@@ -21,7 +21,7 @@ void BallUniverse::debugStuff()
 void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass)
 {
     if(!(position.x - radius < 0 || position.y - radius < 0
-      || position.x + radius > windowSizeX || position.y + radius > windowSizeY))
+      || position.x + radius > worldSizeX || position.y + radius > worldSizeY))
         ballArray.push_back(Ball(radius,mass,position,velocity));
     /*std::tuple<int,int,float> collTuple = findShortestCollTime(timeToNextColl, ballArray);
     timeToNextColl = std::get<2>(collTuple);
@@ -83,7 +83,7 @@ void BallUniverse::universeLoop(float dt)
     for(int i=0;i<ballArray.size();i++)
     {
         ballArray.at(i).resetToCollided();
-        ballArray.at(i).checkForBounce(windowSizeX,windowSizeY);
+        ballArray.at(i).checkForBounce(worldSizeX,worldSizeY);
     }
 
     if(enable_collisions==true)
@@ -248,6 +248,17 @@ sf::Vector2f BallUniverse::velocityFromMouse(sf::Vector2i mousePosOnClick)
     return velocity;
 }
 
+void BallUniverse::zoomToMouse(float zoomFactor)
+{
+
+    currentZoom = zoomFactor;
+    worldView.zoom(zoomFactor);
+    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+    sf::Vector2f mousePos = window.mapPixelToCoords(viewPos);
+    worldView.setCenter(mousePos);
+    window.setView(worldView);
+}
+
 BallUniverse::BallUniverse(int m_windowSizeX, int m_windowSizeY, float dt, int spawnVelFactor,
                             float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
                             int ballGridWidth, bool force, bool collision) :
@@ -307,12 +318,19 @@ void BallUniverse::universeMainLoop()
 
             if(event.type == sf::Event::Resized)
             {
-                //window.setSize({windowSizeX,windowSizeY});
-                //sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
                 sf::Vector2f viewSize(event.size.width, event.size.height);
-                //sf::Vector2f viewCentre(event.size.width/2, event.size.height/2);
                 worldView.setSize(viewSize);
-                worldView.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
+
+                float xFactor = currentZoom*static_cast<float>(worldSizeX)/static_cast<float>(event.size.width);
+                float yFactor = currentZoom*static_cast<float>(worldSizeY)/static_cast<float>(event.size.height);
+
+                worldView.setSize(event.size.width,event.size.height);
+
+                if(yFactor > xFactor)
+                    worldView.zoom(yFactor);
+                else
+                    worldView.zoom(xFactor);
+
                 window.setView(worldView);
 
             }
@@ -329,18 +347,12 @@ void BallUniverse::universeMainLoop()
                     dt-=1;
                 else if(event.key.code == sf::Keyboard::Delete)
                     ballArray.clear();
-                else if(event.key.code == sf::Keyboard::Equal)
-                {
-                    currentZoom = 2.0f;
-                    worldView.zoom(currentZoom);
-                    window.setView(worldView);
-                }
                 else if(event.key.code == sf::Keyboard::Dash)
-                {
-                    currentZoom = 0.5f;
-                    worldView.zoom(currentZoom);
-                    window.setView(worldView);
-                }
+                    zoomToMouse(2.0f);
+                else if(event.key.code == sf::Keyboard::Equal)
+                    zoomToMouse(0.5f);
+                else if(event.key.code == sf::Keyboard::Num0)
+                    window.setView(window.getDefaultView());
 
             }
         }

@@ -17,7 +17,7 @@ public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
 
     float timeToCollision(Ball &otherBall);
-    void checkForBounce(int windowSizeX, int windowSizeY);
+    void checkForBounce(int worldSizeX, int worldSizeY);
     void ballCollision(Ball &otherBall);
     void updateVelocity(float dt, Ball &otherBall);
     void updatePosition(float dt);
@@ -47,6 +47,8 @@ class BallUniverse
     sf::View worldView = window.getDefaultView();
     float currentZoom = 1.0f;
 
+    int worldSizeX = windowSizeX;
+    int worldSizeY = windowSizeY;
     int numOfBalls;
     int collider1 = 0;
     int collider2 = 0;
@@ -79,6 +81,8 @@ class BallUniverse
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
 
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick);
+    void zoomToMouse(float zoomFactor);
+
 
 
 public:

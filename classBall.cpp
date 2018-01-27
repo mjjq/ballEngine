@@ -71,15 +71,15 @@ float Ball::timeToCollision(Ball &otherBall)
         return (root2<root1)?root2:root1;
 }
 
-void Ball::checkForBounce(int windowSizeX, int windowSizeY)
+void Ball::checkForBounce(int worldSizeX, int worldSizeY)
 {
     sf::Vector2f shapePos = getPosition();
     float shapeRadius = getRadius();
 
-    if(((shapePos.x+shapeRadius >= windowSizeX) && (velocity.x>=0))
+    if(((shapePos.x+shapeRadius >= worldSizeX) && (velocity.x>=0))
     || ((shapePos.x-shapeRadius <= 0  && (velocity.x<=0))))
         velocity.x = -velocity.x*dampingFactor;
-    if(((shapePos.y+shapeRadius >= windowSizeY) && (velocity.y>=0))
+    if(((shapePos.y+shapeRadius >= worldSizeY) && (velocity.y>=0))
     || ((shapePos.y-shapeRadius <= 0  && (velocity.y<=0))))
         velocity.y = -velocity.y*dampingFactor;
 }
