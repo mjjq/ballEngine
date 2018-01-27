@@ -14,8 +14,8 @@
 
 int main()
 {
-    int windowSizeX = 1920;
-    int windowSizeY = 1080;
+    int windowSizeX = 700;
+    int windowSizeY = 700;
 
     float dt=1;
     int spawnVelFactor = 10.f;

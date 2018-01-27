@@ -201,7 +201,9 @@ void BallUniverse::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 
     if((mouseType == true))
     {
-        finalPos = sf::Mouse::getPosition(window);
+        sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+        finalPos = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
+        //finalPos = sf::Mouse::getPosition(window);
         line[0] = sf::Vertex(static_cast<sf::Vector2f>(initPos),sf::Color::White);
         line[1] = sf::Vertex(static_cast<sf::Vector2f>(finalPos),sf::Color::White);
         window.draw(line, 2, sf::Lines);
@@ -234,7 +236,10 @@ void BallUniverse::createBallGrid(int numWide, int numHigh, float spacing, sf::V
 
 sf::Vector2f BallUniverse::velocityFromMouse(sf::Vector2i mousePosOnClick)
 {
-    sf::Vector2i mousePosOnRelease = sf::Mouse::getPosition(window);
+
+    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+    sf::Vector2i mousePosOnRelease = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
+    //sf::Vector2i mousePosOnRelease = sf::Mouse::getPosition(window);
     sf::Vector2i scaledVector = (spawnVelFactor)*(mousePosOnRelease-mousePosOnClick);
     float windowDiagSize = pow(windowSizeX*windowSizeX + windowSizeY*windowSizeY, 0.5);
     sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/windowDiagSize;
@@ -252,7 +257,7 @@ enable_collisions(collision), dt{dt}, spawnVelFactor{spawnVelFactor},
 spawnRadius{spawnRadius}, spawnMass{spawnMass}, ballGridSpacing{ballGridSpacing},
 ballGridHeight{ballGridHeight}, ballGridWidth{ballGridWidth}
 {
-    //ballArray.push_back(Ball(8,25000000,{windowSizeX/2,windowSizeY/2},{0,0}));
+    window.setView(worldView);
 }
 
 void BallUniverse::universeMainLoop()
@@ -270,7 +275,10 @@ void BallUniverse::universeMainLoop()
                 window.close();
 
             if(event.type == sf::Event::MouseButtonPressed)
-                mousePosOnClick = sf::Mouse::getPosition(window);
+            {
+                sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+                mousePosOnClick = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
+            }
 
             if(event.type == sf::Event::EventType::MouseButtonReleased
                             && event.mouseButton.button==sf::Mouse::Left
@@ -278,7 +286,6 @@ void BallUniverse::universeMainLoop()
             {
                 sf::Vector2f velocity = velocityFromMouse(mousePosOnClick);
                 spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,spawnMass);
-
             }
 
             /*if(event.type == sf::Event::EventType::MouseButtonReleased
@@ -300,8 +307,13 @@ void BallUniverse::universeMainLoop()
 
             if(event.type == sf::Event::Resized)
             {
-                window.setSize({windowSizeX,windowSizeY});
+                //window.setSize({windowSizeX,windowSizeY});
                 //sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
+                sf::Vector2f viewSize(event.size.width, event.size.height);
+                //sf::Vector2f viewCentre(event.size.width/2, event.size.height/2);
+                worldView.setSize(viewSize);
+                worldView.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
+                window.setView(worldView);
 
             }
 
@@ -313,10 +325,22 @@ void BallUniverse::universeMainLoop()
                     timestep-=sf::milliseconds(10);
                 else if(event.key.code == sf::Keyboard::Left)
                     dt+=1;
-                else if(event.key.code == sf::Keyboard::Right && dt>2)
+                else if(event.key.code == sf::Keyboard::Right && dt>=2)
                     dt-=1;
                 else if(event.key.code == sf::Keyboard::Delete)
                     ballArray.clear();
+                else if(event.key.code == sf::Keyboard::Equal)
+                {
+                    currentZoom = 2.0f;
+                    worldView.zoom(currentZoom);
+                    window.setView(worldView);
+                }
+                else if(event.key.code == sf::Keyboard::Dash)
+                {
+                    currentZoom = 0.5f;
+                    worldView.zoom(currentZoom);
+                    window.setView(worldView);
+                }
 
             }
         }

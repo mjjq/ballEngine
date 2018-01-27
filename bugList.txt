@@ -1,0 +1,15 @@
+Graphics/Interface:
+
+mouse click spawn location incorrect after window Resize
+
+window resize does not scale well, fixed but needs an option to scale simulation size with window
+
+Crash when attempting to delete balls while there are collisions going on
+
+
+Physics:
+
+very soon after a collision, and when another collision is close, the ball will simply pass through the ball it should collide with -
+Kind of fixed, needs more testing
+
+Physics is tied to framerate

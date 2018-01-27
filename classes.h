@@ -44,6 +44,8 @@ class BallUniverse
     int windowSizeY;
     sf::Text mousePos;
     sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
+    sf::View worldView = window.getDefaultView();
+    float currentZoom = 1.0f;
 
     int numOfBalls;
     int collider1 = 0;
