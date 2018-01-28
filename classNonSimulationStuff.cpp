@@ -53,13 +53,19 @@ void NonSimulationStuff::zoomToMouse(float zoomFactor)
 
 sf::Vector2f NonSimulationStuff::getEffectiveZoom(int worldSizeX, int worldSizeY)
 {
-    float zoom = currentZoom;
-    float winSizeX = window.getSize().x;
-    float winSizeY = window.getSize().y;
-    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-    float xFactor = zoom*static_cast<float>(worldSizeX)/static_cast<float>(winSizeX);
-    float yFactor = zoom*static_cast<float>(worldSizeY)/static_cast<float>(winSizeY);
-    sf::Vector2f effectiveZoom = {xFactor,yFactor};
+    sf::Vector2f effectiveZoom;
+    if(simFitsInWindow)
+    {
+        float zoom = currentZoom;
+        float winSizeX = window.getSize().x;
+        float winSizeY = window.getSize().y;
+        sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+        float xFactor = zoom*static_cast<float>(worldSizeX)/static_cast<float>(winSizeX);
+        float yFactor = zoom*static_cast<float>(worldSizeY)/static_cast<float>(winSizeY);
+        effectiveZoom = {xFactor,yFactor};
+    }
+    else
+        effectiveZoom = {1,1};
     return effectiveZoom;
 }
 
@@ -108,6 +114,7 @@ void NonSimulationStuff::resetView()
     sf::Vector2i wSize = ballSim.getWorldSize();
     worldView.setCenter(wSize.x/2,wSize.y/2);
     adjustViewSize(window.getSize().x, window.getSize().y, wSize.x, wSize.y, currentZoom);
+
     window.setView(worldView);
 }
 
@@ -198,7 +205,6 @@ void NonSimulationStuff::mainLoop()
 
             if(event.type == sf::Event::Resized)
             {
-                //sf::Vector2i wSize = ballSim.getWorldSize();
                 adjustViewSize(event.size.width, event.size.height, wSize.x, wSize.y, currentZoom);
             }
 
@@ -226,12 +232,6 @@ void NonSimulationStuff::mainLoop()
                     zoomToMouse(0.5f);
                 else if(event.key.code == sf::Keyboard::Num0)
                     resetView();
-                /*else if(event.key.code == sf::Keyboard::Space)
-                {
-                    std::cout << "thing\n";
-                    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-                    mousePosOnClick = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
-                }*/
             }
         }
 
@@ -252,11 +252,11 @@ void NonSimulationStuff::mainLoop()
 
 NonSimulationStuff::NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int spawnVelFactor,
                  float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
-                                    int ballGridWidth, BallUniverse sim) :
+                                    int ballGridWidth, bool simFitsInWindow, BallUniverse sim) :
 
 windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{spawnVelFactor},
             spawnRadius{spawnRadius}, spawnMass{spawnMass}, ballGridSpacing{ballGridSpacing},
-            ballGridHeight{ballGridHeight}, ballGridWidth{ballGridWidth}, ballSim{sim}
+            ballGridHeight{ballGridHeight}, ballGridWidth{ballGridWidth}, simFitsInWindow{simFitsInWindow}, ballSim{sim}
 {
     sf::Vector2i wSize = ballSim.getWorldSize();
     changeBoundaryRect(wSize);

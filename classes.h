@@ -83,6 +83,7 @@ class NonSimulationStuff
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
     sf::Time timeToNextSpawn = sf::milliseconds(0);
     sf::RectangleShape boundaryRect;
+    bool simFitsInWindow;
 
     int spawnVelFactor;
     float spawnRadius;
@@ -108,8 +109,8 @@ class NonSimulationStuff
 
 public:
     NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int spawnVelFactor,
-                 float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
-                                    int ballGridWidth,BallUniverse sim);
+                        float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
+                        int ballGridWidth, bool simFitsInWindow, BallUniverse sim);
 
     void mainLoop();
 
