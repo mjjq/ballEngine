@@ -293,6 +293,8 @@ void BallUniverse::checkForViewPan(sf::Vector2i initialPos, sf::Vector2f origina
 
         window.setView(worldView);
     }
+    else
+        window.setMouseCursorVisible(true);
 }
 
 void BallUniverse::adjustViewSize(int sizeX, int sizeY, float zoom)
@@ -416,11 +418,6 @@ void BallUniverse::universeMainLoop()
                     mousePosOnClick = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
                 }*/
             }
-        }
-        if(event.type == sf::Event::EventType::KeyReleased)
-        {
-            if(event.key.code == sf::Keyboard::Space)
-                window.setMouseCursorVisible(true);
         }
 
         checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
