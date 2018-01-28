@@ -17,7 +17,7 @@ public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
 
     float timeToCollision(Ball &otherBall);
-    void checkForBounce(int windowSizeX, int windowSizeY);
+    void checkForBounce(int worldSizeX, int worldSizeY);
     void ballCollision(Ball &otherBall);
     void updateVelocity(float dt, Ball &otherBall);
     void updatePosition(float dt);
@@ -40,24 +40,55 @@ class BallUniverse
 {
     std::vector<Ball> ballArray;
 
-    int windowSizeX;
-    int windowSizeY;
-    sf::Text mousePos;
-    sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
-
+    int worldSizeX;
+    int worldSizeY;
     int numOfBalls;
     int collider1 = 0;
     int collider2 = 0;
     bool enable_forces;
     bool enable_collisions;
 
-    sf::Time minTimeToNextSpawn = sf::milliseconds(500);
-    sf::Time timeToNextSpawn = sf::milliseconds(0);
-    sf::Time timestep = sf::milliseconds(16.67);
     float currentTime = 0;
     float timeToNextColl = 1e+15;
     float dt;
 
+    std::tuple<int,int,float> findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt=1e+10);
+    float getTotalKE(std::vector<Ball> &ballArray);
+
+
+public:
+    BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
+
+    void universeLoop();
+
+    void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
+    void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
+                        sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
+    sf::Vector2i getWorldSize();
+    void incSimStep(float delta);
+    void decSimStep(float delta);
+    std::vector<Ball>* getBallArrayAddress();
+    void clearSimulation();
+};
+
+class NonSimulationStuff
+{
+    int windowSizeX;
+    int windowSizeY;
+    //sf::Text mousePos;
+    sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
+    sf::View worldView = window.getDefaultView();
+    float currentZoom = 1.0f;
+    sf::Time timestep = sf::milliseconds(16.67);
+    sf::Time minTimeToNextSpawn = sf::milliseconds(500);
+    sf::Time timeToNextSpawn = sf::milliseconds(0);
+    sf::RectangleShape boundaryRect;
+    bool simFitsInWindow;
+
+    sf::Vector2i mousePosOnClick;
+    sf::Vector2i mousePosOnRelease;
+    sf::Vector2f recentViewCoords;
+    sf::Vector2i wSize;
     int spawnVelFactor;
     float spawnRadius;
     float spawnMass;
@@ -65,26 +96,31 @@ class BallUniverse
     int ballGridHeight;
     int ballGridWidth;
 
-    void debugStuff();
-    void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
-    std::tuple<int,int,float> findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt=1e+10);
-    void universeLoop(float dt);
-    void universeLoopNoForces(float dt);
+    BallUniverse ballSim;
+
+    void zoomToMouse(float zoomFactor);
+    sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
+    void checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool);
+    void resetView();
+    void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY, float zoom);
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
-    float getTotalKE(std::vector<Ball> &ballArray);
-
-    void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
-                        sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
-
-    sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick);
+    sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
+    void drawBalls();
+    void changeBoundaryRect(sf::Vector2i worldSize);
+    void mouseWheelZoom(bool keyPress, float delta);
+    void mouseEvents(sf::Event &event);
+    void keyEvents(sf::Event &event);
+    void resizeEvents(sf::Event &event);
+    void incTimeStep(sf::Time delta);
+    void decTimeStep(sf::Time delta);
 
 
 public:
-    BallUniverse(int m_windowSizeX, int m_windowSizeY, float dt, int spawnVelFactor,
-                 float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
-                                    int ballGridWidth, bool force=true, bool collision=true);
-    void universeMainLoop();
+    NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int spawnVelFactor,
+                        float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
+                        int ballGridWidth, bool simFitsInWindow, BallUniverse sim);
 
+    void mainLoop();
 
 };
 

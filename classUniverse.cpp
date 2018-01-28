@@ -9,26 +9,11 @@
 #include "sfVectorMath.h"
 
 
-void BallUniverse::debugStuff()
-{
-    std::string mouse_x{(sf::Mouse::getPosition(window).x)};
-    mouse_x += " " + (sf::Mouse::getPosition(window).y);
-    mousePos.setString(mouse_x);
-    mousePos.setColor(sf::Color::Red);
-    window.draw(mousePos);
-}
-
 void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass)
 {
     if(!(position.x - radius < 0 || position.y - radius < 0
-      || position.x + radius > windowSizeX || position.y + radius > windowSizeY))
+      || position.x + radius > worldSizeX || position.y + radius > worldSizeY))
         ballArray.push_back(Ball(radius,mass,position,velocity));
-    /*std::tuple<int,int,float> collTuple = findShortestCollTime(timeToNextColl, ballArray);
-    timeToNextColl = std::get<2>(collTuple);
-    collider1 = std::get<0>(collTuple);
-    collider2 = std::get<1>(collTuple);
-    currentTime = 0;*/
-   // std::cout << ballArray.size() << "\n";
 }
 
 //void resetAndCheckBounce(std::vector<Ball>)
@@ -75,7 +60,7 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
     return std::make_tuple(coll1,coll2,localT_coll);
 }
 
-void BallUniverse::universeLoop(float dt)
+void BallUniverse::universeLoop()
 {
     float dtR = dt;
     float epsilon = 1e-5;
@@ -83,7 +68,7 @@ void BallUniverse::universeLoop(float dt)
     for(int i=0;i<ballArray.size();i++)
     {
         ballArray.at(i).resetToCollided();
-        ballArray.at(i).checkForBounce(windowSizeX,windowSizeY);
+        ballArray.at(i).checkForBounce(worldSizeX,worldSizeY);
     }
 
     if(enable_collisions==true)
@@ -101,7 +86,7 @@ void BallUniverse::universeLoop(float dt)
             for(int i=0;i<ballArray.size();i++)
             {
                 ballArray.at(i).updatePosition(std::floor(1e+3*dtR)/1e+3);
-                window.draw(ballArray.at(i));
+                //window.draw(ballArray.at(i));
             }
         if(collider1 != collider2)
         {
@@ -128,84 +113,11 @@ void BallUniverse::universeLoop(float dt)
         for(int i=0;i<ballArray.size();i++)
         {
             ballArray.at(i).updatePosition(dt);
-            window.draw(ballArray.at(i));
+            //window.draw(ballArray.at(i));
             ballArray.at(i).resetToCollided();
         }
     }
 
-}
-
-void BallUniverse::universeLoopNoForces(float dt)
-{
-    //int collider1 = std::numeric_limits<int>::quiet_NaN();
-    //int collider2 = std::numeric_limits<int>::quiet_NaN();
-    float dtR = dt;
-    float epsilon = 1e-5;
-
-    for(int i=0;i<ballArray.size();i++)
-    {
-        ballArray.at(i).resetToCollided();
-        ballArray.at(i).checkForBounce(windowSizeX,windowSizeY);
-    }
-
-    if(dt + currentTime > timeToNextColl)
-    {
-        //std::cout << "next collision: " <<timeToNextColl << "\n";
-        dtR = timeToNextColl - currentTime;
-        //std::cout << dtR << "\n";
-        //std::cout << std::floor(1e+5*dtR)/1e+5 << "\n";
-        if(std::abs(dtR) > epsilon)
-            for(int i=0;i<ballArray.size();i++)
-            {
-                ballArray.at(i).updatePosition(std::floor(1e+5*dtR)/1e+5);
-                window.draw(ballArray.at(i));
-            }
-        if(collider1 != collider2)
-        {
-            ballArray.at(collider1).ballCollision(ballArray.at(collider2));
-            std::cout << "Collision at ";
-            sfVectorMath::printVector(ballArray.at(collider1).getPosition());
-            std::cout << "\n";
-            //ballArray.at(collider1).resetToCollided();
-            //ballArray.at(collider2).resetToCollided();
-            //std::cout << getTotalKE(ballArray) <<"\n";
-        }
-        timeToNextColl = 1e+15;
-
-        std::tuple<int,int,float> collTuple = findShortestCollTime(timeToNextColl, ballArray);
-        timeToNextColl = std::get<2>(collTuple);
-        collider1 = std::get<0>(collTuple);
-        collider2 = std::get<1>(collTuple);
-
-        currentTime = -dtR;
-    }
-    else
-    {
-        //std::cout <<"no collide";
-        for(int i=0;i<ballArray.size();i++)
-        {
-            ballArray.at(i).updatePosition(dt);
-            window.draw(ballArray.at(i));
-            ballArray.at(i).resetToCollided();
-        }
-    }
-    currentTime += dtR;
-    //std::cout << currentTime << "\n";
-
-}
-
-void BallUniverse::checkMBPress(sf::Vector2i &initPos, bool mouseType)
-{
-    sf::Vector2i finalPos;
-    sf::Vertex line[2];
-
-    if((mouseType == true))
-    {
-        finalPos = sf::Mouse::getPosition(window);
-        line[0] = sf::Vertex(static_cast<sf::Vector2f>(initPos),sf::Color::White);
-        line[1] = sf::Vertex(static_cast<sf::Vector2f>(finalPos),sf::Color::White);
-        window.draw(line, 2, sf::Lines);
-    }
 }
 
 float BallUniverse::getTotalKE(std::vector<Ball> &ballArray)
@@ -232,104 +144,36 @@ void BallUniverse::createBallGrid(int numWide, int numHigh, float spacing, sf::V
     }
 }
 
-sf::Vector2f BallUniverse::velocityFromMouse(sf::Vector2i mousePosOnClick)
+sf::Vector2i BallUniverse::getWorldSize()
 {
-    sf::Vector2i mousePosOnRelease = sf::Mouse::getPosition(window);
-    sf::Vector2i scaledVector = (spawnVelFactor)*(mousePosOnRelease-mousePosOnClick);
-    float windowDiagSize = pow(windowSizeX*windowSizeX + windowSizeY*windowSizeY, 0.5);
-    sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/windowDiagSize;
-    timeToNextSpawn = minTimeToNextSpawn;
-
-    return velocity;
+    sf::Vector2i wSize = {worldSizeX,worldSizeY};
+    return wSize;
 }
 
-BallUniverse::BallUniverse(int m_windowSizeX, int m_windowSizeY, float dt, int spawnVelFactor,
-                            float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
-                            int ballGridWidth, bool force, bool collision) :
-
-windowSizeX(m_windowSizeX), windowSizeY{m_windowSizeY}, enable_forces(force),
-enable_collisions(collision), dt{dt}, spawnVelFactor{spawnVelFactor},
-spawnRadius{spawnRadius}, spawnMass{spawnMass}, ballGridSpacing{ballGridSpacing},
-ballGridHeight{ballGridHeight}, ballGridWidth{ballGridWidth}
+void BallUniverse::incSimStep(float delta)
 {
-    //ballArray.push_back(Ball(8,25000000,{windowSizeX/2,windowSizeY/2},{0,0}));
+    if(delta>0)
+        dt+=delta;
+}
+void BallUniverse::decSimStep(float delta)
+{
+    if(delta>0 && dt>delta)
+        dt-=delta;
 }
 
-void BallUniverse::universeMainLoop()
+std::vector<Ball>* BallUniverse::getBallArrayAddress()
 {
-    sf::Vector2i mousePosOnClick;
-    sf::Vector2i mousePosOnRelease;
-
-    while(window.isOpen())
-    {
-        window.clear();
-        sf::Event event;
-        while(window.pollEvent(event))
-        {
-            if(event.type == sf::Event::Closed)
-                window.close();
-
-            if(event.type == sf::Event::MouseButtonPressed)
-                mousePosOnClick = sf::Mouse::getPosition(window);
-
-            if(event.type == sf::Event::EventType::MouseButtonReleased
-                            && event.mouseButton.button==sf::Mouse::Left
-                            && !(timeToNextSpawn > sf::milliseconds(0)))
-            {
-                sf::Vector2f velocity = velocityFromMouse(mousePosOnClick);
-                spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,spawnMass);
-
-            }
-
-            /*if(event.type == sf::Event::EventType::MouseButtonReleased
-                            && event.mouseButton.button==sf::Mouse::Right
-                            && !(timeToNextSpawn > sf::milliseconds(0)))
-            {
-                sf::Vector2f velocity = velocityFromMouse(mousePosOnClick);
-                spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,-spawnMass);
-            }*/
-
-            if(event.type == sf::Event::EventType::MouseButtonReleased
-                            && event.mouseButton.button==sf::Mouse::Middle
-                            && !(timeToNextSpawn > sf::milliseconds(0)))
-            {
-                sf::Vector2f velocity = velocityFromMouse(mousePosOnClick);
-                createBallGrid(ballGridWidth,ballGridHeight,ballGridSpacing,
-                                static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnMass,spawnRadius);
-            }
-
-            if(event.type == sf::Event::Resized)
-            {
-                window.setSize({windowSizeX,windowSizeY});
-                //sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
-
-            }
-
-            if(event.type == sf::Event::EventType::KeyPressed)
-            {
-                if(event.key.code == sf::Keyboard::PageUp)
-                    timestep+=sf::milliseconds(10);
-                else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
-                    timestep-=sf::milliseconds(10);
-                else if(event.key.code == sf::Keyboard::Left)
-                    dt+=1;
-                else if(event.key.code == sf::Keyboard::Right && dt>2)
-                    dt-=1;
-                else if(event.key.code == sf::Keyboard::Delete)
-                    ballArray.clear();
-
-            }
-        }
-
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
-
-        universeLoop(dt);
-
-        window.display();
-        sf::sleep(timestep);
-        timeToNextSpawn -= timestep;
-    }
+    return &ballArray;
 }
 
+void BallUniverse::clearSimulation()
+{
+    ballArray.clear();
+}
+
+BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :
+
+worldSizeX{worldSizeX}, worldSizeY{worldSizeY}, enable_forces(force), enable_collisions(collision), dt{dt}
+{
+
+}
