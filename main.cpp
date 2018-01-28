@@ -16,6 +16,8 @@ int main()
 {
     int windowSizeX = 700;
     int windowSizeY = 700;
+    int worldSizeX = 1000;
+    int worldSizeY = 10;
 
     float dt=1;
     int spawnVelFactor = 10.f;
@@ -25,10 +27,10 @@ int main()
     int ballGridHeight = 10;
     int ballGridWidth = 10;
 
-    bool enableForces = true;
-    bool enableCollisions = false;
+    bool enableForces = false;
+    bool enableCollisions = true;
 
-    BallUniverse universe1(windowSizeX, windowSizeY, dt, spawnVelFactor, spawnRadius, spawnMass,
+    BallUniverse universe1(windowSizeX, windowSizeY, worldSizeX, worldSizeY, dt, spawnVelFactor, spawnRadius, spawnMass,
                                     ballGridSpacing, ballGridHeight, ballGridWidth, enableForces, enableCollisions);
 
     universe1.universeMainLoop();

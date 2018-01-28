@@ -47,8 +47,8 @@ class BallUniverse
     sf::View worldView = window.getDefaultView();
     float currentZoom = 1.0f;
 
-    int worldSizeX = windowSizeX;
-    int worldSizeY = windowSizeY;
+    int worldSizeX;
+    int worldSizeY;
     int numOfBalls;
     int collider1 = 0;
     int collider2 = 0;
@@ -82,11 +82,13 @@ class BallUniverse
 
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick);
     void zoomToMouse(float zoomFactor);
+    void checkForViewPan(sf::Vector2i initialPos, bool keyBool);
+    void adjustViewSize(int sizeX, int sizeY, float zoom);
 
 
 
 public:
-    BallUniverse(int m_windowSizeX, int m_windowSizeY, float dt, int spawnVelFactor,
+    BallUniverse(int m_windowSizeX, int m_windowSizeY, int worldSizeX, int worldSizeY, float dt, int spawnVelFactor,
                  float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
                                     int ballGridWidth, bool force=true, bool collision=true);
     void universeMainLoop();
