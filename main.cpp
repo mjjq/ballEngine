@@ -16,23 +16,24 @@ int main()
 {
     int windowSizeX = 700;
     int windowSizeY = 700;
-    int worldSizeX = 700;
-    int worldSizeY = 700;
+    int worldSizeX = 200;
+    int worldSizeY = 200;
 
     float dt=1;
-    int spawnVelFactor = 10.f;
+    int spawnVelFactor = 10;
     float spawnRadius = 2;
     float spawnMass = 0.3;
     float ballGridSpacing = 8;
     int ballGridHeight = 10;
     int ballGridWidth = 10;
 
-    bool enableForces = false;
-    bool enableCollisions = true;
+    bool enableForces = true;
+    bool enableCollisions = false;
 
-    BallUniverse universe1(windowSizeX, windowSizeY, worldSizeX, worldSizeY, dt, spawnVelFactor, spawnRadius, spawnMass,
-                                    ballGridSpacing, ballGridHeight, ballGridWidth, enableForces, enableCollisions);
+    BallUniverse universe1(worldSizeX, worldSizeY, dt, enableForces, enableCollisions);
+    NonSimulationStuff window1(windowSizeX, windowSizeY, spawnVelFactor, spawnRadius,
+                                spawnMass, ballGridSpacing, ballGridHeight, ballGridWidth, universe1);
 
-    universe1.universeMainLoop();
+    window1.mainLoop();
 
 }
