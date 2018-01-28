@@ -16,8 +16,8 @@ int main()
 {
     int windowSizeX = 700;
     int windowSizeY = 700;
-    int worldSizeX = 1000;
-    int worldSizeY = 10;
+    int worldSizeX = 700;
+    int worldSizeY = 700;
 
     float dt=1;
     int spawnVelFactor = 10.f;

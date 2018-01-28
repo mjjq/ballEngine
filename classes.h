@@ -82,7 +82,8 @@ class BallUniverse
 
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick);
     void zoomToMouse(float zoomFactor);
-    void checkForViewPan(sf::Vector2i initialPos, bool keyBool);
+    sf::Vector2f getEffectiveZoom();
+    void checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, bool keyBool);
     void adjustViewSize(int sizeX, int sizeY, float zoom);
 
 

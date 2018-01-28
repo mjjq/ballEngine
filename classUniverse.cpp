@@ -101,7 +101,7 @@ void BallUniverse::universeLoop(float dt)
             for(int i=0;i<ballArray.size();i++)
             {
                 ballArray.at(i).updatePosition(std::floor(1e+3*dtR)/1e+3);
-                window.draw(ballArray.at(i));
+                //window.draw(ballArray.at(i));
             }
         if(collider1 != collider2)
         {
@@ -128,10 +128,12 @@ void BallUniverse::universeLoop(float dt)
         for(int i=0;i<ballArray.size();i++)
         {
             ballArray.at(i).updatePosition(dt);
-            window.draw(ballArray.at(i));
+            //window.draw(ballArray.at(i));
             ballArray.at(i).resetToCollided();
         }
     }
+    for(int i=0; i<ballArray.size(); i++)
+        window.draw(ballArray.at(i));
 
 }
 
@@ -251,7 +253,7 @@ sf::Vector2f BallUniverse::velocityFromMouse(sf::Vector2i mousePosOnClick)
 void BallUniverse::zoomToMouse(float zoomFactor)
 {
 
-    currentZoom = zoomFactor;
+    currentZoom *= zoomFactor;
     worldView.zoom(zoomFactor);
     sf::Vector2i viewPos = sf::Mouse::getPosition(window);
     sf::Vector2f mousePos = window.mapPixelToCoords(viewPos);
@@ -259,17 +261,38 @@ void BallUniverse::zoomToMouse(float zoomFactor)
     window.setView(worldView);
 }
 
-void BallUniverse::checkForViewPan(sf::Vector2i initialPos, bool keyBool)
+sf::Vector2f BallUniverse::getEffectiveZoom()
 {
-    /*if(keyBool==true)
+    float zoom = currentZoom;
+    float winSizeX = window.getSize().x;
+    float winSizeY = window.getSize().y;
+    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+    float xFactor = zoom*static_cast<float>(worldSizeX)/static_cast<float>(winSizeX);
+    float yFactor = zoom*static_cast<float>(worldSizeY)/static_cast<float>(winSizeY);
+    sf::Vector2f effectiveZoom = {xFactor,yFactor};
+    return effectiveZoom;
+}
+
+void BallUniverse::checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, bool keyBool)
+{
+    if(keyBool==true)
     {
+        window.setMouseCursorVisible(false);
+        sf::Vector2f effectiveZoom = getEffectiveZoom();
         sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-        sfVectorMath::printVector(viewPos);
-        std::cout <<"\n";
-        worldView.setCenter(static_cast<sf::Vector2f>(viewPos));
+        sf::Vector2f relPos = static_cast<sf::Vector2f>(initialPos - viewPos);
+        //sfVectorMath::printVector(viewPos);
+        //std::cout <<"\n";
+        if(effectiveZoom.y > effectiveZoom.x)
+            relPos *= effectiveZoom.y;
+        else
+            relPos *= effectiveZoom.x;
+
+
+        worldView.setCenter(relPos + originalView);
 
         window.setView(worldView);
-    }*/
+    }
 }
 
 void BallUniverse::adjustViewSize(int sizeX, int sizeY, float zoom)
@@ -278,6 +301,8 @@ void BallUniverse::adjustViewSize(int sizeX, int sizeY, float zoom)
     float yFactor = zoom*static_cast<float>(worldSizeY)/static_cast<float>(sizeY);
 
     worldView.setSize(sizeX,sizeY);
+    windowSizeX = sizeX;
+    windowSizeY = sizeY;
 
     if(yFactor > xFactor)
         worldView.zoom(yFactor);
@@ -307,6 +332,7 @@ void BallUniverse::universeMainLoop()
 {
     sf::Vector2i mousePosOnClick;
     sf::Vector2i mousePosOnRelease;
+    sf::Vector2f recentViewCoords;
 
     while(window.isOpen())
     {
@@ -322,13 +348,14 @@ void BallUniverse::universeMainLoop()
                 sf::Vector2i viewPos = sf::Mouse::getPosition(window);
                 mousePosOnClick = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
             }
-            //window.setKeyRepeatEnabled(false);
-            /*if(event.type == sf::Event::KeyPressed)
+            window.setKeyRepeatEnabled(false);
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
             {
-                std::cout << "thing\n";
-                sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-                mousePosOnClick = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
-            }*/
+                //std::cout << "thing\n";
+                recentViewCoords = worldView.getCenter();
+                mousePosOnClick = sf::Mouse::getPosition(window);
+                //mousePosOnClick = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
+            }
             //window.setKeyRepeatEnabled(true);
 
             if(event.type == sf::Event::EventType::MouseButtonReleased
@@ -390,11 +417,16 @@ void BallUniverse::universeMainLoop()
                 }*/
             }
         }
+        if(event.type == sf::Event::EventType::KeyReleased)
+        {
+            if(event.key.code == sf::Keyboard::Space)
+                window.setMouseCursorVisible(true);
+        }
 
         checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
         checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
         checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
-        //checkForViewPan(mousePosOnClick,sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
+        checkForViewPan(mousePosOnClick,recentViewCoords, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
 
         universeLoop(dt);
 
