@@ -85,6 +85,10 @@ class NonSimulationStuff
     sf::RectangleShape boundaryRect;
     bool simFitsInWindow;
 
+    sf::Vector2i mousePosOnClick;
+    sf::Vector2i mousePosOnRelease;
+    sf::Vector2f recentViewCoords;
+    sf::Vector2i wSize;
     int spawnVelFactor;
     float spawnRadius;
     float spawnMass;
@@ -104,7 +108,11 @@ class NonSimulationStuff
     void drawBalls();
     void changeBoundaryRect(sf::Vector2i worldSize);
     void mouseWheelZoom(bool keyPress, float delta);
-
+    void mouseEvents(sf::Event &event);
+    void keyEvents(sf::Event &event);
+    void resizeEvents(sf::Event &event);
+    void incTimeStep(sf::Time delta);
+    void decTimeStep(sf::Time delta);
 
 
 public:
