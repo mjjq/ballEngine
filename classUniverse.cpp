@@ -182,6 +182,17 @@ void BallUniverse::toggleForces()
         enable_forces = true;
 }
 
+void BallUniverse::changeBallColour()
+{
+    for(int i=0; i<ballArray.size(); i++)
+    {
+        if(ballArray.at(i).getPosition().x > worldSizeX/2)
+            ballArray.at(i).setFillColor(sf::Color::Red);
+        else
+            ballArray.at(i).setFillColor(sf::Color::Green);
+    }
+}
+
 void BallUniverse::clearSimulation()
 {
     ballArray.clear();

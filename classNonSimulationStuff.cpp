@@ -195,6 +195,8 @@ void NonSimulationStuff::newLayerEvent(bool keyBool, sf::Event &event)
             ballSim.toggleCollisions();
         else if(event.key.code == sf::Keyboard::F)
             ballSim.toggleForces();
+        else if(event.key.code == sf::Keyboard::K)
+            ballSim.changeBallColour();
     }
 }
 

@@ -16,20 +16,20 @@ int main()
 {
     int windowSizeX = 700;
     int windowSizeY = 700;
-    int worldSizeX = 700;
-    int worldSizeY = 700;
+    int worldSizeX = 2000;
+    int worldSizeY = 2000;
     bool simFitsInWindow = true;
 
     float dt=1;
     int spawnVelFactor = 10;
-    float spawnRadius = 2;
+    float spawnRadius = 8;
     float spawnMass = 0.5;
     float ballGridSpacing = 8;
     int ballGridHeight = 10;
     int ballGridWidth = 10;
 
-    bool enableForces = true;
-    bool enableCollisions = false;
+    bool enableForces = false;
+    bool enableCollisions = true;
 
     BallUniverse universe1(worldSizeX, worldSizeY, dt, enableForces, enableCollisions);
     NonSimulationStuff window1(windowSizeX, windowSizeY, spawnVelFactor, spawnRadius,

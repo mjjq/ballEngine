@@ -71,6 +71,7 @@ public:
     void toggleCollisions();
     void toggleForces();
     void clearSimulation();
+    void changeBallColour();
 };
 
 class NonSimulationStuff
