@@ -16,14 +16,14 @@ int main()
 {
     int windowSizeX = 700;
     int windowSizeY = 700;
-    int worldSizeX = 800;
-    int worldSizeY = 800;
+    int worldSizeX = 700;
+    int worldSizeY = 700;
     bool simFitsInWindow = true;
 
     float dt=1;
     int spawnVelFactor = 10;
     float spawnRadius = 2;
-    float spawnMass = 0.3;
+    float spawnMass = 0.5;
     float ballGridSpacing = 8;
     int ballGridHeight = 10;
     int ballGridWidth = 10;

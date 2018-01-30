@@ -84,6 +84,7 @@ void Ball::checkForBounce(int worldSizeX, int worldSizeY)
         velocity.y = -velocity.y*dampingFactor;
 }
 
+
 void Ball::ballCollision(Ball &otherBall)
 {
     using namespace sfVectorMath;

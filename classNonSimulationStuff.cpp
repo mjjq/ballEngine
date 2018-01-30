@@ -187,6 +187,17 @@ void NonSimulationStuff::mouseEvents(sf::Event &event)
     }
 }
 
+void NonSimulationStuff::newLayerEvent(bool keyBool, sf::Event &event)
+{
+    if(keyBool)
+    {
+        if(event.key.code == sf::Keyboard::C)
+            ballSim.toggleCollisions();
+        else if(event.key.code == sf::Keyboard::F)
+            ballSim.toggleForces();
+    }
+}
+
 void NonSimulationStuff::keyEvents(sf::Event &event)
 {
     if(event.type == sf::Event::EventType::KeyPressed)
@@ -212,6 +223,7 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
             recentViewCoords = worldView.getCenter();
             mousePosOnClick = sf::Mouse::getPosition(window);
         }
+        newLayerEvent(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl), event);
     }
 }
 

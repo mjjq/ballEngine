@@ -68,6 +68,8 @@ public:
     void incSimStep(float delta);
     void decSimStep(float delta);
     std::vector<Ball>* getBallArrayAddress();
+    void toggleCollisions();
+    void toggleForces();
     void clearSimulation();
 };
 
@@ -113,6 +115,8 @@ class NonSimulationStuff
     void resizeEvents(sf::Event &event);
     void incTimeStep(sf::Time delta);
     void decTimeStep(sf::Time delta);
+    void newLayerEvent(bool keyBool, sf::Event &event);
+
 
 
 public:

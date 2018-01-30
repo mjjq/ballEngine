@@ -166,6 +166,22 @@ std::vector<Ball>* BallUniverse::getBallArrayAddress()
     return &ballArray;
 }
 
+void BallUniverse::toggleCollisions()
+{
+    if(enable_collisions)
+        enable_collisions = false;
+    else
+        enable_collisions = true;
+}
+
+void BallUniverse::toggleForces()
+{
+    if(enable_forces)
+        enable_forces = false;
+    else
+        enable_forces = true;
+}
+
 void BallUniverse::clearSimulation()
 {
     ballArray.clear();
