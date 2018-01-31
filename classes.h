@@ -89,6 +89,7 @@ class NonSimulationStuff
     bool simFitsInWindow;
 
     sf::Vector2i mousePosOnClick;
+    sf::Vector2i mousePosOnPan;
     sf::Vector2i mousePosOnRelease;
     sf::Vector2f recentViewCoords;
     sf::Vector2i wSize;

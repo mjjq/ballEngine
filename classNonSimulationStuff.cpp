@@ -223,7 +223,7 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
         else if(event.key.code == sf::Keyboard::Space)
         {
             recentViewCoords = worldView.getCenter();
-            mousePosOnClick = sf::Mouse::getPosition(window);
+            mousePosOnPan = sf::Mouse::getPosition(window);
         }
         newLayerEvent(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl), event);
     }
@@ -269,7 +269,7 @@ void NonSimulationStuff::mainLoop()
         checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
         checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
         checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
-        checkForViewPan(mousePosOnClick,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
+        checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
 
         ballSim.universeLoop();
 
