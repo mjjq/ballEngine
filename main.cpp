@@ -22,7 +22,7 @@ int main()
 
     float dt=1;
     int spawnVelFactor = 10;
-    float spawnRadius = 8;
+    float spawnRadius = 10;
     float spawnMass = 0.5;
     float ballGridSpacing = 8;
     int ballGridHeight = 10;

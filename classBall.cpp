@@ -47,12 +47,12 @@ float Ball::timeToCollision(Ball &otherBall)
     using namespace sfVectorMath;
 
     sf::Vector2f relPos = getPosition() - otherBall.getPosition();
-    sf::Vector2f relVel = getVelocity() - otherBall.getVelocity();
     float radSum = getRadius() + otherBall.getRadius();
 
     if(dot(relPos,relPos) < pow(radSum, 2))
         return std::numeric_limits<float>::quiet_NaN();
 
+    sf::Vector2f relVel = getVelocity() - otherBall.getVelocity();
     float discriminant = pow(dot(relPos,relVel), 2) - dot(relVel,relVel)*(dot(relPos,relPos) - pow(radSum, 2));
 
     if(discriminant < 0)
@@ -112,8 +112,8 @@ void Ball::ballCollision(Ball &otherBall)
     sf::Vector2f v2final = v2 + v2PrimeFrame;
     otherBall.setVelocity(v2final);
 
-    setToCollided();
-    otherBall.setToCollided();
+    //setToCollided();
+    //otherBall.setToCollided();
 }
 
 

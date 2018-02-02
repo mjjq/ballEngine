@@ -205,9 +205,9 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
     if(event.type == sf::Event::EventType::KeyPressed)
     {
         if(event.key.code == sf::Keyboard::PageUp)
-            incTimeStep(sf::milliseconds(16.67));
+            incTimeStep(sf::milliseconds(1.0/60.0));
         else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
-            decTimeStep(sf::milliseconds(16.67));
+            decTimeStep(sf::milliseconds(1.0/60.0));
         else if(event.key.code == sf::Keyboard::Comma)
             ballSim.decSimStep(0.1);
         else if(event.key.code == sf::Keyboard::Period)
@@ -220,6 +220,8 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
             zoomToMouse(0.5f);
         else if(event.key.code == sf::Keyboard::Num0)
             resetView();
+        else if(event.key.code == sf::Keyboard::P)
+            ballSim.toggleSimPause();
         else if(event.key.code == sf::Keyboard::Space)
         {
             recentViewCoords = worldView.getCenter();

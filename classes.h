@@ -51,6 +51,7 @@ class BallUniverse
     float currentTime = 0;
     float timeToNextColl = 1e+15;
     float dt;
+    bool isPaused = false;
 
     std::tuple<int,int,float> findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt=1e+10);
     float getTotalKE(std::vector<Ball> &ballArray);
@@ -67,6 +68,8 @@ public:
     sf::Vector2i getWorldSize();
     void incSimStep(float delta);
     void decSimStep(float delta);
+    void setSimStep(float delta);
+    void toggleSimPause();
     std::vector<Ball>* getBallArrayAddress();
     void toggleCollisions();
     void toggleForces();
@@ -82,7 +85,7 @@ class NonSimulationStuff
     sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
     sf::View worldView = window.getDefaultView();
     float currentZoom = 1.0f;
-    sf::Time timestep = sf::milliseconds(16.67);
+    sf::Time timestep = sf::milliseconds(1000.0/60.0);
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
     sf::Time timeToNextSpawn = sf::milliseconds(0);
     sf::RectangleShape boundaryRect;
