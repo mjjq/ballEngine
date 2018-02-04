@@ -11,30 +11,30 @@
 
 
 template <typename T>
-void UITextElement<T>::updateElement()
+void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView)
     {
-        displayVariable = *variable;
-        std::string strDispVariable = initialText + " " + std::to_string(displayVariable);
-        //std::cout << strDispVariable << "\n";
-        setString(strDispVariable);
-        if(posRelativeToWorld)
+        if(variable!=nullptr)
         {
+            displayVariable = *variable;
+            std::string strDispVariable = initialText + " " + std::to_string(displayVariable);
+            setString(strDispVariable);
+        }
+        if(fixedToWindow)
+        {
+            window.setView(GUIView);
+            setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(origPosition)));
         }
     }
 
 template <typename T>
-UITextElement<T>::UITextElement(std::string font, std::string text, sf::Vector2f position, T *variable) :
-                            initialText{text}, variable{variable}
+UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, T *var) :
+                            initialText{text}, variable{var}, origPosition{position}
 
 {
-    if(!displayFont.loadFromFile(font))
-    {
-        std::cout << "Error loading font for " + initialText + " \n";
-    }
     setString(initialText);
     setPosition(position);
-    setFont(displayFont);
     setFillColor(sf::Color::White);
 }
 
 template class UITextElement<int>;
+template class UITextElement<float>;

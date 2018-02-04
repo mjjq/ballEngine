@@ -84,34 +84,32 @@ class UITextElement : public sf::Text
 {
     std::string initialText;
     sf::Font displayFont;
-    int *variable;//function which returns the variable to display
-    int displayVariable;
+    sf::Vector2f origPosition;
+    T *variable;//function which returns the variable to display
+    T displayVariable;
     //Template <typename T>;
 
     bool displayElement = true;
-    bool posRelativeToWorld = false;
+    bool fixedToWindow = false;
 
 public:
-    UITextElement(std::string font, std::string text, sf::Vector2f position, T *variable);
-
-    void updateElement();
+    UITextElement(std::string text, sf::Vector2f position, T *var = nullptr);
+    void updateElement(sf::RenderWindow &window, sf::View &GUIView);
 
 };
+
 
 template <typename T>
 class UIDebug
 {
-
+    sf::Font currentFont;
+    std::vector<UITextElement<T>> textArray;
 
 public:
-    std::vector<UITextElement<T>> textElements;
-    UIDebug();
-    void addTextElement(std::string font, std::string text, sf::Vector2f position, T *variable);
-    void clearTextElements();
-    void moveTextElement(int element);
-    void upAndRenderAllElements(sf::RenderWindow &window);
-    UITextElement<T> returnElement(int elementNo);
+    void addElement(std::string font, std::string str, sf::Vector2f position, T *var = nullptr);
+    void renderElements(sf::RenderWindow &window, sf::View &GUIView);
 };
+
 
 class NonSimulationStuff
 {
@@ -120,6 +118,7 @@ class NonSimulationStuff
     //sf::Text mousePos;
     sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
     sf::View worldView = window.getDefaultView();
+    sf::View GUIView = window.getDefaultView();
     float currentZoom = 1.0f;
     sf::Time timestep = sf::milliseconds(1000.0/60.0);
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
@@ -140,7 +139,7 @@ class NonSimulationStuff
     int ballGridWidth;
 
     BallUniverse ballSim;
-    UIDebug<int> debugUI;
+    UIDebug<float> debugUI;
 
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);

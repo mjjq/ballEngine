@@ -98,13 +98,20 @@ void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, in
 {
     sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX,worldSizeY);
     worldView.setSize(sizeX,sizeY);
+    GUIView.setSize(sizeX, sizeY);
     windowSizeX = sizeX;
     windowSizeY = sizeY;
 
     if(effectiveZoom.y > effectiveZoom.x)
+    {
         worldView.zoom(effectiveZoom.y);
+        //GUIView.zoom(effectiveZoom.y);
+    }
     else
+    {
         worldView.zoom(effectiveZoom.x);
+        //GUIView.zoom(effectiveZoom.x);
+    }
 
     window.setView(worldView);
 }
@@ -257,18 +264,9 @@ float NonSimulationStuff::getWindowSizeX()
 
 void NonSimulationStuff::mainLoop()
 {
-    //std::string font = "./fonts/cour.ttf";
-    //float thing= 3.0;
-    //std::string var = std::to_string(windowSizeX);
-    UITextElement<int> testText("./fonts/cour.ttf", "mousePosition", {400.0,400.0}, &windowSizeX);
-    /*sf::Text test;
-    sf::Font font;
-    if(!font.loadFromFile("./fonts/cour.ttf"));
-        std::cout << "fail";
-    test.setFont(font);
-    test.setFillColor(sf::Color::White);
-    test.setPosition({400.0,400.0});
-    test.setString("Hello");*/
+    float thing = 1.4f;
+    debugUI.addElement("./fonts/cour.ttf", "mousePosition", {000.0,000.0}, &thing);
+
     while(window.isOpen())
     {
         window.clear();
@@ -295,12 +293,11 @@ void NonSimulationStuff::mainLoop()
 
         ballSim.drawBalls(window);
         window.draw(boundaryRect);
-        //window.draw(testText);
-        //debugUI.upAndRenderAllElements(window);
-        //window.draw(debugUI.textElements.at(0));
-        //sfVectorMath::printVector(debugUI.textElements.at(0).getPosition());
-        UITextElement<int> a = debugUI.returnElement(0);
-        window.draw(a);
+
+        debugUI.renderElements(window, GUIView);
+
+        window.setView(worldView);
+
         window.display();
 
         sf::sleep(timestep);
@@ -321,5 +318,4 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{spawnVelF
     resetView();
 
 
-    debugUI.addTextElement("./fonts/cour.ttf", "mousePosition", {400.0,400.0}, &mousePosOnClick.x);
 }
