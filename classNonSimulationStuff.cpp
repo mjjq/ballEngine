@@ -4,6 +4,7 @@
 #include <thread>
 #include <limits>
 #include <tuple>
+#include <functional>
 
 #include "classes.h"
 #include "sfVectorMath.h"
@@ -249,8 +250,25 @@ void NonSimulationStuff::decTimeStep(sf::Time delta)
         timestep-=delta;
 }
 
+float NonSimulationStuff::getWindowSizeX()
+{
+    return windowSizeX;
+}
+
 void NonSimulationStuff::mainLoop()
 {
+    //std::string font = "./fonts/cour.ttf";
+    //float thing= 3.0;
+    //std::string var = std::to_string(windowSizeX);
+    UITextElement<int> testText("./fonts/cour.ttf", "mousePosition", {400.0,400.0}, &windowSizeX);
+    /*sf::Text test;
+    sf::Font font;
+    if(!font.loadFromFile("./fonts/cour.ttf"));
+        std::cout << "fail";
+    test.setFont(font);
+    test.setFillColor(sf::Color::White);
+    test.setPosition({400.0,400.0});
+    test.setString("Hello");*/
     while(window.isOpen())
     {
         window.clear();
@@ -275,8 +293,14 @@ void NonSimulationStuff::mainLoop()
 
         ballSim.universeLoop();
 
-        drawBalls();
+        ballSim.drawBalls(window);
         window.draw(boundaryRect);
+        //window.draw(testText);
+        //debugUI.upAndRenderAllElements(window);
+        //window.draw(debugUI.textElements.at(0));
+        //sfVectorMath::printVector(debugUI.textElements.at(0).getPosition());
+        UITextElement<int> a = debugUI.returnElement(0);
+        window.draw(a);
         window.display();
 
         sf::sleep(timestep);
@@ -295,4 +319,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{spawnVelF
     wSize = ballSim.getWorldSize();
     changeBoundaryRect(wSize);
     resetView();
+
+
+    debugUI.addTextElement("./fonts/cour.ttf", "mousePosition", {400.0,400.0}, &mousePosOnClick.x);
 }

@@ -190,6 +190,14 @@ std::vector<Ball>* BallUniverse::getBallArrayAddress()
     return &ballArray;
 }
 
+void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
+{
+    for(int i=0; i<ballArray.size(); i++)
+    {
+        windowRef.draw(ballArray.at(i));
+    }
+}
+
 void BallUniverse::toggleCollisions()
 {
     if(enable_collisions)

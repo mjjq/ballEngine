@@ -70,11 +70,47 @@ public:
     void decSimStep(float delta);
     void setSimStep(float delta);
     void toggleSimPause();
-    std::vector<Ball>* getBallArrayAddress();
     void toggleCollisions();
     void toggleForces();
     void clearSimulation();
     void changeBallColour();
+
+    std::vector<Ball>* getBallArrayAddress();
+    void drawBalls(sf::RenderWindow &windowRef);
+};
+
+template <typename T>
+class UITextElement : public sf::Text
+{
+    std::string initialText;
+    sf::Font displayFont;
+    int *variable;//function which returns the variable to display
+    int displayVariable;
+    //Template <typename T>;
+
+    bool displayElement = true;
+    bool posRelativeToWorld = false;
+
+public:
+    UITextElement(std::string font, std::string text, sf::Vector2f position, T *variable);
+
+    void updateElement();
+
+};
+
+template <typename T>
+class UIDebug
+{
+
+
+public:
+    std::vector<UITextElement<T>> textElements;
+    UIDebug();
+    void addTextElement(std::string font, std::string text, sf::Vector2f position, T *variable);
+    void clearTextElements();
+    void moveTextElement(int element);
+    void upAndRenderAllElements(sf::RenderWindow &window);
+    UITextElement<T> returnElement(int elementNo);
 };
 
 class NonSimulationStuff
@@ -104,6 +140,7 @@ class NonSimulationStuff
     int ballGridWidth;
 
     BallUniverse ballSim;
+    UIDebug<int> debugUI;
 
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
@@ -121,6 +158,7 @@ class NonSimulationStuff
     void incTimeStep(sf::Time delta);
     void decTimeStep(sf::Time delta);
     void newLayerEvent(bool keyBool, sf::Event &event);
+    float getWindowSizeX();
 
 
 
@@ -132,5 +170,7 @@ public:
     void mainLoop();
 
 };
+
+
 
 #endif // CLASS_BALL_H
