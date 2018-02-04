@@ -65,6 +65,8 @@ public:
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
+    void drawBalls(sf::RenderWindow &windowRef);
+
     sf::Vector2i getWorldSize();
     void incSimStep(float delta);
     void decSimStep(float delta);
@@ -74,9 +76,6 @@ public:
     void toggleForces();
     void clearSimulation();
     void changeBallColour();
-
-    std::vector<Ball>* getBallArrayAddress();
-    void drawBalls(sf::RenderWindow &windowRef);
 };
 
 template <typename T>
@@ -90,7 +89,7 @@ class UITextElement : public sf::Text
     //Template <typename T>;
 
     bool displayElement = true;
-    bool fixedToWindow = false;
+    bool fixedToWindow = true;
 
 public:
     UITextElement(std::string text, sf::Vector2f position, T *var = nullptr);
@@ -106,7 +105,7 @@ class UIDebug
     std::vector<UITextElement<T>> textArray;
 
 public:
-    void addElement(std::string font, std::string str, sf::Vector2f position, T *var = nullptr);
+    void addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var = nullptr);
     void renderElements(sf::RenderWindow &window, sf::View &GUIView);
 };
 
@@ -139,7 +138,8 @@ class NonSimulationStuff
     int ballGridWidth;
 
     BallUniverse ballSim;
-    UIDebug<float> debugUI;
+    UIDebug<int> debugUIInt;
+    UIDebug<float> debugUIFloat;
 
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
@@ -148,7 +148,6 @@ class NonSimulationStuff
     void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY, float zoom);
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
-    void drawBalls();
     void changeBoundaryRect(sf::Vector2i worldSize);
     void mouseWheelZoom(bool keyPress, float delta);
     void mouseEvents(sf::Event &event);

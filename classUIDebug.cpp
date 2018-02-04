@@ -10,11 +10,12 @@
 #include "sfVectorMath.h"
 
 template <typename T>
-void UIDebug<T>::addElement(std::string font, std::string str, sf::Vector2f position, T *var)
+void UIDebug<T>::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
 {
     UITextElement<T> text(str, position, var);
     currentFont.loadFromFile(font);
     text.setFont(currentFont);
+    text.setCharacterSize(fontSize);
     //text.setPosition(position);
     //text.setString(str);
     textArray.push_back(text);

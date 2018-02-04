@@ -126,12 +126,12 @@ void NonSimulationStuff::resetView()
     window.setView(worldView);
 }
 
-void NonSimulationStuff::drawBalls()
+/*void NonSimulationStuff::drawBalls()
 {
     std::vector<Ball>* arrayAddress = ballSim.getBallArrayAddress();
     for(int i=0; i<arrayAddress->size(); i++)
         window.draw(arrayAddress->at(i));
-}
+}*/
 
 void NonSimulationStuff::changeBoundaryRect(sf::Vector2i worldSize)
 {
@@ -264,9 +264,6 @@ float NonSimulationStuff::getWindowSizeX()
 
 void NonSimulationStuff::mainLoop()
 {
-    float thing = 1.4f;
-    debugUI.addElement("./fonts/cour.ttf", "mousePosition", {000.0,000.0}, &thing);
-
     while(window.isOpen())
     {
         window.clear();
@@ -294,7 +291,8 @@ void NonSimulationStuff::mainLoop()
         ballSim.drawBalls(window);
         window.draw(boundaryRect);
 
-        debugUI.renderElements(window, GUIView);
+        debugUIFloat.renderElements(window, GUIView);
+        debugUIInt.renderElements(window, GUIView);
 
         window.setView(worldView);
 
@@ -316,6 +314,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{spawnVelF
     wSize = ballSim.getWorldSize();
     changeBoundaryRect(wSize);
     resetView();
-
+    debugUIInt.addElement("./fonts/cour.ttf", "windowSizeX", 16, {000.0,000.0}, &windowSizeX);
+    debugUIInt.addElement("./fonts/cour.ttf", "windowSizeY", 16, {000.0,025.0}, &windowSizeY);
 
 }

@@ -97,7 +97,11 @@ void BallUniverse::universeLoop()
             if(collider1 != collider2)
             {
                 std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
+                if(std::abs(dtR) < epsilon)
+                    sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
                 ballArray.at(collider1).ballCollision(ballArray.at(collider2));
+                if(std::abs(dtR) < epsilon)
+                    sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
                 //ballArray.at(collider1).resetToCollided();
                 //ballArray.at(collider2).resetToCollided();
             }
@@ -183,11 +187,6 @@ void BallUniverse::toggleSimPause()
     else
         isPaused = true;
         //setSimStep(0);
-}
-
-std::vector<Ball>* BallUniverse::getBallArrayAddress()
-{
-    return &ballArray;
 }
 
 void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
