@@ -291,8 +291,8 @@ void NonSimulationStuff::mainLoop()
         ballSim.drawBalls(window);
         window.draw(boundaryRect);
 
-        debugUIFloat.renderElements(window, GUIView);
-        debugUIInt.renderElements(window, GUIView);
+        //debugUIFloat.renderElements(window, GUIView);
+        //debugUIInt.renderElements(window, GUIView);
 
         window.setView(worldView);
 
@@ -312,9 +312,12 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{spawnVelF
             ballGridHeight{ballGridHeight}, ballGridWidth{ballGridWidth}, simFitsInWindow{simFitsInWindow}, ballSim{sim}
 {
     wSize = ballSim.getWorldSize();
+    //const int& wSizeX = ballSim.getWorldSizeX();
+    //std::cout << wSizeX << "\n";
     changeBoundaryRect(wSize);
     resetView();
-    debugUIInt.addElement("./fonts/cour.ttf", "windowSizeX", 16, {000.0,000.0}, &windowSizeX);
-    debugUIInt.addElement("./fonts/cour.ttf", "windowSizeY", 16, {000.0,025.0}, &windowSizeY);
+    //debugUIInt.addElement("./fonts/cour.ttf", "windowSizeX", 16, {000.0,000.0}, &windowSizeX);
+    //debugUIInt.addElement("./fonts/cour.ttf", "windowSizeY", 16, {000.0,025.0}, &windowSizeY);
+//    debugUIConstInt.addElement("./fonts/cour.ttf", "windowSizeY", 16, {000.0,050.0}, wSizeX);
 
 }

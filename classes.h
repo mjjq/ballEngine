@@ -76,6 +76,8 @@ public:
     void toggleForces();
     void clearSimulation();
     void changeBallColour();
+
+    const int* getWorldSizeX();
 };
 
 template <typename T>
@@ -138,8 +140,9 @@ class NonSimulationStuff
     int ballGridWidth;
 
     BallUniverse ballSim;
-    UIDebug<int> debugUIInt;
-    UIDebug<float> debugUIFloat;
+    //UIDebug<int> debugUIInt;
+    //UIDebug<const int> debugUIConstInt;
+    //UIDebug<float> debugUIFloat;
 
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);

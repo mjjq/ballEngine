@@ -229,6 +229,11 @@ void BallUniverse::clearSimulation()
     ballArray.clear();
 }
 
+const int* BallUniverse::getWorldSizeX()
+{
+    return &worldSizeX;
+}
+
 BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :
 
 worldSizeX{worldSizeX}, worldSizeY{worldSizeY}, enable_forces(force), enable_collisions(collision), dt{dt}

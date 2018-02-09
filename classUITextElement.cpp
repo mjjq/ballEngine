@@ -16,6 +16,7 @@ void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView
         if(variable!=nullptr)
         {
             displayVariable = *variable;
+            std::cout << variable << " : " << displayVariable << "\n";
             std::string strDispVariable = initialText + " " + std::to_string(displayVariable);
             setString(strDispVariable);
         }
