@@ -91,23 +91,33 @@ class UITextElement : public sf::Text
     //Template <typename T>;
 
     bool displayElement = true;
-    bool fixedToWindow = true;
+    bool fixedToWindow;
 
 public:
-    UITextElement(std::string text, sf::Vector2f position, T *var = nullptr);
-    void updateElement(sf::RenderWindow &window, sf::View &GUIView);
+    UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var = nullptr);
+    void updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition);
 
 };
 
 
 template <typename T>
-class UIDebug
+class UIWindow
 {
     sf::Font currentFont;
+    sf::Vector2f origPosition;
+    float width;
+    float height;
+    sf::Color color;
+    sf::RectangleShape windowBox;
     std::vector<UITextElement<T>> textArray;
 
+    bool fixedToWindow;
+
 public:
+    UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, sf::Color color = {50,50,50,150});
     void addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var = nullptr);
+    bool ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2);
+    void renderWindow(sf::RenderWindow &window, sf::View &GUIView);
     void renderElements(sf::RenderWindow &window, sf::View &GUIView);
 };
 
@@ -140,6 +150,8 @@ class NonSimulationStuff
     int ballGridWidth;
 
     BallUniverse ballSim;
+
+    UIWindow<int> UIWindow1{{0,0}, 150, 200, true};
     //UIDebug<int> debugUIInt;
     //UIDebug<const int> debugUIConstInt;
     //UIDebug<float> debugUIFloat;

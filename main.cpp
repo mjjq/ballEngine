@@ -16,8 +16,8 @@ int main()
 {
     int windowSizeX = 700;
     int windowSizeY = 700;
-    int worldSizeX = 2000;
-    int worldSizeY = 2000;
+    int worldSizeX = 1000;
+    int worldSizeY = 1000;
     bool simFitsInWindow = true;
 
     float dt=1;

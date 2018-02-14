@@ -11,7 +11,7 @@
 
 
 template <typename T>
-void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView)
+void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition)
     {
         if(variable!=nullptr)
         {
@@ -22,14 +22,18 @@ void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView
         }
         if(fixedToWindow)
         {
-            window.setView(GUIView);
-            setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(origPosition)));
+            setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(origPosition+parentPosition)));
+
+        }
+        else
+        {
+            setPosition((origPosition+parentPosition));
         }
     }
 
 template <typename T>
-UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, T *var) :
-                            initialText{text}, variable{var}, origPosition{position}
+UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var) :
+                            initialText{text}, variable{var}, origPosition{position}, fixedToWindow{fixedToWin}
 
 {
     setString(initialText);
