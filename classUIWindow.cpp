@@ -42,6 +42,7 @@ void UIWindow<T>::renderElements(sf::RenderWindow &window, sf::View &GUIView)
             //std::cout << a.top << " " << a.left << " " << a.width << " " << a.height << "\n";
             //std::cout << b.top << " " << b.left << " " << b.width << " " << b.height << "\n";
             textArray.at(i).updateElement(window, GUIView, origPosition);
+            textArray.at(i).textWrap(windowBox.getGlobalBounds());
             window.draw(textArray.at(i));
         }
     }

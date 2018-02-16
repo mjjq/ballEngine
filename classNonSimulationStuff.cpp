@@ -235,6 +235,12 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
             recentViewCoords = worldView.getCenter();
             mousePosOnPan = sf::Mouse::getPosition(window);
         }
+        else if(event.key.code == sf::Keyboard::L)
+        {
+            spawnVelFactor += 1;
+            //std::cout << spawnMass << "\n";
+        }
+
         newLayerEvent(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl), event);
     }
 }
@@ -291,6 +297,7 @@ void NonSimulationStuff::mainLoop()
         ballSim.drawBalls(window);
         window.draw(boundaryRect);
 
+
         UIWindow1.renderWindow(window,GUIView);
         //debugUIFloat.renderElements(window, GUIView);
         //debugUIInt.renderElements(window, GUIView);
@@ -321,6 +328,6 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{spawnVelF
     //debugUIInt.addElement("./fonts/cour.ttf", "windowSizeY", 16, {000.0,025.0}, &windowSizeY);
 //    debugUIConstInt.addElement("./fonts/cour.ttf", "windowSizeY", 16, {000.0,050.0}, wSizeX);
 
-    UIWindow1.addElement("./fonts/cour.ttf", "test", 16, {0,0});
-    UIWindow1.addElement("./fonts/courbd.ttf", "tst2", 16, {0,10});
+    UIWindow1.addElement("./fonts/cour.ttf", "Spawn Mass:", 26, {00,0}, &spawnMass);
+//    UIWindow1.addElement("./fonts/courbd.ttf", "SpawnjoijoijoijRadius:", 16, {0,35}, &windowSizeY);
 }

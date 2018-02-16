@@ -34,7 +34,7 @@ class NonSimulationStuff
 
     BallUniverse ballSim;
 
-    UIWindow<int> UIWindow1{{0,0}, 150, 200, true};
+    UIWindow<float> UIWindow1{{00,0}, 200, 200, true};
     //UIDebug<int> debugUIInt;
     //UIDebug<const int> debugUIConstInt;
     //UIDebug<float> debugUIFloat;
