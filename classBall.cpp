@@ -5,7 +5,7 @@
 #include <limits>
 #include <tuple>
 
-#include "classes.h"
+#include "classBall.h"
 #include "sfVectorMath.h"
 
 float Ball::lenJonesForce(float x, float x_0, float r, float m)

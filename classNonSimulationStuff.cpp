@@ -6,7 +6,7 @@
 #include <tuple>
 #include <functional>
 
-#include "classes.h"
+#include "classNonSim.h"
 #include "sfVectorMath.h"
 
 void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)

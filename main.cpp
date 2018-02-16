@@ -5,12 +5,8 @@
 #include <limits>
 #include <tuple>
 
-#include "classes.h"
+#include "classNonSim.h"
 #include "sfVectorMath.h"
-
-
-
-
 
 int main()
 {

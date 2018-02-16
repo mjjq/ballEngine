@@ -6,7 +6,7 @@
 #include <tuple>
 #include <functional>
 
-#include "classes.h"
+#include "classUIWindow.h"
 #include "sfVectorMath.h"
 
 template <typename T>
