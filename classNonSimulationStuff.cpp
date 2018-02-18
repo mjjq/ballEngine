@@ -95,7 +95,7 @@ void NonSimulationStuff::checkForViewPan(sf::Vector2i initialPos, sf::Vector2f o
         window.setMouseCursorVisible(true);
 }
 
-void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY, float zoom)
+void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY)//, float zoom)
 {
     sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX,worldSizeY);
     worldView.setSize(sizeX,sizeY);
@@ -117,12 +117,36 @@ void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, in
     window.setView(worldView);
 }
 
+void NonSimulationStuff::toggleFullScreen()
+{
+    if(!isFullScreen)
+    {
+        prevWindowSizeX = windowSizeX;
+        prevWindowSizeY = windowSizeY;
+        prevWindowPosition = window.getPosition();
+
+        sf::VideoMode mode = sf::VideoMode::getDesktopMode();
+        window.setSize({mode.width,mode.height});
+        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None);
+        adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);//, zoom);
+        isFullScreen = true;
+    }
+    else
+    {
+        window.setSize({prevWindowSizeX,prevWindowSizeY});
+        window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine");
+        adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);//, zoom);
+        window.setPosition(prevWindowPosition);
+        isFullScreen = false;
+    }
+}
+
 void NonSimulationStuff::resetView()
 {
     currentZoom = 1.0;
     sf::Vector2i woSize = ballSim.getWorldSize();
     worldView.setCenter(woSize.x/2,woSize.y/2);
-    adjustViewSize(window.getSize().x, window.getSize().y, woSize.x, woSize.y, currentZoom);
+    adjustViewSize(window.getSize().x, window.getSize().y, woSize.x, woSize.y);//, currentZoom);
 
     window.setView(worldView);
 }
@@ -214,12 +238,18 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
         if(event.key.code == sf::Keyboard::L)
                 spawnMass -= 1;
     }
+    else if(newLayerKeys[2])
+    {
+        if(event.key.code == sf::Keyboard::Return)
+            toggleFullScreen();
+    }
 }
 
 void NonSimulationStuff::keyEvents(sf::Event &event)
 {
     std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)};
+                                       sf::Keyboard::isKeyPressed(sf::Keyboard::RControl),
+                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)};
     bool newLayerPressed = false;
     if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
         newLayerPressed = true;
@@ -264,7 +294,7 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
 void NonSimulationStuff::resizeEvents(sf::Event &event)
 {
     if(event.type == sf::Event::Resized)
-        adjustViewSize(event.size.width, event.size.height, wSize.x, wSize.y, currentZoom);
+        adjustViewSize(event.size.width, event.size.height, wSize.x, wSize.y);//, currentZoom);
 
 }
 
@@ -314,9 +344,11 @@ void NonSimulationStuff::mainLoop()
         window.draw(boundaryRect);
 
 
-        UIWindow1.renderWindow(window,GUIView);
-
-        window.setView(worldView);
+//        UIWindow1.renderWindow(window,GUIView);
+//        window.setView(worldView);
+//        UIWindow2.renderWindow(window,GUIView);
+//        window.setView(worldView);
+        container.renderWindows(window, GUIView, worldView);
 
         window.display();
 
@@ -337,9 +369,13 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    UIWindow1.addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,0}, &spawnMass);
-    UIWindow1.addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,20}, &spawnRadius);
-    UIWindow1.addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,50}, &windowSizeX);
-    UIWindow1.addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,70}, &windowSizeY);
-    UIWindow1.addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,100}, &ballSim.getNumOfBalls());
+    container.addWindow({00,80}, 250, 200, true);
+    container.addWindow({0,0}, 220, 50, true);
+
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,0}, &spawnMass);
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,20}, &spawnRadius);
+    container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,50}, &ballSim.getNumOfBalls());
+
+    container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
+    container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
 }

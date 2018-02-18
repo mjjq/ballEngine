@@ -2,7 +2,7 @@
 #define CLASSES_H
 
 #include "classUniverse.h"
-#include "classUIWindow.h"
+#include "classUIContainer.h"
 
 
 class NonSimulationStuff
@@ -20,6 +20,11 @@ class NonSimulationStuff
     sf::RectangleShape boundaryRect;
     bool simFitsInWindow;
 
+    int prevWindowSizeX;
+    int prevWindowSizeY;
+    sf::Vector2i prevWindowPosition;
+    bool isFullScreen = false;
+
     sf::Vector2i mousePosOnClick;
     sf::Vector2i mousePosOnPan;
     sf::Vector2i mousePosOnRelease;
@@ -34,7 +39,9 @@ class NonSimulationStuff
 
     BallUniverse ballSim;
 
-    UIWindow UIWindow1{{00,0}, 250, 200, true};
+    //UIWindow UIWindow1{{00,80}, 250, 200, true};
+    //UIWindow UIWindow2{{0,0}, 220, 50, false};
+    UIContainer container;
     //UIDebug<int> debugUIInt;
     //UIDebug<const int> debugUIConstInt;
     //UIDebug<float> debugUIFloat;
@@ -43,7 +50,8 @@ class NonSimulationStuff
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
     void checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool);
     void resetView();
-    void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY, float zoom);
+    void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY);//, float zoom);
+    void toggleFullScreen();
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
     void changeBoundaryRect(sf::Vector2i worldSize);

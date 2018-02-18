@@ -12,7 +12,6 @@
 template<class T>
 void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
 {
-    std::cout << var << "\n";
     UITextElement<T> *text = new UITextElement<T>{str, position, fixedToWindow, var};
     currentFont.loadFromFile(font);
     text->setFont(currentFont);

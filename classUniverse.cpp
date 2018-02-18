@@ -99,7 +99,7 @@ void BallUniverse::universeLoop()
                 }
             if(collider1 != collider2)
             {
-                std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
+                //std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
                 if(std::abs(dtR) < epsilon)
                     sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
                 ballArray.at(collider1).ballCollision(ballArray.at(collider2));
