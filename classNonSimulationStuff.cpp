@@ -7,6 +7,7 @@
 #include <functional>
 
 #include "classNonSim.h"
+#include "classTextElementBase.h"
 #include "sfVectorMath.h"
 
 void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)
@@ -195,9 +196,9 @@ void NonSimulationStuff::mouseEvents(sf::Event &event)
     }
 }
 
-void NonSimulationStuff::newLayerEvent(bool keyBool, sf::Event &event)
+void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 {
-    if(keyBool)
+    if(newLayerKeys[0])
     {
         if(event.key.code == sf::Keyboard::C)
             ballSim.toggleCollisions();
@@ -205,13 +206,28 @@ void NonSimulationStuff::newLayerEvent(bool keyBool, sf::Event &event)
             ballSim.toggleForces();
         else if(event.key.code == sf::Keyboard::K)
             ballSim.changeBallColour();
+        else if(event.key.code == sf::Keyboard::R)
+            spawnRadius -= 1;
+    }
+    else if(newLayerKeys[1])
+    {
+        if(event.key.code == sf::Keyboard::L)
+                spawnMass -= 1;
     }
 }
 
 void NonSimulationStuff::keyEvents(sf::Event &event)
 {
+    std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
+                                       sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)};
+    bool newLayerPressed = false;
+    if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
+        newLayerPressed = true;
+
     if(event.type == sf::Event::EventType::KeyPressed)
     {
+        if(!newLayerPressed)
+        {
         if(event.key.code == sf::Keyboard::PageUp)
             incTimeStep(sf::milliseconds(1.0/60.0));
         else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
@@ -236,12 +252,12 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
             mousePosOnPan = sf::Mouse::getPosition(window);
         }
         else if(event.key.code == sf::Keyboard::L)
-        {
-            spawnVelFactor += 1;
-            //std::cout << spawnMass << "\n";
+            spawnMass += 1;
+        else if(event.key.code == sf::Keyboard::R)
+            spawnRadius += 1;
         }
 
-        newLayerEvent(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl), event);
+        newLayerEvent(newLayerKeys, event);
     }
 }
 
@@ -299,8 +315,6 @@ void NonSimulationStuff::mainLoop()
 
 
         UIWindow1.renderWindow(window,GUIView);
-        //debugUIFloat.renderElements(window, GUIView);
-        //debugUIInt.renderElements(window, GUIView);
 
         window.setView(worldView);
 
@@ -311,23 +325,21 @@ void NonSimulationStuff::mainLoop()
     }
 }
 
-NonSimulationStuff::NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int spawnVelFactor,
-                 float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
-                                    int ballGridWidth, bool simFitsInWindow, BallUniverse sim) :
+NonSimulationStuff::NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int m_spawnVelFactor,
+                 float m_spawnRadius, float m_spawnMass, float m_ballGridSpacing, int m_ballGridHeight,
+                                    int m_ballGridWidth, bool m_simFitsInWindow, BallUniverse m_sim) :
 
-windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{spawnVelFactor},
-            spawnRadius{spawnRadius}, spawnMass{spawnMass}, ballGridSpacing{ballGridSpacing},
-            ballGridHeight{ballGridHeight}, ballGridWidth{ballGridWidth}, simFitsInWindow{simFitsInWindow}, ballSim{sim}
+windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVelFactor},
+            spawnRadius{m_spawnRadius}, spawnMass{m_spawnMass}, ballGridSpacing{m_ballGridSpacing},
+            ballGridHeight{m_ballGridHeight}, ballGridWidth{m_ballGridWidth}, simFitsInWindow{m_simFitsInWindow}, ballSim{m_sim}
 {
     wSize = ballSim.getWorldSize();
-    //const int& wSizeX = ballSim.getWorldSizeX();
-    //std::cout << wSizeX << "\n";
     changeBoundaryRect(wSize);
     resetView();
-    //debugUIInt.addElement("./fonts/cour.ttf", "windowSizeX", 16, {000.0,000.0}, &windowSizeX);
-    //debugUIInt.addElement("./fonts/cour.ttf", "windowSizeY", 16, {000.0,025.0}, &windowSizeY);
-//    debugUIConstInt.addElement("./fonts/cour.ttf", "windowSizeY", 16, {000.0,050.0}, wSizeX);
 
-    UIWindow1.addElement("./fonts/cour.ttf", "Spawn Mass:", 26, {00,0}, &spawnMass);
-//    UIWindow1.addElement("./fonts/courbd.ttf", "SpawnjoijoijoijRadius:", 16, {0,35}, &windowSizeY);
+    UIWindow1.addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,0}, &spawnMass);
+    UIWindow1.addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,20}, &spawnRadius);
+    UIWindow1.addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,50}, &windowSizeX);
+    UIWindow1.addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,70}, &windowSizeY);
+    UIWindow1.addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,100}, &ballSim.getNumOfBalls());
 }

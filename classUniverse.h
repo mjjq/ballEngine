@@ -8,7 +8,7 @@ class BallUniverse
 
     int worldSizeX;
     int worldSizeY;
-    int numOfBalls;
+    int numOfBalls = 0;
     int collider1 = 0;
     int collider2 = 0;
     bool enable_forces;
@@ -43,7 +43,8 @@ public:
     void clearSimulation();
     void changeBallColour();
 
-    const int* getWorldSizeX();
+    const int& getWorldSizeX();
+    int& getNumOfBalls();
 };
 
 #endif // CLASS_UNIVERSE_H

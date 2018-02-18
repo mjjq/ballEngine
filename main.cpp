@@ -7,6 +7,7 @@
 
 #include "classNonSim.h"
 #include "sfVectorMath.h"
+#include "stringConversion.h"
 
 int main()
 {

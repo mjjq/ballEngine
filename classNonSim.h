@@ -34,7 +34,7 @@ class NonSimulationStuff
 
     BallUniverse ballSim;
 
-    UIWindow<float> UIWindow1{{00,0}, 200, 200, true};
+    UIWindow UIWindow1{{00,0}, 250, 200, true};
     //UIDebug<int> debugUIInt;
     //UIDebug<const int> debugUIConstInt;
     //UIDebug<float> debugUIFloat;
@@ -53,7 +53,7 @@ class NonSimulationStuff
     void resizeEvents(sf::Event &event);
     void incTimeStep(sf::Time delta);
     void decTimeStep(sf::Time delta);
-    void newLayerEvent(bool keyBool, sf::Event &event);
+    void newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event);
     float getWindowSizeX();
 
 

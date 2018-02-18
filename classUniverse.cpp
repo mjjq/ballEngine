@@ -13,7 +13,10 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
 {
     if(!(position.x - radius < 0 || position.y - radius < 0
       || position.x + radius > worldSizeX || position.y + radius > worldSizeY))
+    {
         ballArray.push_back(Ball(radius,mass,position,velocity));
+        numOfBalls++;
+    }
 }
 
 //void resetAndCheckBounce(std::vector<Ball>)
@@ -227,11 +230,17 @@ void BallUniverse::changeBallColour()
 void BallUniverse::clearSimulation()
 {
     ballArray.clear();
+    numOfBalls = 0;
 }
 
-const int* BallUniverse::getWorldSizeX()
+const int& BallUniverse::getWorldSizeX()
 {
-    return &worldSizeX;
+    return worldSizeX;
+}
+
+int& BallUniverse::getNumOfBalls()
+{
+    return numOfBalls;
 }
 
 BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :

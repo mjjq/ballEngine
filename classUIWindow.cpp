@@ -9,48 +9,51 @@
 #include "classUIWindow.h"
 #include "sfVectorMath.h"
 
-template <typename T>
-void UIWindow<T>::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
+template<class T>
+void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
 {
-    UITextElement<T> text(str, position, fixedToWindow, var);
+    std::cout << var << "\n";
+    UITextElement<T> *text = new UITextElement<T>{str, position, fixedToWindow, var};
     currentFont.loadFromFile(font);
-    text.setFont(currentFont);
-    text.setCharacterSize(fontSize);
+    text->setFont(currentFont);
+    text->setCharacterSize(fontSize);
     //text.setPosition(position);
     //text.setString(str);
-    textArray.push_back(text);
+    UITextElementBase *text2 = text;
+    textArray.emplace_back(text2);
 }
 
-template <typename T>
-bool UIWindow<T>::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2)
+
+bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2)
 {
     if(rectBound1.intersects(rectBound2))
         return true;
     return false;
 }
 
-template <typename T>
-void UIWindow<T>::renderElements(sf::RenderWindow &window, sf::View &GUIView)
+
+void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 {
     for(int i=0; i<textArray.size(); i++)
     {
 
         //if(textArray.at(i).getGlobalBounds().intersects(windowBox.getGlobalBounds()))
         {
-            sf::Rect<float> a = textArray.at(0).getGlobalBounds();
+            sf::Rect<float> a = textArray.at(0)->getGlobalBounds();
             sf::Rect<float> b = windowBox.getGlobalBounds();
             //std::cout << a.top << " " << a.left << " " << a.width << " " << a.height << "\n";
             //std::cout << b.top << " " << b.left << " " << b.width << " " << b.height << "\n";
-            textArray.at(i).updateElement(window, GUIView, origPosition);
-            textArray.at(i).textWrap(windowBox.getGlobalBounds());
-            window.draw(textArray.at(i));
+            textArray.at(i)->updateElement(window, GUIView, origPosition);
+            textArray.at(i)->textWrap(windowBox.getGlobalBounds());
+            window.draw(*textArray.at(i));
         }
     }
 }
 
-template <typename T>
-void UIWindow<T>::renderWindow(sf::RenderWindow &window, sf::View &GUIView)
+
+void UIWindow::renderWindow(sf::RenderWindow &window, sf::View &GUIView)
 {
+
     if(fixedToWindow)
     {
         window.setView(GUIView);
@@ -64,8 +67,8 @@ void UIWindow<T>::renderWindow(sf::RenderWindow &window, sf::View &GUIView)
     renderElements(window, GUIView);
 }
 
-template <typename T>
-UIWindow<T>::UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, sf::Color color) :
+
+UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, sf::Color color) :
             origPosition{position}, width{width}, height{height}, color{color}, fixedToWindow{fixedToWin}
 {
     windowBox.setPosition(origPosition);
@@ -73,5 +76,9 @@ UIWindow<T>::UIWindow(sf::Vector2f position, float width, float height, bool fix
     windowBox.setFillColor(color);
 }
 
-template class UIWindow<int>;
-template class UIWindow<float>;
+template void UIWindow::addElement<int>(std::string font, std::string str, int fontSize, sf::Vector2f position, int *var);
+//template void UIWindow::addElement<const int>(std::string font, std::string str, int fontSize, sf::Vector2f position, const int *var);
+template void UIWindow::addElement<float>(std::string font, std::string str, int fontSize, sf::Vector2f position, float *var);
+template void UIWindow::addElement<sf::Vector2i>(std::string font, std::string str, int fontSize, sf::Vector2f position, sf::Vector2i *var);
+template void UIWindow::addElement<sf::Vector2f>(std::string font, std::string str, int fontSize, sf::Vector2f position, sf::Vector2f *var);
+
