@@ -5,7 +5,7 @@
 #include <limits>
 #include <tuple>
 
-#include "classes.h"
+#include "classUniverse.h"
 #include "sfVectorMath.h"
 
 
@@ -13,7 +13,10 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
 {
     if(!(position.x - radius < 0 || position.y - radius < 0
       || position.x + radius > worldSizeX || position.y + radius > worldSizeY))
+    {
         ballArray.push_back(Ball(radius,mass,position,velocity));
+        numOfBalls++;
+    }
 }
 
 //void resetAndCheckBounce(std::vector<Ball>)
@@ -96,7 +99,7 @@ void BallUniverse::universeLoop()
                 }
             if(collider1 != collider2)
             {
-                std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
+                //std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
                 if(std::abs(dtR) < epsilon)
                     sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
                 ballArray.at(collider1).ballCollision(ballArray.at(collider2));
@@ -227,6 +230,17 @@ void BallUniverse::changeBallColour()
 void BallUniverse::clearSimulation()
 {
     ballArray.clear();
+    numOfBalls = 0;
+}
+
+const int& BallUniverse::getWorldSizeX()
+{
+    return worldSizeX;
+}
+
+int& BallUniverse::getNumOfBalls()
+{
+    return numOfBalls;
 }
 
 BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :
