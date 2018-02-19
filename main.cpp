@@ -5,9 +5,9 @@
 #include <limits>
 #include <tuple>
 
-#include "classNonSim.h"
-#include "sfVectorMath.h"
-#include "stringConversion.h"
+#include "./headers/classNonSim.h"
+#include "./headers/sfVectorMath.h"
+#include "./headers/stringConversion.h"
 
 int main()
 {
