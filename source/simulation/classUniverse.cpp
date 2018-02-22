@@ -5,15 +5,18 @@
 #include <limits>
 #include <tuple>
 
-#include "classes.h"
-#include "sfVectorMath.h"
+#include "../../headers/classUniverse.h"
+#include "../../headers/sfVectorMath.h"
 
 
 void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass)
 {
     if(!(position.x - radius < 0 || position.y - radius < 0
       || position.x + radius > worldSizeX || position.y + radius > worldSizeY))
+    {
         ballArray.push_back(Ball(radius,mass,position,velocity));
+        numOfBalls++;
+    }
 }
 
 //void resetAndCheckBounce(std::vector<Ball>)
@@ -96,8 +99,12 @@ void BallUniverse::universeLoop()
                 }
             if(collider1 != collider2)
             {
-                std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
+                //std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
+                if(std::abs(dtR) < epsilon)
+                    sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
                 ballArray.at(collider1).ballCollision(ballArray.at(collider2));
+                if(std::abs(dtR) < epsilon)
+                    sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
                 //ballArray.at(collider1).resetToCollided();
                 //ballArray.at(collider2).resetToCollided();
             }
@@ -185,9 +192,12 @@ void BallUniverse::toggleSimPause()
         //setSimStep(0);
 }
 
-std::vector<Ball>* BallUniverse::getBallArrayAddress()
+void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
 {
-    return &ballArray;
+    for(int i=0; i<ballArray.size(); i++)
+    {
+        windowRef.draw(ballArray.at(i));
+    }
 }
 
 void BallUniverse::toggleCollisions()
@@ -220,6 +230,17 @@ void BallUniverse::changeBallColour()
 void BallUniverse::clearSimulation()
 {
     ballArray.clear();
+    numOfBalls = 0;
+}
+
+const int& BallUniverse::getWorldSizeX()
+{
+    return worldSizeX;
+}
+
+int& BallUniverse::getNumOfBalls()
+{
+    return numOfBalls;
 }
 
 BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :

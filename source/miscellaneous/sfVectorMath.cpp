@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include "sfVectorMath.h"
+#include "../../headers/sfVectorMath.h"
 
 int sfVectorMath::dot(sf::Vector2i vec1, sf::Vector2i vec2)
 {

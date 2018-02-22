@@ -4,9 +4,11 @@
 #include <thread>
 #include <limits>
 #include <tuple>
+#include <functional>
 
-#include "classes.h"
-#include "sfVectorMath.h"
+#include "../../headers/classNonSim.h"
+#include "../../headers/classTextElementBase.h"
+#include "../../headers/sfVectorMath.h"
 
 void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 {
@@ -93,19 +95,50 @@ void NonSimulationStuff::checkForViewPan(sf::Vector2i initialPos, sf::Vector2f o
         window.setMouseCursorVisible(true);
 }
 
-void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY, float zoom)
+void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY)//, float zoom)
 {
     sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX,worldSizeY);
     worldView.setSize(sizeX,sizeY);
+    GUIView.setSize(sizeX, sizeY);
     windowSizeX = sizeX;
     windowSizeY = sizeY;
 
     if(effectiveZoom.y > effectiveZoom.x)
+    {
         worldView.zoom(effectiveZoom.y);
+        //GUIView.zoom(effectiveZoom.y);
+    }
     else
+    {
         worldView.zoom(effectiveZoom.x);
+        //GUIView.zoom(effectiveZoom.x);
+    }
 
     window.setView(worldView);
+}
+
+void NonSimulationStuff::toggleFullScreen()
+{
+    if(!isFullScreen)
+    {
+        prevWindowSizeX = windowSizeX;
+        prevWindowSizeY = windowSizeY;
+        prevWindowPosition = window.getPosition();
+
+        sf::VideoMode mode = sf::VideoMode::getDesktopMode();
+        window.setSize({mode.width,mode.height});
+        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None);
+        adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);//, zoom);
+        isFullScreen = true;
+    }
+    else
+    {
+        window.setSize({prevWindowSizeX,prevWindowSizeY});
+        window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine");
+        adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);//, zoom);
+        window.setPosition(prevWindowPosition);
+        isFullScreen = false;
+    }
 }
 
 void NonSimulationStuff::resetView()
@@ -113,17 +146,17 @@ void NonSimulationStuff::resetView()
     currentZoom = 1.0;
     sf::Vector2i woSize = ballSim.getWorldSize();
     worldView.setCenter(woSize.x/2,woSize.y/2);
-    adjustViewSize(window.getSize().x, window.getSize().y, woSize.x, woSize.y, currentZoom);
+    adjustViewSize(window.getSize().x, window.getSize().y, woSize.x, woSize.y);//, currentZoom);
 
     window.setView(worldView);
 }
 
-void NonSimulationStuff::drawBalls()
+/*void NonSimulationStuff::drawBalls()
 {
     std::vector<Ball>* arrayAddress = ballSim.getBallArrayAddress();
     for(int i=0; i<arrayAddress->size(); i++)
         window.draw(arrayAddress->at(i));
-}
+}*/
 
 void NonSimulationStuff::changeBoundaryRect(sf::Vector2i worldSize)
 {
@@ -187,9 +220,9 @@ void NonSimulationStuff::mouseEvents(sf::Event &event)
     }
 }
 
-void NonSimulationStuff::newLayerEvent(bool keyBool, sf::Event &event)
+void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 {
-    if(keyBool)
+    if(newLayerKeys[0])
     {
         if(event.key.code == sf::Keyboard::C)
             ballSim.toggleCollisions();
@@ -197,13 +230,34 @@ void NonSimulationStuff::newLayerEvent(bool keyBool, sf::Event &event)
             ballSim.toggleForces();
         else if(event.key.code == sf::Keyboard::K)
             ballSim.changeBallColour();
+        else if(event.key.code == sf::Keyboard::R)
+            spawnRadius -= 1;
+    }
+    else if(newLayerKeys[1])
+    {
+        if(event.key.code == sf::Keyboard::L)
+                spawnMass -= 1;
+    }
+    else if(newLayerKeys[2])
+    {
+        if(event.key.code == sf::Keyboard::Return)
+            toggleFullScreen();
     }
 }
 
 void NonSimulationStuff::keyEvents(sf::Event &event)
 {
+    std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
+                                       sf::Keyboard::isKeyPressed(sf::Keyboard::RControl),
+                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)};
+    bool newLayerPressed = false;
+    if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
+        newLayerPressed = true;
+
     if(event.type == sf::Event::EventType::KeyPressed)
     {
+        if(!newLayerPressed)
+        {
         if(event.key.code == sf::Keyboard::PageUp)
             incTimeStep(sf::milliseconds(1.0/60.0));
         else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
@@ -227,14 +281,20 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
             recentViewCoords = worldView.getCenter();
             mousePosOnPan = sf::Mouse::getPosition(window);
         }
-        newLayerEvent(sf::Keyboard::isKeyPressed(sf::Keyboard::LControl), event);
+        else if(event.key.code == sf::Keyboard::L)
+            spawnMass += 1;
+        else if(event.key.code == sf::Keyboard::R)
+            spawnRadius += 1;
+        }
+
+        newLayerEvent(newLayerKeys, event);
     }
 }
 
 void NonSimulationStuff::resizeEvents(sf::Event &event)
 {
     if(event.type == sf::Event::Resized)
-        adjustViewSize(event.size.width, event.size.height, wSize.x, wSize.y, currentZoom);
+        adjustViewSize(event.size.width, event.size.height, wSize.x, wSize.y);//, currentZoom);
 
 }
 
@@ -247,6 +307,11 @@ void NonSimulationStuff::decTimeStep(sf::Time delta)
 {
     if(delta>sf::milliseconds(0) && timestep>delta)
         timestep-=delta;
+}
+
+float NonSimulationStuff::getWindowSizeX()
+{
+    return windowSizeX;
 }
 
 void NonSimulationStuff::mainLoop()
@@ -275,8 +340,16 @@ void NonSimulationStuff::mainLoop()
 
         ballSim.universeLoop();
 
-        drawBalls();
+        ballSim.drawBalls(window);
         window.draw(boundaryRect);
+
+
+//        UIWindow1.renderWindow(window,GUIView);
+//        window.setView(worldView);
+//        UIWindow2.renderWindow(window,GUIView);
+//        window.setView(worldView);
+        container.renderWindows(window, GUIView, worldView);
+
         window.display();
 
         sf::sleep(timestep);
@@ -284,15 +357,25 @@ void NonSimulationStuff::mainLoop()
     }
 }
 
-NonSimulationStuff::NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int spawnVelFactor,
-                 float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
-                                    int ballGridWidth, bool simFitsInWindow, BallUniverse sim) :
+NonSimulationStuff::NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int m_spawnVelFactor,
+                 float m_spawnRadius, float m_spawnMass, float m_ballGridSpacing, int m_ballGridHeight,
+                                    int m_ballGridWidth, bool m_simFitsInWindow, BallUniverse m_sim) :
 
-windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{spawnVelFactor},
-            spawnRadius{spawnRadius}, spawnMass{spawnMass}, ballGridSpacing{ballGridSpacing},
-            ballGridHeight{ballGridHeight}, ballGridWidth{ballGridWidth}, simFitsInWindow{simFitsInWindow}, ballSim{sim}
+windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVelFactor},
+            spawnRadius{m_spawnRadius}, spawnMass{m_spawnMass}, ballGridSpacing{m_ballGridSpacing},
+            ballGridHeight{m_ballGridHeight}, ballGridWidth{m_ballGridWidth}, simFitsInWindow{m_simFitsInWindow}, ballSim{m_sim}
 {
     wSize = ballSim.getWorldSize();
     changeBoundaryRect(wSize);
     resetView();
+
+    container.addWindow({00,80}, 250, 200, true);
+    container.addWindow({0,0}, 220, 50, true);
+
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,0}, &spawnMass);
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,20}, &spawnRadius);
+    container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,50}, &ballSim.getNumOfBalls());
+
+    container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
+    container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
 }
