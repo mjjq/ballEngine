@@ -46,6 +46,6 @@ UITextElementBase::UITextElementBase(std::string text, sf::Vector2f position, bo
 {
     setString(initialText);
     setPosition(position);
-    setFillColor(sf::Color::White);
+//    setFillColor(sf::Color::White);
 }
 

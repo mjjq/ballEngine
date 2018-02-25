@@ -36,6 +36,8 @@ void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView
         }
 }
 
+
+
 template <typename T>
 UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var) :
                             UITextElementBase(text, position, fixedToWin), variable{var}
@@ -48,5 +50,6 @@ UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, bool fi
 template class UITextElement<int>;
 //template class UITextElement<const int>;
 template class UITextElement<float>;
+template class UITextElement<bool>;
 template class UITextElement<sf::Vector2i>;
 template class UITextElement<sf::Vector2f>;

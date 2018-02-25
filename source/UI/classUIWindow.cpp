@@ -8,6 +8,7 @@
 
 #include "../../headers/classUIWindow.h"
 #include "../../headers/sfVectorMath.h"
+#include "../../headers/stringConversion.h"
 
 template<class T>
 void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
@@ -38,8 +39,8 @@ void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 
         //if(textArray.at(i).getGlobalBounds().intersects(windowBox.getGlobalBounds()))
         {
-            sf::Rect<float> a = textArray.at(0)->getGlobalBounds();
-            sf::Rect<float> b = windowBox.getGlobalBounds();
+            //sf::Rect<float> a = textArray.at(0)->getGlobalBounds();
+            //sf::Rect<float> b = windowBox.getGlobalBounds();
             //std::cout << a.top << " " << a.left << " " << a.width << " " << a.height << "\n";
             //std::cout << b.top << " " << b.left << " " << b.width << " " << b.height << "\n";
             textArray.at(i)->updateElement(window, GUIView, origPosition);
@@ -75,9 +76,62 @@ UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedT
     windowBox.setFillColor(color);
 }
 
+void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
+{
+    //std::cout << windowBox.getPosition() << "\n";
+    if(fixedToWindow)
+    {
+        sf::Vector2f mousePosf = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+        if(origRect.contains(mousePosf))
+        {
+            //mouseOffset = {mousePosf.x - origRect.left, mousePosf.y - origRect.top};
+            mouseIntersecting = true;
+            //std::cout << "intersecting" << "\n";
+        }
+        else
+        {
+            mouseOffset = {0,0};
+            mouseIntersecting = false;
+        }
+    }
+    else
+    {
+        sf::Vector2f mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window)); //static_cast<sf::Vector2f>(
+        //std::cout << mousePosf << "\n";
+        if(origRect.contains(mousePosf))
+        {
+            //mouseOffset = {mousePosf.x - origRect.left, mousePosf.y - origRect.top};
+            mouseIntersecting = true;
+            //std::cout << "intersecting" << "\n";
+        }
+        else
+        {
+            mouseOffset = {0,0};
+            mouseIntersecting = false;
+        }
+    }
+}
+
+bool UIWindow::getIsMouseIntersecting()
+{
+    return mouseIntersecting;
+}
+
+void UIWindow::moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition, sf::Vector2i offset)
+{
+    if(fixedToWindow)
+        origPosition = static_cast<sf::Vector2f>(newPosition);
+    else
+        origPosition = window.mapPixelToCoords(newPosition);// + mouseOffset);
+    sf::Rect<float> newRect{origPosition,{width,height}};
+    origRect = newRect;
+    //std::cout << "Moving\n";
+}
+
 template void UIWindow::addElement<int>(std::string font, std::string str, int fontSize, sf::Vector2f position, int *var);
 //template void UIWindow::addElement<const int>(std::string font, std::string str, int fontSize, sf::Vector2f position, const int *var);
 template void UIWindow::addElement<float>(std::string font, std::string str, int fontSize, sf::Vector2f position, float *var);
+template void UIWindow::addElement<bool>(std::string font, std::string str, int fontSize, sf::Vector2f position, bool *var);
 template void UIWindow::addElement<sf::Vector2i>(std::string font, std::string str, int fontSize, sf::Vector2f position, sf::Vector2i *var);
 template void UIWindow::addElement<sf::Vector2f>(std::string font, std::string str, int fontSize, sf::Vector2f position, sf::Vector2f *var);
 
