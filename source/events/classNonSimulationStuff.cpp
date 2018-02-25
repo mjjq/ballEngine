@@ -180,7 +180,7 @@ void NonSimulationStuff::mouseWheelZoom(bool keyPress, float delta)
     }
 }
 
-void NonSimulationStuff::mouseEvents(sf::Event &event)
+void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
 {
     if(event.type == sf::Event::MouseButtonPressed)
     {
@@ -188,7 +188,7 @@ void NonSimulationStuff::mouseEvents(sf::Event &event)
         mousePosOnClick = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
     }
 
-    if(event.type == sf::Event::EventType::MouseButtonReleased
+    else if(event.type == sf::Event::EventType::MouseButtonReleased
                             && event.mouseButton.button==sf::Mouse::Left
                             && !(timeToNextSpawn > sf::milliseconds(0)))
     {
@@ -204,7 +204,7 @@ void NonSimulationStuff::mouseEvents(sf::Event &event)
         spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,-spawnMass);
     }*/
 
-    if(event.type == sf::Event::EventType::MouseButtonReleased
+    else if(event.type == sf::Event::EventType::MouseButtonReleased
                     && event.mouseButton.button==sf::Mouse::Middle
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
@@ -212,17 +212,41 @@ void NonSimulationStuff::mouseEvents(sf::Event &event)
         ballSim.createBallGrid(ballGridWidth,ballGridHeight,ballGridSpacing,
                         static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnMass,spawnRadius);
     }
+}
 
-    if(event.type == sf::Event::MouseWheelScrolled)
+void NonSimulationStuff::mouseViewEvents(sf::Event &event)
+{
+    if(event.type == sf::Event::MouseButtonPressed)
+    {
+        mouseOnUIWhenClicked = container.doesMIntExist();
+    }
+
+    else if(event.type == sf::Event::MouseWheelScrolled)
     {
         float delta = event.mouseWheelScroll.delta;
         mouseWheelZoom(sf::Keyboard::isKeyPressed(sf::Keyboard::Space), delta);
+    }
+
+    else if(event.type == sf::Event::MouseMoved)
+        container.checkMouseIntersection(window, GUIView, worldView);
+}
+
+void NonSimulationStuff::mouseUIEvents(sf::Event &event)
+{
+    if(!mouseOnButtonWhenClicked.first)
+        if(event.type == sf::Event::MouseButtonPressed)
+        {
+            clickedWindowToDrag = true;
+        }
+    else if(event.type == sf::Event::MouseButtonReleased)
+    {
+        clickedWindowToDrag = false;
     }
 }
 
 void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 {
-    if(newLayerKeys[0])
+    if(newLayerKeys[0]&&(!newLayerKeys[1]))
     {
         if(event.key.code == sf::Keyboard::C)
             ballSim.toggleCollisions();
@@ -232,12 +256,26 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
             ballSim.changeBallColour();
         else if(event.key.code == sf::Keyboard::R)
             spawnRadius -= 1;
+        else if(event.key.code == sf::Keyboard::M)
+            spawnMass -= 1;
     }
-    else if(newLayerKeys[1])
+    /*else if((!newLayerKeys[0])&&newLayerKeys[1])
     {
-        if(event.key.code == sf::Keyboard::L)
-                spawnMass -= 1;
+        std::cout << "HEllo\n";
+        spawnRadius += 5;
+        if(event.key.code == sf::Keyboard::R)
+            std::cout << "Hello2\n";
+        else if(event.key.code == sf::Keyboard::M)
+            spawnMass += 5;
     }
+    else if(newLayerKeys[0]&&newLayerKeys[1])
+    {
+        std::cout << "Hello3\n";
+        if(event.key.code == sf::Keyboard::R)
+            spawnRadius -= 5;
+        else if(event.key.code == sf::Keyboard::M)
+            spawnMass -= 5;
+    }*/
     else if(newLayerKeys[2])
     {
         if(event.key.code == sf::Keyboard::Return)
@@ -248,7 +286,7 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
 void NonSimulationStuff::keyEvents(sf::Event &event)
 {
     std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::RControl),
+                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LShift),
                                        sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)};
     bool newLayerPressed = false;
     if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
@@ -258,33 +296,33 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
     {
         if(!newLayerPressed)
         {
-        if(event.key.code == sf::Keyboard::PageUp)
-            incTimeStep(sf::milliseconds(1.0/60.0));
-        else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
-            decTimeStep(sf::milliseconds(1.0/60.0));
-        else if(event.key.code == sf::Keyboard::Comma)
-            ballSim.decSimStep(0.1);
-        else if(event.key.code == sf::Keyboard::Period)
-            ballSim.incSimStep(0.1);
-        else if(event.key.code == sf::Keyboard::Delete)
-            ballSim.clearSimulation();
-        else if(event.key.code == sf::Keyboard::Dash)
-            zoomToMouse(2.0f);
-        else if(event.key.code == sf::Keyboard::Equal)
-            zoomToMouse(0.5f);
-        else if(event.key.code == sf::Keyboard::Num0)
-            resetView();
-        else if(event.key.code == sf::Keyboard::P)
-            ballSim.toggleSimPause();
-        else if(event.key.code == sf::Keyboard::Space)
-        {
-            recentViewCoords = worldView.getCenter();
-            mousePosOnPan = sf::Mouse::getPosition(window);
-        }
-        else if(event.key.code == sf::Keyboard::L)
-            spawnMass += 1;
-        else if(event.key.code == sf::Keyboard::R)
-            spawnRadius += 1;
+            if(event.key.code == sf::Keyboard::PageUp)
+                incTimeStep(sf::milliseconds(1.0/60.0));
+            else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
+                decTimeStep(sf::milliseconds(1.0/60.0));
+            else if(event.key.code == sf::Keyboard::Comma)
+                ballSim.decSimStep(0.1);
+            else if(event.key.code == sf::Keyboard::Period)
+                ballSim.incSimStep(0.1);
+            else if(event.key.code == sf::Keyboard::Delete)
+                ballSim.clearSimulation();
+            else if(event.key.code == sf::Keyboard::Dash)
+                zoomToMouse(2.0f);
+            else if(event.key.code == sf::Keyboard::Equal)
+                zoomToMouse(0.5f);
+            else if(event.key.code == sf::Keyboard::Num0)
+                resetView();
+            else if(event.key.code == sf::Keyboard::P)
+                ballSim.toggleSimPause();
+            else if(event.key.code == sf::Keyboard::Space)
+            {
+                recentViewCoords = worldView.getCenter();
+                mousePosOnPan = sf::Mouse::getPosition(window);
+            }
+            else if(event.key.code == sf::Keyboard::M)
+                spawnMass += 1;
+            else if(event.key.code == sf::Keyboard::R)
+                spawnRadius += 1;
         }
 
         newLayerEvent(newLayerKeys, event);
@@ -295,7 +333,6 @@ void NonSimulationStuff::resizeEvents(sf::Event &event)
 {
     if(event.type == sf::Event::Resized)
         adjustViewSize(event.size.width, event.size.height, wSize.x, wSize.y);//, currentZoom);
-
 }
 
 void NonSimulationStuff::incTimeStep(sf::Time delta)
@@ -319,7 +356,7 @@ void NonSimulationStuff::mainLoop()
     while(window.isOpen())
     {
         window.clear();
-
+        std::pair<bool,int> mouseOnUI = container.doesMIntExist();
         sf::Event event;
         while(window.pollEvent(event))
         {
@@ -328,14 +365,29 @@ void NonSimulationStuff::mainLoop()
             if(event.type == sf::Event::Closed)
                 window.close();
 
-            mouseEvents(event);
+            mouseViewEvents(event);
+
+            if(!mouseOnUIWhenClicked.first)
+                mouseWorldEvents(event);
+            else
+                mouseUIEvents(event);
+
             keyEvents(event);
             resizeEvents(event);
         }
 
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
+        if(!mouseOnUIWhenClicked.first)
+        {
+            checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
+            checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
+            checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
+        }
+        if(clickedWindowToDrag)
+        {
+            int windowIndex = mouseOnUIWhenClicked.second;
+            container.getWindow(windowIndex).moveWindow(window, sf::Mouse::getPosition(window));
+        }
+
         checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
 
         ballSim.universeLoop();
@@ -343,11 +395,6 @@ void NonSimulationStuff::mainLoop()
         ballSim.drawBalls(window);
         window.draw(boundaryRect);
 
-
-//        UIWindow1.renderWindow(window,GUIView);
-//        window.setView(worldView);
-//        UIWindow2.renderWindow(window,GUIView);
-//        window.setView(worldView);
         container.renderWindows(window, GUIView, worldView);
 
         window.display();
@@ -369,12 +416,15 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    container.addWindow({00,80}, 250, 200, true);
+    container.addWindow({500,80}, 250, 200, false);
     container.addWindow({0,0}, 220, 50, true);
 
-    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,0}, &spawnMass);
-    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,20}, &spawnRadius);
-    container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,50}, &ballSim.getNumOfBalls());
+    container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,00}, &ballSim.getNumOfBalls());
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,50}, &spawnRadius);
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Forces Enabled:", 16, {0,70}, &ballSim.getForcesEnabled());
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Collisions Enabled:", 16, {0,90}, &ballSim.getCollisionsEnabled());
+
 
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
