@@ -4,7 +4,6 @@
 #include "classUniverse.h"
 #include "classUIContainer.h"
 
-
 class NonSimulationStuff
 {
     int windowSizeX;
@@ -49,6 +48,9 @@ class NonSimulationStuff
     //UIDebug<int> debugUIInt;
     //UIDebug<const int> debugUIConstInt;
     //UIDebug<float> debugUIFloat;
+    //namespace ButtonMethods;
+    static void increaseMass();
+
 
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
