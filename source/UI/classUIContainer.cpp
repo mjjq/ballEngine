@@ -22,6 +22,7 @@ void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf:
     for(int i=0; i<interfaceWindows.size(); i++)
     {
         interfaceWindows.at(i).renderWindow(window, GUIView);
+        interfaceWindows.at(i).renderElements(window,GUIView);
         window.setView(originalView);
     }
 }

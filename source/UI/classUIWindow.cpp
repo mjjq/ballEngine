@@ -9,6 +9,7 @@
 #include "../../headers/classUIWindow.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
+#include "../../headers/classUIButton.h"
 
 template<class T>
 void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
@@ -22,6 +23,16 @@ void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::V
     UITextElementBase *text2 = text;
     textArray.emplace_back(text2);
 }
+
+
+void UIWindow::addButton(std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
+                                                bool fixedToWin, void (*func)(), sf::Color color)
+{
+    UIButton *button = new UIButton{text, func, position, bSize, color};
+    button->addElement<int>(font, text, fontSize, {10.0,10.0});
+    buttonArray.emplace_back(button);
+}
+
 
 
 bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2)
@@ -47,6 +58,11 @@ void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
             textArray.at(i)->textWrap(windowBox.getGlobalBounds());
             window.draw(*textArray.at(i));
         }
+    }
+    for(int i=0; i<buttonArray.size(); i++)
+    {
+        buttonArray.at(i)->updateElement(window, origPosition);
+        buttonArray.at(i)->renderButton(window,GUIView);
     }
 }
 
