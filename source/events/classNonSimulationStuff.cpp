@@ -10,6 +10,12 @@
 #include "../../headers/classTextElementBase.h"
 #include "../../headers/sfVectorMath.h"
 
+
+void NonSimulationStuff::increaseMass()
+{
+//    spawnMass += 1;
+}
+
 void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 {
     sf::Vector2i finalPos;
@@ -416,7 +422,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    container.addWindow({500,80}, 250, 200, false);
+    container.addWindow({0,80}, 250, 200, true);
     container.addWindow({0,0}, 220, 50, true);
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,00}, &ballSim.getNumOfBalls());
@@ -424,6 +430,9 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,50}, &spawnRadius);
     container.getWindow(0).addElement("./fonts/cour.ttf", "Forces Enabled:", 16, {0,70}, &ballSim.getForcesEnabled());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Collisions Enabled:", 16, {0,90}, &ballSim.getCollisionsEnabled());
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass +", 16, {0,150}, {80,40}, false, increaseMass);
+    /*std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
+                                                bool fixedToWin, std::function<void> *func, sf::Color color*/
 
 
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
