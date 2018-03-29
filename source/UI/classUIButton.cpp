@@ -11,8 +11,8 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
-UIButton::UIButton(std::string text, std::function<void()> clickFunc, sf::Vector2f position, sf::Vector2f bSize, sf::Color color) :
-            UIWindow(position, bSize.x, bSize.y, false, color)
+UIButton::UIButton(std::string text, std::function<void()> clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color) :
+            UIWindow(position, bSize.x, bSize.y, fixedToWin, color)
 {
     //addElement(font)
 }
@@ -27,7 +27,7 @@ void UIButton::renderButton(sf::RenderWindow &window, sf::View &GUIView)
     window.draw(windowBox);
     textArray.at(0)->updateElement(window, GUIView, currPosition);
     window.draw(*textArray.at(0));
-    std::cout << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
+   // std::cout << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
     /*for(int i=0; i<textArray.size(); i++)
     {
 
@@ -46,9 +46,15 @@ void UIButton::renderButton(sf::RenderWindow &window, sf::View &GUIView)
 
 void UIButton::updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition)
 {
-    std::cout << currPosition << "\n";
-
-    currPosition = window.mapPixelToCoords(static_cast<sf::Vector2i>(origPosition+parentPosition));
-    windowBox.setPosition(currPosition);
+    //std::cout << fixedToWindow << "\n";
+    currPosition = origPosition+parentPosition;
+    //std::cout << parentPosition << "\n";
+    sf::Rect<float> newRect{currPosition,{width,height}};
+    origRect = newRect;
+    if(fixedToWindow)
+        windowBox.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(currPosition)));
+    else
+        windowBox.setPosition(currPosition);
+    //std::cout << currPosition << "\n";
 
 }
