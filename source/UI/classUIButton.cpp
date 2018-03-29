@@ -12,7 +12,7 @@
 #include "../../headers/stringConversion.h"
 
 UIButton::UIButton(std::string text, std::function<void()> clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color) :
-            UIWindow(position, bSize.x, bSize.y, fixedToWin, color)
+            UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color)
 {
     //addElement(font)
 }

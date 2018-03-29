@@ -10,9 +10,9 @@
 #include "../../headers/sfVectorMath.h"
 
 
-void UIContainer::addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, sf::Color color)
+void UIContainer::addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable, sf::Color color)
 {
-    UIWindow newWindow{position, width, height, fixedToWin, color};
+    UIWindow newWindow{position, width, height, fixedToWin, draggable, color};
     interfaceWindows.push_back(newWindow);
     mouseIntersectionList.push_back(false);
 }

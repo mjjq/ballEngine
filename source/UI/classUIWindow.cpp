@@ -85,8 +85,8 @@ void UIWindow::renderWindow(sf::RenderWindow &window, sf::View &GUIView)
 }
 
 
-UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, sf::Color color) :
-            origPosition{position}, width{width}, height{height}, color{color}, fixedToWindow{fixedToWin}
+UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable, sf::Color color) :
+            origPosition{position}, width{width}, height{height}, color{color}, fixedToWindow{fixedToWin}, draggable{draggable}
 {
     windowBox.setPosition(origPosition);
     windowBox.setSize(sf::Vector2f(width,height));
@@ -169,14 +169,17 @@ std::pair<bool,int> UIWindow::getClickedButton()
 
 void UIWindow::moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition)
 {
-    if(fixedToWindow)
-        origPosition = static_cast<sf::Vector2f>(newPosition+mouseOffset);
-    else
-        origPosition = window.mapPixelToCoords(newPosition) + static_cast<sf::Vector2f>(mouseOffset);
-    sf::Rect<float> newRect{origPosition,{width,height}};
-    origRect = newRect;
+    if(draggable)
+    {
+        if(fixedToWindow)
+            origPosition = static_cast<sf::Vector2f>(newPosition+mouseOffset);
+        else
+            origPosition = window.mapPixelToCoords(newPosition) + static_cast<sf::Vector2f>(mouseOffset);
+        sf::Rect<float> newRect{origPosition,{width,height}};
+        origRect = newRect;
     //std::cout << "Moving\n";
     //std::cout << mouseOffset << "\n";
+    }
 }
 
 void UIWindow::changeOrigin(sf::RenderWindow &window, sf::Vector2i origin)

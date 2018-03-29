@@ -458,7 +458,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    container.addWindow({0,80}, 250, 200, false);
+    container.addWindow({0,80}, 250, 200, true, true);
     container.addWindow({0,0}, 220, 50, true);
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,00}, &ballSim.getNumOfBalls());
