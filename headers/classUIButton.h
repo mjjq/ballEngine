@@ -15,10 +15,10 @@ protected:
     sf::Vector2f currPosition = origPosition;
 
     bool displayElement = true;
-    bool fixedToWindow;
+    //bool fixedToWindow;
 
 public:
-    UIButton(std::string text, std::function<void()> clickFunc, sf::Vector2f position, sf::Vector2f bSize, sf::Color color = {80,80,80,150});
+    UIButton(std::string text, std::function<void()> clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color = {80,80,80,150});
     void clickButton();
     void renderButton(sf::RenderWindow &window, sf::View &GUIView);
     void updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition);

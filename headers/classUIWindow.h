@@ -12,7 +12,7 @@ class UIWindow
 {
 protected:
     sf::Font currentFont;
-    sf::Vector2f mouseOffset;
+    sf::Vector2i mouseOffset = {0,0};
 
     sf::Vector2f origPosition;
     float width;
@@ -24,6 +24,7 @@ protected:
 
     std::vector<UITextElementBase*> textArray;
     std::vector<UIButton*> buttonArray;
+    std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
 
     bool fixedToWindow = true;
     bool draggable = false;
@@ -38,15 +39,19 @@ public:
     void addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var = nullptr);
 
     void addButton(std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
-                                                bool fixedToWin, void (*func)(), sf::Color color = {80,80,80,150});
+                                                void (*func)(), sf::Color color = {80,80,80,150});
 
     bool ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2);
     void renderWindow(sf::RenderWindow &window, sf::View &GUIView);
     void renderElements(sf::RenderWindow &window, sf::View &GUIView);
+
     void checkMouseIntersection(sf::RenderWindow &window);
     bool getIsMouseIntersecting();
+    void resetButtonPair();
+    std::pair<bool,int> getClickedButton();
+    void changeOrigin(sf::RenderWindow &window, sf::Vector2i origin);
 
-    void moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition, sf::Vector2i offset = {0,0});
+    void moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition);
 };
 
 #endif // CLASS_UIWIN_H

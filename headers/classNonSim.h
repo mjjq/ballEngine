@@ -62,6 +62,8 @@ class NonSimulationStuff
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
     void changeBoundaryRect(sf::Vector2i worldSize);
     void mouseWheelZoom(bool keyPress, float delta);
+    void clickOnUI();
+    void resetButtonPress();
 
     void mouseWorldEvents(sf::Event &event);
     void mouseViewEvents(sf::Event &event);
