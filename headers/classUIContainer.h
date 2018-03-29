@@ -6,6 +6,8 @@ class UIContainer
 {
     std::vector<UIWindow> interfaceWindows;
     std::vector<bool> mouseIntersectionList;
+    //std::vector<bool,int> buttonIntersectList;
+
 
 public:
     void addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});

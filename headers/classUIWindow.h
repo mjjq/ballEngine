@@ -45,6 +45,8 @@ public:
     void renderWindow(sf::RenderWindow &window, sf::View &GUIView);
     void renderElements(sf::RenderWindow &window, sf::View &GUIView);
 
+    void clickIntersectedButton();
+
     void checkMouseIntersection(sf::RenderWindow &window);
     bool getIsMouseIntersecting();
     void resetButtonPair();
