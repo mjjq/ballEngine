@@ -27,13 +27,13 @@ protected:
     std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
 
     bool fixedToWindow = true;
-    bool draggable = false;
+    bool draggable = true;
     bool mouseIntersecting = false;
 
 
 
 public:
-    UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, sf::Color color = {50,50,50,150});
+    UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
 
     template<class T>
     void addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var = nullptr);

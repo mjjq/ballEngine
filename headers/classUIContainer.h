@@ -8,7 +8,7 @@ class UIContainer
     std::vector<bool> mouseIntersectionList;
 
 public:
-    void addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, sf::Color color = {50,50,50,150});
+    void addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
 
     void renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
     void checkMouseIntersection(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
