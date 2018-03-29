@@ -19,7 +19,7 @@ UIButton::UIButton(std::string text, std::function<void()> clickFunc, sf::Vector
 
 void UIButton::clickButton()
 {
-
+    std::cout << "Button is " << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
 }
 
 void UIButton::renderButton(sf::RenderWindow &window, sf::View &GUIView)

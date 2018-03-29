@@ -162,6 +162,13 @@ bool UIWindow::getIsMouseIntersecting()
     return mouseIntersecting;
 }
 
+void UIWindow::clickIntersectedButton()
+{
+    int buttonIndex = std::get<1>(mouseOnButtonWhenClicked);
+    if(buttonIndex != -1)
+        buttonArray.at(buttonIndex)->clickButton();
+}
+
 std::pair<bool,int> UIWindow::getClickedButton()
 {
     return mouseOnButtonWhenClicked;

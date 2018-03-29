@@ -195,6 +195,7 @@ void NonSimulationStuff::clickOnUI()
     if(windowBool)
     {
         container.getWindow(windowIndex).changeOrigin(window, sf::Mouse::getPosition(window));
+        container.getWindow(windowIndex).clickIntersectedButton();
         //std::cout << (sf::Mouse::getPosition(window)) << "\n";
         mouseOnButtonWhenClicked = container.getWindow(windowIndex).getClickedButton();
         //if(mouseOnButtonWhenClicked.first)
