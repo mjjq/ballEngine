@@ -45,6 +45,8 @@ public:
 
     const int& getWorldSizeX();
     int& getNumOfBalls();
+    bool& getCollisionsEnabled();
+    bool& getForcesEnabled();
 };
 
 #endif // CLASS_UNIVERSE_H

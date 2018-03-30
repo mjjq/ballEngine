@@ -14,6 +14,7 @@ public:
     UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var = nullptr);
     void updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition);
 
+
 };
 
 #endif // CLASS_TXTEL_H

@@ -243,6 +243,16 @@ int& BallUniverse::getNumOfBalls()
     return numOfBalls;
 }
 
+bool& BallUniverse::getCollisionsEnabled()
+{
+    return enable_collisions;
+}
+
+bool& BallUniverse::getForcesEnabled()
+{
+    return enable_forces;
+}
+
 BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :
 
 worldSizeX{worldSizeX}, worldSizeY{worldSizeY}, enable_forces(force), enable_collisions(collision), dt{dt}
