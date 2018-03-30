@@ -196,8 +196,8 @@ void UIWindow::changeOrigin(sf::RenderWindow &window, sf::Vector2i origin)
         mouseOffset = static_cast<sf::Vector2i>(origPosition) - origin;
     else
         mouseOffset = static_cast<sf::Vector2i>(origPosition - window.mapPixelToCoords(origin));
-    std::cout << origPosition << "\n";
-    std::cout << window.mapPixelToCoords(origin) << "\n";
+    //std::cout << origPosition << "\n";
+    //std::cout << window.mapPixelToCoords(origin) << "\n";
 }
 
 template void UIWindow::addElement<int>(std::string font, std::string str, int fontSize, sf::Vector2f position, int *var);

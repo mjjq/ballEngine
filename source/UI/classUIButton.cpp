@@ -12,7 +12,7 @@
 #include "../../headers/stringConversion.h"
 
 UIButton::UIButton(std::string text, std::function<void()> clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color) :
-            UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color)
+            UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color), unclickedColor{color}
 {
     //addElement(font)
 }
@@ -20,6 +20,12 @@ UIButton::UIButton(std::string text, std::function<void()> clickFunc, sf::Vector
 void UIButton::clickButton()
 {
     std::cout << "Button is " << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
+    //windowBox.setFillColor(clickedColor);
+}
+
+void UIButton::unclickButton()
+{
+    windowBox.setFillColor(unclickedColor);
 }
 
 void UIButton::renderButton(sf::RenderWindow &window, sf::View &GUIView)
@@ -27,21 +33,6 @@ void UIButton::renderButton(sf::RenderWindow &window, sf::View &GUIView)
     window.draw(windowBox);
     textArray.at(0)->updateElement(window, GUIView, currPosition);
     window.draw(*textArray.at(0));
-   // std::cout << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
-    /*for(int i=0; i<textArray.size(); i++)
-    {
-
-        //if(textArray.at(i).getGlobalBounds().intersects(windowBox.getGlobalBounds()))
-        {
-            //sf::Rect<float> a = textArray.at(0)->getGlobalBounds();
-            //sf::Rect<float> b = windowBox.getGlobalBounds();
-            //std::cout << a.top << " " << a.left << " " << a.width << " " << a.height << "\n";
-            //std::cout << b.top << " " << b.left << " " << b.width << " " << b.height << "\n";
-            //textArray.at(i)->updateElement(window, GUIView, origPosition);
-            textArray.at(i)->textWrap(windowBox.getGlobalBounds());
-            window.draw(*textArray.at(i));
-        }
-    }*/
 }
 
 void UIButton::updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition)

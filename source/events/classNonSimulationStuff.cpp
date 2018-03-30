@@ -190,7 +190,9 @@ void NonSimulationStuff::mouseWheelZoom(bool keyPress, float delta)
 void NonSimulationStuff::clickOnUI()
 {
     mouseOnUIWhenClicked = container.doesMIntExist();
-    bool windowBool = std::get<0>(mouseOnUIWhenClicked);
+
+    container.clickOnUI(window);
+    /*bool windowBool = std::get<0>(mouseOnUIWhenClicked);
     int windowIndex = std::get<1>(mouseOnUIWhenClicked);
     if(windowBool)
     {
@@ -200,7 +202,7 @@ void NonSimulationStuff::clickOnUI()
         mouseOnButtonWhenClicked = container.getWindow(windowIndex).getClickedButton();
         //if(mouseOnButtonWhenClicked.first)
             //container.getWindow(mouseOnButtonWhenClicked.last).
-    }
+    }*/
     //std::cout << std::get<1>(mouseOnButtonWhenClicked) << " blc\n";
     //std::cout << "Test\n";
 
@@ -208,13 +210,37 @@ void NonSimulationStuff::clickOnUI()
 
 void NonSimulationStuff::resetButtonPress()
 {
-    bool windowBool = std::get<0>(mouseOnUIWhenClicked);
+    /*bool windowBool = std::get<0>(mouseOnUIWhenClicked);
     int windowIndex = std::get<1>(mouseOnUIWhenClicked);
     if(windowIndex != -1)
     {
+        std::cout << windowIndex << "\n";
         container.getWindow(windowIndex).resetButtonPair();
-    }
+    }*/
+    container.resetUIClick();
     //mouseOnButtonWhenClicked = std::make_pair(false, -1);
+}
+
+
+void NonSimulationStuff::mouseViewEvents(sf::Event &event)
+{
+    if(event.type == sf::Event::MouseButtonPressed)
+    {
+        clickOnUI();
+    }
+
+    else if(event.type == sf::Event::MouseWheelScrolled)
+    {
+        float delta = event.mouseWheelScroll.delta;
+        mouseWheelZoom(sf::Keyboard::isKeyPressed(sf::Keyboard::Space), delta);
+    }
+
+    else if(event.type == sf::Event::MouseMoved)
+    {
+        resetButtonPress();
+        container.checkMouseIntersection(window, GUIView, worldView);
+        //clickOnUI();
+    }
 }
 
 void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
@@ -251,35 +277,14 @@ void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
     }
 }
 
-void NonSimulationStuff::mouseViewEvents(sf::Event &event)
-{
-    if(event.type == sf::Event::MouseButtonPressed)
-    {
-        clickOnUI();
-    }
-
-    else if(event.type == sf::Event::MouseWheelScrolled)
-    {
-        float delta = event.mouseWheelScroll.delta;
-        mouseWheelZoom(sf::Keyboard::isKeyPressed(sf::Keyboard::Space), delta);
-    }
-
-    else if(event.type == sf::Event::MouseMoved)
-    {
-        resetButtonPress();
-        container.checkMouseIntersection(window, GUIView, worldView);
-        //clickOnUI();
-    }
-}
-
 void NonSimulationStuff::mouseUIEvents(sf::Event &event)
 {
     //std::cout << mouseOnButtonWhenClicked.first << "\n";
-    if(!mouseOnButtonWhenClicked.first)
+    //if(!mouseOnButtonWhenClicked.first)
         if(event.type == sf::Event::MouseButtonPressed)
         {
             //std::cout << "hello\n";
-            clickedWindowToDrag = true;
+            clickedWindowToDrag = container.isWindowDraggable();
         }
     else if(event.type == sf::Event::MouseButtonReleased)
     {
@@ -427,8 +432,9 @@ void NonSimulationStuff::mainLoop()
         }
         if(clickedWindowToDrag)
         {
-            int windowIndex = mouseOnUIWhenClicked.second;
-            container.getWindow(windowIndex).moveWindow(window, sf::Mouse::getPosition(window));
+            //int windowIndex = mouseOnUIWhenClicked.second;
+            //container.getWindow(windowIndex).moveWindow(window, sf::Mouse::getPosition(window));
+            container.dragWindow(window);
         }
 
         checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
@@ -459,8 +465,8 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    container.addWindow({0,80}, 250, 200, true, true);
-    container.addWindow({0,0}, 220, 50, true);
+    container.addWindow({0,80}, 250, 200, false, true);
+    container.addWindow({0,0}, 220, 50, true, true);
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,00}, &ballSim.getNumOfBalls());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);
