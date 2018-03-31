@@ -5,6 +5,13 @@
 template <typename T>
 class UITextElement : public UITextElementBase
 {
+    std::string initialText;
+    std::string wrappedText;
+    sf::Font displayFont;
+    sf::Vector2f origPosition;
+
+    bool displayElement = true;
+    bool fixedToWindow;
 
     T *variable;//function which returns the variable to display
     T displayVariable;

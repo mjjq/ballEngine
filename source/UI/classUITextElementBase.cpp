@@ -49,9 +49,8 @@ void UITextElementBase::setOrigPosition(sf::Vector2f newPosition)
 
 UITextElementBase::~UITextElementBase() {};
 
-UITextElementBase::UITextElementBase(std::string text, sf::Vector2f position, bool fixedToWin, bool wrapText,
-                                                sf::Rect<float> wrapBounds) :
-                            initialText{text}, origPosition{position}, fixedToWindow{fixedToWin}
+UITextElementBase::UITextElementBase() //:
+                            //initialText{text}, origPosition{position}, fixedToWindow{fixedToWin}
 
 {
     /*setString(initialText);

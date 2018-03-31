@@ -456,7 +456,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     resetView();
 
     container.addWindow({0,150}, 250, 200, true, true);
-    //container.addWindow({0,0}, 250, 100, true, false);
+    container.addWindow({0,0}, 250, 100, true, false);
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {1,1}, &ballSim.getNumOfBalls());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);
@@ -470,8 +470,8 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
                                                 bool fixedToWin, std::function<void> *func, sf::Color color*/
 
 
-    /*container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
+    container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
-    container.getWindow(1).addButton("./fonts/cour.ttf", "Rad -", 16, {0,50}, {80,40}, increaseMass);*/
+    container.getWindow(1).addButton("./fonts/cour.ttf", "Rad -", 16, {0,50}, {80,40}, increaseMass);
 
 }

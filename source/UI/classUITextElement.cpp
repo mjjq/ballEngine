@@ -76,8 +76,8 @@ void UITextElement<T>::setOrigPosition(sf::Vector2f newPosition)
 
 template <typename T>
 UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var, bool wrapText,
-                                                sf::Rect<float> wrapBounds) :
-                            UITextElementBase(text, position, fixedToWin, wrapText, wrapBounds), variable{var}
+                                sf::Rect<float> wrapBounds) : UITextElementBase(), variable{var}, initialText{text},
+                                origPosition{position}, fixedToWindow{fixedToWin}
 
 {
     setString(initialText);
