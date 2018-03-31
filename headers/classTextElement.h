@@ -11,9 +11,11 @@ class UITextElement : public UITextElementBase
     //Template <typename T>;
 
 public:
-    UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var = nullptr);
+    UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var = nullptr, bool wrapText = false,
+                                                sf::Rect<float> wrapBounds = sf::Rect<float>(0,0,1000,1000));
     void updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition);
-
+    void setOrigPosition(sf::Vector2f newPosition);
+    void textWrap(sf::Rect<float> parentRect);
 
 };
 

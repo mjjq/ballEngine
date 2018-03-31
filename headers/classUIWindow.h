@@ -26,6 +26,7 @@ protected:
     std::vector<UIButton*> buttonArray;
     std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
 
+    bool isButton = false;
     bool fixedToWindow = true;
     bool draggable = true;
     bool mouseIntersecting = false;
@@ -46,6 +47,7 @@ public:
     void renderElements(sf::RenderWindow &window, sf::View &GUIView);
 
     void clickIntersectedButton();
+    void releaseClickedButton();
 
     void checkMouseIntersection(sf::RenderWindow &window);
     bool getIsMouseIntersecting();

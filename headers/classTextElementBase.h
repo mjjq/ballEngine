@@ -14,9 +14,11 @@ protected:
 
 public:
     virtual ~UITextElementBase();
-    UITextElementBase(std::string text, sf::Vector2f position, bool fixedToWin);
+    UITextElementBase(std::string text, sf::Vector2f position, bool fixedToWin, bool wrapText,
+                                                sf::Rect<float> wrapBounds);
     virtual void updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition) = 0;
-    void textWrap(sf::Rect<float> parentRect);
+    virtual void setOrigPosition(sf::Vector2f newPosition) = 0;
+    virtual void textWrap(sf::Rect<float> parentRect) = 0;
 
 };
 

@@ -14,7 +14,8 @@
 template<class T>
 void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
 {
-    UITextElement<T> *text = new UITextElement<T>{str, position, fixedToWindow, var};
+    //UITextElement<T> *text;
+    UITextElement<T> *text = new UITextElement<T>{str, position, fixedToWindow, var, !isButton, windowBox.getLocalBounds()};
     currentFont.loadFromFile(font);
     text->setFont(currentFont);
     text->setCharacterSize(fontSize);
@@ -29,8 +30,8 @@ void UIWindow::addButton(std::string font, std::string text, int fontSize, sf::V
                                                 void (*func)(), sf::Color color)
 {
     //std::cout << fixedToWindow << "\n";
-    UIButton *button = new UIButton{text, func, position, bSize, fixedToWindow, color};
-    button->addElement<int>(font, text, fontSize, {10.0,10.0});
+    UIButton *button = new UIButton{font, text, fontSize, func, position, bSize, fixedToWindow, color};
+    //button->addElement<int>(font, text, fontSize, {10.0,10.0});
     buttonArray.emplace_back(button);
 }
 
@@ -155,6 +156,17 @@ void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
 void UIWindow::resetButtonPair()
 {
     mouseOnButtonWhenClicked = std::make_pair(false,-1);
+}
+
+void UIWindow::releaseClickedButton()
+{
+    bool buttonBool = mouseOnButtonWhenClicked.first;
+    int buttonInt = mouseOnButtonWhenClicked.second;
+    if(buttonBool)
+    {
+        buttonArray.at(buttonInt)->releaseButton();
+        resetButtonPair();
+    }
 }
 
 bool UIWindow::getIsMouseIntersecting()

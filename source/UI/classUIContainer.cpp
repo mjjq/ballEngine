@@ -78,8 +78,8 @@ void UIContainer::clickOnUI(sf::RenderWindow &window)
         getWindow(windowIndex).changeOrigin(window, sf::Mouse::getPosition(window));
         getWindow(windowIndex).clickIntersectedButton();
         currentIntButton = getWindow(windowIndex).getClickedButton();
-        bool buttonBool = std::get<0>(currentIntButton);
-        int buttonIndex = std::get<1>(currentIntButton);
+        //bool buttonBool = std::get<0>(currentIntButton);
+        //int buttonIndex = std::get<1>(currentIntButton);
     }
 
 }
@@ -91,8 +91,10 @@ void UIContainer::resetUIClick()
     int windowIndex = std::get<1>(currentIntWindow);
     if(windowIndex != -1)
     {
-        //std::cout << windowIndex << "\n";
+        std::cout << windowIndex << "\n";
+        getWindow(windowIndex).releaseClickedButton();
         getWindow(windowIndex).resetButtonPair();
+        currentIntWindow = std::make_pair<bool,int>(false, -1);
     }
 }
 

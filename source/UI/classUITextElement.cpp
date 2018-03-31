@@ -36,14 +36,57 @@ void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView
         }
 }
 
+template <typename T>
+void UITextElement<T>::textWrap(sf::Rect<float> parentRect)
+{
+    //std::cout << static_cast<std::string>(getString());
+    const sf::String insertString = "\n";
+    int a=0;
+    //std::cout << parentRect << "\n";
+    for(std::size_t i=0; i<getString().getSize(); i++)
+    {
+        //std::cout << i << ", " << findCharacterPos(i) << "\n";
+        if(getString()[i] == ' ')
+            a = i;
+        if(!parentRect.contains(findCharacterPos(i)) && a!=0)
+        {
+            sf::String currString = getString();
+            currString.replace(a, 1, insertString);
+            setString(currString);
+            a=0;
+        }
+        else if(!parentRect.contains(findCharacterPos(i)) && a==0 && i!=0)
+        {
+            sf::String currString = getString();
+            currString.insert(i-1, "-" + insertString);
+            setString(currString);
+        }
+    }
+    wrappedText = getString();
+    //std::cout << wrappedText << "\n";
+}
+
+template <typename T>
+void UITextElement<T>::setOrigPosition(sf::Vector2f newPosition)
+{
+    origPosition = newPosition;
+}
+
 
 
 template <typename T>
-UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var) :
-                            UITextElementBase(text, position, fixedToWin), variable{var}
+UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var, bool wrapText,
+                                                sf::Rect<float> wrapBounds) :
+                            UITextElementBase(text, position, fixedToWin, wrapText, wrapBounds), variable{var}
 
 {
-
+    setString(initialText);
+    setPosition(position);
+    /*if(wrapText)// && wrapBounds != sf::Rect<float>(0,0,0,0))
+    {
+        std::cout << "Wrapped\n";
+        textWrap(wrapBounds);
+    }*/
 }
 
 

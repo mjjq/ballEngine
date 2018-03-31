@@ -20,6 +20,12 @@ std::ostream& operator << ( std::ostream& outs, const bool &value )
 }
 
 template <typename T>
+std::ostream &operator << ( std::ostream& outs, const sf::Rect<T> &rect)
+{
+    return outs << "[(" << rect.left << ", " << rect.top << "), (" << rect.width << ", " << rect.height << ")]";
+}
+
+template <typename T>
 std::string to_string( const T &value )
 {
   std::ostringstream ss;
@@ -29,4 +35,6 @@ std::string to_string( const T &value )
 
 template std::string to_string<sf::Vector2i>(const sf::Vector2i &value);
 template std::string to_string<sf::Vector2f>(const sf::Vector2f &value);
+template std::string to_string<sf::Rect<int>>(const sf::Rect<int> &value);
+template std::string to_string<sf::Rect<float>>(const sf::Rect<float> &value);
 template std::string to_string<bool>(const bool &value);
