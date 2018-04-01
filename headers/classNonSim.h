@@ -27,8 +27,9 @@ class NonSimulationStuff
     sf::Vector2i mousePosOnClick;
     sf::Vector2i mousePosOnPan;
     sf::Vector2i mousePosOnRelease;
+
     std::pair<bool,int> mouseOnUIWhenClicked{false, -1};
-    std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
+    //std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
     bool clickedWindowToDrag = false;
 
     sf::Vector2f recentViewCoords;
@@ -62,6 +63,7 @@ class NonSimulationStuff
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
     void changeBoundaryRect(sf::Vector2i worldSize);
     void mouseWheelZoom(bool keyPress, float delta);
+    void resetUIClick();
     void clickOnUI();
     void resetButtonPress();
 

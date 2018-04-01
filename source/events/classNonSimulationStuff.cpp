@@ -190,9 +190,18 @@ void NonSimulationStuff::mouseWheelZoom(bool keyPress, float delta)
 
 void NonSimulationStuff::clickOnUI()
 {
+    container.checkMouseIntersection(window, GUIView, worldView);
     mouseOnUIWhenClicked = container.doesMIntExist();
     container.clickOnUI(window);
 
+}
+
+void NonSimulationStuff::resetUIClick()
+{
+    container.resetUIClick();
+    clickedWindowToDrag = false;
+    //container.checkMouseIntersection(window, GUIView, worldView);
+    //container.doesMIntExist();
 }
 
 void NonSimulationStuff::resetButtonPress()
@@ -221,7 +230,10 @@ void NonSimulationStuff::mouseViewEvents(sf::Event &event)
         //resetButtonPress();
         //if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
         //std::cout << mouseOnUIWhenClicked.first << "\n";
+        //mouseOnUIWhenClicked = container.doesMIntExist();
         container.checkMouseIntersection(window, GUIView, worldView);
+        container.doesMIntExist();
+        //mouseOnUIWhenClicked = container.doesMIntExist();
         //clickOnUI();
     }
 
@@ -232,10 +244,7 @@ void NonSimulationStuff::mouseViewEvents(sf::Event &event)
     }
     else if(event.type == sf::Event::MouseButtonReleased)
     {
-        //std::cout << "declick\n";
-        container.resetUIClick();
-        clickedWindowToDrag = false;
-        container.checkMouseIntersection(window, GUIView, worldView);
+        resetUIClick();
     }
 
 }
@@ -404,7 +413,7 @@ void NonSimulationStuff::mainLoop()
     while(window.isOpen())
     {
         window.clear();
-        std::pair<bool,int> mouseOnUI = container.doesMIntExist();
+        //std::pair<bool,int> mouseOnUI = container.doesMIntExist();
         sf::Event event;
         while(window.pollEvent(event))
         {
@@ -431,11 +440,7 @@ void NonSimulationStuff::mainLoop()
             checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
         }
         if(clickedWindowToDrag)
-        {
-            //int windowIndex = mouseOnUIWhenClicked.second;
-            //container.getWindow(windowIndex).moveWindow(window, sf::Mouse::getPosition(window));
             container.dragWindow(window);
-        }
 
         checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
 
@@ -465,9 +470,9 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    container.addWindow({0,150}, 250, 250, true, false);
+    container.addWindow({0,150}, 250, 250, true, true);
     container.addWindow({0,0}, 250, 50, true, false);
-    container.addWindow({0,450}, 250, 50, true, false);
+    container.addWindow({0,450}, 250, 50, false, true);
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {1,1}, &ballSim.getNumOfBalls());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);

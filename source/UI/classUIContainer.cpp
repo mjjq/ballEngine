@@ -21,8 +21,9 @@ void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf:
 {
     for(int i=0; i<interfaceWindows.size(); i++)
     {
-        interfaceWindows.at(i).renderWindow(window, GUIView);
-        interfaceWindows.at(i).renderElements(window,GUIView);
+        int j = interfaceWindows.size() - 1 - i;
+        interfaceWindows.at(j).renderWindow(window, GUIView);
+        interfaceWindows.at(j).renderElements(window,GUIView);
         window.setView(originalView);
     }
 }
@@ -78,6 +79,8 @@ void UIContainer::clickOnUI(sf::RenderWindow &window)
         getWindow(windowIndex).changeOrigin(window, sf::Mouse::getPosition(window));
         getWindow(windowIndex).clickIntersectedButton();
         currentIntButton = getWindow(windowIndex).getClickedButton();
+        //std::swap(interfaceWindows.at(windowIndex), interfaceWindows.front());
+        //currentIntWindow = doesMIntExist();
         //bool buttonBool = std::get<0>(currentIntButton);
         //int buttonIndex = std::get<1>(currentIntButton);
     }
@@ -94,8 +97,9 @@ void UIContainer::resetUIClick()
         std::cout << windowIndex << "\n";
         getWindow(windowIndex).releaseClickedButton();
         getWindow(windowIndex).resetButtonPair();
-        currentIntWindow = std::make_pair<bool,int>(false, -1);
     }
+    currentIntWindow = std::make_pair<bool,int>(false, -1);
+    currentIntButton = std::make_pair<bool,int>(false, -1);
 }
 
 

@@ -10,6 +10,9 @@ class UIButton;
 
 class UIWindow
 {
+    std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
+    std::pair<bool,int> mouseOnButton{false, -1};
+
 protected:
     sf::Font currentFont;
     sf::Vector2i mouseOffset = {0,0};
@@ -24,7 +27,6 @@ protected:
 
     std::vector<UITextElementBase*> textArray;
     std::vector<UIButton*> buttonArray;
-    std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
 
     bool isButton = false;
     bool fixedToWindow = true;

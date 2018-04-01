@@ -96,77 +96,63 @@ UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedT
 
 void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
 {
-    //std::cout << windowBox.getPosition() << "\n";
+    mouseIntersecting = false;
+    resetButtonPair();
+
     if(fixedToWindow)
     {
         sf::Vector2f mousePosf = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
         if(origRect.contains(mousePosf))
         {
-            //mouseOffset = {mousePosf.x - origRect.left, mousePosf.y - origRect.top};
             mouseIntersecting = true;
             for(int i=0; i<buttonArray.size(); i++)
             {
                 buttonArray.at(i)->checkMouseIntersection(window);
                 bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-                //std::cout << isIntersectingWithButton << "\n";
                 if(isIntersectingWithButton)
-                    mouseOnButtonWhenClicked = std::make_pair(isIntersectingWithButton, i);
-                //std::cout << isIntersectingWithButton << "\n";
-
+                    mouseOnButton = std::make_pair(isIntersectingWithButton, i);
             }
-            //std::cout << "intersecting" << "\n";
         }
         else
-        {
-            //mouseOffset = {0,0};
             mouseIntersecting = false;
-        }
     }
     else
     {
-        sf::Vector2f mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window)); //static_cast<sf::Vector2f>(
-       // mousePosf = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
-        //std::cout << mousePosf << "\n";
+        sf::Vector2f mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         if(origRect.contains(mousePosf))
         {
-            //std::cout << origRect.top << "\n";
-            //mouseOffset = {mousePosf.x - origRect.left, mousePosf.y - origRect.top};
             mouseIntersecting = true;
             for(int i=0; i<buttonArray.size(); i++)
             {
-                //std::cout << origRect.left << "\n";
                 buttonArray.at(i)->checkMouseIntersection(window);
                 bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-                //std::cout << isIntersectingWithButton << "\n";
                 if(isIntersectingWithButton)
-                    mouseOnButtonWhenClicked = std::make_pair(isIntersectingWithButton, i);
-
+                    mouseOnButton = std::make_pair(isIntersectingWithButton, i);
             }
-            //std::cout << "intersecting" << "\n";
         }
         else
-        {
-            //mouseOffset = {0,0};
             mouseIntersecting = false;
-        }
     }
-    //std::cout << mouseOnButtonWhenClicked.first << "\n";
 }
 
 void UIWindow::resetButtonPair()
 {
-    mouseOnButtonWhenClicked = std::make_pair(false,-1);
+    //mouseOnButtonWhenClicked = std::make_pair(false,-1);
+    mouseOnButton = std::make_pair(false,-1);
+    //std::cout << mouseOnButtonWhenClicked.second << "\n";
 }
 
 void UIWindow::releaseClickedButton()
 {
     bool buttonBool = mouseOnButtonWhenClicked.first;
-    int buttonInt = mouseOnButtonWhenClicked.second;
+    int buttonIndex = mouseOnButtonWhenClicked.second;
     if(buttonBool)
     {
-        buttonArray.at(buttonInt)->releaseButton();
-        resetButtonPair();
+        buttonArray.at(buttonIndex)->releaseButton();
     }
+    mouseIntersecting = false;
+    mouseOnButtonWhenClicked = std::make_pair(false,-1);
+    //std::cout << "Button on Release: " << buttonIndex << "\n";
 }
 
 bool UIWindow::getIsMouseIntersecting()
@@ -176,9 +162,13 @@ bool UIWindow::getIsMouseIntersecting()
 
 void UIWindow::clickIntersectedButton()
 {
-    int buttonIndex = std::get<1>(mouseOnButtonWhenClicked);
+    int buttonIndex = std::get<1>(mouseOnButton);
+    std::cout << "Button on Click: " << buttonIndex << "\n";
     if(buttonIndex != -1)
+    {
+        mouseOnButtonWhenClicked = mouseOnButton;
         buttonArray.at(buttonIndex)->clickButton();
+    }
 }
 
 std::pair<bool,int> UIWindow::getClickedButton()

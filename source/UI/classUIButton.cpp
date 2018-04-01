@@ -36,7 +36,7 @@ void UIButton::releaseButton()
 {
     if(mouseIntersecting && buttonDown)
     {
-        std::cout << "Button is " << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
+        //std::cout << "Button is " << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
         clickFunc();
     }
     buttonDown = false;
