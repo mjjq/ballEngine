@@ -11,8 +11,8 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
-UIButton::UIButton(std::string font, std::string text, int fontSize, std::function<void()> clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color) :
-            UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color), unclickedColor{color}
+UIButton::UIButton(std::string font, std::string text, int fontSize, std::function<void()> const& clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color) :
+            UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color), unclickedColor{color}, clickFunc{clickFunc}
 {
     isButton = true;
     addElement<int>(font, text, fontSize, {0.0,0.0});
@@ -29,6 +29,7 @@ UIButton::UIButton(std::string font, std::string text, int fontSize, std::functi
 void UIButton::clickButton()
 {
     buttonDown = true;
+    //clickFunc();
 }
 
 void UIButton::releaseButton()
@@ -36,6 +37,7 @@ void UIButton::releaseButton()
     if(mouseIntersecting && buttonDown)
     {
         std::cout << "Button is " << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
+        clickFunc();
     }
     buttonDown = false;
 }

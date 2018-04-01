@@ -14,7 +14,8 @@
 
 void NonSimulationStuff::increaseMass()
 {
-//    spawnMass += 1;
+    spawnMass += 1;
+    std::cout << "Hello\n";
 }
 
 void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)
@@ -219,6 +220,7 @@ void NonSimulationStuff::mouseViewEvents(sf::Event &event)
     {
         //resetButtonPress();
         //if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        //std::cout << mouseOnUIWhenClicked.first << "\n";
         container.checkMouseIntersection(window, GUIView, worldView);
         //clickOnUI();
     }
@@ -227,6 +229,13 @@ void NonSimulationStuff::mouseViewEvents(sf::Event &event)
     {
         float delta = event.mouseWheelScroll.delta;
         mouseWheelZoom(sf::Keyboard::isKeyPressed(sf::Keyboard::Space), delta);
+    }
+    else if(event.type == sf::Event::MouseButtonReleased)
+    {
+        //std::cout << "declick\n";
+        container.resetUIClick();
+        clickedWindowToDrag = false;
+        container.checkMouseIntersection(window, GUIView, worldView);
     }
 
 }
@@ -240,12 +249,13 @@ void NonSimulationStuff::mouseUIEvents(sf::Event &event)
             //std::cout << "hello\n";
             clickedWindowToDrag = container.isWindowDraggable();
         }
-    else if(event.type == sf::Event::MouseButtonReleased)
+    /*else if(event.type == sf::Event::MouseButtonReleased)
     {
+        //std::cout << "declick\n";
         container.resetUIClick();
         clickedWindowToDrag = false;
         container.checkMouseIntersection(window, GUIView, worldView);
-    }
+    }*/
 }
 
 void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
@@ -455,7 +465,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    container.addWindow({0,150}, 250, 200, true, true);
+    container.addWindow({0,150}, 250, 200, true, false);
     container.addWindow({0,0}, 250, 100, true, false);
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {1,1}, &ballSim.getNumOfBalls());
@@ -463,8 +473,8 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,50}, &spawnRadius);
     container.getWindow(0).addElement("./fonts/cour.ttf", "Forces Enabled:", 16, {0,70}, &ballSim.getForcesEnabled());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Collisions Enabled:", 16, {0,90}, &ballSim.getCollisionsEnabled());
-    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass +", 16, {0,140}, {80,40}, increaseMass);
-    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass -", 16, {90,140}, {80,40}, increaseMass);
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass +", 16, {0,140}, {80,40}, [&]{spawnMass+=1;});
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass -", 16, {90,140}, {80,40}, [&]{spawnMass-=1;});
 
     /*std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
                                                 bool fixedToWin, std::function<void> *func, sf::Color color*/
@@ -472,6 +482,6 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
 
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
-    container.getWindow(1).addButton("./fonts/cour.ttf", "Rad -", 16, {0,50}, {80,40}, increaseMass);
+    //container.getWindow(1).addButton("./fonts/cour.ttf", "Rad -", 16, {0,50}, {80,40}, increaseMass);
 
 }

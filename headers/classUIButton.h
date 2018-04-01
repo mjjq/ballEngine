@@ -16,6 +16,7 @@ protected:
     sf::Color clickedColor = {30,30,30,150};
     sf::Color unclickedColor;
     sf::Color mouseOverColor = {100,100,100,150};
+    std::function<void()> clickFunc;
 
     bool buttonDown = false;
 
@@ -23,7 +24,7 @@ protected:
     //bool fixedToWindow;
 
 public:
-    UIButton(std::string font, std::string text, int fontSize, std::function<void()> clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color = {80,80,80,150});
+    UIButton(std::string font, std::string text, int fontSize, std::function<void()> const& clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color = {80,80,80,150});
 
     void clickButton();
     void releaseButton();

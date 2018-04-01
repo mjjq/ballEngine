@@ -27,7 +27,7 @@ void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::V
 
 
 void UIWindow::addButton(std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
-                                                void (*func)(), sf::Color color)
+                                                std::function<void()> const& func, sf::Color color)
 {
     //std::cout << fixedToWindow << "\n";
     UIButton *button = new UIButton{font, text, fontSize, func, position, bSize, fixedToWindow, color};

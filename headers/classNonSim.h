@@ -49,7 +49,7 @@ class NonSimulationStuff
     //UIDebug<const int> debugUIConstInt;
     //UIDebug<float> debugUIFloat;
     //namespace ButtonMethods;
-    static void increaseMass();
+    void increaseMass();
 
 
     void zoomToMouse(float zoomFactor);

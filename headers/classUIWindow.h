@@ -40,7 +40,7 @@ public:
     void addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var = nullptr);
 
     void addButton(std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
-                                                void (*func)(), sf::Color color = {80,80,80,150});
+                                                std::function<void()> const& func, sf::Color color = {80,80,80,150});
 
     bool ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2);
     void renderWindow(sf::RenderWindow &window, sf::View &GUIView);
