@@ -68,12 +68,11 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
     return std::make_tuple(coll1,coll2,localT_coll);
 }
 
-void BallUniverse::universeLoop()
+void BallUniverse::physicsLoop()
 {
-    float dtR = dt;
-    float epsilon = 1e-5;
-    if(!isPaused)
-    {
+
+        float dtR = dt;
+        float epsilon = 1e-5;
         for(int i=0;i<ballArray.size();i++)
         {
             ballArray.at(i).resetToCollided();
@@ -131,16 +130,82 @@ void BallUniverse::universeLoop()
                 //ballArray.at(i).resetToCollided();
             }
         }
-    }
 
 }
 
-float BallUniverse::getTotalKE(std::vector<Ball> &ballArray)
+void BallUniverse::universeLoop()
 {
-    float totalKE{0};
+    if(!isPaused)
+    {
+        physicsLoop();
+        calcTotalKE(ballArray);
+        calcTotalMomentum(ballArray);
+        //if(enable_trajectories)
+        sampleAllPositions();
+    }
+    //drawSampledPositions();
+}
+
+void BallUniverse::sampleAllPositions()
+{
+    if(timeToNextSample - dt <= 0)
+    {
+        for(int i=0; i<ballArray.size(); i++)
+            if(ballArray.at(i).getSamplePrevPosBool())
+                ballArray.at(i).sampleNextPosition();
+
+        timeToNextSample = sampledt;
+        //std::cout << timeToNextSample << "\n";
+    }
+    else
+        timeToNextSample -= dt;
+
     for(int i=0; i<ballArray.size(); i++)
-        totalKE += ballArray.at(i).getKE();
-    return totalKE;
+        if(ballArray.at(i).getSamplePrevPosBool())
+            ballArray.at(i).sampleCurrentPosition();
+}
+
+void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer very CPU intensive
+{
+    for(int i=0; i<ballArray.size(); i++)
+    {
+        if(ballArray.at(i).getSamplePrevPosBool())
+        {
+            std::deque<sf::Vector2f> previousPositions = ballArray.at(i).getPreviousPositions();
+            if(previousPositions.size() > 1)
+            {
+                int colorGradient = previousPositions.size();
+                sf::VertexArray lines(sf::LinesStrip, previousPositions.size());
+                sf::Color color;
+                for(int i=0; i<previousPositions.size(); i++)
+                {
+                    color = {255,255,255,255*i/colorGradient};
+                    lines[i].position = previousPositions.at(i);
+                    lines[i].color = color;
+                    //line[0] = sf::Vertex(static_cast<sf::Vector2f>(previousPositions.at(i)),color);
+                    //line[1] = sf::Vertex(static_cast<sf::Vector2f>(previousPositions.at(i+1)),color);
+                    //window.draw(line, 2, sf::Lines);
+                }
+                window.draw(lines);
+            }
+        }
+    }
+}
+
+void BallUniverse::calcTotalKE(std::vector<Ball> &ballArray)
+{
+    float KE{0};
+    for(int i=0; i<ballArray.size(); i++)
+        KE += ballArray.at(i).getKE();
+    totalKE = KE;
+}
+
+void BallUniverse::calcTotalMomentum(std::vector<Ball> &ballArray)
+{
+    sf::Vector2f momentum{0,0};
+    for(int i=0; i<ballArray.size(); i++)
+        momentum+=ballArray.at(i).getMomentum();
+    totalMomentum = momentum;
 }
 
 void BallUniverse::createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition, sf::Vector2f init_velocity, float ballMass, float ballRadius)
@@ -194,6 +259,8 @@ void BallUniverse::toggleSimPause()
 
 void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
 {
+    if(enable_trajectories)
+        drawSampledPositions(windowRef);
     for(int i=0; i<ballArray.size(); i++)
     {
         windowRef.draw(ballArray.at(i));
@@ -252,6 +319,25 @@ bool& BallUniverse::getForcesEnabled()
 {
     return enable_forces;
 }
+
+float& BallUniverse::getTotalKE()
+{
+    return totalKE;
+}
+
+sf::Vector2f& BallUniverse::getTotalMomentum()
+{
+    return totalMomentum;
+}
+
+void BallUniverse::toggleTrajectories()
+{
+    if(enable_trajectories)
+        enable_trajectories = false;
+    else
+        enable_trajectories = true;
+}
+
 
 BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :
 

@@ -1,6 +1,8 @@
 #ifndef CLASS_BALL_H
 #define CLASS_BALL_H
 
+#include <deque>
+
 class Ball : public sf::CircleShape
 {
     sf::Vector2f velocity;
@@ -13,6 +15,9 @@ class Ball : public sf::CircleShape
     float exptCollForce(float x, float x_0, float r, float m);
     float newtonForce(float x, float x_0, float r, float G, float M);
 
+    std::deque<sf::Vector2f> previousPositions;
+    bool samplePreviousPositions = true;
+
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
 
@@ -21,6 +26,8 @@ public:
     void ballCollision(Ball &otherBall);
     void updateVelocity(float dt, Ball &otherBall);
     void updatePosition(float dt);
+    void sampleNextPosition();
+    void sampleCurrentPosition();
 
     float getMass();
     float getRadius();
@@ -30,9 +37,13 @@ public:
     void resetToCollided();
     bool getHasCollided();
     float getKE();
+    sf::Vector2f getMomentum();
     float getDistance(Ball &otherBall);
     float getSpeed();
     float getRelSpeed(Ball &otherBall);
+
+    bool getSamplePrevPosBool();
+    std::deque<sf::Vector2f>& getPreviousPositions();
 };
 
 #endif // CLASS_UNIVERSE_H

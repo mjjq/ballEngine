@@ -19,8 +19,18 @@ class BallUniverse
     float dt;
     bool isPaused = false;
 
+    float sampledt = 5*dt;
+    float timeToNextSample = sampledt;
+    bool enable_trajectories;
+
     std::tuple<int,int,float> findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt=1e+10);
-    float getTotalKE(std::vector<Ball> &ballArray);
+
+    float totalKE = 0;
+    sf::Vector2f totalMomentum = sf::Vector2f{0,0};
+    void calcTotalKE(std::vector<Ball> &ballArray);
+    void calcTotalMomentum(std::vector<Ball> &ballArray);
+
+    void physicsLoop();
 
 
 public:
@@ -47,6 +57,12 @@ public:
     int& getNumOfBalls();
     bool& getCollisionsEnabled();
     bool& getForcesEnabled();
+    float& getTotalKE();
+    sf::Vector2f& getTotalMomentum();
+
+    void sampleAllPositions();
+    void drawSampledPositions(sf::RenderWindow &window);
+    void toggleTrajectories();
 };
 
 #endif // CLASS_UNIVERSE_H

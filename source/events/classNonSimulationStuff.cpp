@@ -470,21 +470,23 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    container.addWindow({0,150}, 250, 250, true, true);
+    container.addWindow({0,100}, 250, 250, true, false);
     container.addWindow({0,0}, 250, 50, true, false);
-    container.addWindow({0,450}, 250, 50, false, true);
+    container.addWindow({0,400}, 250, 50, true, false);
+    container.addWindow({0,500}, 250, 100, true, false);
 
-    container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {1,1}, &ballSim.getNumOfBalls());
+    container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,50}, &spawnRadius);
     container.getWindow(0).addElement("./fonts/cour.ttf", "Forces Enabled:", 16, {0,70}, &ballSim.getForcesEnabled());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Collisions Enabled:", 16, {0,90}, &ballSim.getCollisionsEnabled());
-    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass +", 12, {10,140}, {60,30}, [&]{spawnMass+=1;});
-    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass -", 12, {90,140}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}});
-    container.getWindow(0).addButton("./fonts/cour.ttf", "Rst Mass", 12, {170,140}, {60,30}, [&]{spawnMass=1;});
-    container.getWindow(0).addButton("./fonts/cour.ttf", "Rad +", 12, {10,180}, {60,30}, [&]{spawnRadius+=1;});
-    container.getWindow(0).addButton("./fonts/cour.ttf", "Rad -", 12, {90,180}, {60,30}, [&]{if(spawnRadius>1){spawnRadius-=1;}});
-    container.getWindow(0).addButton("./fonts/cour.ttf", "Rst Rad", 12, {170,180}, {60,30}, [&]{spawnRadius=10;});
+
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;});
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}});
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Rst Mass", 12, {170,180}, {60,30}, [&]{spawnMass=1;});
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Rad +", 12, {10,220}, {60,30}, [&]{spawnRadius+=1;});
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Rad -", 12, {90,220}, {60,30}, [&]{if(spawnRadius>1){spawnRadius-=1;}});
+    container.getWindow(0).addButton("./fonts/cour.ttf", "Rst Rad", 12, {170,220}, {60,30}, [&]{spawnRadius=10;});
 
     /*std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
                                                 bool fixedToWin, std::function<void> *func, sf::Color color*/
@@ -496,6 +498,11 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(2).addButton("./fonts/cour.ttf", "Star", 12, {10,10}, {60,30}, [&]{spawnRadius=50;spawnMass=100;});
     container.getWindow(2).addButton("./fonts/cour.ttf", "Planet", 12, {90,10}, {60,30}, [&]{spawnRadius=10;spawnMass=1;});
     container.getWindow(2).addButton("./fonts/cour.ttf", "Asteroid", 12, {170,10}, {60,30}, [&]{spawnRadius=3;spawnMass=0.01;});
+
+    container.getWindow(3).addElement("./fonts/cour.ttf", "Total KE: ", 16, {0,0}, &ballSim.getTotalKE());
+    container.getWindow(3).addElement("./fonts/cour.ttf", "Total Momentum: ", 16, {0,20}, &ballSim.getTotalMomentum());
+    container.getWindow(3).addButton("./fonts/cour.ttf", "Trj", 12, {10,50}, {60,30}, [&]{ballSim.toggleTrajectories();});
+
 
 
 

@@ -182,6 +182,11 @@ float Ball::getKE()
     return 0.5*getMass()*sfVectorMath::dot(getVelocity(),getVelocity());
 }
 
+sf::Vector2f Ball::getMomentum()
+{
+    return getMass()*velocity;
+}
+
 float Ball::getDistance(Ball &otherBall)
 {
     sf::Vector2f relPos = getPosition() - otherBall.getPosition();
@@ -197,4 +202,32 @@ float Ball::getRelSpeed(Ball &otherBall)
 {
     sf::Vector2f relVelocity = getVelocity() - otherBall.getVelocity();
     return pow(sfVectorMath::dot(relVelocity,relVelocity),0.5);
+}
+
+void Ball::sampleNextPosition()
+{
+    int positionSize = 10;
+    previousPositions.push_back(getPosition());
+    if(previousPositions.size()>positionSize)
+    {
+        int eraseUpperLimit = previousPositions.size() - positionSize;
+        previousPositions.erase(previousPositions.begin(), previousPositions.begin()+eraseUpperLimit);
+        //previousPositions.pop_front();
+    }
+}
+
+void Ball::sampleCurrentPosition()
+{
+    if(previousPositions.size()>0)
+        previousPositions.back() = getPosition();
+}
+
+std::deque<sf::Vector2f>& Ball::getPreviousPositions()
+{
+    return previousPositions;
+}
+
+bool Ball::getSamplePrevPosBool()
+{
+    return samplePreviousPositions;
 }

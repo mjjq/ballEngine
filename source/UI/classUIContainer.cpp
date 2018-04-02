@@ -14,6 +14,7 @@ void UIContainer::addWindow(sf::Vector2f position, float width, float height, bo
 {
     UIWindow newWindow{position, width, height, fixedToWin, draggable, color};
     interfaceWindows.push_back(newWindow);
+    interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);
 }
 

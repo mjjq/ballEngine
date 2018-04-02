@@ -5,6 +5,7 @@
 class UIContainer
 {
     std::vector<UIWindow> interfaceWindows;
+    std::vector<int> interfaceWindowIDs;
     std::vector<bool> mouseIntersectionList;
     std::pair<bool,int> currentIntButton;
     std::pair<bool,int> currentIntWindow;
