@@ -330,6 +330,23 @@ sf::Vector2f& BallUniverse::getTotalMomentum()
     return totalMomentum;
 }
 
+sf::Vector2f BallUniverse::getBallPosition(int i)
+{
+    if(ballArray.size()>i)
+        return ballArray.at(i).getPosition();
+}
+
+void BallUniverse::pushBall(float force, float relDirection, int i)
+{
+    sf::Vector2f velocity = ballArray.at(i).getVelocity();
+    sf::Vector2f forceVec{0,0};
+    if(sfVectorMath::dot(velocity, velocity) != 0)
+        forceVec = sfVectorMath::rotate(force*sfVectorMath::norm(velocity), relDirection);
+    else
+        forceVec = sfVectorMath::rotate({0,-force}, relDirection);
+    ballArray.at(i).applyExternalImpulse(forceVec, dt);
+}
+
 void BallUniverse::toggleTrajectories()
 {
     if(enable_trajectories)

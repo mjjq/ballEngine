@@ -25,6 +25,7 @@ public:
     void checkForBounce(int worldSizeX, int worldSizeY);
     void ballCollision(Ball &otherBall);
     void updateVelocity(float dt, Ball &otherBall);
+    void applyExternalImpulse(sf::Vector2f force, float dt);
     void updatePosition(float dt);
     void sampleNextPosition();
     void sampleCurrentPosition();

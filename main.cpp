@@ -25,8 +25,8 @@ int main()
     int ballGridHeight = 10;
     int ballGridWidth = 10;
 
-    bool enableForces = false;
-    bool enableCollisions = true;
+    bool enableForces = true;
+    bool enableCollisions = false;
 
     BallUniverse universe1(worldSizeX, worldSizeY, dt, enableForces, enableCollisions);
     NonSimulationStuff window1(windowSizeX, windowSizeY, spawnVelFactor, spawnRadius,

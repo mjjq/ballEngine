@@ -7,6 +7,7 @@ namespace sfVectorMath
     float dot(sf::Vector2f vec1, sf::Vector2f vec2);
     sf::Vector2f norm(sf::Vector2i vec1);
     sf::Vector2f norm(sf::Vector2f vec1);
+    sf::Vector2f rotate(sf::Vector2f vec1, float angleDegree);
     void printVector(sf::Vector2f vec);
     void printVector(sf::Vector2i vec);
 };

@@ -41,21 +41,20 @@ class NonSimulationStuff
     int ballGridHeight;
     int ballGridWidth;
 
+    int playerBallIndex = 0;
+
     BallUniverse ballSim;
 
-    //UIWindow UIWindow1{{00,80}, 250, 200, true};
-    //UIWindow UIWindow2{{0,0}, 220, 50, false};
     UIContainer container;
-    //UIDebug<int> debugUIInt;
-    //UIDebug<const int> debugUIConstInt;
-    //UIDebug<float> debugUIFloat;
-    //namespace ButtonMethods;
+
     void increaseMass();
 
 
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
     void checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool);
+    void focusOnBall(int ballIndex, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool);
+
     void resetView();
     void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY);//, float zoom);
     void toggleFullScreen();
@@ -72,6 +71,7 @@ class NonSimulationStuff
     void mouseUIEvents(sf::Event &event);
     void keyEvents(sf::Event &event);
     void resizeEvents(sf::Event &event);
+    void playerKeysDown(int player);
 
     void incTimeStep(sf::Time delta);
     void decTimeStep(sf::Time delta);

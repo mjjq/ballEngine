@@ -63,6 +63,8 @@ public:
     void sampleAllPositions();
     void drawSampledPositions(sf::RenderWindow &window);
     void toggleTrajectories();
+    sf::Vector2f getBallPosition(int i);
+    void pushBall(float force, float relDirection, int i);
 };
 
 #endif // CLASS_UNIVERSE_H

@@ -136,6 +136,11 @@ void Ball::updateVelocity(float dt, Ball &otherBall)
 
 }
 
+void Ball::applyExternalImpulse(sf::Vector2f force, float dt)
+{
+    velocity += force*dt/getMass();
+}
+
 void Ball::updatePosition(float dt)
 {
     //sf::Vector2f currPos = getPosition();

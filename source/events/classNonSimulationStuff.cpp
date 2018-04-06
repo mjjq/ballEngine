@@ -69,7 +69,7 @@ sf::Vector2f NonSimulationStuff::getEffectiveZoom(int worldSizeX, int worldSizeY
         float zoom = currentZoom;
         float winSizeX = window.getSize().x;
         float winSizeY = window.getSize().y;
-        sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+        //sf::Vector2i viewPos = sf::Mouse::getPosition(window);
         float xFactor = zoom*static_cast<float>(worldSizeX)/static_cast<float>(winSizeX);
         float yFactor = zoom*static_cast<float>(worldSizeY)/static_cast<float>(winSizeY);
         effectiveZoom = {xFactor,yFactor};
@@ -101,6 +101,28 @@ void NonSimulationStuff::checkForViewPan(sf::Vector2i initialPos, sf::Vector2f o
     }
     else
         window.setMouseCursorVisible(true);
+}
+
+void NonSimulationStuff::focusOnBall(int ballIndex, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool)
+{
+    if(keyBool==true)
+    {
+        sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
+        //window.setMouseCursorVisible(false);
+        sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX, worldSizeY);
+        //sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+        //sfVectorMath::printVector(viewPos);
+        //std::cout <<"\n";
+        /*if(effectiveZoom.y > effectiveZoom.x)
+            relPos *= effectiveZoom.y;
+        else
+            relPos *= effectiveZoom.x;*/
+
+
+        worldView.setCenter(relPos);
+
+        window.setView(worldView);
+    }
 }
 
 void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY)//, float zoom)
@@ -386,11 +408,44 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
     }
 }
 
+
+void NonSimulationStuff::playerKeysDown(int player)
+{
+    /*std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
+                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LShift),
+                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)};
+    bool newLayerPressed = false;
+    if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
+        newLayerPressed = true;
+
+    if(event.type == sf::Event::EventType::KeyPressed)
+    {
+        if(!newLayerPressed)
+        {
+            if(event.key.code == sf::Keyboard::W)
+                ballSim.pushBall({1,1}, player);
+        }
+    }*/
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+        focusOnBall(0, recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        ballSim.pushBall(0.01, 0, player);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        ballSim.pushBall(0.01, 180, player);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        ballSim.pushBall(0.01, 270, player);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        ballSim.pushBall(0.01, 90, player);
+}
+
 void NonSimulationStuff::resizeEvents(sf::Event &event)
 {
     if(event.type == sf::Event::Resized)
         adjustViewSize(event.size.width, event.size.height, wSize.x, wSize.y);//, currentZoom);
 }
+
+
 
 void NonSimulationStuff::incTimeStep(sf::Time delta)
 {
@@ -443,6 +498,7 @@ void NonSimulationStuff::mainLoop()
             container.dragWindow(window);
 
         checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
+        playerKeysDown(0);
 
         ballSim.universeLoop();
 
