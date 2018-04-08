@@ -1,3 +1,14 @@
+/**
+    classNonSimulationStuff.cpp
+    @class NonSimulationStuff
+    Purpose: Handle all aspects of the program which are not involved in
+    simulation. This includes event handling of user inputs, and functions
+    to do with rendering.
+
+    @author mjjq
+    @version 0.1
+*/
+
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <cmath>
@@ -11,13 +22,23 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
-
+/**
+    Increases the spawn mass by 1.
+*/
 void NonSimulationStuff::increaseMass()
 {
     spawnMass += 1;
-    std::cout << "Hello\n";
+    //std::cout << "Hello\n";
 }
 
+
+/**
+    If the mouse button is pressed, draws a line between position where
+    mouse was clicked and the current position of the mouse.
+
+    @param &initPos The click position of the mouse.
+    @param mouseType Boolean which draws line if set to true.
+*/
 void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 {
     sf::Vector2i finalPos;
@@ -27,27 +48,52 @@ void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)
     {
         sf::Vector2i viewPos = sf::Mouse::getPosition(window);
         finalPos = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
-        //finalPos = sf::Mouse::getPosition(window);
-        line[0] = sf::Vertex(static_cast<sf::Vector2f>(initPos),sf::Color::White);
-        line[1] = sf::Vertex(static_cast<sf::Vector2f>(finalPos),sf::Color::White);
+
+        line[0] = sf::Vertex(static_cast<sf::Vector2f>(initPos),
+                                              sf::Color::White);
+        line[1] = sf::Vertex(static_cast<sf::Vector2f>(finalPos),
+                                              sf::Color::White);
         window.draw(line, 2, sf::Lines);
     }
 }
 
-sf::Vector2f NonSimulationStuff::velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor)
+/**
+    Generates a spawn velocity for a new ball proportional to the distance
+    between the mouse position on click and the current mouse position.
+
+    @param mousePosOnClick The mouse position when a chosen mouse button was
+    clicked.
+    @param spawnVelFactor The factor by which the aforementioned distance is
+    multiplied. A larger value will generate a larger spawn velocity.
+
+    @return The calculated velocity.
+*/
+sf::Vector2f NonSimulationStuff::velocityFromMouse(sf::Vector2i mousePosOnClick,
+                                                            int spawnVelFactor)
 {
 
     sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-    sf::Vector2i mousePosOnRelease = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
-    //sf::Vector2i mousePosOnRelease = sf::Mouse::getPosition(window);
-    sf::Vector2i scaledVector = (spawnVelFactor)*(mousePosOnRelease-mousePosOnClick);
-    float windowDiagSize = pow(windowSizeX*windowSizeX + windowSizeY*windowSizeY, 0.5);
+    sf::Vector2i mousePosOnRelease = static_cast<sf::Vector2i>
+                                     (window.mapPixelToCoords(viewPos));
+
+    sf::Vector2i scaledVector = (spawnVelFactor)*(mousePosOnRelease-
+                                                  mousePosOnClick);
+
+    float windowDiagSize = pow(windowSizeX*windowSizeX +
+                               windowSizeY*windowSizeY, 0.5);
+
     sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/windowDiagSize;
     timeToNextSpawn = minTimeToNextSpawn;
 
     return velocity;
 }
 
+/**
+    Applies a zoom to the rendered view, and centres the view to the position
+    of the mouse. The if statement imposes a maximum zoom out limit.
+
+    @param zoomFactor The factor by which to zoom the current view.
+*/
 void NonSimulationStuff::zoomToMouse(float zoomFactor)
 {
     if(currentZoom*zoomFactor < 2.0)
@@ -61,6 +107,21 @@ void NonSimulationStuff::zoomToMouse(float zoomFactor)
     }
 }
 
+
+/**
+    Generates effective zooms in the x and y directions. The effective zoom
+    is the zoom factor in world co-ordinates as opposed to window co-ordinates,
+    and so will differ in the x and y directions if the window is not square
+    but rectangular.
+    If the simulation is set to not fit within the window (simFitsInWindow==
+    false), then the window and world are 1:1 in co-ordinates, thus the
+    effective zoom is 1.
+
+    @param worldSizeX The x-direction size of the simulation world.
+    @param worldSizeY The y-direction size of the simulation world.
+
+    @return The effective world zoom of each direction in vector form.
+*/
 sf::Vector2f NonSimulationStuff::getEffectiveZoom(int worldSizeX, int worldSizeY)
 {
     sf::Vector2f effectiveZoom;
@@ -70,8 +131,10 @@ sf::Vector2f NonSimulationStuff::getEffectiveZoom(int worldSizeX, int worldSizeY
         float winSizeX = window.getSize().x;
         float winSizeY = window.getSize().y;
         //sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-        float xFactor = zoom*static_cast<float>(worldSizeX)/static_cast<float>(winSizeX);
-        float yFactor = zoom*static_cast<float>(worldSizeY)/static_cast<float>(winSizeY);
+        float xFactor = zoom*static_cast<float>(worldSizeX)/
+                             static_cast<float>(winSizeX);
+        float yFactor = zoom*static_cast<float>(worldSizeY)/
+                             static_cast<float>(winSizeY);
         effectiveZoom = {xFactor,yFactor};
     }
     else
@@ -79,16 +142,31 @@ sf::Vector2f NonSimulationStuff::getEffectiveZoom(int worldSizeX, int worldSizeY
     return effectiveZoom;
 }
 
-void NonSimulationStuff::checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool)
+/**
+    Checks if a chosen key is pressed. If so, the mouse is made invisible and
+    the view is panned based on the relative position between the mouse's
+    position on the key press and its current position.
+
+    @param initialPos The position of the mouse when the chosen key is pressed.
+    @param originalView The central position of the view when the chosen key
+    is pressed.
+    @param worldSizeX The x-direction size of the simulation world.
+    @param worldSizeY The y-direction size of the simulation world.
+    @param keyBool The boolean value of the chosen key, isKeyPressed.
+
+    @return Void.
+*/
+void NonSimulationStuff::checkForViewPan(sf::Vector2i initialPos,
+    sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool)
 {
     if(keyBool==true)
     {
         window.setMouseCursorVisible(false);
+
         sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX, worldSizeY);
         sf::Vector2i viewPos = sf::Mouse::getPosition(window);
         sf::Vector2f relPos = static_cast<sf::Vector2f>(initialPos - viewPos);
-        //sfVectorMath::printVector(viewPos);
-        //std::cout <<"\n";
+
         if(effectiveZoom.y > effectiveZoom.x)
             relPos *= effectiveZoom.y;
         else
@@ -103,29 +181,40 @@ void NonSimulationStuff::checkForViewPan(sf::Vector2i initialPos, sf::Vector2f o
         window.setMouseCursorVisible(true);
 }
 
-void NonSimulationStuff::focusOnBall(int ballIndex, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool)
+
+/**
+    Adjusts the camera to center on a chosen ball within the simulation if a
+    chosen key is held.
+
+    @param ballIndex The ball to focus on, specified by an integer index.
+    @param keyBool The boolean isKeyPressed value of the chosen key.
+
+    @return Void.
+*/
+void NonSimulationStuff::focusOnBall(int ballIndex, bool keyBool)
 {
     if(keyBool==true)
     {
         sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
-        //window.setMouseCursorVisible(false);
-        sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX, worldSizeY);
-        //sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-        //sfVectorMath::printVector(viewPos);
-        //std::cout <<"\n";
-        /*if(effectiveZoom.y > effectiveZoom.x)
-            relPos *= effectiveZoom.y;
-        else
-            relPos *= effectiveZoom.x;*/
-
 
         worldView.setCenter(relPos);
-
         window.setView(worldView);
     }
 }
 
-void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY)//, float zoom)
+/**
+    Scales the view to the window based on the current window and world sizes.
+    This function ensure the world level zoom is preserved as well as accounting
+    for vertical aspect ratios by checking for effective zooms in each direction.
+
+    @param sizeX The x-direction size of the window.
+    @param sizeY The y-direction size of the window.
+    @param worldSizeX The x-direction size of the simulation world.
+    @param worldSizeY The y-direction size of the simulation world.
+
+    @return Void.
+*/
+void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY)
 {
     sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX,worldSizeY);
     worldView.setSize(sizeX,sizeY);
@@ -134,19 +223,18 @@ void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, in
     windowSizeY = sizeY;
 
     if(effectiveZoom.y > effectiveZoom.x)
-    {
         worldView.zoom(effectiveZoom.y);
-        //GUIView.zoom(effectiveZoom.y);
-    }
     else
-    {
         worldView.zoom(effectiveZoom.x);
-        //GUIView.zoom(effectiveZoom.x);
-    }
 
     window.setView(worldView);
 }
 
+/**
+    Toggles the window between windowed and fullscreen mode.
+
+    @return Void.
+*/
 void NonSimulationStuff::toggleFullScreen()
 {
     if(!isFullScreen)
@@ -158,19 +246,25 @@ void NonSimulationStuff::toggleFullScreen()
         sf::VideoMode mode = sf::VideoMode::getDesktopMode();
         window.setSize({mode.width,mode.height});
         window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None);
-        adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);//, zoom);
+        adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);
         isFullScreen = true;
     }
     else
     {
         window.setSize({prevWindowSizeX,prevWindowSizeY});
         window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine");
-        adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);//, zoom);
+        adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);
         window.setPosition(prevWindowPosition);
         isFullScreen = false;
     }
 }
 
+/**
+    Resets the window view to a zoom of 1, centered on the simulation world
+    centre.
+
+    @return Void.
+*/
 void NonSimulationStuff::resetView()
 {
     currentZoom = 1.0;
@@ -181,13 +275,14 @@ void NonSimulationStuff::resetView()
     window.setView(worldView);
 }
 
-/*void NonSimulationStuff::drawBalls()
-{
-    std::vector<Ball>* arrayAddress = ballSim.getBallArrayAddress();
-    for(int i=0; i<arrayAddress->size(); i++)
-        window.draw(arrayAddress->at(i));
-}*/
 
+/**
+    Changes the drawn rectangle which is the boundary of the simulation.
+
+    @param worldSize The size of the simulation world.
+
+    @return Void.
+*/
 void NonSimulationStuff::changeBoundaryRect(sf::Vector2i worldSize)
 {
     sf::Color grey(50,50,50);
@@ -198,6 +293,16 @@ void NonSimulationStuff::changeBoundaryRect(sf::Vector2i worldSize)
     boundaryRect.setPosition({0,0});
 }
 
+/**
+    Zooms the world based on direction of mouse wheel scroll if a chosen key is
+    pressed.
+
+    @param keyPress The isKeyPressed boolean value for a chosen key.
+    @param delta The mousewheel delta value. Positive if the mousewheel is
+    scrolled up, negative otherwise.
+
+    @return Void.
+*/
 void NonSimulationStuff::mouseWheelZoom(bool keyPress, float delta)
 {
     if(keyPress)
@@ -210,6 +315,11 @@ void NonSimulationStuff::mouseWheelZoom(bool keyPress, float delta)
     }
 }
 
+/**
+    Clicks on a User Interface window.
+
+    @return Void.
+*/
 void NonSimulationStuff::clickOnUI()
 {
     container.checkMouseIntersection(window, GUIView, worldView);
@@ -218,28 +328,26 @@ void NonSimulationStuff::clickOnUI()
 
 }
 
+/**
+    Sets the current User Interface window to not be draggable.
+
+    @return Void.
+*/
 void NonSimulationStuff::resetUIClick()
 {
     container.resetUIClick();
     clickedWindowToDrag = false;
-    //container.checkMouseIntersection(window, GUIView, worldView);
-    //container.doesMIntExist();
-}
-
-void NonSimulationStuff::resetButtonPress()
-{
-    /*bool windowBool = std::get<0>(mouseOnUIWhenClicked);
-    int windowIndex = std::get<1>(mouseOnUIWhenClicked);
-    if(windowIndex != -1)
-    {
-        std::cout << windowIndex << "\n";
-        container.getWindow(windowIndex).resetButtonPair();
-    }*/
-    //container.resetUIClick();
-    //mouseOnButtonWhenClicked = std::make_pair(false, -1);
 }
 
 
+/**
+    Function which handles all events to do with checking for UI interaction
+    or adjusting the view.
+
+    @param &event The event case to process.
+
+    @return Void.
+*/
 void NonSimulationStuff::mouseViewEvents(sf::Event &event)
 {
     if(event.type == sf::Event::MouseButtonPressed)
@@ -249,14 +357,8 @@ void NonSimulationStuff::mouseViewEvents(sf::Event &event)
 
     else if(event.type == sf::Event::MouseMoved)
     {
-        //resetButtonPress();
-        //if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-        //std::cout << mouseOnUIWhenClicked.first << "\n";
-        //mouseOnUIWhenClicked = container.doesMIntExist();
         container.checkMouseIntersection(window, GUIView, worldView);
         container.doesMIntExist();
-        //mouseOnUIWhenClicked = container.doesMIntExist();
-        //clickOnUI();
     }
 
     else if(event.type == sf::Event::MouseWheelScrolled)
@@ -271,24 +373,30 @@ void NonSimulationStuff::mouseViewEvents(sf::Event &event)
 
 }
 
+
+/**
+    Function which handles all events to do with generating interactions with
+    the User Interface.
+
+    @param &event The event case to process.
+
+    @return Void.
+*/
 void NonSimulationStuff::mouseUIEvents(sf::Event &event)
 {
-    //std::cout << mouseOnButtonWhenClicked.first << "\n";
-    //if(!mouseOnButtonWhenClicked.first)
         if(event.type == sf::Event::MouseButtonPressed)
-        {
-            //std::cout << "hello\n";
             clickedWindowToDrag = container.isWindowDraggable();
-        }
-    /*else if(event.type == sf::Event::MouseButtonReleased)
-    {
-        //std::cout << "declick\n";
-        container.resetUIClick();
-        clickedWindowToDrag = false;
-        container.checkMouseIntersection(window, GUIView, worldView);
-    }*/
 }
 
+
+/**
+    Function which handles all events to do with generating interactions with
+    the simulation world.
+
+    @param &event The event case to process.
+
+    @return Void.
+*/
 void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
 {
     if(event.type == sf::Event::MouseButtonPressed)
@@ -323,6 +431,15 @@ void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
     }
 }
 
+/**
+    Function which handles general key based events under some combination of
+    primary key presses e.g. ctrl, alt, shift.
+
+    @param &newLayerKeys Vector of isKeyPressed boolean.
+    @param &event The event case to process.
+
+    @return Void.
+*/
 void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 {
     if(newLayerKeys[0]&&(!newLayerKeys[1]))
@@ -338,23 +455,6 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
         else if(event.key.code == sf::Keyboard::M)
             spawnMass -= 1;
     }
-    /*else if((!newLayerKeys[0])&&newLayerKeys[1])
-    {
-        std::cout << "HEllo\n";
-        spawnRadius += 5;
-        if(event.key.code == sf::Keyboard::R)
-            std::cout << "Hello2\n";
-        else if(event.key.code == sf::Keyboard::M)
-            spawnMass += 5;
-    }
-    else if(newLayerKeys[0]&&newLayerKeys[1])
-    {
-        std::cout << "Hello3\n";
-        if(event.key.code == sf::Keyboard::R)
-            spawnRadius -= 5;
-        else if(event.key.code == sf::Keyboard::M)
-            spawnMass -= 5;
-    }*/
     else if(newLayerKeys[2])
     {
         if(event.key.code == sf::Keyboard::Return)
@@ -362,6 +462,16 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
     }
 }
 
+
+/**
+    Function which handles general key based events. Events are processed provided
+    there are no key primary keys held. If these keys are held, the newLayerEvent
+    events are processed instead.
+
+    @param &event The event case to process.
+
+    @return Void.
+*/
 void NonSimulationStuff::keyEvents(sf::Event &event)
 {
     std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
@@ -409,25 +519,17 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
 }
 
 
+/**
+    Function which handles player key held cases.
+
+    @param player The ball index which the player controls.
+
+    @return Void.
+*/
 void NonSimulationStuff::playerKeysDown(int player)
 {
-    /*std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LShift),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)};
-    bool newLayerPressed = false;
-    if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
-        newLayerPressed = true;
-
-    if(event.type == sf::Event::EventType::KeyPressed)
-    {
-        if(!newLayerPressed)
-        {
-            if(event.key.code == sf::Keyboard::W)
-                ballSim.pushBall({1,1}, player);
-        }
-    }*/
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
-        focusOnBall(0, recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
+        focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         ballSim.pushBall(0.01, 0, player);
@@ -439,6 +541,14 @@ void NonSimulationStuff::playerKeysDown(int player)
         ballSim.pushBall(0.01, 90, player);
 }
 
+
+/**
+    Function which handles events on window resize.
+
+    @param &event The event case to process.
+
+    @return Void.
+*/
 void NonSimulationStuff::resizeEvents(sf::Event &event)
 {
     if(event.type == sf::Event::Resized)
@@ -446,18 +556,38 @@ void NonSimulationStuff::resizeEvents(sf::Event &event)
 }
 
 
+/**
+    Increases the rendering timestep.
 
+    @param delta The amount to increase the rendering timestep by.
+
+    @return Void.
+*/
 void NonSimulationStuff::incTimeStep(sf::Time delta)
 {
     if(delta>sf::milliseconds(0))
         timestep+=delta;
 }
+
+
+/**
+    Decreases the rendering timestep.
+
+    @param delta The amount to decrease the rendering timestep by.
+
+    @return Void.
+*/
 void NonSimulationStuff::decTimeStep(sf::Time delta)
 {
     if(delta>sf::milliseconds(0) && timestep>delta)
         timestep-=delta;
 }
 
+/**
+    Returns the current x-direction window size.
+
+    @return x-direction window size.
+*/
 float NonSimulationStuff::getWindowSizeX()
 {
     return windowSizeX;

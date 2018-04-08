@@ -53,7 +53,7 @@ class NonSimulationStuff
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
     void checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool);
-    void focusOnBall(int ballIndex, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool);
+    void focusOnBall(int ballIndex, bool keyBool);
 
     void resetView();
     void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY);//, float zoom);
@@ -64,7 +64,6 @@ class NonSimulationStuff
     void mouseWheelZoom(bool keyPress, float delta);
     void resetUIClick();
     void clickOnUI();
-    void resetButtonPress();
 
     void mouseWorldEvents(sf::Event &event);
     void mouseViewEvents(sf::Event &event);
