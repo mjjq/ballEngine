@@ -1,3 +1,11 @@
+/**
+    @file stringConversion.cpp
+    Purpose: Overloads << operator to include cases for handling SFML vectors
+    and other SFML objects.
+
+    @author mjjq
+*/
+
 #include <iostream>
 #include <sstream>
 #include <SFML/Graphics.hpp>

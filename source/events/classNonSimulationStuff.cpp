@@ -1,12 +1,10 @@
 /**
-    classNonSimulationStuff.cpp
     @class NonSimulationStuff
     Purpose: Handle all aspects of the program which are not involved in
     simulation. This includes event handling of user inputs, and functions
     to do with rendering.
 
     @author mjjq
-    @version 0.1
 */
 
 #include <iostream>
