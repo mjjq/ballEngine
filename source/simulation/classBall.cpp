@@ -16,6 +16,8 @@
 
 #include "../../headers/classBall.h"
 #include "../../headers/sfVectorMath.h"
+#include "../../headers/integrators.h"
+#include "../../headers/stringConversion.h"
 
 /**
     Returns change in velocity of a Lennard-Jones based force. This function
@@ -72,7 +74,7 @@ float Ball::newtonForce(float x, float x_0, float r, float G, float M)
     @param initVel The initial velocity of the ball.
 */
 Ball::Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel) :
-sf::CircleShape(radius), mass(mass), velocity{initVel}, radius(radius)
+sf::CircleShape(radius), mass(mass), cStepVelocity{initVel}, radius(radius)
 {
     setPosition(initPos);
     setOrigin(radius,radius);
@@ -135,12 +137,12 @@ void Ball::checkForBounce(int worldSizeX, int worldSizeY)
     sf::Vector2f shapePos = getPosition();
     float shapeRadius = getRadius();
 
-    if(((shapePos.x+shapeRadius >= worldSizeX) && (velocity.x>=0))
-    || ((shapePos.x-shapeRadius <= 0  && (velocity.x<=0))))
-        velocity.x = -velocity.x*dampingFactor;
-    if(((shapePos.y+shapeRadius >= worldSizeY) && (velocity.y>=0))
-    || ((shapePos.y-shapeRadius <= 0  && (velocity.y<=0))))
-        velocity.y = -velocity.y*dampingFactor;
+    if(((shapePos.x+shapeRadius >= worldSizeX) && (cStepVelocity.x>=0))
+    || ((shapePos.x-shapeRadius <= 0  && (cStepVelocity.x<=0))))
+        cStepVelocity.x = -cStepVelocity.x*dampingFactor;
+    if(((shapePos.y+shapeRadius >= worldSizeY) && (cStepVelocity.y>=0))
+    || ((shapePos.y-shapeRadius <= 0  && (cStepVelocity.y<=0))))
+        cStepVelocity.y = -cStepVelocity.y*dampingFactor;
 }
 
 /**
@@ -190,24 +192,41 @@ void Ball::ballCollision(Ball &otherBall)
 
     @return Void.
 */
-void Ball::updateVelocity(float dt, Ball &otherBall)
+void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
 {
     float x_0 = otherBall.getPosition().x;
     float y_0 = otherBall.getPosition().y;
     float x = getPosition().x;
     float y = getPosition().y;
     float r = sqrt(pow((x-x_0),2) + pow((y-y_0),2));
-    float m = getMass();
 
     if(r > (otherBall.getRadius()+getRadius()))
     {
-        float G = 5;
+        float G = 1;
         float M = otherBall.getMass();
-        velocity.x += newtonForce(x,x_0,r,G,M)*dt;
-        velocity.y += newtonForce(y,y_0,r,G,M)*dt;
+        //velocity.x += newtonForce(x,x_0,r,G,M)*dt;
+        //velocity.y += newtonForce(y,y_0,r,G,M)*dt;
+        //std::cout << velocity << "\n";
+        switch(integType)
+        {
+            case(Integrators::INTEG_EULER):
+                nStepVelocity = cStepVelocity + integrators::eulerMethod({x-x_0,y-y_0}, dt, M, G);
+                break;
+
+            case(Integrators::INTEG_SEM_IMP_EULER):
+                nStepVelocity = cStepVelocity + integrators::semImpEulerMethod({x-x_0,y-y_0}, dt, M);
+                cStepVelocity = nStepVelocity;
+                break;
+
+            case(Integrators::INTEG_RK4):
+                nStepVelocity = cStepVelocity + integrators::RK4Method1stODE({x-x_0,y-y_0}, dt, M, G);
+                cStepVelocity += integrators::RK4Method2ndODE({x-x_0,y-y_0}, dt, M);
+                break;
+        }
     }
 
 }
+
 
 
 /**
@@ -218,7 +237,7 @@ void Ball::updateVelocity(float dt, Ball &otherBall)
 */
 void Ball::applyExternalImpulse(sf::Vector2f force, float dt)
 {
-    velocity += force*dt/getMass();
+    nStepVelocity += force*dt/getMass();
 }
 
 
@@ -232,7 +251,9 @@ void Ball::applyExternalImpulse(sf::Vector2f force, float dt)
 void Ball::updatePosition(float dt)
 {
     //sf::Vector2f currPos = getPosition();
-    setPosition(getPosition()+velocity*dt);
+    setPosition(getPosition()+cStepVelocity*dt);
+
+    cStepVelocity = nStepVelocity;
 }
 
 /**
@@ -263,7 +284,7 @@ float Ball::getRadius()
 */
 sf::Vector2f Ball::getVelocity()
 {
-    return velocity;
+    return cStepVelocity;
 }
 
 /**
@@ -275,7 +296,7 @@ sf::Vector2f Ball::getVelocity()
 */
 void Ball::setVelocity(sf::Vector2f vel)
 {
-    velocity = vel;
+    cStepVelocity = vel;
 }
 
 
@@ -320,6 +341,11 @@ float Ball::getKE()
     return 0.5*getMass()*sfVectorMath::dot(getVelocity(),getVelocity());
 }
 
+float Ball::getGPE(Ball &otherBall)
+{
+    return -getMass()*otherBall.getMass()/getDistance(otherBall);
+}
+
 
 /**
     Get the momentum vector of the ball.
@@ -328,7 +354,7 @@ float Ball::getKE()
 */
 sf::Vector2f Ball::getMomentum()
 {
-    return getMass()*velocity;
+    return getMass()*cStepVelocity;
 }
 
 

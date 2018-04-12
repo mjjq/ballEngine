@@ -7,6 +7,7 @@
 
 #include "../../headers/classUniverse.h"
 #include "../../headers/sfVectorMath.h"
+#include "../../headers/stringConversion.h"
 
 
 void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass)
@@ -119,7 +120,7 @@ void BallUniverse::physicsLoop()
                     for(int j=0;j<ballArray.size();j++)
                     {
                         if(i!=j)
-                            ballArray.at(i).updateVelocity(dt, ballArray.at(j));
+                            ballArray.at(i).updateVelocity(intEnum, dt, ballArray.at(j));
                     }
                 }
             }
@@ -140,6 +141,8 @@ void BallUniverse::universeLoop()
         physicsLoop();
         calcTotalKE(ballArray);
         calcTotalMomentum(ballArray);
+        calcTotalGPE(ballArray);
+        calcTotalEnergy();
         //if(enable_trajectories)
         sampleAllPositions();
     }
@@ -194,10 +197,30 @@ void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer ve
 
 void BallUniverse::calcTotalKE(std::vector<Ball> &ballArray)
 {
+    totalKE = 0;
     float KE{0};
     for(int i=0; i<ballArray.size(); i++)
         KE += ballArray.at(i).getKE();
     totalKE = KE;
+}
+
+void BallUniverse::calcTotalGPE(std::vector<Ball> &ballArray)
+{
+    totalGPE = 0;
+    if(ballArray.size()>1)
+    {
+        float GPE{0};
+        for(int i=0; i<ballArray.size(); i++)
+            for(int j=0; j<ballArray.size(); j++)
+                if(i!=j)
+                    GPE+=ballArray.at(i).getGPE(ballArray.at(j))/2;
+        totalGPE = GPE;
+    }
+}
+
+void BallUniverse::calcTotalEnergy()
+{
+    totalEnergy = totalKE + totalGPE;
 }
 
 void BallUniverse::calcTotalMomentum(std::vector<Ball> &ballArray)
@@ -283,6 +306,16 @@ void BallUniverse::toggleForces()
         enable_forces = true;
 }
 
+void BallUniverse::toggleRK4()
+{
+    int current = static_cast<int>(intEnum);
+    int size = static_cast<int>(Integrators::LAST);
+    current = (current+1)%size;
+    std::cout << "Int Type: " << current << "\n";
+    intEnum = static_cast<Integrators>(current);
+    //temp=temp+1;
+}
+
 void BallUniverse::changeBallColour()
 {
     for(int i=0; i<ballArray.size(); i++)
@@ -325,6 +358,11 @@ float& BallUniverse::getTotalKE()
     return totalKE;
 }
 
+float& BallUniverse::getTotalEnergy()
+{
+    return totalEnergy;
+}
+
 sf::Vector2f& BallUniverse::getTotalMomentum()
 {
     return totalMomentum;
@@ -334,6 +372,16 @@ sf::Vector2f BallUniverse::getBallPosition(int i)
 {
     if(ballArray.size()>i)
         return ballArray.at(i).getPosition();
+}
+
+float& BallUniverse::getTimeStep()
+{
+    return dt;
+}
+
+bool& BallUniverse::getUseRK4()
+{
+    return useRK4;
 }
 
 void BallUniverse::pushBall(float force, float relDirection, int i)

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <sstream>
 #include <SFML/Graphics.hpp>
+#include "../../headers/stringConversion.h"
+#include "../../headers/integrators.h"
 
 template <typename T>
 std::ostream& operator << ( std::ostream& outs, const sf::Vector2<T> &vec2 )
@@ -31,6 +33,24 @@ template <typename T>
 std::ostream &operator << ( std::ostream& outs, const sf::Rect<T> &rect)
 {
     return outs << "[(" << rect.left << ", " << rect.top << "), (" << rect.width << ", " << rect.height << ")]";
+}
+
+template <typename T>
+std::ostream &operator << ( std::ostream& outs, const Integrators &intType)
+{
+    std::string temp;
+    switch(intType)
+    {
+        case(Integrators::INTEG_EULER):
+            temp = std::string("Euler");
+        case(Integrators::INTEG_SEM_IMP_EULER):
+            temp = std::string("Semi Imp Euler");
+        case(Integrators::INTEG_RK4):
+            temp = std::string("RK4");
+        default:
+            temp = std::string("Error, invalid integrator");
+    }
+    return outs << temp;
 }
 
 template <typename T>

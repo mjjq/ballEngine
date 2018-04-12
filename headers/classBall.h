@@ -2,10 +2,12 @@
 #define CLASS_BALL_H
 
 #include <deque>
+#include "integrators.h"
 
 class Ball : public sf::CircleShape
 {
-    sf::Vector2f velocity;
+    sf::Vector2f cStepVelocity;
+    sf::Vector2f nStepVelocity = cStepVelocity;
     float dampingFactor = 1;
     float mass;
     float radius;
@@ -24,7 +26,7 @@ public:
     float timeToCollision(Ball &otherBall);
     void checkForBounce(int worldSizeX, int worldSizeY);
     void ballCollision(Ball &otherBall);
-    void updateVelocity(float dt, Ball &otherBall);
+    void updateVelocity(Integrators integType, float dt, Ball &otherBall);
     void applyExternalImpulse(sf::Vector2f force, float dt);
     void updatePosition(float dt);
     void sampleNextPosition();
@@ -38,6 +40,7 @@ public:
     void resetToCollided();
     bool getHasCollided();
     float getKE();
+    float getGPE(Ball &otherBall);
     sf::Vector2f getMomentum();
     float getDistance(Ball &otherBall);
     float getSpeed();
