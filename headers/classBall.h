@@ -8,6 +8,7 @@ class Ball : public sf::CircleShape
 {
     sf::Vector2f cStepVelocity;
     sf::Vector2f nStepVelocity = cStepVelocity;
+    sf::Vector2f nStepPosition = getPosition();
     float dampingFactor = 1;
     float mass;
     float radius;

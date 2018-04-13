@@ -202,6 +202,7 @@ void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
 
     if(r > (otherBall.getRadius()+getRadius()))
     {
+        //nStepVelocity = {0,0};
         float G = 1;
         float M = otherBall.getMass();
         //velocity.x += newtonForce(x,x_0,r,G,M)*dt;
@@ -210,17 +211,23 @@ void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
         switch(integType)
         {
             case(Integrators::INTEG_EULER):
-                nStepVelocity = cStepVelocity + integrators::eulerMethod({x-x_0,y-y_0}, dt, M, G);
+                //nStepVelocity = cStepVelocity + integrators::semImpEulerMethod({x-x_0,y-y_0}, dt, M, G);
+                nStepVelocity += integrators::semImpEulerMethod({x-x_0,y-y_0}, dt, M, G);
+                //cStepVelocity = nStepVelocity;
+                //std::cout << "Euler\n";
                 break;
 
             case(Integrators::INTEG_SEM_IMP_EULER):
-                nStepVelocity = cStepVelocity + integrators::semImpEulerMethod({x-x_0,y-y_0}, dt, M);
+                nStepVelocity += integrators::semImpEulerMethod({x-x_0,y-y_0}, dt, M, G);
                 cStepVelocity = nStepVelocity;
+                //std::cout << "SIEuler\n";
                 break;
 
             case(Integrators::INTEG_RK4):
-                nStepVelocity = cStepVelocity + integrators::RK4Method1stODE({x-x_0,y-y_0}, dt, M, G);
-                cStepVelocity += integrators::RK4Method2ndODE({x-x_0,y-y_0}, dt, M);
+                std::vector<sf::Vector2f> solution = integrators::RK4Method2ndODE({x-x_0,y-y_0}, dt, M, G);
+                nStepVelocity += solution.at(0);
+                cStepVelocity += solution.at(1);
+                //std::cout << "RK4\n";
                 break;
         }
     }
@@ -237,7 +244,8 @@ void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
 */
 void Ball::applyExternalImpulse(sf::Vector2f force, float dt)
 {
-    nStepVelocity += force*dt/getMass();
+    cStepVelocity += force*dt/getMass();
+    nStepVelocity = cStepVelocity;
 }
 
 
@@ -251,8 +259,9 @@ void Ball::applyExternalImpulse(sf::Vector2f force, float dt)
 void Ball::updatePosition(float dt)
 {
     //sf::Vector2f currPos = getPosition();
-    setPosition(getPosition()+cStepVelocity*dt);
-
+    setPosition(getPosition() + cStepVelocity*dt);
+    //std::cout << "Current: " << cStepVelocity << "\n";
+    //std::cout << "Next:    " << nStepVelocity << "\n";
     cStepVelocity = nStepVelocity;
 }
 

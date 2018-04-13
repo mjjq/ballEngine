@@ -452,6 +452,10 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
             spawnRadius -= 1;
         else if(event.key.code == sf::Keyboard::M)
             spawnMass -= 1;
+        else if(event.key.code == sf::Keyboard::Comma)
+            ballSim.decSimStep(1);
+        else if(event.key.code == sf::Keyboard::Period)
+            ballSim.incSimStep(1);
     }
     else if(newLayerKeys[2])
     {
@@ -488,9 +492,9 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
             else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
                 decTimeStep(sf::milliseconds(1.0/60.0));
             else if(event.key.code == sf::Keyboard::Comma)
-                ballSim.decSimStep(1.0);
+                ballSim.decSimStep(0.1);
             else if(event.key.code == sf::Keyboard::Period)
-                ballSim.incSimStep(1.0);
+                ballSim.incSimStep(0.1);
             else if(event.key.code == sf::Keyboard::Delete)
                 ballSim.clearSimulation();
             else if(event.key.code == sf::Keyboard::Dash)
