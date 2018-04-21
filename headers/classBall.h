@@ -9,6 +9,7 @@ class Ball : public sf::CircleShape
     sf::Vector2f cStepVelocity;
     sf::Vector2f nStepVelocity = cStepVelocity;
     sf::Vector2f nStepPosition = getPosition();
+    sf::Vector2f pStepPosition = nStepPosition;
     float dampingFactor = 1;
     float mass;
     float radius;
@@ -19,7 +20,8 @@ class Ball : public sf::CircleShape
     float newtonForce(float x, float x_0, float r, float G, float M);
 
     std::deque<sf::Vector2f> previousPositions;
-    bool samplePreviousPositions = true;
+    bool samplePreviousPositions = false;
+    bool isPlayer = false;
 
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);

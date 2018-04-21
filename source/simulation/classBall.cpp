@@ -137,12 +137,12 @@ void Ball::checkForBounce(int worldSizeX, int worldSizeY)
     sf::Vector2f shapePos = getPosition();
     float shapeRadius = getRadius();
 
-    if(((shapePos.x+shapeRadius >= worldSizeX) && (cStepVelocity.x>=0))
-    || ((shapePos.x-shapeRadius <= 0  && (cStepVelocity.x<=0))))
-        cStepVelocity.x = -cStepVelocity.x*dampingFactor;
-    if(((shapePos.y+shapeRadius >= worldSizeY) && (cStepVelocity.y>=0))
-    || ((shapePos.y-shapeRadius <= 0  && (cStepVelocity.y<=0))))
-        cStepVelocity.y = -cStepVelocity.y*dampingFactor;
+    if(((shapePos.x+shapeRadius >= worldSizeX) && (nStepVelocity.x>=0))
+    || ((shapePos.x-shapeRadius <= 0  && (nStepVelocity.x<=0))))
+        nStepVelocity.x = -nStepVelocity.x*dampingFactor;
+    if(((shapePos.y+shapeRadius >= worldSizeY) && (nStepVelocity.y>=0))
+    || ((shapePos.y-shapeRadius <= 0  && (nStepVelocity.y<=0))))
+        nStepVelocity.y = -nStepVelocity.y*dampingFactor;
 }
 
 /**
@@ -208,11 +208,12 @@ void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
         //velocity.x += newtonForce(x,x_0,r,G,M)*dt;
         //velocity.y += newtonForce(y,y_0,r,G,M)*dt;
         //std::cout << velocity << "\n";
+        std::vector<sf::Vector2f> solution;
         switch(integType)
         {
             case(Integrators::INTEG_EULER):
                 //nStepVelocity = cStepVelocity + integrators::semImpEulerMethod({x-x_0,y-y_0}, dt, M, G);
-                nStepVelocity += integrators::semImpEulerMethod({x-x_0,y-y_0}, dt, M, G);
+                nStepVelocity += integrators::eulerMethod({x-x_0,y-y_0}, dt, M, G);
                 //cStepVelocity = nStepVelocity;
                 //std::cout << "Euler\n";
                 break;
@@ -224,10 +225,16 @@ void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
                 break;
 
             case(Integrators::INTEG_RK4):
-                std::vector<sf::Vector2f> solution = integrators::RK4Method2ndODE({x-x_0,y-y_0}, dt, M, G);
+                solution = integrators::RK4Method2ndODE({x-x_0,y-y_0}, dt, M, G);
                 nStepVelocity += solution.at(0);
                 cStepVelocity += solution.at(1);
                 //std::cout << "RK4\n";
+                break;
+
+            case(Integrators::INTEG_VERLET):
+                solution = integrators::verletMethod({x-x_0,y-y_0}, cStepVelocity, dt, M, G);
+                nStepVelocity += solution.at(0);
+                cStepVelocity += solution.at(1);
                 break;
         }
     }
@@ -244,8 +251,8 @@ void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
 */
 void Ball::applyExternalImpulse(sf::Vector2f force, float dt)
 {
-    cStepVelocity += force*dt/getMass();
-    nStepVelocity = cStepVelocity;
+    nStepVelocity += force*dt/getMass();
+    //nStepVelocity = cStepVelocity;
 }
 
 
@@ -306,6 +313,7 @@ sf::Vector2f Ball::getVelocity()
 void Ball::setVelocity(sf::Vector2f vel)
 {
     cStepVelocity = vel;
+    nStepVelocity = vel;
 }
 
 
