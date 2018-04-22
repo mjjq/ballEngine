@@ -21,7 +21,7 @@ class Ball : public sf::CircleShape
 
     std::deque<sf::Vector2f> previousPositions;
     bool samplePreviousPositions = false;
-    bool isPlayer = false;
+    bool isPlayer = true;
 
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);

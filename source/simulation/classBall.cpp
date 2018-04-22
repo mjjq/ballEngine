@@ -77,6 +77,7 @@ Ball::Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel)
 sf::CircleShape(radius), mass(mass), cStepVelocity{initVel}, radius(radius)
 {
     setPosition(initPos);
+    nStepPosition = initPos;
     setOrigin(radius,radius);
     if(mass>0)
         setFillColor(sf::Color::Green);
@@ -214,7 +215,7 @@ void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
             case(Integrators::INTEG_EULER):
                 //nStepVelocity = cStepVelocity + integrators::semImpEulerMethod({x-x_0,y-y_0}, dt, M, G);
                 nStepVelocity += integrators::eulerMethod({x-x_0,y-y_0}, dt, M, G);
-                //cStepVelocity = nStepVelocity;
+                //nStepPosition += dt*(cStepVelocity);
                 //std::cout << "Euler\n";
                 break;
 
@@ -225,16 +226,16 @@ void Ball::updateVelocity(Integrators integType, float dt, Ball &otherBall)
                 break;
 
             case(Integrators::INTEG_RK4):
-                solution = integrators::RK4Method2ndODE({x-x_0,y-y_0}, dt, M, G);
-                nStepVelocity += solution.at(0);
-                cStepVelocity += solution.at(1);
+                nStepVelocity += integrators::RK4Method2ndODE({x-x_0,y-y_0}, cStepVelocity, dt, M, G);
+                //nStepVelocity += solution.at(0);
+                //cStepVelocity += solution.at(1);
                 //std::cout << "RK4\n";
                 break;
 
             case(Integrators::INTEG_VERLET):
-                solution = integrators::verletMethod({x-x_0,y-y_0}, cStepVelocity, dt, M, G);
-                nStepVelocity += solution.at(0);
-                cStepVelocity += solution.at(1);
+                nStepVelocity += integrators::verletMethod({x-x_0,y-y_0}, cStepVelocity, dt, M, G);
+                /*nStepVelocity += solution.at(0);
+                cStepVelocity += solution.at(1);*/
                 break;
         }
     }
@@ -266,10 +267,11 @@ void Ball::applyExternalImpulse(sf::Vector2f force, float dt)
 void Ball::updatePosition(float dt)
 {
     //sf::Vector2f currPos = getPosition();
-    setPosition(getPosition() + cStepVelocity*dt);
+    setPosition(getPosition()+cStepVelocity*dt);
     //std::cout << "Current: " << cStepVelocity << "\n";
     //std::cout << "Next:    " << nStepVelocity << "\n";
     cStepVelocity = nStepVelocity;
+    //nStepPosition = getPosition();
 }
 
 /**

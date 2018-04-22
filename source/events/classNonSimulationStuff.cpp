@@ -541,6 +541,8 @@ void NonSimulationStuff::playerKeysDown(int player)
         ballSim.pushBall(0.01, 270, player);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         ballSim.pushBall(0.01, 90, player);
+
+    ballSim.drawSampledPositions(window);
 }
 
 

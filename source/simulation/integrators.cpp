@@ -28,25 +28,32 @@ sf::Vector2f integrators::RK4Method1stODE(sf::Vector2f xvec, float dt, float M, 
     return (dt/6.0f)*(k1+2.0f*k2+2.0f*k3+k4);
 }
 
-std::vector<sf::Vector2f> integrators::RK4Method2ndODE(sf::Vector2f xvec, float dt, float M, float G)
+sf::Vector2f integrators::RK4Method2ndODE(sf::Vector2f xvec, sf::Vector2f &velVec, float dt, float M, float G)
 {
-    sf::Vector2f k1 = forces::newtonForce(xvec, M, G);
-    sf::Vector2f k2 = forces::newtonForce(xvec + 0.5f*dt*k1, M, G);
-    sf::Vector2f k3 = forces::newtonForce(xvec + 0.5f*dt*k2, M, G);
-    sf::Vector2f k4 = forces::newtonForce(xvec + dt*k3, M, G);
+    sf::Vector2f kv1 = forces::newtonForce(xvec, M, G);
+    sf::Vector2f kr1 = velVec;
+    sf::Vector2f kv2 = forces::newtonForce(xvec + 0.5f*dt*kr1, M, G);
+    sf::Vector2f kr2 = velVec + 0.5f*dt*kv1;
+    sf::Vector2f kv3 = forces::newtonForce(xvec + 0.5f*dt*kr2, M, G);
+    sf::Vector2f kr3 = velVec + 0.5f*dt*kv2;
+    sf::Vector2f kv4 = forces::newtonForce(xvec + dt*kr3, M, G);
+    sf::Vector2f kr4 = velVec + dt*kv3;
 
     //sf::Vector2f k1 = forces::newtonForce(xvec, M, G);
     //sf::Vector2f k2 = forces::newtonForce(xvec + 0.5f*dt*k1, M, G);
     //sf::Vector2f k3 = forces::newtonForce(xvec + 0.5f*dt*k2, M, G);
+    velVec += (dt/6.0f)*(kv1 + kv2 + kv3);
 
-    return {(dt/6.0f)*(k1+2.0f*k2+2.0f*k3+k4), (dt/6.0f)*(k1 + k2 + k3)};
+    return (dt/6.0f)*(kv1+2.0f*kv2+2.0f*kv3+kv4);
 }
 
-std::vector<sf::Vector2f> integrators::verletMethod(sf::Vector2f xvec, sf::Vector2f velVec, float dt, float M, float G)
+sf::Vector2f integrators::verletMethod(sf::Vector2f xvec, sf::Vector2f &velVec, float dt, float M, float G)
 {
     sf::Vector2f newXVec = (velVec + 0.5f*dt*forces::newtonForce(xvec, M, G));
     sf::Vector2f dv = 0.5f*(forces::newtonForce(xvec+newXVec*dt, M, G) + forces::newtonForce(xvec, M, G));
 
-    return {dv*dt, newXVec-velVec};
+    velVec = newXVec;
+
+    return dv*dt;
 }
 
