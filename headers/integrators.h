@@ -2,6 +2,8 @@
 #define INTEGRATORS_H
 #include <SFML/Graphics.hpp>>
 
+typedef std::pair<sf::Vector2f, sf::Vector2f> sfPair;
+
 enum class Integrators
 {
     INTEG_EULER,
@@ -13,11 +15,12 @@ enum class Integrators
 
 namespace integrators
 {
-    sf::Vector2f eulerMethod(sf::Vector2f xvec, float dt, float M, float G=1);
-    sf::Vector2f semImpEulerMethod(sf::Vector2f xvec, float dt, float M, float G=1);
+    sfPair eulerMethod(sf::Vector2f xvec, float dt, float M, float G=1);
+    sfPair semImpEulerMethod(sf::Vector2f xvec, float dt, float M, float G);
     sf::Vector2f RK4Method1stODE(sf::Vector2f xvec, float dt, float M, float G=1);
-    sf::Vector2f RK4Method2ndODE(sf::Vector2f xvec, sf::Vector2f &velVec, float dt, float M, float G=1);
-    sf::Vector2f verletMethod(sf::Vector2f xvec, sf::Vector2f &velVec, float dt, float M, float G=1);
+    sfPair RK4Method2ndODE(sf::Vector2f xvec, sf::Vector2f thisVel, sf::Vector2f otherVel, float dt, float M, float G);
+    //sf::Vector2f verletMethod(sf::Vector2f xvec, sf::Vector2f &velVec, float dt, float M, float G=1);
+    sfPair verletMethod(sf::Vector2f xSep, sf::Vector2f thisVel, sf::Vector2f otherVel, float dt, float M, float G);
     std::string returnIntTypeStr(const Integrators &value);
 }
 

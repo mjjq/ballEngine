@@ -49,6 +49,7 @@ public:
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
+    void createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVelocity);
     void drawBalls(sf::RenderWindow &windowRef);
 
     sf::Vector2i getWorldSize();

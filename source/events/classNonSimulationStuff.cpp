@@ -77,10 +77,12 @@ sf::Vector2f NonSimulationStuff::velocityFromMouse(sf::Vector2i mousePosOnClick,
     sf::Vector2i scaledVector = (spawnVelFactor)*(mousePosOnRelease-
                                                   mousePosOnClick);
 
-    float windowDiagSize = pow(windowSizeX*windowSizeX +
-                               windowSizeY*windowSizeY, 0.5);
+    /*float windowDiagSize = pow(windowSizeX*windowSizeX +
+                               windowSizeY*windowSizeY, 0.5);*/
+    float worldDiagSize = sqrt(sfVectorMath::dot( ballSim.getWorldSize(),
+                                                  ballSim.getWorldSize() ));
 
-    sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/windowDiagSize;
+    sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/worldDiagSize;
     timeToNextSpawn = minTimeToNextSpawn;
 
     return velocity;
@@ -411,13 +413,13 @@ void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
         ballSim.spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,spawnMass);
     }
 
-    /*if(event.type == sf::Event::EventType::MouseButtonReleased
+    if(event.type == sf::Event::EventType::MouseButtonReleased
                     && event.mouseButton.button==sf::Mouse::Right
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
-        sf::Vector2f velocity = velocityFromMouse(mousePosOnClick);
-        spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,-spawnMass);
-    }*/
+        sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
+        ballSim.createSPSys(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+    }
 
     else if(event.type == sf::Event::EventType::MouseButtonReleased
                     && event.mouseButton.button==sf::Mouse::Middle

@@ -260,6 +260,13 @@ void BallUniverse::createBallGrid(int numWide, int numHigh, float spacing, sf::V
     }
 }
 
+void BallUniverse::createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVelocity)
+{
+    spawnNewBall(centralPosition, initVelocity, 50, 1000);
+    spawnNewBall(centralPosition+sf::Vector2f{0.0f, 100.0f}, initVelocity+sf::Vector2f{3.0f, 0.0f}, 10, 1);
+    spawnNewBall(centralPosition+sf::Vector2f{0.0f, -200.0f}, initVelocity+sf::Vector2f{-2.0f, 0.0f}, 10, 1);
+}
+
 sf::Vector2i BallUniverse::getWorldSize()
 {
     sf::Vector2i wSize = {worldSizeX,worldSizeY};
