@@ -77,10 +77,12 @@ sf::Vector2f NonSimulationStuff::velocityFromMouse(sf::Vector2i mousePosOnClick,
     sf::Vector2i scaledVector = (spawnVelFactor)*(mousePosOnRelease-
                                                   mousePosOnClick);
 
-    float windowDiagSize = pow(windowSizeX*windowSizeX +
-                               windowSizeY*windowSizeY, 0.5);
+    /*float windowDiagSize = pow(windowSizeX*windowSizeX +
+                               windowSizeY*windowSizeY, 0.5);*/
+    float worldDiagSize = sqrt(sfVectorMath::dot( ballSim.getWorldSize(),
+                                                  ballSim.getWorldSize() ));
 
-    sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/windowDiagSize;
+    sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/worldDiagSize;
     timeToNextSpawn = minTimeToNextSpawn;
 
     return velocity;
@@ -411,13 +413,13 @@ void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
         ballSim.spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,spawnMass);
     }
 
-    /*if(event.type == sf::Event::EventType::MouseButtonReleased
+    if(event.type == sf::Event::EventType::MouseButtonReleased
                     && event.mouseButton.button==sf::Mouse::Right
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
-        sf::Vector2f velocity = velocityFromMouse(mousePosOnClick);
-        spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,-spawnMass);
-    }*/
+        sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
+        ballSim.createSPSys(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+    }
 
     else if(event.type == sf::Event::EventType::MouseButtonReleased
                     && event.mouseButton.button==sf::Mouse::Middle
@@ -452,6 +454,10 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
             spawnRadius -= 1;
         else if(event.key.code == sf::Keyboard::M)
             spawnMass -= 1;
+        else if(event.key.code == sf::Keyboard::Comma)
+            ballSim.decSimStep(1);
+        else if(event.key.code == sf::Keyboard::Period)
+            ballSim.incSimStep(1);
     }
     else if(newLayerKeys[2])
     {
@@ -537,6 +543,8 @@ void NonSimulationStuff::playerKeysDown(int player)
         ballSim.pushBall(0.01, 270, player);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         ballSim.pushBall(0.01, 90, player);
+
+    ballSim.drawSampledPositions(window);
 }
 
 
@@ -657,13 +665,14 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.addWindow({0,100}, 250, 250, true, false);
     container.addWindow({0,0}, 250, 50, true, false);
     container.addWindow({0,400}, 250, 50, true, false);
-    container.addWindow({0,500}, 250, 100, true, false);
+    container.addWindow({0,500}, 250, 150, true, false);
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,50}, &spawnRadius);
     container.getWindow(0).addElement("./fonts/cour.ttf", "Forces Enabled:", 16, {0,70}, &ballSim.getForcesEnabled());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Collisions Enabled:", 16, {0,90}, &ballSim.getCollisionsEnabled());
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Timestep:", 16, {0,110}, &ballSim.getTimeStep());
 
     container.getWindow(0).addButton("./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;});
     container.getWindow(0).addButton("./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}});
@@ -679,14 +688,16 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
     //container.getWindow(1).addButton("./fonts/cour.ttf", "Rad -", 16, {0,50}, {80,40}, increaseMass);
 
-    container.getWindow(2).addButton("./fonts/cour.ttf", "Star", 12, {10,10}, {60,30}, [&]{spawnRadius=50;spawnMass=100;});
+    container.getWindow(2).addButton("./fonts/cour.ttf", "Star", 12, {10,10}, {60,30}, [&]{spawnRadius=50;spawnMass=10000;});
     container.getWindow(2).addButton("./fonts/cour.ttf", "Planet", 12, {90,10}, {60,30}, [&]{spawnRadius=10;spawnMass=1;});
     container.getWindow(2).addButton("./fonts/cour.ttf", "Asteroid", 12, {170,10}, {60,30}, [&]{spawnRadius=3;spawnMass=0.01;});
 
     container.getWindow(3).addElement("./fonts/cour.ttf", "Total KE: ", 16, {0,0}, &ballSim.getTotalKE());
-    container.getWindow(3).addElement("./fonts/cour.ttf", "Total Momentum: ", 16, {0,20}, &ballSim.getTotalMomentum());
-    container.getWindow(3).addButton("./fonts/cour.ttf", "Trj", 12, {10,50}, {60,30}, [&]{ballSim.toggleTrajectories();});
-
+    //container.getWindow(3).addElement("./fonts/cour.ttf", "Total Momentum: ", 16, {0,20}, &ballSim.getTotalMomentum());
+    container.getWindow(3).addElement("./fonts/cour.ttf", "Total Energy: ", 16, {0,20}, &ballSim.getTotalEnergy());
+    container.getWindow(3).addElement("./fonts/cour.ttf", "Use RK4: ", 16, {0,40}, &ballSim.getUseRK4());
+    container.getWindow(3).addButton("./fonts/cour.ttf", "Trj", 12, {10,80}, {60,30}, [&]{ballSim.toggleTrajectories();});
+    container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {90,80}, {60,30}, [&]{ballSim.toggleRK4();});
 
 
 

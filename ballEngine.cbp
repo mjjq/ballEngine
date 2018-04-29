@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ballEngine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/FirstWindow" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/FirstWindow" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++11" />
+		</Compiler>
+		<Unit filename="headers/classBall.h" />
+		<Unit filename="headers/classNonSim.h" />
+		<Unit filename="headers/classTextElement.h" />
+		<Unit filename="headers/classTextElementBase.h" />
+		<Unit filename="headers/classUIButton.h" />
+		<Unit filename="headers/classUIContainer.h" />
+		<Unit filename="headers/classUIWindow.h" />
+		<Unit filename="headers/classUniverse.h" />
+		<Unit filename="headers/forces.h" />
+		<Unit filename="headers/integrators.h" />
+		<Unit filename="headers/sfVectorMath.h" />
+		<Unit filename="headers/stringConversion.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="source/UI/classUIButton.cpp" />
+		<Unit filename="source/UI/classUIContainer.cpp" />
+		<Unit filename="source/UI/classUITextElement.cpp" />
+		<Unit filename="source/UI/classUITextElementBase.cpp" />
+		<Unit filename="source/UI/classUIWindow.cpp" />
+		<Unit filename="source/events/classNonSimulationStuff.cpp" />
+		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />
+		<Unit filename="source/miscellaneous/stringConversion.cpp" />
+		<Unit filename="source/simulation/classBall.cpp" />
+		<Unit filename="source/simulation/classUniverse.cpp" />
+		<Unit filename="source/simulation/forces.cpp" />
+		<Unit filename="source/simulation/integrators.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

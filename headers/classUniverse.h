@@ -1,5 +1,6 @@
 #ifndef CLASS_UNIVERSE_H
 #define CLASS_UNIVERSE_H
+#include "integrators.h"
 #include "classBall.h"
 
 class BallUniverse
@@ -17,6 +18,8 @@ class BallUniverse
     float currentTime = 0;
     float timeToNextColl = 1e+15;
     float dt;
+    Integrators intEnum = Integrators::INTEG_EULER;
+    std::string useRK4 = "";
     bool isPaused = false;
 
     float sampledt = 5*dt;
@@ -26,9 +29,14 @@ class BallUniverse
     std::tuple<int,int,float> findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt=1e+10);
 
     float totalKE = 0;
+    float totalGPE = 0;
+    float totalEnergy = 0;
     sf::Vector2f totalMomentum = sf::Vector2f{0,0};
+
     void calcTotalKE(std::vector<Ball> &ballArray);
     void calcTotalMomentum(std::vector<Ball> &ballArray);
+    void calcTotalGPE(std::vector<Ball> &ballArray);
+    void calcTotalEnergy();
 
     void physicsLoop();
 
@@ -41,6 +49,7 @@ public:
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
+    void createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVelocity);
     void drawBalls(sf::RenderWindow &windowRef);
 
     sf::Vector2i getWorldSize();
@@ -50,6 +59,7 @@ public:
     void toggleSimPause();
     void toggleCollisions();
     void toggleForces();
+    void toggleRK4();
     void clearSimulation();
     void changeBallColour();
 
@@ -58,7 +68,10 @@ public:
     bool& getCollisionsEnabled();
     bool& getForcesEnabled();
     float& getTotalKE();
+    float& getTotalEnergy();
+    float& getTimeStep();
     sf::Vector2f& getTotalMomentum();
+    Integrators& getUseRK4();
 
     void sampleAllPositions();
     void drawSampledPositions(sf::RenderWindow &window);

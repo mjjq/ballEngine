@@ -10,6 +10,7 @@
 #include "../../headers/classTextElement.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
+#include "../../headers/integrators.h"
 
 
 template <typename T>
@@ -96,3 +97,4 @@ template class UITextElement<float>;
 template class UITextElement<bool>;
 template class UITextElement<sf::Vector2i>;
 template class UITextElement<sf::Vector2f>;
+template class UITextElement<Integrators>;

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <sstream>
 #include <SFML/Graphics.hpp>
+#include "../../headers/stringConversion.h"
+#include "../../headers/integrators.h"
 
 template <typename T>
 std::ostream& operator << ( std::ostream& outs, const sf::Vector2<T> &vec2 )
@@ -34,6 +36,14 @@ std::ostream &operator << ( std::ostream& outs, const sf::Rect<T> &rect)
 }
 
 template <typename T>
+std::ostream &operator << ( std::ostream& outs, const Integrators &intType)
+{
+    std::string temp = integrators::returnIntTypeStr(intType);
+
+    return outs << temp;
+}
+
+template <typename T>
 std::string to_string( const T &value )
 {
   std::ostringstream ss;
@@ -41,8 +51,16 @@ std::string to_string( const T &value )
   return ss.str();
 }
 
+//template <typename T>
+std::string to_string( const Integrators &value )
+{
+    //std::string temp;
+    return integrators::returnIntTypeStr(value);
+}
+
 template std::string to_string<sf::Vector2i>(const sf::Vector2i &value);
 template std::string to_string<sf::Vector2f>(const sf::Vector2f &value);
 template std::string to_string<sf::Rect<int>>(const sf::Rect<int> &value);
 template std::string to_string<sf::Rect<float>>(const sf::Rect<float> &value);
 template std::string to_string<bool>(const bool &value);
+//template std::string to_string<Integrators>(const Integrators &intType);

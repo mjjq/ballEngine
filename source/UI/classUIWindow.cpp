@@ -208,4 +208,5 @@ template void UIWindow::addElement<float>(std::string font, std::string str, int
 template void UIWindow::addElement<bool>(std::string font, std::string str, int fontSize, sf::Vector2f position, bool *var);
 template void UIWindow::addElement<sf::Vector2i>(std::string font, std::string str, int fontSize, sf::Vector2f position, sf::Vector2i *var);
 template void UIWindow::addElement<sf::Vector2f>(std::string font, std::string str, int fontSize, sf::Vector2f position, sf::Vector2f *var);
+template void UIWindow::addElement<Integrators>(std::string font, std::string str, int fontSize, sf::Vector2f position, Integrators *var);
 
