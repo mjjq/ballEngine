@@ -49,10 +49,10 @@ sf::Vector2f integrators::RK4Method2ndODE(sf::Vector2f xvec, sf::Vector2f &velVe
 
 sf::Vector2f integrators::verletMethod(sf::Vector2f xvec, sf::Vector2f &velVec, float dt, float M, float G)
 {
-    sf::Vector2f newXVec = (velVec + 0.5f*dt*forces::newtonForce(xvec, M, G));
-    sf::Vector2f dv = 0.5f*(forces::newtonForce(xvec+newXVec*dt, M, G) + forces::newtonForce(xvec, M, G));
+    sf::Vector2f newVelVec = (velVec + 0.5f*dt*forces::newtonForce(xvec, M, G));
+    sf::Vector2f dv = 0.5f*(forces::newtonForce(xvec+newVelVec*dt, M, G) + forces::newtonForce(xvec, M, G));
 
-    velVec = newXVec;
+    velVec = newVelVec;
 
     return dv*dt;
 }
