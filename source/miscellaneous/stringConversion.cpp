@@ -38,18 +38,8 @@ std::ostream &operator << ( std::ostream& outs, const sf::Rect<T> &rect)
 template <typename T>
 std::ostream &operator << ( std::ostream& outs, const Integrators &intType)
 {
-    std::string temp;
-    switch(intType)
-    {
-        case(Integrators::INTEG_EULER):
-            temp = std::string("Euler");
-        case(Integrators::INTEG_SEM_IMP_EULER):
-            temp = std::string("Semi Imp Euler");
-        case(Integrators::INTEG_RK4):
-            temp = std::string("RK4");
-        default:
-            temp = std::string("Error, invalid integrator");
-    }
+    std::string temp = integrators::returnIntTypeStr(intType);
+
     return outs << temp;
 }
 
@@ -61,8 +51,16 @@ std::string to_string( const T &value )
   return ss.str();
 }
 
+//template <typename T>
+std::string to_string( const Integrators &value )
+{
+    //std::string temp;
+    return integrators::returnIntTypeStr(value);
+}
+
 template std::string to_string<sf::Vector2i>(const sf::Vector2i &value);
 template std::string to_string<sf::Vector2f>(const sf::Vector2f &value);
 template std::string to_string<sf::Rect<int>>(const sf::Rect<int> &value);
 template std::string to_string<sf::Rect<float>>(const sf::Rect<float> &value);
 template std::string to_string<bool>(const bool &value);
+//template std::string to_string<Integrators>(const Integrators &intType);

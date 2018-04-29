@@ -92,11 +92,24 @@ void BallUniverse::physicsLoop()
         {
             dtR = timeToNextColl;
             if(std::abs(dtR) > epsilon)
+            {
+                if(enable_forces==true)
+                {
+                    for(int i=0;i<ballArray.size();i++)
+                    {
+                        for(int j=0;j<ballArray.size();j++)
+                        {
+                            if(i!=j)
+                                ballArray.at(i).updateVelocity(intEnum, dtR, ballArray.at(j));
+                        }
+                    }
+                }
                 for(int i=0;i<ballArray.size();i++)
                 {
                     ballArray.at(i).updatePosition(std::floor(1e+3*dtR)/1e+3);
                     //window.draw(ballArray.at(i));
                 }
+            }
             if(collider1 != collider2)
             {
                 //std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
@@ -379,9 +392,9 @@ float& BallUniverse::getTimeStep()
     return dt;
 }
 
-bool& BallUniverse::getUseRK4()
+Integrators& BallUniverse::getUseRK4()
 {
-    return useRK4;
+    return intEnum;
 }
 
 void BallUniverse::pushBall(float force, float relDirection, int i)

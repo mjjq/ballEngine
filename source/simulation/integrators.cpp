@@ -57,3 +57,20 @@ sf::Vector2f integrators::verletMethod(sf::Vector2f xvec, sf::Vector2f &velVec, 
     return dv*dt;
 }
 
+std::string integrators::returnIntTypeStr(const Integrators &value)
+{
+    switch(value)
+    {
+        case(Integrators::INTEG_EULER):
+            return std::string("Euler");
+        case(Integrators::INTEG_SEM_IMP_EULER):
+            return std::string("Semi Imp Euler");
+        case(Integrators::INTEG_RK4):
+            return std::string("RK4");
+        case(Integrators::INTEG_VERLET):
+            return std::string("Vel Verlet");
+        default:
+            return std::string("Error, invalid integrator");
+    }
+}
+

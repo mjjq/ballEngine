@@ -17,4 +17,7 @@ std::ostream &operator << ( std::ostream& outs, const Integrators &intType);
 template <typename T>
 std::string to_string( const T& value );
 
+//template <typename T>
+std::string to_string( const Integrators& value );
+
 #endif // STRINGCONV_H

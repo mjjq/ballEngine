@@ -19,7 +19,7 @@ class BallUniverse
     float timeToNextColl = 1e+15;
     float dt;
     Integrators intEnum = Integrators::INTEG_EULER;
-    bool useRK4 = false;
+    std::string useRK4 = "";
     bool isPaused = false;
 
     float sampledt = 5*dt;
@@ -70,7 +70,7 @@ public:
     float& getTotalEnergy();
     float& getTimeStep();
     sf::Vector2f& getTotalMomentum();
-    bool& getUseRK4();
+    Integrators& getUseRK4();
 
     void sampleAllPositions();
     void drawSampledPositions(sf::RenderWindow &window);

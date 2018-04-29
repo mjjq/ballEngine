@@ -5,6 +5,7 @@
 #include <limits>
 #include <tuple>
 
+#include "../../headers/sfVectorMath.h"
 #include "../../headers/forces.h"
 
 /**
@@ -21,8 +22,16 @@
 */
 sf::Vector2f forces::newtonForce(sf::Vector2f vec, float M, float G)
 {
-    float r = sqrt(pow(vec.x,2) + pow(vec.y,2));
+    float r = sqrt(sfVectorMath::dot(vec,vec));
     float dvMag = -G*M/pow(r,3);
 
     return sf::Vector2f{vec.x*dvMag, vec.y*dvMag};
 }
+
+/*sf::Vector2f forces::newtonForce(sf::Vector2f vec, float M, float G)
+{
+    float r = sqrt(sfVectorMath::dot(vec,vec));
+    float dvMag = 0.1*(pow((3/r),4)-2*pow(3/r,3));
+
+    return sf::Vector2f{vec.x*dvMag, vec.y*dvMag};
+}*/
