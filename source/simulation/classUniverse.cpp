@@ -29,9 +29,9 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
     //int num = 0;
     float localT_coll = t_coll;
 
-    for(int i=0;i<ballArray.size();i++)
+    for(int i=0;i<ballArray.size();++i)
     {
-        for(int j=0;j<ballArray.size();j++)
+        for(int j=0;j<ballArray.size();++j)
         {
             if(i!=j)
             {
@@ -74,7 +74,7 @@ void BallUniverse::physicsLoop()
 
         float dtR = dt;
         float epsilon = 1e-5;
-        for(int i=0;i<ballArray.size();i++)
+        for(int i=0;i<ballArray.size();++i)
         {
             ballArray.at(i).resetToCollided();
             ballArray.at(i).checkForBounce(worldSizeX,worldSizeY);
@@ -95,16 +95,16 @@ void BallUniverse::physicsLoop()
             {
                 if(enable_forces==true)
                 {
-                    for(int i=0;i<ballArray.size();i++)
+                    for(int i=0;i<ballArray.size();++i)
                     {
-                        for(int j=0;j<ballArray.size();j++)
+                        for(int j=0;j<ballArray.size();++j)
                         {
                             if(i!=j)
                                 ballArray.at(i).updateVelocity(intEnum, dtR, ballArray.at(j));
                         }
                     }
                 }
-                for(int i=0;i<ballArray.size();i++)
+                for(int i=0;i<ballArray.size();++i)
                 {
                     ballArray.at(i).updatePosition(std::floor(1e+3*dtR)/1e+3);
                     //window.draw(ballArray.at(i));
@@ -128,16 +128,16 @@ void BallUniverse::physicsLoop()
             //std::cout <<"no collide";
             if(enable_forces==true)
             {
-                for(int i=0;i<ballArray.size();i++)
+                for(int i=0;i<ballArray.size();++i)
                 {
-                    for(int j=0;j<ballArray.size();j++)
+                    for(int j=0;j<ballArray.size();++j)
                     {
                         if(i!=j)
                             ballArray.at(i).updateVelocity(intEnum, dt, ballArray.at(j));
                     }
                 }
             }
-            for(int i=0;i<ballArray.size();i++)
+            for(int i=0;i<ballArray.size();++i)
             {
                 ballArray.at(i).updatePosition(dt);
                 //window.draw(ballArray.at(i));
@@ -166,7 +166,7 @@ void BallUniverse::sampleAllPositions()
 {
     if(timeToNextSample - dt <= 0)
     {
-        for(int i=0; i<ballArray.size(); i++)
+        for(int i=0; i<ballArray.size(); ++i)
             if(ballArray.at(i).getSamplePrevPosBool())
                 ballArray.at(i).sampleNextPosition();
 
@@ -176,14 +176,14 @@ void BallUniverse::sampleAllPositions()
     else
         timeToNextSample -= dt;
 
-    for(int i=0; i<ballArray.size(); i++)
+    for(int i=0; i<ballArray.size(); ++i)
         if(ballArray.at(i).getSamplePrevPosBool())
             ballArray.at(i).sampleCurrentPosition();
 }
 
 void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer very CPU intensive
 {
-    for(int i=0; i<ballArray.size(); i++)
+    for(int i=0; i<ballArray.size(); ++i)
     {
         if(ballArray.at(i).getSamplePrevPosBool())
         {
@@ -193,11 +193,11 @@ void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer ve
                 int colorGradient = previousPositions.size();
                 sf::VertexArray lines(sf::LinesStrip, previousPositions.size());
                 sf::Color color;
-                for(int i=0; i<previousPositions.size(); i++)
+                for(int j=0; j<previousPositions.size(); ++j)
                 {
-                    color = {255,255,255,255*i/colorGradient};
-                    lines[i].position = previousPositions.at(i);
-                    lines[i].color = color;
+                    color = {255,255,255,255*j/colorGradient};
+                    lines[j].position = previousPositions.at(j);
+                    lines[j].color = color;
                     //line[0] = sf::Vertex(static_cast<sf::Vector2f>(previousPositions.at(i)),color);
                     //line[1] = sf::Vertex(static_cast<sf::Vector2f>(previousPositions.at(i+1)),color);
                     //window.draw(line, 2, sf::Lines);
@@ -212,7 +212,7 @@ void BallUniverse::calcTotalKE(std::vector<Ball> &ballArray)
 {
     totalKE = 0;
     float KE{0};
-    for(int i=0; i<ballArray.size(); i++)
+    for(int i=0; i<ballArray.size(); ++i)
         KE += ballArray.at(i).getKE();
     totalKE = KE;
 }
@@ -223,8 +223,8 @@ void BallUniverse::calcTotalGPE(std::vector<Ball> &ballArray)
     if(ballArray.size()>1)
     {
         float GPE{0};
-        for(int i=0; i<ballArray.size(); i++)
-            for(int j=0; j<ballArray.size(); j++)
+        for(int i=0; i<ballArray.size(); ++i)
+            for(int j=0; j<ballArray.size(); ++j)
                 if(i!=j)
                     GPE+=ballArray.at(i).getGPE(ballArray.at(j))/2;
         totalGPE = GPE;
@@ -239,7 +239,7 @@ void BallUniverse::calcTotalEnergy()
 void BallUniverse::calcTotalMomentum(std::vector<Ball> &ballArray)
 {
     sf::Vector2f momentum{0,0};
-    for(int i=0; i<ballArray.size(); i++)
+    for(int i=0; i<ballArray.size(); ++i)
         momentum+=ballArray.at(i).getMomentum();
     totalMomentum = momentum;
 }
@@ -250,11 +250,27 @@ void BallUniverse::createBallGrid(int numWide, int numHigh, float spacing, sf::V
         spacing = 2.5*ballRadius;
     //if(!)
     {
-        for(int i=-numWide/2; i<=numWide/2; i++)
-            for(int j=-numHigh/2; j<=numHigh/2; j++)
+        for(int i=-numWide/2; i<=numWide/2; ++i)
+            for(int j=-numHigh/2; j<=numHigh/2; ++j)
             {
                 sf::Vector2f offsetPosition = {i*spacing,j*spacing};
                 spawnNewBall(centralPosition + offsetPosition, init_velocity, ballRadius, ballMass);
+                //std::cout << i << " " << j << "\n";
+            }
+    }
+}
+
+void BallUniverse::createAltBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition, sf::Vector2f init_velocity, float ballMass, float ballRadius)
+{
+    if(spacing < 2.5*ballRadius)
+        spacing = 2.5*ballRadius;
+    //if(!)
+    {
+        for(int i=-numWide/2; i<=numWide/2; ++i)
+            for(int j=-numHigh/2; j<=numHigh/2; ++j)
+            {
+                sf::Vector2f offsetPosition = {i*spacing,j*spacing};
+                spawnNewBall(centralPosition + offsetPosition, init_velocity, ballRadius, pow(-1,i)*ballMass);
                 //std::cout << i << " " << j << "\n";
             }
     }
@@ -304,7 +320,7 @@ void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
 {
     if(enable_trajectories)
         drawSampledPositions(windowRef);
-    for(int i=0; i<ballArray.size(); i++)
+    for(int i=0; i<ballArray.size(); ++i)
     {
         windowRef.draw(ballArray.at(i));
     }
@@ -331,14 +347,14 @@ void BallUniverse::toggleRK4()
     int current = static_cast<int>(intEnum);
     int size = static_cast<int>(Integrators::LAST);
     current = (current+1)%size;
-    std::cout << "Int Type: " << current << "\n";
+    //std::cout << "Int Type: " << current << "\n";
     intEnum = static_cast<Integrators>(current);
     //temp=temp+1;
 }
 
 void BallUniverse::changeBallColour()
 {
-    for(int i=0; i<ballArray.size(); i++)
+    for(int i=0; i<ballArray.size(); ++i)
     {
         if(ballArray.at(i).getPosition().x > worldSizeX/2)
             ballArray.at(i).setFillColor(sf::Color::Red);

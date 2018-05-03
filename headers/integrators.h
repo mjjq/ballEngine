@@ -1,6 +1,6 @@
 #ifndef INTEGRATORS_H
 #define INTEGRATORS_H
-#include <SFML/Graphics.hpp>>
+#include <SFML/Graphics.hpp>
 
 typedef std::pair<sf::Vector2f, sf::Vector2f> sfPair;
 
