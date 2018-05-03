@@ -18,7 +18,7 @@ class BallUniverse
     float currentTime = 0;
     float timeToNextColl = 1e+15;
     float dt;
-    Integrators intEnum = Integrators::INTEG_EULER;
+    Integrators intEnum = Integrators::INTEG_VERLET;
     std::string useRK4 = "";
     bool isPaused = false;
 
@@ -49,6 +49,8 @@ public:
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
+    void createAltBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
+                        sf::Vector2f init_velocity, float ballMass, float ballRadius);
     void createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVelocity);
     void drawBalls(sf::RenderWindow &windowRef);
 
