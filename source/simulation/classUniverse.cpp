@@ -20,7 +20,99 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
     }
 }
 
+
 //void resetAndCheckBounce(std::vector<Ball>)
+/**
+    Updates the velocity of the current ball by calculating forces on the ball.
+
+    @param dt The simulation timestep.
+    @param &otherBall The other ball to interact with.
+
+    @return Void.
+*/
+void BallUniverse::updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall)
+{
+    sf::Vector2f relVec = firstBall.getPosition() - secondBall.getPosition();
+    float r2 = sfVectorMath::dot(relVec, relVec);
+
+    if(r2 > pow(firstBall.getRadius()+secondBall.getRadius(), 2))
+    {
+        //nStepVelocity = {0,0};
+        float G = 1;
+        float M = secondBall.getMass();
+        sf::Vector2f firstVelocity = firstBall.getVelocity();
+        sf::Vector2f secondVelocity = secondBall.getVelocity();
+        std::pair<sf::Vector2f,sf::Vector2f> solution;
+        switch(integType)
+        {
+            case(Integrators::INTEG_EULER):
+                solution = integrators::eulerMethod(relVec, dt, M, G);
+                break;
+            case(Integrators::INTEG_SEM_IMP_EULER):
+                solution = integrators::semImpEulerMethod(relVec, dt, M, G);
+                break;
+            case(Integrators::INTEG_RK4):
+                solution = integrators::RK4Method2ndODE(relVec, firstVelocity, secondVelocity, dt, M, G);
+                break;
+            case(Integrators::INTEG_VERLET):
+                solution = integrators::verletMethod(relVec, firstVelocity, secondVelocity, dt, M, G);
+                break;
+        }
+        firstBall.addSolvedVelocity(solution.first, solution.second);
+        /*cStepModVelocity += solution.first;
+        nStepVelocity += solution.second;*/
+    }
+
+}
+
+void BallUniverse::updateAllObjects(bool enableForces, float dt)
+{
+    if(enableForces==true)
+        for(int i=0;i<ballArray.size();++i)
+            for(int j=0;j<ballArray.size();++j)
+                if(i!=j)
+                    updateFirstVelocity(intEnum, dt, ballArray.at(i), ballArray.at(j));
+
+    for(int i=0;i<ballArray.size();++i)
+        ballArray.at(i).updatePosition(dt);
+}
+
+
+/**
+    Calculate the time to collision with another ball.
+
+    @param &otherBall Reference to the other ball.
+
+    @return Time to collision.
+*/
+float BallUniverse::timeToCollision(Ball &firstBall, Ball &secondBall)
+{
+    using namespace sfVectorMath;
+
+    sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
+    float radSum = firstBall.getRadius() + secondBall.getRadius();
+
+    if(dot(relPos,relPos) < pow(radSum, 2))
+        return std::numeric_limits<float>::quiet_NaN();
+
+    sf::Vector2f relVel = firstBall.getVelocity() - secondBall.getVelocity();
+    float discriminant = pow(dot(relPos,relVel), 2) -
+                         dot(relVel,relVel)*(dot(relPos,relPos) - pow(radSum, 2));
+
+    if(discriminant < 0)
+        return std::numeric_limits<float>::quiet_NaN();
+
+    float root1 = -(dot(relPos,relVel) + pow(discriminant,0.5))/dot(relVel,relVel);
+    float root2 = -(dot(relPos,relVel) - pow(discriminant,0.5))/dot(relVel,relVel);
+
+    if(root1 < 0 && root2 < 0)
+        return std::numeric_limits<float>::quiet_NaN();
+    else if(root1 < 0 && root2 > 0)
+        return root2;
+    else if(root2 < 0 && root1 > 0)
+        return root1;
+    return (root2<root1)?root2:root1;
+}
 
 std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt)
 {
@@ -35,8 +127,8 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
         {
             if(i!=j)
             {
-                if(ballArray.at(i).getDistance(ballArray.at(j)) < 0.8*(ballArray.at(i).getRadius() + ballArray.at(j).getRadius()))
-                    std::cout << "Overlapping balls at: " << ballArray.at(i).getPosition().x << "\n";
+                /*if(ballArray.at(i).getDistance(ballArray.at(j)) < 0.8*(ballArray.at(i).getRadius() + ballArray.at(j).getRadius()))
+                    std::cout << "Overlapping balls at: " << ballArray.at(i).getPosition().x << "\n";*/
                 if(ballArray.at(i).getHasCollided()==false && ballArray.at(j).getHasCollided()==false)
                 {
                 //++num;
@@ -45,7 +137,8 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
                  > ballArray.at(i).getDistance(ballArray.at(j)))
                 {
                     //std::cout << "within distance: " << ballArray.at(i).getDistance(ballArray.at(j)) << "\n";
-                    float t_collPrime = ballArray.at(i).timeToCollision(ballArray.at(j));
+                    //float t_collPrime = ballArray.at(i).timeToCollision(ballArray.at(j));
+                    float t_collPrime = timeToCollision(ballArray.at(i), ballArray.at(j));
                     if(t_collPrime < localT_coll)
                     {
                         //std::cout << t_collPrime << " is smaller than " << t_coll << "\n";
@@ -69,7 +162,23 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
     return std::make_tuple(coll1,coll2,localT_coll);
 }
 
-void BallUniverse::physicsLoop()
+void BallUniverse::ballCollision(Ball &firstBall, Ball &secondBall)
+{
+    using namespace sfVectorMath;
+
+    //sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
+    sf::Vector2f rhat = norm(firstBall.getPosition() - secondBall.getPosition());
+
+    sf::Vector2f v1 = firstBall.getVelocity();
+    sf::Vector2f v2 = secondBall.getVelocity();
+    float m1 = firstBall.getMass();
+    float m2 = secondBall.getMass();
+
+    firstBall.setVelocity(v1 - rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
+    secondBall.setVelocity(v2 + rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
+}
+
+float BallUniverse::physicsLoop()
 {
 
         float dtR = dt;
@@ -92,72 +201,47 @@ void BallUniverse::physicsLoop()
         {
             dtR = timeToNextColl;
             if(std::abs(dtR) > epsilon)
-            {
-                if(enable_forces==true)
-                {
-                    for(int i=0;i<ballArray.size();++i)
-                    {
-                        for(int j=0;j<ballArray.size();++j)
-                        {
-                            if(i!=j)
-                                ballArray.at(i).updateVelocity(intEnum, dtR, ballArray.at(j));
-                        }
-                    }
-                }
-                for(int i=0;i<ballArray.size();++i)
-                {
-                    ballArray.at(i).updatePosition(std::floor(1e+3*dtR)/1e+3);
-                    //window.draw(ballArray.at(i));
-                }
-            }
+                updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
+
             if(collider1 != collider2)
             {
-                //std::cout << collider1 << ":" << collider2 << " " << dtR << "\n";
                 if(std::abs(dtR) < epsilon)
                     sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
-                ballArray.at(collider1).ballCollision(ballArray.at(collider2));
+                //ballArray.at(collider1).ballCollision(ballArray.at(collider2));
+                ballCollision(ballArray.at(collider1), ballArray.at(collider2));
                 if(std::abs(dtR) < epsilon)
                     sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
-                //ballArray.at(collider1).resetToCollided();
-                //ballArray.at(collider2).resetToCollided();
             }
             timeToNextColl = 1e+15;
         }
         else
-        {
-            //std::cout <<"no collide";
-            if(enable_forces==true)
-            {
-                for(int i=0;i<ballArray.size();++i)
-                {
-                    for(int j=0;j<ballArray.size();++j)
-                    {
-                        if(i!=j)
-                            ballArray.at(i).updateVelocity(intEnum, dt, ballArray.at(j));
-                    }
-                }
-            }
-            for(int i=0;i<ballArray.size();++i)
-            {
-                ballArray.at(i).updatePosition(dt);
-                //window.draw(ballArray.at(i));
-                //ballArray.at(i).resetToCollided();
-            }
-        }
+            updateAllObjects(enable_forces, dt);
 
+        return dtR;
 }
 
-void BallUniverse::universeLoop()
+void BallUniverse::universeLoop(sf::Time frameTime)
 {
+    float physicsTimeThreshold = dt*60*frameTime.asSeconds();
+    float currPhysicsTime = 0;
     if(!isPaused)
     {
-        physicsLoop();
+        sf::Clock clock;
+        while(clock.getElapsedTime()<frameTime)
+        {
+            currPhysicsTime += physicsLoop();
+            if(currPhysicsTime >= physicsTimeThreshold)
+                break;
+        }
         calcTotalKE(ballArray);
         calcTotalMomentum(ballArray);
         calcTotalGPE(ballArray);
         calcTotalEnergy();
         //if(enable_trajectories)
         sampleAllPositions();
+        if(clock.getElapsedTime()<frameTime)
+            sleep(frameTime-clock.getElapsedTime());
+
     }
     //drawSampledPositions();
 }

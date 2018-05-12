@@ -38,14 +38,18 @@ class BallUniverse
     void calcTotalGPE(std::vector<Ball> &ballArray);
     void calcTotalEnergy();
 
-    void physicsLoop();
+    float physicsLoop();
 
 
 public:
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
-    void universeLoop();
+    void universeLoop(sf::Time frameTime);
 
+    void updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall);
+    void updateAllObjects(bool enableForces, float dt);
+    float timeToCollision(Ball &firstBall, Ball &secondBall);
+    void ballCollision(Ball &firstBall, Ball &secondBall);
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
