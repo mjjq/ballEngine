@@ -27,10 +27,7 @@ class Ball : public sf::CircleShape
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
 
-    float timeToCollision(Ball &otherBall);
     void checkForBounce(int worldSizeX, int worldSizeY);
-    void ballCollision(Ball &otherBall);
-    void updateVelocity(Integrators integType, float dt, Ball &otherBall);
     void applyExternalImpulse(sf::Vector2f force, float dt);
     void updatePosition(float dt);
     void sampleNextPosition();
@@ -40,6 +37,7 @@ public:
     float getRadius();
     sf::Vector2f getVelocity();
     void setVelocity(sf::Vector2f vel);
+    void addSolvedVelocity(sf::Vector2f &cStep, sf::Vector2f &nStep);
     void setToCollided();
     void resetToCollided();
     bool getHasCollided();

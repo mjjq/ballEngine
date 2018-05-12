@@ -490,9 +490,9 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
         if(!newLayerPressed)
         {
             if(event.key.code == sf::Keyboard::PageUp)
-                incTimeStep(sf::milliseconds(1.0/60.0));
+                incTimeStep(sf::milliseconds(100));
             else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
-                decTimeStep(sf::milliseconds(1.0/60.0));
+                decTimeStep(sf::milliseconds(100));
             else if(event.key.code == sf::Keyboard::Comma)
                 ballSim.decSimStep(0.1);
             else if(event.key.code == sf::Keyboard::Period)
@@ -636,7 +636,7 @@ void NonSimulationStuff::mainLoop()
         checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
         playerKeysDown(0);
 
-        ballSim.universeLoop();
+        //ballSim.universeLoop(timestep);
 
         ballSim.drawBalls(window);
         window.draw(boundaryRect);
@@ -644,8 +644,8 @@ void NonSimulationStuff::mainLoop()
         container.renderWindows(window, GUIView, worldView);
 
         window.display();
-
-        sf::sleep(timestep);
+        ballSim.universeLoop(timestep);
+        //sf::sleep(timestep);
         timeToNextSpawn -= timestep;
     }
 }
