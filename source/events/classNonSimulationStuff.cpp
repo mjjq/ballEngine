@@ -601,6 +601,15 @@ float NonSimulationStuff::getWindowSizeX()
     return windowSizeX;
 }
 
+void NonSimulationStuff::updateFPS(sf::Time interval, float framerate)
+{
+    if(timeSinceFSample >= interval)
+    {
+        currentFPS = framerate;
+        timeSinceFSample = sf::milliseconds(0);
+    }
+}
+
 void NonSimulationStuff::mainLoop()
 {
     while(window.isOpen())
@@ -639,19 +648,27 @@ void NonSimulationStuff::mainLoop()
         checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
         playerKeysDown(0);
 
-        //ballSim.universeLoop(timestep);
+        ballSim.universeLoop(currentFrameTime, timestep);
 
         ballSim.drawBalls(window);
         window.draw(boundaryRect);
 
         container.renderWindows(window, GUIView, worldView);
 
-        window.display();
-        ballSim.universeLoop(currentFrameTime, timestep);
+        timeToNextSpawn -= timestep;
+
+        if(frameClock.getElapsedTime()<timestep)
+        {
+            //std::cout << currentFrameTime.asSeconds() << "\n";
+            std::cout << (timestep-frameClock.getElapsedTime()).asSeconds() << "\n";
+            sleep(timestep-frameClock.getElapsedTime());
+        }
 
         currentFrameTime = frameClock.getElapsedTime();
-        currentFPS = 1.0f/currentFrameTime.asSeconds();
-        timeToNextSpawn -= timestep;
+        timeSinceFSample+=currentFrameTime;
+        updateFPS(sf::seconds(0.5f), 1.0f/currentFrameTime.asSeconds());
+
+        window.display();
     }
 }
 
@@ -701,9 +718,9 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(3).addElement("./fonts/cour.ttf", "Total KE: ", 16, {0,0}, &ballSim.getTotalKE());
     //container.getWindow(3).addElement("./fonts/cour.ttf", "Total Momentum: ", 16, {0,20}, &ballSim.getTotalMomentum());
     container.getWindow(3).addElement("./fonts/cour.ttf", "Total Energy: ", 16, {0,20}, &ballSim.getTotalEnergy());
-    container.getWindow(3).addElement("./fonts/cour.ttf", "Use RK4: ", 16, {0,40}, &ballSim.getUseRK4());
-    container.getWindow(3).addButton("./fonts/cour.ttf", "Trj", 12, {10,80}, {60,30}, [&]{ballSim.toggleTrajectories();});
-    container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {90,80}, {60,30}, [&]{ballSim.toggleRK4();});
+    container.getWindow(3).addElement("./fonts/cour.ttf", "Use RK4: ", 16, {0,60}, &ballSim.getUseRK4());
+    container.getWindow(3).addButton("./fonts/cour.ttf", "Trj", 12, {10,90}, {60,30}, [&]{ballSim.toggleTrajectories();});
+    container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {90,90}, {60,30}, [&]{ballSim.toggleRK4();});
 
 
 

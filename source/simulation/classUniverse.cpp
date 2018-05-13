@@ -222,11 +222,11 @@ float BallUniverse::physicsLoop()
 
 void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
 {
-    accumulator += 120*dt*((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
-    int noOfInstances = 0;
     if(!isPaused)
     {
-        sf::Clock clock;
+        accumulator += 120*dt*((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+        int noOfInstances = 0;
+        //sf::Clock clock;
         while(accumulator >= dt)
         {
             accumulator -= physicsLoop();
@@ -239,10 +239,13 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
         //if(enable_trajectories)
         sampleAllPositions();
 
-        if(clock.getElapsedTime()<frameLimit)
+        /*if(clock.getElapsedTime()<frameLimit)
+        {
+            std::cout << (frameLimit-clock.getElapsedTime()).asSeconds() << "\n";
             sleep(frameLimit-clock.getElapsedTime());
+        }*/
 
-        std::cout << noOfInstances << "\n";
+        //std::cout << noOfInstances << "\n";
 
     }
     //drawSampledPositions();

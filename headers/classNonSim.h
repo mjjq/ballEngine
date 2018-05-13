@@ -18,6 +18,7 @@ class NonSimulationStuff
     sf::Time timeToNextSpawn = sf::milliseconds(0);
     sf::Time currentFrameTime = sf::milliseconds(1000.0/60.0);
     float currentFPS = 0.0f;
+    sf::Time timeSinceFSample = sf::milliseconds(0);
     sf::Clock frameClock;
     sf::RectangleShape boundaryRect;
     bool simFitsInWindow;
@@ -67,6 +68,7 @@ class NonSimulationStuff
     void mouseWheelZoom(bool keyPress, float delta);
     void resetUIClick();
     void clickOnUI();
+    void updateFPS(sf::Time interval, float framerate);
 
     void mouseWorldEvents(sf::Event &event);
     void mouseViewEvents(sf::Event &event);
