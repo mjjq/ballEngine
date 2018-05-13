@@ -494,7 +494,7 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
             else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(1))
                 decTimeStep(sf::milliseconds(50));
             else if(event.key.code == sf::Keyboard::Home && timestep>sf::milliseconds(1))
-                timestep = sf::milliseconds(1000/240);
+                timestep = sf::milliseconds(1000/60);
             else if(event.key.code == sf::Keyboard::Comma)
                 ballSim.decSimStep(0.1);
             else if(event.key.code == sf::Keyboard::Period)
@@ -650,6 +650,7 @@ void NonSimulationStuff::mainLoop()
         ballSim.universeLoop(currentFrameTime, timestep);
 
         currentFrameTime = frameClock.getElapsedTime();
+        currentFPS = 1.0f/currentFrameTime.asSeconds();
         timeToNextSpawn -= timestep;
     }
 }
@@ -667,7 +668,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     resetView();
 
     container.addWindow({0,100}, 250, 250, true, false);
-    container.addWindow({0,0}, 250, 50, true, false);
+    container.addWindow({0,0}, 250, 70, true, false);
     container.addWindow({0,400}, 250, 50, true, false);
     container.addWindow({0,500}, 250, 150, true, false);
 
@@ -690,6 +691,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
 
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
     container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
+    container.getWindow(1).addElement("./fonts/cour.ttf", "FPS:", 16, {0,40}, &currentFPS);
     //container.getWindow(1).addButton("./fonts/cour.ttf", "Rad -", 16, {0,50}, {80,40}, increaseMass);
 
     container.getWindow(2).addButton("./fonts/cour.ttf", "Star", 12, {10,10}, {60,30}, [&]{spawnRadius=50;spawnMass=10000;});
