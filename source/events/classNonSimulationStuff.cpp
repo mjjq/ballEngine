@@ -490,9 +490,11 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
         if(!newLayerPressed)
         {
             if(event.key.code == sf::Keyboard::PageUp)
-                incTimeStep(sf::milliseconds(100));
-            else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(15))
-                decTimeStep(sf::milliseconds(100));
+                incTimeStep(sf::milliseconds(50));
+            else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(1))
+                decTimeStep(sf::milliseconds(50));
+            else if(event.key.code == sf::Keyboard::Home && timestep>sf::milliseconds(1))
+                timestep = sf::milliseconds(1000/240);
             else if(event.key.code == sf::Keyboard::Comma)
                 ballSim.decSimStep(0.1);
             else if(event.key.code == sf::Keyboard::Period)
@@ -603,6 +605,7 @@ void NonSimulationStuff::mainLoop()
 {
     while(window.isOpen())
     {
+        frameClock.restart();
         window.clear();
         //std::pair<bool,int> mouseOnUI = container.doesMIntExist();
         sf::Event event;
@@ -644,8 +647,9 @@ void NonSimulationStuff::mainLoop()
         container.renderWindows(window, GUIView, worldView);
 
         window.display();
-        ballSim.universeLoop(timestep);
-        //sf::sleep(timestep);
+        ballSim.universeLoop(currentFrameTime, timestep);
+
+        currentFrameTime = frameClock.getElapsedTime();
         timeToNextSpawn -= timestep;
     }
 }

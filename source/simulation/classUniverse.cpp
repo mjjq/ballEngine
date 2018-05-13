@@ -220,18 +220,23 @@ float BallUniverse::physicsLoop()
         return dtR;
 }
 
-void BallUniverse::universeLoop(sf::Time frameTime)
+void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
 {
-    float physicsTimeThreshold = dt*60*frameTime.asSeconds();
-    float currPhysicsTime = 0;
+    accumulator += dt*((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+    //std::cout << 1.0f/frameTime.asSeconds() << "\n";
+    bool hasDonePhysics = false;
     if(!isPaused)
     {
         sf::Clock clock;
-        while(clock.getElapsedTime()<frameTime)
+        while(accumulator >= dt)
         {
-            currPhysicsTime += physicsLoop();
-            if(currPhysicsTime >= physicsTimeThreshold)
-                break;
+            accumulator -= physicsLoop();
+            std::cout << accumulator << "\n";
+            hasDonePhysics = true;
+            //if(currPhysicsTime >= physicsTimeThreshold)
+            //    break;
+            //if(clock.getElapsedTime()>frameTime)
+            //    break;
         }
         calcTotalKE(ballArray);
         calcTotalMomentum(ballArray);
@@ -239,8 +244,8 @@ void BallUniverse::universeLoop(sf::Time frameTime)
         calcTotalEnergy();
         //if(enable_trajectories)
         sampleAllPositions();
-        if(clock.getElapsedTime()<frameTime)
-            sleep(frameTime-clock.getElapsedTime());
+        //if(clock.getElapsedTime()<frameLimit)
+        //    sleep(frameLimit-clock.getElapsedTime());
 
     }
     //drawSampledPositions();

@@ -17,8 +17,8 @@ int main()
     int worldSizeY = 2000;
     bool simFitsInWindow = true;
 
-    float dt=1;
-    int spawnVelFactor = 10;
+    float dt=1.0f/60.0f;
+    int spawnVelFactor = 500;
     float spawnRadius = 10;
     float spawnMass1 = 1.0;
     float ballGridSpacing = 8;

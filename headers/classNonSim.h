@@ -16,6 +16,9 @@ class NonSimulationStuff
     sf::Time timestep = sf::milliseconds(1000.0/60.0);
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
     sf::Time timeToNextSpawn = sf::milliseconds(0);
+    sf::Time lastFrameTime = sf::milliseconds(0);
+    sf::Time currentFrameTime = sf::milliseconds(1000.0/60.0);
+    sf::Clock frameClock;
     sf::RectangleShape boundaryRect;
     bool simFitsInWindow;
 

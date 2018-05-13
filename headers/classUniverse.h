@@ -18,6 +18,7 @@ class BallUniverse
     float currentTime = 0;
     float timeToNextColl = 1e+15;
     float dt;
+    float accumulator = 0.0f;
     Integrators intEnum = Integrators::INTEG_VERLET;
     std::string useRK4 = "";
     bool isPaused = false;
@@ -44,7 +45,7 @@ class BallUniverse
 public:
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
-    void universeLoop(sf::Time frameTime);
+    void universeLoop(sf::Time frameTime, sf::Time frameLimit);
 
     void updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall);
     void updateAllObjects(bool enableForces, float dt);
