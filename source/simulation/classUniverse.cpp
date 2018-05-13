@@ -495,8 +495,10 @@ sf::Vector2f& BallUniverse::getTotalMomentum()
 
 sf::Vector2f BallUniverse::getBallPosition(int i)
 {
-    if(ballArray.size()>i)
+    if(ballArray.size()>i && ballArray.size()>0)
         return ballArray.at(i).getPosition();
+    return sf::Vector2f{std::numeric_limits<float>::quiet_NaN(),
+                        std::numeric_limits<float>::quiet_NaN()};
 }
 
 float& BallUniverse::getTimeStep()

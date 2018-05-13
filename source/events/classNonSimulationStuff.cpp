@@ -196,9 +196,11 @@ void NonSimulationStuff::focusOnBall(int ballIndex, bool keyBool)
     if(keyBool==true)
     {
         sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
-
-        worldView.setCenter(relPos);
-        window.setView(worldView);
+        if(!std::isnan(relPos.x) && !std::isnan(relPos.y))
+        {
+            worldView.setCenter(relPos);
+            window.setView(worldView);
+        }
     }
 }
 
