@@ -13,12 +13,13 @@ class NonSimulationStuff
     sf::View worldView = window.getDefaultView();
     sf::View GUIView = window.getDefaultView();
     float currentZoom = 1.0f;
-    sf::Time timestep = sf::milliseconds(1000.0/60.0);
+    sf::Time timestep = sf::seconds(1.0f/60.0f);
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
     sf::Time timeToNextSpawn = sf::milliseconds(0);
-    sf::Time currentFrameTime = sf::milliseconds(1000.0/60.0);
+    sf::Time currentFrameTime = sf::seconds(1.0f/60.0f);
     float currentFPS = 0.0f;
     sf::Time timeSinceFSample = sf::milliseconds(0);
+    std::deque<float> previousFrames;
     sf::Clock frameClock;
     sf::RectangleShape boundaryRect;
     bool simFitsInWindow;
@@ -69,6 +70,8 @@ class NonSimulationStuff
     void resetUIClick();
     void clickOnUI();
     void updateFPS(sf::Time interval, float framerate);
+    sf::Time sampleNextFrame(sf::Time frameTime);
+    void limitFramerate(int framerate);
 
     void mouseWorldEvents(sf::Event &event);
     void mouseViewEvents(sf::Event &event);

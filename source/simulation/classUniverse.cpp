@@ -224,29 +224,16 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
 {
     if(!isPaused)
     {
-        accumulator += 120*dt*((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
-        int noOfInstances = 0;
-        //sf::Clock clock;
+        accumulator += 60*dt*((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+
         while(accumulator >= dt)
-        {
             accumulator -= physicsLoop();
-            ++noOfInstances;
-        }
+
         calcTotalKE(ballArray);
         calcTotalMomentum(ballArray);
         calcTotalGPE(ballArray);
         calcTotalEnergy();
-        //if(enable_trajectories)
         sampleAllPositions();
-
-        /*if(clock.getElapsedTime()<frameLimit)
-        {
-            std::cout << (frameLimit-clock.getElapsedTime()).asSeconds() << "\n";
-            sleep(frameLimit-clock.getElapsedTime());
-        }*/
-
-        //std::cout << noOfInstances << "\n";
-
     }
     //drawSampledPositions();
 }
@@ -407,7 +394,7 @@ void BallUniverse::toggleSimPause()
 
 void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
 {
-    if(enable_trajectories)
+    //if(enable_trajectories)
         drawSampledPositions(windowRef);
     for(int i=0; i<ballArray.size(); ++i)
     {

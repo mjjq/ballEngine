@@ -14,6 +14,7 @@
 #include <limits>
 #include <tuple>
 #include <functional>
+#include <numeric>
 
 #include "../../headers/classNonSim.h"
 #include "../../headers/classTextElementBase.h"
@@ -492,11 +493,11 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
         if(!newLayerPressed)
         {
             if(event.key.code == sf::Keyboard::PageUp)
-                incTimeStep(sf::milliseconds(50));
-            else if(event.key.code == sf::Keyboard::PageDown && timestep>sf::milliseconds(1))
-                decTimeStep(sf::milliseconds(50));
-            else if(event.key.code == sf::Keyboard::Home && timestep>sf::milliseconds(1))
-                timestep = sf::milliseconds(1000/60);
+                limitFramerate(60);
+            else if(event.key.code == sf::Keyboard::PageDown)
+                limitFramerate(120);
+            else if(event.key.code == sf::Keyboard::Home)
+                limitFramerate(30);
             else if(event.key.code == sf::Keyboard::Comma)
                 ballSim.decSimStep(0.1);
             else if(event.key.code == sf::Keyboard::Period)
@@ -612,13 +613,44 @@ void NonSimulationStuff::updateFPS(sf::Time interval, float framerate)
     }
 }
 
+/**
+    Stores the current frametime to a std::vector containing the
+    "history" of frametimes. Also erases the oldest entry in the
+    history vector given by positionSize.
+
+    @return Void.
+*/
+sf::Time NonSimulationStuff::sampleNextFrame(sf::Time frameTime)
+{
+    int positionSize = 10;
+    previousFrames.push_back(frameTime.asSeconds());
+    if(previousFrames.size()>positionSize)
+    {
+        int eraseUpperLimit = previousFrames.size() - positionSize;
+        previousFrames.erase(previousFrames.begin(),
+                                previousFrames.begin()+eraseUpperLimit);
+    }
+    return sf::seconds(std::accumulate(previousFrames.begin(),
+                                       previousFrames.end(), 0.0f)/
+                           static_cast<float>(previousFrames.size()));
+
+}
+
+void NonSimulationStuff::limitFramerate(int framerate)
+{
+    window.setFramerateLimit(framerate);
+    timestep = sf::seconds(1.0f/static_cast<float>(framerate));
+}
+
+
 void NonSimulationStuff::mainLoop()
 {
+    window.setFramerateLimit(60);
     while(window.isOpen())
     {
         frameClock.restart();
+
         window.clear();
-        //std::pair<bool,int> mouseOnUI = container.doesMIntExist();
         sf::Event event;
         while(window.pollEvent(event))
         {
@@ -659,18 +691,12 @@ void NonSimulationStuff::mainLoop()
 
         timeToNextSpawn -= timestep;
 
-        if(frameClock.getElapsedTime()<timestep)
-        {
-            //std::cout << currentFrameTime.asSeconds() << "\n";
-            std::cout << (timestep-frameClock.getElapsedTime()).asSeconds() << "\n";
-            sleep(timestep-frameClock.getElapsedTime());
-        }
-
-        currentFrameTime = frameClock.getElapsedTime();
         timeSinceFSample+=currentFrameTime;
         updateFPS(sf::seconds(0.5f), 1.0f/currentFrameTime.asSeconds());
 
         window.display();
+
+        currentFrameTime = sampleNextFrame(frameClock.getElapsedTime());
     }
 }
 
