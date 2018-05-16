@@ -22,7 +22,7 @@ class Ball : public sf::CircleShape
 
     std::deque<sf::Vector2f> previousPositions;
     bool samplePreviousPositions = false;
-    bool isPlayer = true;
+    bool isPlayer = false;
 
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
@@ -49,7 +49,12 @@ public:
     float getRelSpeed(Ball &otherBall);
 
     bool getSamplePrevPosBool();
+    void setSamplePrevPosBool(bool value);
     std::deque<sf::Vector2f>& getPreviousPositions();
+
+    bool getIsPlayer();
+    void setIsPlayer(bool value);
+
 };
 
 #endif // CLASS_UNIVERSE_H

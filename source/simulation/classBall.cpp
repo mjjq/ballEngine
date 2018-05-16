@@ -340,3 +340,20 @@ bool Ball::getSamplePrevPosBool()
 {
     return samplePreviousPositions;
 }
+
+void Ball::setSamplePrevPosBool(bool value)
+{
+    if(samplePreviousPositions!=value);
+        previousPositions.clear();
+    samplePreviousPositions = value;
+}
+
+bool Ball::getIsPlayer()
+{
+    return isPlayer;
+}
+
+void Ball::setIsPlayer(bool value)
+{
+    isPlayer = value;
+}

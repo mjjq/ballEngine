@@ -26,6 +26,7 @@ class BallUniverse
     float sampledt = 5*dt;
     float timeToNextSample = sampledt;
     bool enable_trajectories;
+    int currentPlayer = -1;
 
     std::tuple<int,int,float> findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt=1e+10);
 
@@ -83,8 +84,11 @@ public:
     void sampleAllPositions();
     void drawSampledPositions(sf::RenderWindow &window);
     void toggleTrajectories();
+    void togglePlayerTraj();
     sf::Vector2f getBallPosition(int i);
     void pushBall(float force, float relDirection, int i);
+    void pushPlayer(float force, float relDirection);
+    void setPlayer(int playerIndex);
 };
 
 #endif // CLASS_UNIVERSE_H

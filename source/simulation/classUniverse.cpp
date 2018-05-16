@@ -17,6 +17,8 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
     {
         ballArray.push_back(Ball(radius,mass,position,velocity));
         numOfBalls++;
+        ballArray.back().setSamplePrevPosBool(enable_trajectories);
+        //setPlayer(ballArray.size()-1);
     }
 }
 
@@ -224,16 +226,18 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
 {
     if(!isPaused)
     {
-        accumulator += 60*dt*((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+        accumulator += 120*dt*((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
 
         while(accumulator >= dt)
+        {
             accumulator -= physicsLoop();
+            sampleAllPositions();
+        }
 
         calcTotalKE(ballArray);
         calcTotalMomentum(ballArray);
         calcTotalGPE(ballArray);
         calcTotalEnergy();
-        sampleAllPositions();
     }
     //drawSampledPositions();
 }
@@ -271,7 +275,10 @@ void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer ve
                 sf::Color color;
                 for(int j=0; j<previousPositions.size(); ++j)
                 {
-                    color = {255,255,255,255*j/colorGradient};
+                    if(ballArray.at(i).getIsPlayer())
+                        color = {255,255,0,255*j/colorGradient};
+                    else
+                        color = {255,255,255,255*j/colorGradient};
                     lines[j].position = previousPositions.at(j);
                     lines[j].color = color;
                     //line[0] = sf::Vertex(static_cast<sf::Vector2f>(previousPositions.at(i)),color);
@@ -443,6 +450,7 @@ void BallUniverse::clearSimulation()
 {
     ballArray.clear();
     numOfBalls = 0;
+    currentPlayer = -1;
 }
 
 const int& BallUniverse::getWorldSizeX()
@@ -500,23 +508,69 @@ Integrators& BallUniverse::getUseRK4()
 
 void BallUniverse::pushBall(float force, float relDirection, int i)
 {
-    sf::Vector2f velocity = ballArray.at(i).getVelocity();
-    sf::Vector2f forceVec{0,0};
-    if(sfVectorMath::dot(velocity, velocity) != 0)
-        forceVec = sfVectorMath::rotate(force*sfVectorMath::norm(velocity), relDirection);
-    else
-        forceVec = sfVectorMath::rotate({0,-force}, relDirection);
-    ballArray.at(i).applyExternalImpulse(forceVec, dt);
+    if(ballArray.size()>0 && currentPlayer >= 0)
+    {
+        sf::Vector2f velocity = ballArray.at(i).getVelocity();
+        sf::Vector2f forceVec{0,0};
+        if(sfVectorMath::dot(velocity, velocity) != 0)
+            forceVec = sfVectorMath::rotate(force*sfVectorMath::norm(velocity), relDirection);
+        else
+            forceVec = sfVectorMath::rotate({0,-force}, relDirection);
+        ballArray.at(i).applyExternalImpulse(forceVec, dt);
+    }
+}
+
+void BallUniverse::pushPlayer(float force, float relDirection)
+{
+    pushBall(force, relDirection, currentPlayer);
 }
 
 void BallUniverse::toggleTrajectories()
 {
     if(enable_trajectories)
+    {
         enable_trajectories = false;
+        for(int i=0; i<ballArray.size(); ++i)
+            if(i!=currentPlayer)
+                ballArray.at(i).setSamplePrevPosBool(false);
+    }
     else
+    {
         enable_trajectories = true;
+        for(int i=0; i<ballArray.size(); ++i)
+            if(i!=currentPlayer)
+                ballArray.at(i).setSamplePrevPosBool(true);
+    }
 }
 
+void BallUniverse::setPlayer(int playerIndex)
+{
+    if(playerIndex < ballArray.size() && playerIndex >= 0)
+    {
+        if(currentPlayer >=0)
+        {
+            ballArray.at(currentPlayer).setIsPlayer(false);
+            ballArray.at(currentPlayer).setFillColor(sf::Color::Green);
+            //ballArray.at(currentPlayer).setSamplePrevPosBool(enable_trajectories);
+        }
+        ballArray.at(playerIndex).setIsPlayer(true);
+        ballArray.at(playerIndex).setFillColor(sf::Color::Red);
+        //ballArray.at(currentPlayer).setSamplePrevPosBool(enable_trajectories);
+        currentPlayer = playerIndex;
+    }
+}
+
+void BallUniverse::togglePlayerTraj()
+{
+    if(currentPlayer>=0)
+    {
+        Ball *currentBall = &ballArray.at(currentPlayer);
+        if(currentBall->getSamplePrevPosBool())
+            currentBall->setSamplePrevPosBool(false);
+        else
+            currentBall->setSamplePrevPosBool(true);
+    }
+}
 
 BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :
 

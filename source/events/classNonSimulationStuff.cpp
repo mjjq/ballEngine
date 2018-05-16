@@ -260,6 +260,7 @@ void NonSimulationStuff::toggleFullScreen()
         window.setPosition(prevWindowPosition);
         isFullScreen = false;
     }
+    limitFramerate(static_cast<int>(1.0f/timestep.asSeconds()));
 }
 
 /**
@@ -521,6 +522,10 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
                 spawnMass += 1;
             else if(event.key.code == sf::Keyboard::R)
                 spawnRadius += 1;
+            else if(event.key.code == sf::Keyboard::Num1)
+                ballSim.setPlayer(0);
+            else if(event.key.code == sf::Keyboard::Num2)
+                ballSim.setPlayer(1);
         }
 
         newLayerEvent(newLayerKeys, event);
@@ -537,17 +542,18 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
 */
 void NonSimulationStuff::playerKeysDown(int player)
 {
+
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
         focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        ballSim.pushBall(0.01, 0, player);
+        ballSim.pushPlayer(0.01, 0);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        ballSim.pushBall(0.01, 180, player);
+        ballSim.pushPlayer(0.01, 180);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        ballSim.pushBall(0.01, 270, player);
+        ballSim.pushPlayer(0.01, 270);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        ballSim.pushBall(0.01, 90, player);
+        ballSim.pushPlayer(0.01, 90);
 
     ballSim.drawSampledPositions(window);
 }
@@ -640,12 +646,14 @@ void NonSimulationStuff::limitFramerate(int framerate)
 {
     window.setFramerateLimit(framerate);
     timestep = sf::seconds(1.0f/static_cast<float>(framerate));
+    previousFrames.clear();
+    previousFrames.push_back(timestep.asSeconds());
 }
 
 
 void NonSimulationStuff::mainLoop()
 {
-    window.setFramerateLimit(60);
+    limitFramerate(60);
     while(window.isOpen())
     {
         frameClock.restart();
@@ -746,9 +754,10 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(3).addElement("./fonts/cour.ttf", "Total KE: ", 16, {0,0}, &ballSim.getTotalKE());
     //container.getWindow(3).addElement("./fonts/cour.ttf", "Total Momentum: ", 16, {0,20}, &ballSim.getTotalMomentum());
     container.getWindow(3).addElement("./fonts/cour.ttf", "Total Energy: ", 16, {0,20}, &ballSim.getTotalEnergy());
-    container.getWindow(3).addElement("./fonts/cour.ttf", "Use RK4: ", 16, {0,60}, &ballSim.getUseRK4());
+    container.getWindow(3).addElement("./fonts/cour.ttf", "Int method: ", 16, {0,40}, &ballSim.getUseRK4());
     container.getWindow(3).addButton("./fonts/cour.ttf", "Trj", 12, {10,90}, {60,30}, [&]{ballSim.toggleTrajectories();});
-    container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {90,90}, {60,30}, [&]{ballSim.toggleRK4();});
+    container.getWindow(3).addButton("./fonts/cour.ttf", "Pl Trj", 12, {90,90}, {60,30}, [&]{ballSim.togglePlayerTraj();});
+    container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {170,90}, {60,30}, [&]{ballSim.toggleRK4();});
 
 
 
