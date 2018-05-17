@@ -496,9 +496,9 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
             if(event.key.code == sf::Keyboard::PageUp)
                 limitFramerate(60);
             else if(event.key.code == sf::Keyboard::PageDown)
-                limitFramerate(120);
+                limitFramerate(400);
             else if(event.key.code == sf::Keyboard::Home)
-                limitFramerate(30);
+                limitFramerate(5);
             else if(event.key.code == sf::Keyboard::Comma)
                 ballSim.decSimStep(0.1);
             else if(event.key.code == sf::Keyboard::Period)

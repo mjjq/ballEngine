@@ -19,6 +19,7 @@ class BallUniverse
     float timeToNextColl = 1e+15;
     float dt;
     float accumulator = 0.0f;
+    sf::Clock thresholdTimer;
     Integrators intEnum = Integrators::INTEG_VERLET;
     std::string useRK4 = "";
     bool isPaused = false;
