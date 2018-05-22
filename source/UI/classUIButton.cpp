@@ -14,8 +14,12 @@
 UIButton::UIButton(std::string font, std::string text, int fontSize, std::function<void()> const& clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color) :
             UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color), unclickedColor{color}, clickFunc{clickFunc}
 {
+
     isButton = true;
-    addElement<int>(font, text, fontSize, {0.0,0.0});
+    if(font != "")
+        addElement<int>(font, text, fontSize, {0.0,0.0});
+    else
+        addElement<int>("./fonts/cour.ttf", "", 1, {0.0,0.0});
     sf::Rect<float> buttonBounds = windowBox.getLocalBounds();
     sf::Rect<float> textBounds = textArray.at(0)->getLocalBounds();
 
@@ -24,9 +28,10 @@ UIButton::UIButton(std::string font, std::string text, int fontSize, std::functi
     textArray.at(0)->setOrigin(newOrigin.x, newOrigin.y);
     textArray.at(0)->setOrigPosition({buttonBounds.width/2,buttonBounds.height/2});
 
+
 }
 
-void UIButton::clickButton()
+void UIButton::clickButton(sf::RenderWindow &window)
 {
     buttonDown = true;
     //clickFunc();

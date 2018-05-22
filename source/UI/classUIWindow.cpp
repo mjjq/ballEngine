@@ -10,6 +10,7 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 #include "../../headers/classUIButton.h"
+#include "../../headers/classUISlider.h"
 
 template<class T>
 void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
@@ -35,7 +36,13 @@ void UIWindow::addButton(std::string font, std::string text, int fontSize, sf::V
     buttonArray.emplace_back(button);
 }
 
-
+void UIWindow::addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
+                         sf::Vector2f physRange, std::function<void(float)> sliderFunc)
+{
+    UISlider *slider = new UISlider{position, bSize,
+                   fixedToWindow, range, {70,70,70,255}, physRange, sliderFunc};
+    buttonArray.emplace_back(slider);
+}
 
 bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2)
 {
@@ -47,7 +54,7 @@ bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rec
 
 void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 {
-    for(int i=0; i<textArray.size(); i++)
+    for(int i=0; i<textArray.size(); ++i)
     {
 
         //if(textArray.at(i).getGlobalBounds().intersects(windowBox.getGlobalBounds()))
@@ -61,10 +68,15 @@ void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
             window.draw(*textArray.at(i));
         }
     }
-    for(int i=0; i<buttonArray.size(); i++)
+    for(int i=0; i<buttonArray.size(); ++i)
     {
         buttonArray.at(i)->updateElement(window, origPosition);
         buttonArray.at(i)->renderButton(window,GUIView);
+    }
+    for(int i=0; i<sliderArray.size(); ++i)
+    {
+        sliderArray.at(i)->updateElement(window, origPosition);
+        //sliderArray.at(i)->renderSlider(window, GUIView);
     }
 }
 
@@ -160,14 +172,14 @@ bool UIWindow::getIsMouseIntersecting()
     return mouseIntersecting;
 }
 
-void UIWindow::clickIntersectedButton()
+void UIWindow::clickIntersectedButton(sf::RenderWindow &window)
 {
     int buttonIndex = std::get<1>(mouseOnButton);
     std::cout << "Button on Click: " << buttonIndex << "\n";
     if(buttonIndex != -1)
     {
         mouseOnButtonWhenClicked = mouseOnButton;
-        buttonArray.at(buttonIndex)->clickButton();
+        buttonArray.at(buttonIndex)->clickButton(window);
     }
 }
 

@@ -78,7 +78,7 @@ void UIContainer::clickOnUI(sf::RenderWindow &window)
     if(windowBool)
     {
         getWindow(windowIndex).changeOrigin(window, sf::Mouse::getPosition(window));
-        getWindow(windowIndex).clickIntersectedButton();
+        getWindow(windowIndex).clickIntersectedButton(window);
         currentIntButton = getWindow(windowIndex).getClickedButton();
         //std::swap(interfaceWindows.at(windowIndex), interfaceWindows.front());
         //currentIntWindow = doesMIntExist();

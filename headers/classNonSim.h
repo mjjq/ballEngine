@@ -85,6 +85,8 @@ class NonSimulationStuff
     void newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event);
     float getWindowSizeX();
 
+    void setSpawnMass(float mass);
+
 
 
 public:

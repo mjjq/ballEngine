@@ -2,11 +2,13 @@
 #define CLASS_UIWIN_H
 
 #include "classTextElement.h"
+//#include "classUISlider.h"
 //#include "classUIButton.h"
 
 #include <functional>
 
 class UIButton;
+class UISlider;
 
 class UIWindow
 {
@@ -27,6 +29,7 @@ protected:
 
     std::vector<UITextElementBase*> textArray;
     std::vector<UIButton*> buttonArray;
+    std::vector<UISlider*> sliderArray;
 
     bool isButton = false;
     bool fixedToWindow = true;
@@ -43,19 +46,21 @@ public:
 
     void addButton(std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
                                                 std::function<void()> const& func, sf::Color color = {80,80,80,150});
+    void addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
+                   sf::Vector2f physRange ={0,0}, std::function<void(float)> sliderFunc = nullptr);
 
     bool ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2);
     void renderWindow(sf::RenderWindow &window, sf::View &GUIView);
     void renderElements(sf::RenderWindow &window, sf::View &GUIView);
 
-    void clickIntersectedButton();
+    void clickIntersectedButton(sf::RenderWindow &window);
     void releaseClickedButton();
 
     void checkMouseIntersection(sf::RenderWindow &window);
     bool getIsMouseIntersecting();
     void resetButtonPair();
     std::pair<bool,int> getClickedButton();
-    void changeOrigin(sf::RenderWindow &window, sf::Vector2i origin);
+    virtual void changeOrigin(sf::RenderWindow &window, sf::Vector2i origin);
 
     void moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition);
 };

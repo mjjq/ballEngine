@@ -13,7 +13,7 @@ protected:
     //sf::RectangleShape buttonRect;
     //std::string buttonText;
     sf::Vector2f currPosition = origPosition;
-    sf::Color clickedColor = {30,30,30,150};
+    sf::Color clickedColor = {60,60,60,150};
     sf::Color unclickedColor;
     sf::Color mouseOverColor = {100,100,100,150};
     std::function<void()> clickFunc;
@@ -26,10 +26,10 @@ protected:
 public:
     UIButton(std::string font, std::string text, int fontSize, std::function<void()> const& clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color = {80,80,80,150});
 
-    void clickButton();
-    void releaseButton();
-    void renderButton(sf::RenderWindow &window, sf::View &GUIView);
-    void updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition);
+    virtual void clickButton(sf::RenderWindow &window);
+    virtual void releaseButton();
+    virtual void renderButton(sf::RenderWindow &window, sf::View &GUIView);
+    virtual void updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition);
     //void updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition);
 
 };
