@@ -254,7 +254,8 @@ void NonSimulationStuff::toggleFullScreen()
     }
     else
     {
-        window.setSize({prevWindowSizeX,prevWindowSizeY});
+        //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
+        window.setSize(sf::Vector2u(prevWindowSizeX,prevWindowSizeY));
         window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine");
         adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);
         window.setPosition(prevWindowPosition);
@@ -628,7 +629,7 @@ void NonSimulationStuff::updateFPS(sf::Time interval, float framerate)
 */
 sf::Time NonSimulationStuff::sampleNextFrame(sf::Time frameTime)
 {
-    int positionSize = 10;
+    unsigned int positionSize = 10;
     previousFrames.push_back(frameTime.asSeconds());
     if(previousFrames.size()>positionSize)
     {

@@ -17,8 +17,8 @@ class UISlider : public UIButton
     sf::Color mouseOverColor = {100,100,100,255};
     sf::Color sliderColor = {150,150,150,255};
 
-    sf::Vector2f physRange;
     std::function<void(float)> sliderFunc;
+    sf::Vector2f physRange;
 
     bool sliderDown = false;
 public:

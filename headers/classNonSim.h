@@ -22,7 +22,6 @@ class NonSimulationStuff
     std::deque<float> previousFrames;
     sf::Clock frameClock;
     sf::RectangleShape boundaryRect;
-    bool simFitsInWindow;
 
     int prevWindowSizeX;
     int prevWindowSizeY;
@@ -45,6 +44,8 @@ class NonSimulationStuff
     float ballGridSpacing;
     int ballGridHeight;
     int ballGridWidth;
+
+    bool simFitsInWindow;
 
     int playerBallIndex = 0;
 

@@ -23,7 +23,7 @@ UIButton::UIButton(std::string font, std::string text, int fontSize, std::functi
     sf::Rect<float> buttonBounds = windowBox.getLocalBounds();
     sf::Rect<float> textBounds = textArray.at(0)->getLocalBounds();
 
-    sf::Vector2i newOrigin = {textBounds.width/2 + textBounds.left, textBounds.height/2 + textBounds.top};
+    sf::Vector2i newOrigin = sf::Vector2i(textBounds.width/2 + textBounds.left, textBounds.height/2 + textBounds.top);
 
     textArray.at(0)->setOrigin(newOrigin.x, newOrigin.y);
     textArray.at(0)->setOrigPosition({buttonBounds.width/2,buttonBounds.height/2});

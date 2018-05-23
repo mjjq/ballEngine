@@ -54,7 +54,7 @@ bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rec
 
 void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 {
-    for(int i=0; i<textArray.size(); ++i)
+    for(UITextElementBase *textElement : textArray)
     {
 
         //if(textArray.at(i).getGlobalBounds().intersects(windowBox.getGlobalBounds()))
@@ -63,21 +63,21 @@ void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
             //sf::Rect<float> b = windowBox.getGlobalBounds();
             //std::cout << a.top << " " << a.left << " " << a.width << " " << a.height << "\n";
             //std::cout << b.top << " " << b.left << " " << b.width << " " << b.height << "\n";
-            textArray.at(i)->updateElement(window, GUIView, origPosition);
-            textArray.at(i)->textWrap(windowBox.getGlobalBounds());
-            window.draw(*textArray.at(i));
+            textElement->updateElement(window, GUIView, origPosition);
+            textElement->textWrap(windowBox.getGlobalBounds());
+            window.draw(*textElement);
         }
     }
-    for(int i=0; i<buttonArray.size(); ++i)
+    for(UIButton *button : buttonArray)
     {
-        buttonArray.at(i)->updateElement(window, origPosition);
-        buttonArray.at(i)->renderButton(window,GUIView);
+        button->updateElement(window, origPosition);
+        button->renderButton(window,GUIView);
     }
-    for(int i=0; i<sliderArray.size(); ++i)
+    /*for(int i=0; i<sliderArray.size(); ++i)
     {
         sliderArray.at(i)->updateElement(window, origPosition);
         //sliderArray.at(i)->renderSlider(window, GUIView);
-    }
+    }*/
 }
 
 
@@ -117,7 +117,7 @@ void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
         if(origRect.contains(mousePosf))
         {
             mouseIntersecting = true;
-            for(int i=0; i<buttonArray.size(); i++)
+            for(unsigned int i=0; i<buttonArray.size(); i++)
             {
                 buttonArray.at(i)->checkMouseIntersection(window);
                 bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
@@ -134,7 +134,7 @@ void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
         if(origRect.contains(mousePosf))
         {
             mouseIntersecting = true;
-            for(int i=0; i<buttonArray.size(); i++)
+            for(unsigned int i=0; i<buttonArray.size(); i++)
             {
                 buttonArray.at(i)->checkMouseIntersection(window);
                 bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();

@@ -14,7 +14,7 @@ class UIContainer
 public:
     void addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
     void renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
-    UIWindow &getWindow(int windowIndex);
+    UIWindow &getWindow(unsigned int windowIndex);
 
     void checkMouseIntersection(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
     std::pair<bool,int> doesMIntExist();

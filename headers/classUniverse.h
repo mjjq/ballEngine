@@ -86,10 +86,10 @@ public:
     void drawSampledPositions(sf::RenderWindow &window);
     void toggleTrajectories();
     void togglePlayerTraj();
-    sf::Vector2f getBallPosition(int i);
+    sf::Vector2f getBallPosition(unsigned int i);
     void pushBall(float force, float relDirection, int i);
     void pushPlayer(float force, float relDirection);
-    void setPlayer(int playerIndex);
+    void setPlayer(unsigned int playerIndex);
 };
 
 #endif // CLASS_UNIVERSE_H

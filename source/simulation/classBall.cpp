@@ -40,7 +40,7 @@ float Ball::lenJonesForce(float x, float x_0, float r, float m)
 
 float Ball::exptCollForce(float x, float x_0, float r, float m)
 {
-    float energy = 0.0000001;
+    //float energy = 0.0000001;
     float r_0 = 0.998*getRadius();
     float dv = (x-x_0)*pow(r-r_0,-19)/m;
     return dv;
@@ -74,10 +74,11 @@ float Ball::newtonForce(float x, float x_0, float r, float G, float M)
     @param initVel The initial velocity of the ball.
 */
 Ball::Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel) :
-sf::CircleShape(radius), mass(mass), cStepVelocity{initVel}, radius(radius)
+sf::CircleShape(radius), cStepVelocity{initVel}, nStepPosition(initPos), mass(mass),
+radius(radius)
 {
     setPosition(initPos);
-    nStepPosition = initPos;
+    //nStepPosition = initPos;
     setOrigin(radius,radius);
     if(mass>0)
         setFillColor(sf::Color::Green);
@@ -296,7 +297,7 @@ float Ball::getRelSpeed(Ball &otherBall)
 */
 void Ball::sampleNextPosition()
 {
-    int positionSize = 10;
+    unsigned int positionSize = 10;
     previousPositions.push_back(getPosition());
     if(previousPositions.size()>positionSize)
     {

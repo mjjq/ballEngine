@@ -37,7 +37,7 @@ sfPair integrators::RK4Method2ndODE(sf::Vector2f xvec, sf::Vector2f thisVel, sf:
     sf::Vector2f kv3 = forces::newtonForce(xvec + 0.5f*dt*kr2, M, G);
     sf::Vector2f kr3 = thisVel - otherVel + 0.5f*dt*kv2;
     sf::Vector2f kv4 = forces::newtonForce(xvec + dt*kr3, M, G);
-    sf::Vector2f kr4 = thisVel - otherVel + dt*kv3;
+    //sf::Vector2f kr4 = thisVel - otherVel + dt*kv3;
 
     //sf::Vector2f k1 = forces::newtonForce(xvec, M, G);
     //sf::Vector2f k2 = forces::newtonForce(xvec + 0.5f*dt*k1, M, G);
