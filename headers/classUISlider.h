@@ -19,13 +19,15 @@ class UISlider : public UIButton
 
     std::function<void(float)> sliderFunc;
     sf::Vector2f physRange;
+    float *variable;
 
     bool sliderDown = false;
+
 public:
     UISlider(sf::Vector2f position, sf::Vector2f bSize,
             bool fixedToWin, float range, sf::Color color,
             sf::Vector2f physRange = {0,0},
-            std::function<void(float)> slideFunc = nullptr);
+            std::function<void(float)> slideFunc = nullptr, float *variable = nullptr);
 
     void clickButton(sf::RenderWindow &window);
     void releaseButton();

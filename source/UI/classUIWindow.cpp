@@ -37,10 +37,10 @@ void UIWindow::addButton(std::string font, std::string text, int fontSize, sf::V
 }
 
 void UIWindow::addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
-                         sf::Vector2f physRange, std::function<void(float)> sliderFunc)
+                         sf::Vector2f physRange, std::function<void(float)> sliderFunc, float *variable)
 {
     UISlider *slider = new UISlider{position, bSize,
-                   fixedToWindow, range, {70,70,70,255}, physRange, sliderFunc};
+                   fixedToWindow, range, {70,70,70,255}, physRange, sliderFunc, variable};
     buttonArray.emplace_back(slider);
 }
 

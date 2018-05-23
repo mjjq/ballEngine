@@ -651,9 +651,23 @@ void NonSimulationStuff::limitFramerate(int framerate)
     previousFrames.push_back(timestep.asSeconds());
 }
 
-void NonSimulationStuff::setSpawnMass(float mass)
+void NonSimulationStuff::setSpawnValues(float value,
+                                        SpawnQuantity toChange)
 {
-    spawnMass = mass;
+    float density = 1.0f;
+    switch(toChange)
+    {
+        case(SQ_MASS):
+            spawnMass = value;
+            spawnRadius = density*value;
+            break;
+        case(SQ_RADIUS):
+            spawnRadius = value;
+            spawnMass = density*value;
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -744,8 +758,8 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(0).addButton("./fonts/cour.ttf", "Rad +", 12, {10,220}, {60,30}, [&]{spawnRadius+=1;});
     container.getWindow(0).addButton("./fonts/cour.ttf", "Rad -", 12, {90,220}, {60,30}, [&]{if(spawnRadius>1){spawnRadius-=1;}});
     container.getWindow(0).addButton("./fonts/cour.ttf", "Rst Rad", 12, {170,220}, {60,30}, [&]{spawnRadius=10;});
-    container.getWindow(0).addSlider({10,50}, 210.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnMass(mass);});
-    container.getWindow(0).addSlider({10,90}, 210.0f, {10,20}, {1.0,10.0}, [&](float radius){spawnRadius = radius;});
+    container.getWindow(0).addSlider({10,50}, 210.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass);
+    container.getWindow(0).addSlider({10,90}, 210.0f, {10,20}, {1.0,10.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius);
 
     /*std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
                                                 bool fixedToWin, std::function<void> *func, sf::Color color*/

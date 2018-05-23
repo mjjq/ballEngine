@@ -6,6 +6,13 @@
 
 class NonSimulationStuff
 {
+    enum SpawnQuantity
+    {
+        SQ_MASS,
+        SQ_RADIUS,
+        SQ_DENSITY,
+    };
+
     int windowSizeX;
     int windowSizeY;
     //sf::Text mousePos;
@@ -86,7 +93,7 @@ class NonSimulationStuff
     void newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event);
     float getWindowSizeX();
 
-    void setSpawnMass(float mass);
+    void setSpawnValues(float value, SpawnQuantity toChange);
 
 
 

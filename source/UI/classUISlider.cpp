@@ -18,9 +18,10 @@
 
 UISlider::UISlider(sf::Vector2f position, sf::Vector2f bSize,
                    bool fixedToWin, float range, sf::Color color,
-                   sf::Vector2f physRange, std::function<void(float)> slideFunc) :
+                   sf::Vector2f physRange, std::function<void(float)> slideFunc,
+                   float *variable) :
                    UIButton("", "", 1, [&]{}, position, bSize, fixedToWin, color),
-                   range{range}, sliderFunc{slideFunc}, physRange{physRange}
+                   range{range}, sliderFunc{slideFunc}, physRange{physRange}, variable{variable}
 {
     sliderLine.setOrigin({-width/2.0f,-(height-thickness)/2.0f});
     sliderLine.setFillColor(sliderColor);
@@ -50,6 +51,17 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     //std::cout << fixedToWindow << "\n";
     currPosition = origPosition + parentPosition;
     currButtonPosition = currPosition + buttonPosOnRel;
+    if(!buttonDown && variable != nullptr)
+    {
+        std::cout << "Thing\n";
+        float newPosX = range*(*variable - physRange.x)/(physRange.y - physRange.x);
+        if(newPosX < 0.0f)
+            buttonPosOnRel = sf::Vector2f{0, 0};
+        else if(newPosX > range)
+            buttonPosOnRel = sf::Vector2f{range, 0};
+        else
+            buttonPosOnRel = sf::Vector2f{newPosX, 0};
+    }
     if(buttonDown)
     {
         float newPosX{0.0f};
@@ -62,7 +74,7 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
         if(newPosX > 0.0f && newPosX < range)
         {
             if(sliderFunc != nullptr)
-                sliderFunc((physRange.y-physRange.x)*newPosX/range+physRange.x);
+                sliderFunc((physRange.y-physRange.x)*newPosX/range + physRange.x);
             buttonPosOnRel = sf::Vector2f{newPosX, 0};
         }
         else if(newPosX <= 0.0f)
