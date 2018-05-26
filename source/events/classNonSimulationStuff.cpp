@@ -240,6 +240,7 @@ void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, in
 */
 void NonSimulationStuff::toggleFullScreen()
 {
+    //setAALevel(8);
     if(!isFullScreen)
     {
         prevWindowSizeX = windowSizeX;
@@ -248,7 +249,7 @@ void NonSimulationStuff::toggleFullScreen()
 
         sf::VideoMode mode = sf::VideoMode::getDesktopMode();
         window.setSize({mode.width,mode.height});
-        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None);
+        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None, settings);
         adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);
         isFullScreen = true;
     }
@@ -257,6 +258,33 @@ void NonSimulationStuff::toggleFullScreen()
         //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
         window.setSize(sf::Vector2u(prevWindowSizeX,prevWindowSizeY));
         window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine");
+        adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);
+        window.setPosition(prevWindowPosition);
+        isFullScreen = false;
+    }
+    limitFramerate(static_cast<int>(1.0f/timestep.asSeconds()));
+}
+
+void NonSimulationStuff::setAALevel(unsigned int level)
+{
+    settings.antialiasingLevel = level;
+    prevWindowSizeX = windowSizeX;
+    prevWindowSizeY = windowSizeY;
+    prevWindowPosition = window.getPosition();
+    if(isFullScreen)
+    {
+        sf::VideoMode mode = sf::VideoMode::getDesktopMode();
+        window.setSize({mode.width,mode.height});
+        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None, settings);
+        adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);
+        isFullScreen = true;
+    }
+    else
+    {
+        //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
+        window.setSize(sf::Vector2u(prevWindowSizeX,prevWindowSizeY));
+        window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine",
+                                                    sf::Style::Default, settings);
         adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);
         window.setPosition(prevWindowPosition);
         isFullScreen = false;
@@ -527,6 +555,10 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
                 ballSim.setPlayer(0);
             else if(event.key.code == sf::Keyboard::Num2)
                 ballSim.setPlayer(1);
+            else if(event.key.code == sf::Keyboard::F2)
+                setAALevel(0);
+            else if(event.key.code == sf::Keyboard::F3)
+                setAALevel(8);
         }
 
         newLayerEvent(newLayerKeys, event);
@@ -610,6 +642,7 @@ float NonSimulationStuff::getWindowSizeX()
 {
     return windowSizeX;
 }
+
 
 void NonSimulationStuff::updateFPS(sf::Time interval, float framerate)
 {

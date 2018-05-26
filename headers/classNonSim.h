@@ -16,6 +16,7 @@ class NonSimulationStuff
     int windowSizeX;
     int windowSizeY;
     //sf::Text mousePos;
+    sf::ContextSettings settings;
     sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
     sf::View worldView = window.getDefaultView();
     sf::View GUIView = window.getDefaultView();
@@ -71,6 +72,7 @@ class NonSimulationStuff
     void resetView();
     void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY);//, float zoom);
     void toggleFullScreen();
+    void setAALevel(unsigned int level);
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
     void changeBoundaryRect(sf::Vector2i worldSize);

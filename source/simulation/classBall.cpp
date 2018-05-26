@@ -344,7 +344,7 @@ bool Ball::getSamplePrevPosBool()
 
 void Ball::setSamplePrevPosBool(bool value)
 {
-    if(samplePreviousPositions!=value);
+    if(samplePreviousPositions!=value)
         previousPositions.clear();
     samplePreviousPositions = value;
 }

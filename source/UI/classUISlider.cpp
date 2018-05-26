@@ -10,12 +10,6 @@
 #include "../../headers/stringConversion.h"
 
 
-/*UISlider::UISlider(sf::Vector2f position, int range, sf::Vector2f bSize, bool fixedToWin) :
-    currPosition{position}, range{range}, buttonSize{bSize}, fixedToWin{fixedToWin}
-{
-
-}*/
-
 UISlider::UISlider(sf::Vector2f position, sf::Vector2f bSize,
                    bool fixedToWin, float range, sf::Color color,
                    sf::Vector2f physRange, std::function<void(float)> slideFunc,
@@ -42,18 +36,14 @@ void UISlider::clickButton(sf::RenderWindow &window)
 void UISlider::releaseButton()
 {
     buttonDown = false;
-    //currPosition = buttonPosition;
-    //std::cout << currPosition << "\n";
 }
 
 void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition)
 {
-    //std::cout << fixedToWindow << "\n";
     currPosition = origPosition + parentPosition;
     currButtonPosition = currPosition + buttonPosOnRel;
     if(!buttonDown && variable != nullptr)
     {
-        std::cout << "Thing\n";
         float newPosX = range*(*variable - physRange.x)/(physRange.y - physRange.x);
         if(newPosX < 0.0f)
             buttonPosOnRel = sf::Vector2f{0, 0};
@@ -62,7 +52,7 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
         else
             buttonPosOnRel = sf::Vector2f{newPosX, 0};
     }
-    if(buttonDown)
+    else if(buttonDown)
     {
         float newPosX{0.0f};
         if(fixedToWindow)
@@ -89,10 +79,8 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
                 sliderFunc(physRange.y);
             buttonPosOnRel = sf::Vector2f{range, 0};
         }
-        //std::cout << buttonDown << "yes\n";
     }
 
-    //std::cout << buttonPosition << "\n";
     sf::Rect<float> newButtonRect{currButtonPosition,{width,height}};
     origRect = newButtonRect;
     if(fixedToWindow)
@@ -112,17 +100,12 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
         windowBox.setFillColor(mouseOverColor);
     else
         windowBox.setFillColor(unclickedColor);
-
-    //std::cout << currPosition << "\n";
 }
 
 void UISlider::changeOrigin(sf::RenderWindow &window, sf::Vector2i origin)
 {
-    //sf::Vector2i tempOffset =
     if(fixedToWindow)
         mouseOffset = static_cast<sf::Vector2i>(currButtonPosition) - origin;
     else
         mouseOffset = static_cast<sf::Vector2i>(currButtonPosition - window.mapPixelToCoords(origin));
-    //std::cout << origPosition << "\n";
-    //std::cout << window.mapPixelToCoords(origin) << "\n";
 }
