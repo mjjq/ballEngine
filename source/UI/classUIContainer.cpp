@@ -108,6 +108,7 @@ bool UIContainer::isWindowDraggable()
 {
     if(currentIntWindow.first && !currentIntButton.first)
         return true;
+    //std::cout << currentIntButton.first << "\n";
     return false;
 }
 

@@ -11,6 +11,15 @@
 #include "../../headers/stringConversion.h"
 #include "../../headers/classUIButton.h"
 #include "../../headers/classUISlider.h"
+#include "../../headers/classUIGroup.h"
+
+void UIWindow::addGroup(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable)
+{
+    UIGroup *newGroup = new UIGroup{position, width, height, fixedToWin, color};
+    groupArray.emplace_back(newGroup);
+    //interfaceWindowIDs.push_back(interfaceWindows.size()-1);
+    //mouseIntersectionList.push_back(false);
+}
 
 template<class T>
 void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
@@ -31,17 +40,26 @@ void UIWindow::addButton(std::string font, std::string text, int fontSize, sf::V
                                                 std::function<void()> const& func, sf::Color color)
 {
     //std::cout << fixedToWindow << "\n";
-    UIButton *button = new UIButton{font, text, fontSize, func, position, bSize, fixedToWindow, color};
+
+    /*UIButton *button = new UIButton{font, text, fontSize, func, position, bSize, fixedToWindow, color};
     //button->addElement<int>(font, text, fontSize, {10.0,10.0});
-    buttonArray.emplace_back(button);
+    buttonArray.emplace_back(button);*/
+    addGroup(position, bSize.x, bSize.y, fixedToWindow, false);
+    groupArray.back()->addButton(font, text, fontSize, {0,0}, bSize, func, color);
 }
 
 void UIWindow::addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
                          sf::Vector2f physRange, std::function<void(float)> sliderFunc, float *variable)
 {
-    UISlider *slider = new UISlider{position, bSize,
+    /*UISlider *slider = new UISlider{position, bSize,
                    fixedToWindow, range, {70,70,70,255}, physRange, sliderFunc, variable};
-    buttonArray.emplace_back(slider);
+    buttonArray.emplace_back(slider);*/
+    //UIGroup *newGroup = new UIGroup(position, range, bSize.y, fixedToWindow);
+    addGroup(position, range+bSize.x, bSize.y, fixedToWindow, false);
+    float thickness = 2.0f;
+    groupArray.back()->addButton("", "", 1, {bSize.x/2.0f,(bSize.y-thickness)/2.0f},
+                                        {range, thickness}, [&]{}, {255,255,255,255});
+    groupArray.back()->addSlider({0,0}, range, bSize, physRange, sliderFunc, variable);
 }
 
 bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2)
@@ -72,6 +90,11 @@ void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
     {
         button->updateElement(window, origPosition);
         button->renderButton(window,GUIView);
+    }
+    for(UIGroup *group : groupArray)
+    {
+        group->updateElement(window, origPosition);
+        group->renderElements(window, GUIView);
     }
     /*for(int i=0; i<sliderArray.size(); ++i)
     {
@@ -115,16 +138,7 @@ void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
     {
         sf::Vector2f mousePosf = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
         if(origRect.contains(mousePosf))
-        {
             mouseIntersecting = true;
-            for(unsigned int i=0; i<buttonArray.size(); i++)
-            {
-                buttonArray.at(i)->checkMouseIntersection(window);
-                bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-                if(isIntersectingWithButton)
-                    mouseOnButton = std::make_pair(isIntersectingWithButton, i);
-            }
-        }
         else
             mouseIntersecting = false;
     }
@@ -132,18 +146,25 @@ void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
     {
         sf::Vector2f mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         if(origRect.contains(mousePosf))
-        {
             mouseIntersecting = true;
-            for(unsigned int i=0; i<buttonArray.size(); i++)
-            {
-                buttonArray.at(i)->checkMouseIntersection(window);
-                bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-                if(isIntersectingWithButton)
-                    mouseOnButton = std::make_pair(isIntersectingWithButton, i);
-            }
-        }
         else
             mouseIntersecting = false;
+    }
+
+    for(unsigned int i=0; i<buttonArray.size(); ++i)
+    {
+        buttonArray.at(i)->checkMouseIntersection(window);
+        bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
+        if(isIntersectingWithButton)
+            mouseOnButton = std::make_pair(isIntersectingWithButton, i);
+    }
+
+    for(unsigned int j=0; j<groupArray.size(); ++j)
+    {
+        groupArray.at(j)->checkMouseIntersection(window);
+        bool isIntWithGroup = groupArray.at(j)->getIsMouseIntersecting();
+        if(isIntWithGroup)
+            mouseOnGroup = std::make_pair(isIntWithGroup, j);
     }
 }
 
@@ -151,6 +172,7 @@ void UIWindow::resetButtonPair()
 {
     //mouseOnButtonWhenClicked = std::make_pair(false,-1);
     mouseOnButton = std::make_pair(false,-1);
+    mouseOnGroup = std::make_pair(false,-1);
     //std::cout << mouseOnButtonWhenClicked.second << "\n";
 }
 
@@ -160,10 +182,18 @@ void UIWindow::releaseClickedButton()
     int buttonIndex = mouseOnButtonWhenClicked.second;
     if(buttonBool)
     {
-        buttonArray.at(buttonIndex)->releaseButton();
+        buttonArray.at(buttonIndex)->releaseClickedButton();
+    }
+
+    bool groupBool = mouseOnGroupWhenClicked.first;
+    int groupIndex = mouseOnGroupWhenClicked.second;
+    if(groupBool)
+    {
+        groupArray.at(groupIndex)->releaseClickedButton();
     }
     mouseIntersecting = false;
     mouseOnButtonWhenClicked = std::make_pair(false,-1);
+    mouseOnGroupWhenClicked = std::make_pair(false, -1);
     //std::cout << "Button on Release: " << buttonIndex << "\n";
 }
 
@@ -175,17 +205,24 @@ bool UIWindow::getIsMouseIntersecting()
 void UIWindow::clickIntersectedButton(sf::RenderWindow &window)
 {
     int buttonIndex = std::get<1>(mouseOnButton);
+    int groupIndex = std::get<1>(mouseOnGroup);
     std::cout << "Button on Click: " << buttonIndex << "\n";
     if(buttonIndex != -1)
     {
         mouseOnButtonWhenClicked = mouseOnButton;
-        buttonArray.at(buttonIndex)->clickButton(window);
+        buttonArray.at(buttonIndex)->clickIntersectedButton(window);
+    }
+    else if(groupIndex != -1)
+    {
+        mouseOnGroupWhenClicked = mouseOnGroup;
+        groupArray.at(groupIndex)->clickIntersectedButton(window);
     }
 }
 
 std::pair<bool,int> UIWindow::getClickedButton()
 {
-    return mouseOnButtonWhenClicked;
+    //return mouseOnButtonWhenClicked;
+    return mouseOnGroupWhenClicked;
 }
 
 void UIWindow::moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition)

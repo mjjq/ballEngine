@@ -26,8 +26,8 @@ protected:
 public:
     UIButton(std::string font, std::string text, int fontSize, std::function<void()> const& clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color = {80,80,80,150});
 
-    virtual void clickButton(sf::RenderWindow &window);
-    virtual void releaseButton();
+    virtual void clickIntersectedButton(sf::RenderWindow &window);
+    virtual void releaseClickedButton();
     virtual void renderButton(sf::RenderWindow &window, sf::View &GUIView);
     virtual void updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition);
     //void updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition);

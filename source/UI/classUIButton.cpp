@@ -31,13 +31,13 @@ UIButton::UIButton(std::string font, std::string text, int fontSize, std::functi
 
 }
 
-void UIButton::clickButton(sf::RenderWindow &window)
+void UIButton::clickIntersectedButton(sf::RenderWindow &window)
 {
     buttonDown = true;
     //clickFunc();
 }
 
-void UIButton::releaseButton()
+void UIButton::releaseClickedButton()
 {
     if(mouseIntersecting && buttonDown)
     {
@@ -56,7 +56,7 @@ void UIButton::renderButton(sf::RenderWindow &window, sf::View &GUIView)
 
 void UIButton::updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition)
 {
-    //std::cout << fixedToWindow << "\n";
+    //std::cout << mouseIntersecting << "\n";
     currPosition = origPosition+parentPosition;
     //std::cout << parentPosition << "\n";
     sf::Rect<float> newRect{currPosition,{width,height}};
@@ -76,3 +76,4 @@ void UIButton::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     //std::cout << currPosition << "\n";
 
 }
+
