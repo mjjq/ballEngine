@@ -773,10 +773,10 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     changeBoundaryRect(wSize);
     resetView();
 
-    container.addWindow({0,100}, 250, 250, false, true);
-    container.addWindow({0,0}, 250, 70, true, true);
-    container.addWindow({0,400}, 250, 50, true, true);
-    container.addWindow({0,500}, 250, 150, true, true);
+    container.addWindow({0,100}, 250, 250, true, false);
+    container.addWindow({0,0}, 250, 70, true, false);
+    container.addWindow({0,400}, 250, 50, true, false);
+    container.addWindow({0,500}, 250, 150, true, false);
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);
