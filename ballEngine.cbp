@@ -38,6 +38,7 @@
 		<Unit filename="headers/classTextElementBase.h" />
 		<Unit filename="headers/classUIButton.h" />
 		<Unit filename="headers/classUIContainer.h" />
+		<Unit filename="headers/classUISlider.h" />
 		<Unit filename="headers/classUIWindow.h" />
 		<Unit filename="headers/classUniverse.h" />
 		<Unit filename="headers/forces.h" />
@@ -47,6 +48,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="source/UI/classUIButton.cpp" />
 		<Unit filename="source/UI/classUIContainer.cpp" />
+		<Unit filename="source/UI/classUISlider.cpp" />
 		<Unit filename="source/UI/classUITextElement.cpp" />
 		<Unit filename="source/UI/classUITextElementBase.cpp" />
 		<Unit filename="source/UI/classUIWindow.cpp" />

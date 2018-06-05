@@ -10,32 +10,50 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 #include "../../headers/classUIButton.h"
+#include "../../headers/classUISlider.h"
+#include "../../headers/classUIGroup.h"
+
+void UIWindow::addGroup(sf::Vector2f position, float width,
+                        float height, bool fixedToWin, bool draggable)
+{
+    UIGroup *newGroup = new UIGroup{position, width, height, fixedToWin, color};
+    groupArray.emplace_back(newGroup);
+}
 
 template<class T>
-void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var)
+void UIWindow::addElement(std::string font, std::string str,
+                          int fontSize, sf::Vector2f position, T *var)
 {
-    //UITextElement<T> *text;
-    UITextElement<T> *text = new UITextElement<T>{str, position, fixedToWindow, var, !isButton, windowBox.getLocalBounds()};
+    UITextElement<T> *text = new UITextElement<T>{str, position, fixedToWindow,
+                                    var, !isButton, windowBox.getLocalBounds()};
     currentFont.loadFromFile(font);
     text->setFont(currentFont);
     text->setCharacterSize(fontSize);
-    //text.setPosition(position);
-    //text.setString(str);
     UITextElementBase *text2 = text;
     textArray.emplace_back(text2);
 }
 
 
-void UIWindow::addButton(std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
-                                                std::function<void()> const& func, sf::Color color)
+void UIWindow::addButton(std::string font, std::string text, int fontSize,
+                         sf::Vector2f position, sf::Vector2f bSize,
+                         std::function<void()> const& func, sf::Color color,
+                         bool changeState)
 {
-    //std::cout << fixedToWindow << "\n";
-    UIButton *button = new UIButton{font, text, fontSize, func, position, bSize, fixedToWindow, color};
-    //button->addElement<int>(font, text, fontSize, {10.0,10.0});
-    buttonArray.emplace_back(button);
+    addGroup(position, bSize.x, bSize.y, fixedToWindow, false);
+    groupArray.back()->addButton(font, text, fontSize, {0,0}, bSize, func,
+                                                        color, changeState);
 }
 
+void UIWindow::addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
+                         sf::Vector2f physRange, std::function<void(float)> sliderFunc,
+                         float *variable)
+{
+    addGroup(position, range+bSize.x, bSize.y, fixedToWindow, false);
+    float thickness = 2.0f;
 
+    groupArray.back()->addSlider({0,0}, range, thickness, bSize,
+                                 physRange, sliderFunc, variable);
+}
 
 bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2)
 {
@@ -47,24 +65,21 @@ bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rec
 
 void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 {
-    for(int i=0; i<textArray.size(); i++)
+    for(UITextElementBase *textElement : textArray)
     {
-
-        //if(textArray.at(i).getGlobalBounds().intersects(windowBox.getGlobalBounds()))
-        {
-            //sf::Rect<float> a = textArray.at(0)->getGlobalBounds();
-            //sf::Rect<float> b = windowBox.getGlobalBounds();
-            //std::cout << a.top << " " << a.left << " " << a.width << " " << a.height << "\n";
-            //std::cout << b.top << " " << b.left << " " << b.width << " " << b.height << "\n";
-            textArray.at(i)->updateElement(window, GUIView, origPosition);
-            textArray.at(i)->textWrap(windowBox.getGlobalBounds());
-            window.draw(*textArray.at(i));
-        }
+        textElement->updateElement(window, GUIView, origPosition);
+        textElement->textWrap(windowBox.getGlobalBounds());
+        window.draw(*textElement);
     }
-    for(int i=0; i<buttonArray.size(); i++)
+    for(UIButton *button : buttonArray)
     {
-        buttonArray.at(i)->updateElement(window, origPosition);
-        buttonArray.at(i)->renderButton(window,GUIView);
+        button->updateElement(window, origPosition);
+        button->renderButton(window,GUIView);
+    }
+    for(UIGroup *group : groupArray)
+    {
+        group->updateElement(window, origPosition);
+        group->renderElements(window, GUIView);
     }
 }
 
@@ -75,7 +90,8 @@ void UIWindow::renderWindow(sf::RenderWindow &window, sf::View &GUIView)
     if(fixedToWindow)
     {
         window.setView(GUIView);
-        windowBox.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(origPosition)));
+        windowBox.setPosition(window.mapPixelToCoords
+            (static_cast<sf::Vector2i>(origPosition)));
     }
     else
     {
@@ -86,8 +102,10 @@ void UIWindow::renderWindow(sf::RenderWindow &window, sf::View &GUIView)
 }
 
 
-UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable, sf::Color color) :
-            origPosition{position}, width{width}, height{height}, color{color}, fixedToWindow{fixedToWin}, draggable{draggable}
+UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin,
+                bool draggable, sf::Color color) : origPosition{position}, width{width},
+                height{height}, color{color}, fixedToWindow{fixedToWin},
+                draggable{draggable}
 {
     windowBox.setPosition(origPosition);
     windowBox.setSize(sf::Vector2f(width,height));
@@ -98,40 +116,34 @@ void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
 {
     mouseIntersecting = false;
     resetButtonPair();
+    sf::Vector2f mousePosf;
 
     if(fixedToWindow)
-    {
-        sf::Vector2f mousePosf = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
-        if(origRect.contains(mousePosf))
-        {
-            mouseIntersecting = true;
-            for(int i=0; i<buttonArray.size(); i++)
-            {
-                buttonArray.at(i)->checkMouseIntersection(window);
-                bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-                if(isIntersectingWithButton)
-                    mouseOnButton = std::make_pair(isIntersectingWithButton, i);
-            }
-        }
-        else
-            mouseIntersecting = false;
-    }
+        mousePosf = static_cast<sf::Vector2f>
+                        (sf::Mouse::getPosition(window));
     else
+        mousePosf = window.mapPixelToCoords
+                        (sf::Mouse::getPosition(window));
+
+    if(origRect.contains(mousePosf))
+        mouseIntersecting = true;
+    else
+        mouseIntersecting = false;
+
+    for(unsigned int i=0; i<buttonArray.size(); ++i)
     {
-        sf::Vector2f mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-        if(origRect.contains(mousePosf))
-        {
-            mouseIntersecting = true;
-            for(int i=0; i<buttonArray.size(); i++)
-            {
-                buttonArray.at(i)->checkMouseIntersection(window);
-                bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-                if(isIntersectingWithButton)
-                    mouseOnButton = std::make_pair(isIntersectingWithButton, i);
-            }
-        }
-        else
-            mouseIntersecting = false;
+        buttonArray.at(i)->checkMouseIntersection(window);
+        bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
+        if(isIntersectingWithButton)
+            mouseOnButton = std::make_pair(isIntersectingWithButton, i);
+    }
+
+    for(unsigned int j=0; j<groupArray.size(); ++j)
+    {
+        groupArray.at(j)->checkMouseIntersection(window);
+        bool isIntWithGroup = groupArray.at(j)->getIsMouseIntersecting();
+        if(isIntWithGroup)
+            mouseOnGroup = std::make_pair(isIntWithGroup, j);
     }
 }
 
@@ -139,6 +151,7 @@ void UIWindow::resetButtonPair()
 {
     //mouseOnButtonWhenClicked = std::make_pair(false,-1);
     mouseOnButton = std::make_pair(false,-1);
+    mouseOnGroup = std::make_pair(false,-1);
     //std::cout << mouseOnButtonWhenClicked.second << "\n";
 }
 
@@ -148,10 +161,18 @@ void UIWindow::releaseClickedButton()
     int buttonIndex = mouseOnButtonWhenClicked.second;
     if(buttonBool)
     {
-        buttonArray.at(buttonIndex)->releaseButton();
+        buttonArray.at(buttonIndex)->releaseClickedButton();
+    }
+
+    bool groupBool = mouseOnGroupWhenClicked.first;
+    int groupIndex = mouseOnGroupWhenClicked.second;
+    if(groupBool)
+    {
+        groupArray.at(groupIndex)->releaseClickedButton();
     }
     mouseIntersecting = false;
     mouseOnButtonWhenClicked = std::make_pair(false,-1);
+    mouseOnGroupWhenClicked = std::make_pair(false, -1);
     //std::cout << "Button on Release: " << buttonIndex << "\n";
 }
 
@@ -160,20 +181,27 @@ bool UIWindow::getIsMouseIntersecting()
     return mouseIntersecting;
 }
 
-void UIWindow::clickIntersectedButton()
+void UIWindow::clickIntersectedButton(sf::RenderWindow &window)
 {
     int buttonIndex = std::get<1>(mouseOnButton);
-    std::cout << "Button on Click: " << buttonIndex << "\n";
+    int groupIndex = std::get<1>(mouseOnGroup);
+    std::cout << "Button on Click: " << groupIndex << "\n";
     if(buttonIndex != -1)
     {
         mouseOnButtonWhenClicked = mouseOnButton;
-        buttonArray.at(buttonIndex)->clickButton();
+        buttonArray.at(buttonIndex)->clickIntersectedButton(window);
+        //std::cout << buttonArray.at(buttonIndex) << "\n";
+    }
+    else if(groupIndex != -1)
+    {
+        mouseOnGroupWhenClicked = mouseOnGroup;
+        groupArray.at(groupIndex)->clickIntersectedButton(window);
     }
 }
 
 std::pair<bool,int> UIWindow::getClickedButton()
 {
-    return mouseOnButtonWhenClicked;
+    return mouseOnGroupWhenClicked;
 }
 
 void UIWindow::moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition)
@@ -183,30 +211,32 @@ void UIWindow::moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition)
         if(fixedToWindow)
             origPosition = static_cast<sf::Vector2f>(newPosition+mouseOffset);
         else
-            origPosition = window.mapPixelToCoords(newPosition) + static_cast<sf::Vector2f>(mouseOffset);
+            origPosition = window.mapPixelToCoords(newPosition) +
+                            static_cast<sf::Vector2f>(mouseOffset);
         sf::Rect<float> newRect{origPosition,{width,height}};
         origRect = newRect;
-    //std::cout << "Moving\n";
-    //std::cout << mouseOffset << "\n";
     }
 }
 
 void UIWindow::changeOrigin(sf::RenderWindow &window, sf::Vector2i origin)
 {
-    //sf::Vector2i tempOffset =
     if(fixedToWindow)
         mouseOffset = static_cast<sf::Vector2i>(origPosition) - origin;
     else
-        mouseOffset = static_cast<sf::Vector2i>(origPosition - window.mapPixelToCoords(origin));
-    //std::cout << origPosition << "\n";
-    //std::cout << window.mapPixelToCoords(origin) << "\n";
+        mouseOffset = static_cast<sf::Vector2i>(origPosition -
+                                window.mapPixelToCoords(origin));
 }
 
-template void UIWindow::addElement<int>(std::string font, std::string str, int fontSize, sf::Vector2f position, int *var);
-//template void UIWindow::addElement<const int>(std::string font, std::string str, int fontSize, sf::Vector2f position, const int *var);
-template void UIWindow::addElement<float>(std::string font, std::string str, int fontSize, sf::Vector2f position, float *var);
-template void UIWindow::addElement<bool>(std::string font, std::string str, int fontSize, sf::Vector2f position, bool *var);
-template void UIWindow::addElement<sf::Vector2i>(std::string font, std::string str, int fontSize, sf::Vector2f position, sf::Vector2i *var);
-template void UIWindow::addElement<sf::Vector2f>(std::string font, std::string str, int fontSize, sf::Vector2f position, sf::Vector2f *var);
-template void UIWindow::addElement<Integrators>(std::string font, std::string str, int fontSize, sf::Vector2f position, Integrators *var);
+template void UIWindow::addElement<int>(std::string font, std::string str,
+                                int fontSize, sf::Vector2f position, int *var);
+template void UIWindow::addElement<float>(std::string font, std::string str,
+                                int fontSize, sf::Vector2f position, float *var);
+template void UIWindow::addElement<bool>(std::string font, std::string str,
+                                int fontSize, sf::Vector2f position, bool *var);
+template void UIWindow::addElement<sf::Vector2i>(std::string font, std::string str,
+                                int fontSize, sf::Vector2f position, sf::Vector2i *var);
+template void UIWindow::addElement<sf::Vector2f>(std::string font, std::string str,
+                                int fontSize, sf::Vector2f position, sf::Vector2f *var);
+template void UIWindow::addElement<Integrators>(std::string font, std::string str,
+                                int fontSize, sf::Vector2f position, Integrators *var);
 

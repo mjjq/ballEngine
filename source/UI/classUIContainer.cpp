@@ -10,6 +10,11 @@
 #include "../../headers/sfVectorMath.h"
 
 
+UIContainer::UIContainer()
+{
+
+}
+
 void UIContainer::addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable, sf::Color color)
 {
     UIWindow newWindow{position, width, height, fixedToWin, draggable, color};
@@ -20,7 +25,7 @@ void UIContainer::addWindow(sf::Vector2f position, float width, float height, bo
 
 void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
-    for(int i=0; i<interfaceWindows.size(); i++)
+    for(unsigned int i=0; i<interfaceWindows.size(); i++)
     {
         int j = interfaceWindows.size() - 1 - i;
         interfaceWindows.at(j).renderWindow(window, GUIView);
@@ -29,26 +34,26 @@ void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf:
     }
 }
 
-UIWindow &UIContainer::getWindow(int windowIndex)
+UIWindow &UIContainer::getWindow(unsigned int windowIndex)
 {
     try{
-    if(windowIndex < 0 || windowIndex >= interfaceWindows.size())
+    if(windowIndex >= interfaceWindows.size())
         throw "windowIndex out of range in UIContainer::getWindow.";
-
-    return interfaceWindows.at(windowIndex);
 
     }
     catch(const char* err)
     {
         std::cerr << "Error: " << err << "\n";
     }
+
+    return interfaceWindows.at(windowIndex);
 }
 
 
 void UIContainer::checkMouseIntersection(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
     //window.setView(GUIView);
-    for(int i=0; i<interfaceWindows.size(); i++)
+    for(unsigned int i=0; i<interfaceWindows.size(); i++)
     {
         interfaceWindows.at(i).checkMouseIntersection(window);
         mouseIntersectionList.at(i) = interfaceWindows.at(i).getIsMouseIntersecting();
@@ -78,7 +83,7 @@ void UIContainer::clickOnUI(sf::RenderWindow &window)
     if(windowBool)
     {
         getWindow(windowIndex).changeOrigin(window, sf::Mouse::getPosition(window));
-        getWindow(windowIndex).clickIntersectedButton();
+        getWindow(windowIndex).clickIntersectedButton(window);
         currentIntButton = getWindow(windowIndex).getClickedButton();
         //std::swap(interfaceWindows.at(windowIndex), interfaceWindows.front());
         //currentIntWindow = doesMIntExist();
@@ -91,11 +96,11 @@ void UIContainer::clickOnUI(sf::RenderWindow &window)
 
 void UIContainer::resetUIClick()
 {
-    bool windowBool = std::get<0>(currentIntWindow);
+    //bool windowBool = std::get<0>(currentIntWindow);
     int windowIndex = std::get<1>(currentIntWindow);
     if(windowIndex != -1)
     {
-        std::cout << windowIndex << "\n";
+        //std::cout << windowIndex << "\n";
         getWindow(windowIndex).releaseClickedButton();
         getWindow(windowIndex).resetButtonPair();
     }
@@ -108,6 +113,7 @@ bool UIContainer::isWindowDraggable()
 {
     if(currentIntWindow.first && !currentIntButton.first)
         return true;
+    //std::cout << currentIntButton.first << "\n";
     return false;
 }
 
@@ -115,4 +121,8 @@ void UIContainer::dragWindow(sf::RenderWindow &window)
 {
    //std::cout << currentIntButton.first << " " << currentIntWindow.first << "\n";
     getWindow(currentIntWindow.second).moveWindow(window, sf::Mouse::getPosition(window));
+}
+
+void UIContainer::setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2)
+{
 }

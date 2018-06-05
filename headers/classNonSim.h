@@ -6,9 +6,17 @@
 
 class NonSimulationStuff
 {
+    enum SpawnQuantity
+    {
+        SQ_MASS,
+        SQ_RADIUS,
+        SQ_DENSITY,
+    };
+
     int windowSizeX;
     int windowSizeY;
     //sf::Text mousePos;
+    sf::ContextSettings settings;
     sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
     sf::View worldView = window.getDefaultView();
     sf::View GUIView = window.getDefaultView();
@@ -22,7 +30,6 @@ class NonSimulationStuff
     std::deque<float> previousFrames;
     sf::Clock frameClock;
     sf::RectangleShape boundaryRect;
-    bool simFitsInWindow;
 
     int prevWindowSizeX;
     int prevWindowSizeY;
@@ -46,6 +53,8 @@ class NonSimulationStuff
     int ballGridHeight;
     int ballGridWidth;
 
+    bool simFitsInWindow;
+
     int playerBallIndex = 0;
 
     BallUniverse ballSim;
@@ -63,6 +72,7 @@ class NonSimulationStuff
     void resetView();
     void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY);//, float zoom);
     void toggleFullScreen();
+    void setAALevel(unsigned int level);
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
     void changeBoundaryRect(sf::Vector2i worldSize);
@@ -84,6 +94,8 @@ class NonSimulationStuff
     void decTimeStep(sf::Time delta);
     void newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event);
     float getWindowSizeX();
+
+    void setSpawnValues(float value, SpawnQuantity toChange);
 
 
 

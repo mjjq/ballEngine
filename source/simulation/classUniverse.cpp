@@ -59,6 +59,8 @@ void BallUniverse::updateFirstVelocity(Integrators integType, float dt, Ball &fi
             case(Integrators::INTEG_VERLET):
                 solution = integrators::verletMethod(relVec, firstVelocity, secondVelocity, dt, M, G);
                 break;
+            default:
+                break;
         }
         firstBall.addSolvedVelocity(solution.first, solution.second);
         /*cStepModVelocity += solution.first;
@@ -70,15 +72,14 @@ void BallUniverse::updateFirstVelocity(Integrators integType, float dt, Ball &fi
 void BallUniverse::updateAllObjects(bool enableForces, float dt)
 {
     if(enableForces==true)
-        for(int i=0;i<ballArray.size();++i)
-            for(int j=0;j<ballArray.size();++j)
-                if(i!=j)
-                    updateFirstVelocity(intEnum, dt, ballArray.at(i), ballArray.at(j));
+        for(Ball &ball1 : ballArray)
+            for(Ball &ball2 : ballArray)
+                if(&ball1 != &ball2)
+                    updateFirstVelocity(intEnum, dt, ball1, ball2);
 
-    for(int i=0;i<ballArray.size();++i)
-        ballArray.at(i).updatePosition(dt);
+    for(Ball &ball : ballArray)
+        ball.updatePosition(dt);
 }
-
 
 /**
     Calculate the time to collision with another ball.
@@ -123,9 +124,9 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
     //int num = 0;
     float localT_coll = t_coll;
 
-    for(int i=0;i<ballArray.size();++i)
+    for(unsigned int i=0;i<ballArray.size();++i)
     {
-        for(int j=0;j<ballArray.size();++j)
+        for(unsigned int j=0;j<ballArray.size();++j)
         {
             if(i!=j)
             {
@@ -185,10 +186,10 @@ float BallUniverse::physicsLoop()
 
         float dtR = dt;
         float epsilon = 1e-5;
-        for(int i=0;i<ballArray.size();++i)
+        for(Ball &ball : ballArray)
         {
-            ballArray.at(i).resetToCollided();
-            ballArray.at(i).checkForBounce(worldSizeX,worldSizeY);
+            ball.resetToCollided();
+            ball.checkForBounce(worldSizeX,worldSizeY);
         }
 
         if(enable_collisions==true)
@@ -241,7 +242,7 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
         calcTotalMomentum(ballArray);
         calcTotalGPE(ballArray);
         calcTotalEnergy();
-        if(limiting = maxLimit && accumulator >= dt)
+        if( (limiting = maxLimit) && (accumulator >= dt) )
         {
             accumulator = 0.0f;
             std::cout << "Limit\n";
@@ -254,9 +255,9 @@ void BallUniverse::sampleAllPositions()
 {
     if(timeToNextSample - dt <= 0)
     {
-        for(int i=0; i<ballArray.size(); ++i)
-            if(ballArray.at(i).getSamplePrevPosBool())
-                ballArray.at(i).sampleNextPosition();
+        for(Ball &ball : ballArray)
+            if(ball.getSamplePrevPosBool())
+                ball.sampleNextPosition();
 
         timeToNextSample = sampledt;
         //std::cout << timeToNextSample << "\n";
@@ -264,29 +265,29 @@ void BallUniverse::sampleAllPositions()
     else
         timeToNextSample -= dt;
 
-    for(int i=0; i<ballArray.size(); ++i)
-        if(ballArray.at(i).getSamplePrevPosBool())
-            ballArray.at(i).sampleCurrentPosition();
+    for(Ball &ball : ballArray)
+        if(ball.getSamplePrevPosBool())
+            ball.sampleCurrentPosition();
 }
 
 void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer very CPU intensive
 {
-    for(int i=0; i<ballArray.size(); ++i)
+    for(Ball &ball : ballArray)
     {
-        if(ballArray.at(i).getSamplePrevPosBool())
+        if(ball.getSamplePrevPosBool())
         {
-            std::deque<sf::Vector2f> previousPositions = ballArray.at(i).getPreviousPositions();
+            std::deque<sf::Vector2f> previousPositions = ball.getPreviousPositions();
             if(previousPositions.size() > 1)
             {
                 int colorGradient = previousPositions.size();
                 sf::VertexArray lines(sf::LinesStrip, previousPositions.size());
                 sf::Color color;
-                for(int j=0; j<previousPositions.size(); ++j)
+                for(unsigned int j=0; j<previousPositions.size(); ++j)
                 {
-                    if(ballArray.at(i).getIsPlayer())
-                        color = {255,255,0,255*j/colorGradient};
+                    if(ball.getIsPlayer())
+                        color = {255,255,0,static_cast<sf::Uint8>(255*j/colorGradient)};
                     else
-                        color = {255,255,255,255*j/colorGradient};
+                        color = {255,255,255,static_cast<sf::Uint8>(255*j/colorGradient)};
                     lines[j].position = previousPositions.at(j);
                     lines[j].color = color;
                     //line[0] = sf::Vertex(static_cast<sf::Vector2f>(previousPositions.at(i)),color);
@@ -303,8 +304,8 @@ void BallUniverse::calcTotalKE(std::vector<Ball> &ballArray)
 {
     totalKE = 0;
     float KE{0};
-    for(int i=0; i<ballArray.size(); ++i)
-        KE += ballArray.at(i).getKE();
+    for(Ball &ball : ballArray)
+        KE += ball.getKE();
     totalKE = KE;
 }
 
@@ -314,10 +315,10 @@ void BallUniverse::calcTotalGPE(std::vector<Ball> &ballArray)
     if(ballArray.size()>1)
     {
         float GPE{0};
-        for(int i=0; i<ballArray.size(); ++i)
-            for(int j=0; j<ballArray.size(); ++j)
-                if(i!=j)
-                    GPE+=ballArray.at(i).getGPE(ballArray.at(j))/2;
+        for(Ball &ball1 : ballArray)
+            for(Ball &ball2 : ballArray)
+                if(&ball1 != &ball2)
+                    GPE+=ball1.getGPE(ball2)/2;
         totalGPE = GPE;
     }
 }
@@ -330,8 +331,8 @@ void BallUniverse::calcTotalEnergy()
 void BallUniverse::calcTotalMomentum(std::vector<Ball> &ballArray)
 {
     sf::Vector2f momentum{0,0};
-    for(int i=0; i<ballArray.size(); ++i)
-        momentum+=ballArray.at(i).getMomentum();
+    for(Ball &ball : ballArray)
+        momentum += ball.getMomentum();
     totalMomentum = momentum;
 }
 
@@ -410,11 +411,10 @@ void BallUniverse::toggleSimPause()
 void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
 {
     //if(enable_trajectories)
-        drawSampledPositions(windowRef);
-    for(int i=0; i<ballArray.size(); ++i)
-    {
-        windowRef.draw(ballArray.at(i));
-    }
+    drawSampledPositions(windowRef);
+
+    for(Ball &ball : ballArray)
+        windowRef.draw(ball);
 }
 
 void BallUniverse::toggleCollisions()
@@ -445,12 +445,12 @@ void BallUniverse::toggleRK4()
 
 void BallUniverse::changeBallColour()
 {
-    for(int i=0; i<ballArray.size(); ++i)
+    for(Ball &ball : ballArray)
     {
-        if(ballArray.at(i).getPosition().x > worldSizeX/2)
-            ballArray.at(i).setFillColor(sf::Color::Red);
+        if(ball.getPosition().x > worldSizeX/2)
+            ball.setFillColor(sf::Color::Red);
         else
-            ballArray.at(i).setFillColor(sf::Color::Green);
+            ball.setFillColor(sf::Color::Green);
     }
 }
 
@@ -496,9 +496,9 @@ sf::Vector2f& BallUniverse::getTotalMomentum()
     return totalMomentum;
 }
 
-sf::Vector2f BallUniverse::getBallPosition(int i)
+sf::Vector2f BallUniverse::getBallPosition(unsigned int i)
 {
-    if(ballArray.size()>i && ballArray.size()>0)
+    if(ballArray.size()>i && i>=0)
         return ballArray.at(i).getPosition();
     return sf::Vector2f{std::numeric_limits<float>::quiet_NaN(),
                         std::numeric_limits<float>::quiet_NaN()};
@@ -538,20 +538,20 @@ void BallUniverse::toggleTrajectories()
     if(enable_trajectories)
     {
         enable_trajectories = false;
-        for(int i=0; i<ballArray.size(); ++i)
+        for(int i=0; (unsigned)i<ballArray.size(); ++i)
             if(i!=currentPlayer)
                 ballArray.at(i).setSamplePrevPosBool(false);
     }
     else
     {
         enable_trajectories = true;
-        for(int i=0; i<ballArray.size(); ++i)
+        for(int i=0; (unsigned)i<ballArray.size(); ++i)
             if(i!=currentPlayer)
                 ballArray.at(i).setSamplePrevPosBool(true);
     }
 }
 
-void BallUniverse::setPlayer(int playerIndex)
+void BallUniverse::setPlayer(unsigned int playerIndex)
 {
     if(playerIndex < ballArray.size() && playerIndex >= 0)
     {

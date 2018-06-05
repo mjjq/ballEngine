@@ -240,6 +240,7 @@ void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, in
 */
 void NonSimulationStuff::toggleFullScreen()
 {
+    //setAALevel(8);
     if(!isFullScreen)
     {
         prevWindowSizeX = windowSizeX;
@@ -248,14 +249,42 @@ void NonSimulationStuff::toggleFullScreen()
 
         sf::VideoMode mode = sf::VideoMode::getDesktopMode();
         window.setSize({mode.width,mode.height});
-        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None);
+        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None, settings);
         adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);
         isFullScreen = true;
     }
     else
     {
-        window.setSize({prevWindowSizeX,prevWindowSizeY});
+        //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
+        window.setSize(sf::Vector2u(prevWindowSizeX,prevWindowSizeY));
         window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine");
+        adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);
+        window.setPosition(prevWindowPosition);
+        isFullScreen = false;
+    }
+    limitFramerate(static_cast<int>(1.0f/timestep.asSeconds()));
+}
+
+void NonSimulationStuff::setAALevel(unsigned int level)
+{
+    settings.antialiasingLevel = level;
+    prevWindowSizeX = windowSizeX;
+    prevWindowSizeY = windowSizeY;
+    prevWindowPosition = window.getPosition();
+    if(isFullScreen)
+    {
+        sf::VideoMode mode = sf::VideoMode::getDesktopMode();
+        window.setSize({mode.width,mode.height});
+        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None, settings);
+        adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);
+        isFullScreen = true;
+    }
+    else
+    {
+        //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
+        window.setSize(sf::Vector2u(prevWindowSizeX,prevWindowSizeY));
+        window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine",
+                                                    sf::Style::Default, settings);
         adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);
         window.setPosition(prevWindowPosition);
         isFullScreen = false;
@@ -526,6 +555,10 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
                 ballSim.setPlayer(0);
             else if(event.key.code == sf::Keyboard::Num2)
                 ballSim.setPlayer(1);
+            else if(event.key.code == sf::Keyboard::F2)
+                setAALevel(0);
+            else if(event.key.code == sf::Keyboard::F3)
+                setAALevel(8);
         }
 
         newLayerEvent(newLayerKeys, event);
@@ -610,6 +643,7 @@ float NonSimulationStuff::getWindowSizeX()
     return windowSizeX;
 }
 
+
 void NonSimulationStuff::updateFPS(sf::Time interval, float framerate)
 {
     if(timeSinceFSample >= interval)
@@ -628,7 +662,7 @@ void NonSimulationStuff::updateFPS(sf::Time interval, float framerate)
 */
 sf::Time NonSimulationStuff::sampleNextFrame(sf::Time frameTime)
 {
-    int positionSize = 10;
+    unsigned int positionSize = 10;
     previousFrames.push_back(frameTime.asSeconds());
     if(previousFrames.size()>positionSize)
     {
@@ -648,6 +682,25 @@ void NonSimulationStuff::limitFramerate(int framerate)
     timestep = sf::seconds(1.0f/static_cast<float>(framerate));
     previousFrames.clear();
     previousFrames.push_back(timestep.asSeconds());
+}
+
+void NonSimulationStuff::setSpawnValues(float value,
+                                        SpawnQuantity toChange)
+{
+    float density = 1.0f;
+    switch(toChange)
+    {
+        case(SQ_MASS):
+            spawnMass = value;
+            spawnRadius = density*value;
+            break;
+        case(SQ_RADIUS):
+            spawnRadius = value;
+            spawnMass = density*value;
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -727,10 +780,10 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
 
     container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);
-    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,50}, &spawnRadius);
-    container.getWindow(0).addElement("./fonts/cour.ttf", "Forces Enabled:", 16, {0,70}, &ballSim.getForcesEnabled());
-    container.getWindow(0).addElement("./fonts/cour.ttf", "Collisions Enabled:", 16, {0,90}, &ballSim.getCollisionsEnabled());
-    container.getWindow(0).addElement("./fonts/cour.ttf", "Timestep:", 16, {0,110}, &ballSim.getTimeStep());
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,70}, &spawnRadius);
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Forces Enabled:", 16, {0,110}, &ballSim.getForcesEnabled());
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Collisions Enabled:", 16, {0,130}, &ballSim.getCollisionsEnabled());
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Timestep:", 16, {0,150}, &ballSim.getTimeStep());
 
     container.getWindow(0).addButton("./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;});
     container.getWindow(0).addButton("./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}});
@@ -738,6 +791,8 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(0).addButton("./fonts/cour.ttf", "Rad +", 12, {10,220}, {60,30}, [&]{spawnRadius+=1;});
     container.getWindow(0).addButton("./fonts/cour.ttf", "Rad -", 12, {90,220}, {60,30}, [&]{if(spawnRadius>1){spawnRadius-=1;}});
     container.getWindow(0).addButton("./fonts/cour.ttf", "Rst Rad", 12, {170,220}, {60,30}, [&]{spawnRadius=10;});
+    container.getWindow(0).addSlider({10,50}, 210.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass);
+    container.getWindow(0).addSlider({10,90}, 210.0f, {10,20}, {1.0,10.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius);
 
     /*std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
                                                 bool fixedToWin, std::function<void> *func, sf::Color color*/
@@ -758,7 +813,7 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(3).addButton("./fonts/cour.ttf", "Trj", 12, {10,90}, {60,30}, [&]{ballSim.toggleTrajectories();});
     container.getWindow(3).addButton("./fonts/cour.ttf", "Pl Trj", 12, {90,90}, {60,30}, [&]{ballSim.togglePlayerTraj();});
     container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {170,90}, {60,30}, [&]{ballSim.toggleRK4();});
-
+    //container.getWindow(3).addSlider({10,50}, 210.0f, {10,20}, {0.1,3.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass);
 
 
 }
