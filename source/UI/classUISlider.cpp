@@ -15,10 +15,9 @@ UISlider::UISlider(sf::Vector2f position, sf::Vector2f bSize,
                    sf::Vector2f physRange, std::function<void(float)> slideFunc,
                    float *variable) :
                    UIButton("", "", 1, [&]{}, position, bSize, fixedToWin, color),
-                   range{range}, sliderFunc{slideFunc}, physRange{physRange}, variable{variable}
+                   range{range}, sliderFunc{slideFunc}, physRange{physRange},
+                   variable{variable}
 {
-    //sliderLine.setOrigin({-width/2.0f,-(height-thickness)/2.0f});
-    //sliderLine.setFillColor(sliderColor);
 }
 
 void UISlider::renderButton(sf::RenderWindow &window, sf::View &GUIView)
@@ -72,7 +71,8 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
         if(fixedToWindow)
             newPosX = sf::Mouse::getPosition(window).x + mouseOffset.x - currPosition.x;
         else
-            newPosX = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x + mouseOffset.x - currPosition.x;
+            newPosX = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x
+                                               + mouseOffset.x - currPosition.x;
 
 
         if(newPosX > 0.0f && newPosX < range)
@@ -98,15 +98,10 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     sf::Rect<float> newButtonRect{currButtonPosition,{width,height}};
     origRect = newButtonRect;
     if(fixedToWindow)
-    {
-        //sliderLine.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(currPosition)));
-        windowBox.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(currButtonPosition)));
-    }
+        windowBox.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>
+                                                            (currButtonPosition)));
     else
-    {
-        //sliderLine.setPosition(currPosition);
         windowBox.setPosition(currButtonPosition);
-    }
 
     if(buttonDown)
         windowBox.setFillColor(clickedColor);
@@ -118,10 +113,7 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
 
 void UISlider::changeOrigin(sf::Vector2i origin)
 {
-    //if(fixedToWindow)
-        mouseOffset = static_cast<sf::Vector2i>(currButtonPosition) - origin;
-    /*else
-        mouseOffset = static_cast<sf::Vector2i>(currButtonPosition - window.mapPixelToCoords(origin));*/
+    mouseOffset = static_cast<sf::Vector2i>(currButtonPosition) - origin;
 }
 
 void UISlider::checkMouseIntersection(sf::RenderWindow &window)

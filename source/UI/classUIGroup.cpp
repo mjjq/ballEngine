@@ -30,9 +30,9 @@ void UIGroup::addButton(std::string font, std::string text, int fontSize,
     buttonArray.emplace_back(button);
 }
 
-void UIGroup::addSlider(sf::Vector2f position, float range, float thickness, sf::Vector2f bSize,
-                        sf::Vector2f physRange, std::function<void(float)> sliderFunc,
-                        float *variable)
+void UIGroup::addSlider(sf::Vector2f position, float range, float thickness,
+                        sf::Vector2f bSize, sf::Vector2f physRange,
+                        std::function<void(float)> sliderFunc, float *variable)
 {
     UIButton *sliderBox = new UIButton{"", "", 1, [&]{},
                             {bSize.x/2.0f,(bSize.y-thickness)/2.0f}, {range, thickness},
@@ -62,7 +62,8 @@ void UIGroup::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositio
     sf::Rect<float> newRect{currPosition,{width,height}};
     origRect = newRect;
     if(fixedToWindow)
-        windowBox.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(currPosition)));
+        windowBox.setPosition(window.mapPixelToCoords
+                             (static_cast<sf::Vector2i>(currPosition)));
     else
         windowBox.setPosition(currPosition);
 }

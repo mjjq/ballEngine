@@ -40,23 +40,19 @@ void UIButton::clickIntersectedButton(sf::RenderWindow &window)
 {
     downFunc();
     buttonDown = true;
-    //clickFunc();
 }
 
 void UIButton::clickIntersectedButton()
 {
-    //std::cout << &downFunc << "\n";
     downFunc();
     buttonDown = true;
 }
 
 void UIButton::releaseClickedButton()
 {
-    if( (mouseIntersecting && buttonDown) || upExOverride)
-    {
-        //std::cout << "Button is " << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
+    if( (mouseIntersecting && buttonDown) || upExOverride )
         upFunc();
-    }
+
     buttonDown = false;
 }
 
@@ -75,7 +71,8 @@ void UIButton::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     sf::Rect<float> newRect{currPosition,{width,height}};
     origRect = newRect;
     if(fixedToWindow)
-        windowBox.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(currPosition)));
+        windowBox.setPosition(window.mapPixelToCoords
+                             (static_cast<sf::Vector2i>(currPosition)));
     else
         windowBox.setPosition(currPosition);
 

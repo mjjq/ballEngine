@@ -39,19 +39,26 @@ protected:
     bool draggable = true;
     bool mouseIntersecting = false;
 
-    void addGroup(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable);
+    void addGroup(sf::Vector2f position, float width,
+                  float height, bool fixedToWin, bool draggable);
 
 public:
-    UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
+    UIWindow(sf::Vector2f position, float width, float height,
+             bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
 
     template<class T>
-    void addElement(std::string font, std::string str, int fontSize, sf::Vector2f position, T *var = nullptr);
+    void addElement(std::string font, std::string str,
+                    int fontSize, sf::Vector2f position, T *var = nullptr);
 
-    virtual void addButton(std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
-                           std::function<void()> const& func, sf::Color color = {80,80,80,150}, bool changeState = true);
+    virtual void addButton(std::string font, std::string text, int fontSize,
+                           sf::Vector2f position, sf::Vector2f bSize,
+                           std::function<void()> const& func,
+                           sf::Color color = {80,80,80,150}, bool changeState = true);
 
-    virtual void addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
-                   sf::Vector2f physRange ={0,0}, std::function<void(float)> sliderFunc = nullptr, float *variable = nullptr);
+    virtual void addSlider(sf::Vector2f position, float range,
+                           sf::Vector2f bSize, sf::Vector2f physRange ={0,0},
+                           std::function<void(float)> sliderFunc = nullptr,
+                           float *variable = nullptr);
 
     bool ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2);
     void renderWindow(sf::RenderWindow &window, sf::View &GUIView);

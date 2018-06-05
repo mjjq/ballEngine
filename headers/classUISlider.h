@@ -27,7 +27,8 @@ public:
     UISlider(sf::Vector2f position, sf::Vector2f bSize,
             bool fixedToWin, float range, sf::Color color,
             sf::Vector2f physRange = {0,0},
-            std::function<void(float)> slideFunc = nullptr, float *variable = nullptr);
+            std::function<void(float)> slideFunc = nullptr,
+            float *variable = nullptr);
 
     void clickIntersectedButton(sf::RenderWindow &window);
     void clickIntersectedButton();

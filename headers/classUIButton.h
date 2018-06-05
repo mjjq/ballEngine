@@ -8,10 +8,6 @@
 class UIButton : public UIWindow
 {
 protected:
-    //sf::Font displayFont;
-    //sf::Vector2f origPosition;
-    //sf::RectangleShape buttonRect;
-    //std::string buttonText;
     sf::Vector2f currPosition = origPosition;
     sf::Color clickedColor = {60,60,60,150};
     sf::Color unclickedColor;
@@ -39,7 +35,6 @@ public:
     virtual void releaseClickedButton();
     virtual void renderButton(sf::RenderWindow &window, sf::View &GUIView);
     virtual void updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition);
-    //void updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition);
     void setDownFunction(std::function<void()> const& func);
     void setUpFunction(std::function<void()> const& func);
     void setUpExOverride(bool value);
