@@ -72,7 +72,6 @@
 		<Unit filename="source/UI/classUIButton.cpp" />
 		<Unit filename="source/UI/classUIContainer.cpp" />
 		<Unit filename="source/UI/classUIGroup.cpp" />
-		<Unit filename="source/UI/classUIGroup.h" />
 		<Unit filename="source/UI/classUISlider.cpp" />
 		<Unit filename="source/UI/classUITextElement.cpp" />
 		<Unit filename="source/UI/classUITextElementBase.cpp" />

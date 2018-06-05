@@ -37,29 +37,19 @@ void UIWindow::addElement(std::string font, std::string str, int fontSize, sf::V
 
 
 void UIWindow::addButton(std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
-                                                std::function<void()> const& func, sf::Color color)
+                                                std::function<void()> const& func, sf::Color color, bool changeState)
 {
-    //std::cout << fixedToWindow << "\n";
-
-    /*UIButton *button = new UIButton{font, text, fontSize, func, position, bSize, fixedToWindow, color};
-    //button->addElement<int>(font, text, fontSize, {10.0,10.0});
-    buttonArray.emplace_back(button);*/
     addGroup(position, bSize.x, bSize.y, fixedToWindow, false);
-    groupArray.back()->addButton(font, text, fontSize, {0,0}, bSize, func, color);
+    groupArray.back()->addButton(font, text, fontSize, {0,0}, bSize, func, color, changeState);
 }
 
 void UIWindow::addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
                          sf::Vector2f physRange, std::function<void(float)> sliderFunc, float *variable)
 {
-    /*UISlider *slider = new UISlider{position, bSize,
-                   fixedToWindow, range, {70,70,70,255}, physRange, sliderFunc, variable};
-    buttonArray.emplace_back(slider);*/
-    //UIGroup *newGroup = new UIGroup(position, range, bSize.y, fixedToWindow);
     addGroup(position, range+bSize.x, bSize.y, fixedToWindow, false);
     float thickness = 2.0f;
-    groupArray.back()->addButton("", "", 1, {bSize.x/2.0f,(bSize.y-thickness)/2.0f},
-                                        {range, thickness}, [&]{}, {255,255,255,255});
-    groupArray.back()->addSlider({0,0}, range, bSize, physRange, sliderFunc, variable);
+
+    groupArray.back()->addSlider({0,0}, range, thickness, bSize, physRange, sliderFunc, variable);
 }
 
 bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2)
@@ -206,11 +196,12 @@ void UIWindow::clickIntersectedButton(sf::RenderWindow &window)
 {
     int buttonIndex = std::get<1>(mouseOnButton);
     int groupIndex = std::get<1>(mouseOnGroup);
-    std::cout << "Button on Click: " << buttonIndex << "\n";
+    std::cout << "Button on Click: " << groupIndex << "\n";
     if(buttonIndex != -1)
     {
         mouseOnButtonWhenClicked = mouseOnButton;
         buttonArray.at(buttonIndex)->clickIntersectedButton(window);
+        //std::cout << buttonArray.at(buttonIndex) << "\n";
     }
     else if(groupIndex != -1)
     {

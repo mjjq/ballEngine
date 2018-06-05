@@ -13,15 +13,20 @@ public:
 
     void addButton(std::string font, std::string text, int fontSize,
                    sf::Vector2f position, sf::Vector2f bSize,
-                   std::function<void()> const& func, sf::Color color = {80,80,80,150});
+                   std::function<void()> const& func, sf::Color color = {80,80,80,150},
+                   bool changeState = true);
 
-    void addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
+    void addSlider(sf::Vector2f position, float range, float thickness, sf::Vector2f bSize,
                    sf::Vector2f physRange ={0,0}, std::function<void(float)> sliderFunc = nullptr,
                    float *variable = nullptr);
 
     void updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition);
 
     void renderElements(sf::RenderWindow &window, sf::View &GUIView);
+
+    void setDownFunc(unsigned int buttonIndex, std::function<void()> const& func);
+    UIButton& getButton(unsigned int index);
+    void printButtonAddress();
 };
 
 #endif

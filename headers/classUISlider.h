@@ -30,10 +30,11 @@ public:
             std::function<void(float)> slideFunc = nullptr, float *variable = nullptr);
 
     void clickIntersectedButton(sf::RenderWindow &window);
+    void clickIntersectedButton();
     void releaseClickedButton();
     void renderButton(sf::RenderWindow &window, sf::View &GUIView);
     void updateElement(sf::RenderWindow &window, sf::Vector2f parentPosition);
-    void changeOrigin(sf::RenderWindow &window, sf::Vector2i origin);
+    void changeOrigin(sf::Vector2i origin);
     void checkMouseIntersection(sf::RenderWindow &window);
 };
 

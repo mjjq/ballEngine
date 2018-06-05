@@ -10,6 +10,11 @@
 #include "../../headers/sfVectorMath.h"
 
 
+UIContainer::UIContainer()
+{
+
+}
+
 void UIContainer::addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable, sf::Color color)
 {
     UIWindow newWindow{position, width, height, fixedToWin, draggable, color};
@@ -116,4 +121,8 @@ void UIContainer::dragWindow(sf::RenderWindow &window)
 {
    //std::cout << currentIntButton.first << " " << currentIntWindow.first << "\n";
     getWindow(currentIntWindow.second).moveWindow(window, sf::Mouse::getPosition(window));
+}
+
+void UIContainer::setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2)
+{
 }

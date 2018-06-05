@@ -4,6 +4,10 @@
 
 class UIContainer
 {
+    static sf::RenderWindow &parentWindow;
+    static sf::View &originalView;
+    static sf::View &GUIView;
+
     std::vector<UIWindow> interfaceWindows;
     std::vector<int> interfaceWindowIDs;
     std::vector<bool> mouseIntersectionList;
@@ -12,6 +16,8 @@ class UIContainer
 
 
 public:
+    UIContainer();
+
     void addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
     void renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
     UIWindow &getWindow(unsigned int windowIndex);
@@ -25,7 +31,7 @@ public:
     bool isWindowDraggable();
     void dragWindow(sf::RenderWindow &window);
 
-
+    static void setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2);
 };
 
 

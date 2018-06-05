@@ -30,7 +30,21 @@ void UISlider::renderButton(sf::RenderWindow &window, sf::View &GUIView)
 void UISlider::clickIntersectedButton(sf::RenderWindow &window)
 {
     buttonDown = true;
-    changeOrigin(window, sf::Mouse::getPosition(window));
+    if(fixedToWindow)
+        changeOrigin(sf::Mouse::getPosition(window));
+    else
+    {
+        sf::Vector2i tempOrigin = static_cast<sf::Vector2i>
+            (window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+        changeOrigin(tempOrigin);
+    }
+}
+
+void UISlider::clickIntersectedButton()
+{
+    buttonDown = true;
+    changeOrigin(static_cast<sf::Vector2i>(sf::Vector2f
+                {currButtonPosition.x + width/2, currButtonPosition.y + height/2}));
 }
 
 void UISlider::releaseClickedButton()
@@ -102,51 +116,36 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
         windowBox.setFillColor(unclickedColor);
 }
 
-void UISlider::changeOrigin(sf::RenderWindow &window, sf::Vector2i origin)
+void UISlider::changeOrigin(sf::Vector2i origin)
 {
-    if(fixedToWindow)
+    //if(fixedToWindow)
         mouseOffset = static_cast<sf::Vector2i>(currButtonPosition) - origin;
-    else
-        mouseOffset = static_cast<sf::Vector2i>(currButtonPosition - window.mapPixelToCoords(origin));
+    /*else
+        mouseOffset = static_cast<sf::Vector2i>(currButtonPosition - window.mapPixelToCoords(origin));*/
 }
 
 void UISlider::checkMouseIntersection(sf::RenderWindow &window)
 {
     mouseIntersecting = false;
     resetButtonPair();
+    sf::Vector2f mousePosf;
 
     if(fixedToWindow)
+        mousePosf = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+    else
+        mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+    if(origRect.contains(mousePosf))
     {
-        sf::Vector2f mousePosf = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
-        if(origRect.contains(mousePosf))
+        mouseIntersecting = true;
+        for(unsigned int i=0; i<buttonArray.size(); i++)
         {
-            mouseIntersecting = true;
-            for(unsigned int i=0; i<buttonArray.size(); i++)
-            {
-                buttonArray.at(i)->checkMouseIntersection(window);
-                bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-                if(isIntersectingWithButton)
-                    mouseOnButton = std::make_pair(isIntersectingWithButton, i);
-            }
+            buttonArray.at(i)->checkMouseIntersection(window);
+            bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
+            if(isIntersectingWithButton)
+                mouseOnButton = std::make_pair(isIntersectingWithButton, i);
         }
-        else
-            mouseIntersecting = false;
     }
     else
-    {
-        sf::Vector2f mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-        if(origRect.contains(mousePosf))
-        {
-            mouseIntersecting = true;
-            for(unsigned int i=0; i<buttonArray.size(); i++)
-            {
-                buttonArray.at(i)->checkMouseIntersection(window);
-                bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-                if(isIntersectingWithButton)
-                    mouseOnButton = std::make_pair(isIntersectingWithButton, i);
-            }
-        }
-        else
-            mouseIntersecting = false;
-    }
+        mouseIntersecting = false;
 }

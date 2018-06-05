@@ -11,8 +11,12 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
-UIButton::UIButton(std::string font, std::string text, int fontSize, std::function<void()> const& clickFunc, sf::Vector2f position, sf::Vector2f bSize, bool fixedToWin, sf::Color color) :
-            UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color), unclickedColor{color}, clickFunc{clickFunc}
+UIButton::UIButton(std::string font, std::string text, int fontSize,
+                   std::function<void()> const& upFunc, sf::Vector2f position,
+                   sf::Vector2f bSize, bool fixedToWin, sf::Color color,
+                   bool changeState) :
+            UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color),
+            unclickedColor{color}, upFunc{upFunc}, changeState{changeState}
 {
 
     isButton = true;
@@ -23,7 +27,8 @@ UIButton::UIButton(std::string font, std::string text, int fontSize, std::functi
     sf::Rect<float> buttonBounds = windowBox.getLocalBounds();
     sf::Rect<float> textBounds = textArray.at(0)->getLocalBounds();
 
-    sf::Vector2i newOrigin = sf::Vector2i(textBounds.width/2 + textBounds.left, textBounds.height/2 + textBounds.top);
+    sf::Vector2i newOrigin = sf::Vector2i(textBounds.width/2 + textBounds.left,
+                                          textBounds.height/2 + textBounds.top);
 
     textArray.at(0)->setOrigin(newOrigin.x, newOrigin.y);
     textArray.at(0)->setOrigPosition({buttonBounds.width/2,buttonBounds.height/2});
@@ -33,16 +38,24 @@ UIButton::UIButton(std::string font, std::string text, int fontSize, std::functi
 
 void UIButton::clickIntersectedButton(sf::RenderWindow &window)
 {
+    downFunc();
     buttonDown = true;
     //clickFunc();
 }
 
+void UIButton::clickIntersectedButton()
+{
+    //std::cout << &downFunc << "\n";
+    downFunc();
+    buttonDown = true;
+}
+
 void UIButton::releaseClickedButton()
 {
-    if(mouseIntersecting && buttonDown)
+    if( (mouseIntersecting && buttonDown) || upExOverride)
     {
         //std::cout << "Button is " << static_cast<std::string>(textArray.at(0)->getString()) << "\n";
-        clickFunc();
+        upFunc();
     }
     buttonDown = false;
 }
@@ -66,14 +79,29 @@ void UIButton::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     else
         windowBox.setPosition(currPosition);
 
-    if(mouseIntersecting && buttonDown)
+    if(mouseIntersecting && buttonDown && changeState)
         windowBox.setFillColor(clickedColor);
-    else if(mouseIntersecting && !buttonDown)
+    else if(mouseIntersecting && !buttonDown && changeState)
         windowBox.setFillColor(mouseOverColor);
     else
         windowBox.setFillColor(unclickedColor);
 
     //std::cout << currPosition << "\n";
 
+}
+
+void UIButton::setDownFunction(std::function<void()> const& func)
+{
+    downFunc = func;
+}
+
+void UIButton::setUpFunction(std::function<void()> const& func)
+{
+    upFunc = func;
+}
+
+void UIButton::setUpExOverride(bool value)
+{
+    upExOverride = value;
 }
 
