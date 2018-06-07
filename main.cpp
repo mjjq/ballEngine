@@ -6,9 +6,6 @@
 #include <tuple>
 
 #include "./headers/classSceneManager.h"
-#include "./headers/classNonSim.h"
-#include "./headers/sfVectorMath.h"
-#include "./headers/stringConversion.h"
 
 int main()
 {

@@ -2,7 +2,7 @@
 #define CLASS_SCENEMAN_H
 
 #include "classScene.h"
-#include "classNonSim.h"
+#include "classGameScene.h"
 #include "classUIContainer.h"
 
 class SceneManager
