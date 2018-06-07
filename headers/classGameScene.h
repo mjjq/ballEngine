@@ -15,35 +15,24 @@ class GameScene : public Scene
         SQ_DENSITY,
     };
 
-    int windowSizeX = 800;
-    int windowSizeY = 800;
-    //sf::Text mousePos;
-    sf::ContextSettings settings;
     sf::RenderWindow &window;
     sf::View worldView = window.getDefaultView();
     sf::View GUIView = window.getDefaultView();
     float currentZoom = 1.0f;
+
     sf::Time &timestep;
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
     sf::Time timeToNextSpawn = sf::milliseconds(0);
     sf::Time &currentFrameTime;
     float &currentFPS;
-    sf::Time timeSinceFSample = sf::milliseconds(0);
-    std::deque<float> previousFrames;
-    sf::Clock frameClock;
-    sf::RectangleShape boundaryRect;
 
-    int prevWindowSizeX;
-    int prevWindowSizeY;
-    sf::Vector2i prevWindowPosition;
-    bool isFullScreen = false;
+    sf::RectangleShape boundaryRect;
 
     sf::Vector2i mousePosOnClick;
     sf::Vector2i mousePosOnPan;
     sf::Vector2i mousePosOnRelease;
 
     std::pair<bool,int> mouseOnUIWhenClicked{false, -1};
-    //std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
     bool clickedWindowToDrag = false;
 
     sf::Vector2f recentViewCoords;
@@ -58,13 +47,9 @@ class GameScene : public Scene
     bool simFitsInWindow = true;
 
     int playerBallIndex = 0;
-
     BallUniverse ballSim{2000, 2000, 1.0f, true, false};
 
     UIContainer container;
-
-    void increaseMass();
-
 
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
@@ -73,15 +58,13 @@ class GameScene : public Scene
 
     void resetView();
     void adjustViewSize(sf::Vector2u newSize);//, float zoom);
+
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
     void changeBoundaryRect(sf::Vector2i worldSize);
     void mouseWheelZoom(bool keyPress, float delta);
     void resetUIClick();
     void clickOnUI();
-    void updateFPS(sf::Time interval, float framerate);
-    sf::Time sampleNextFrame(sf::Time frameTime);
-
 
     void mouseWorldEvents(sf::Event &event);
     void mouseViewEvents(sf::Event &event);
@@ -93,7 +76,6 @@ class GameScene : public Scene
     void incTimeStep(sf::Time delta);
     void decTimeStep(sf::Time delta);
     void newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event);
-    float getWindowSizeX();
 
     void setSpawnValues(float value, SpawnQuantity toChange);
 
@@ -106,6 +88,7 @@ public:
     void load();
     void events(sf::Event &event);
     void redraw(sf::RenderWindow &window);
+    void unload();
 
 };
 

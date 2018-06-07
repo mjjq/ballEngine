@@ -126,3 +126,25 @@ void UIContainer::dragWindow(sf::RenderWindow &window)
 void UIContainer::setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2)
 {
 }
+
+void UIContainer::destroyWindow(unsigned int index)
+{
+    if(index >= 0 && index < interfaceWindows.size())
+    {
+        interfaceWindows.at(index).destroyAllElements();
+        interfaceWindows.erase(interfaceWindows.begin()+index);
+        interfaceWindowIDs.erase(interfaceWindowIDs.begin()+index);
+    }
+}
+
+void UIContainer::destroyAllWindows()
+{
+    for(unsigned int i=0; i<interfaceWindows.size(); ++i)
+    {
+        std::cout << interfaceWindows.size() << "\n";
+        interfaceWindows.at(i).destroyAllElements();
+    }
+    interfaceWindows.clear();
+    interfaceWindowIDs.clear();
+    //destroyWindow(0);
+}

@@ -32,6 +32,8 @@ void SceneManager::mainLoop()
                     setAALevel(0, game);
                 else if(event.key.code == sf::Keyboard::F3)
                     setAALevel(8, game);
+                else if(event.key.code == sf::Keyboard::F5)
+                    game.unload();
             }
             else if(event.type == sf::Event::Closed)
                 window.close();

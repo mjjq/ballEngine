@@ -46,6 +46,8 @@ public:
     UIWindow(sf::Vector2f position, float width, float height,
              bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
 
+    virtual ~UIWindow();
+
     template<class T>
     void addElement(std::string font, std::string str,
                     int fontSize, sf::Vector2f position, T *var = nullptr);
@@ -72,6 +74,7 @@ public:
     void resetButtonPair();
     std::pair<bool,int> getClickedButton();
     virtual void changeOrigin(sf::RenderWindow &window, sf::Vector2i origin);
+    void destroyAllElements();
 
     void moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition);
 };

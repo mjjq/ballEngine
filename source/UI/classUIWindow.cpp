@@ -29,8 +29,8 @@ void UIWindow::addElement(std::string font, std::string str,
     currentFont.loadFromFile(font);
     text->setFont(currentFont);
     text->setCharacterSize(fontSize);
-    UITextElementBase *text2 = text;
-    textArray.emplace_back(text2);
+    //UITextElementBase *text2 = text;
+    textArray.emplace_back(text);
 }
 
 
@@ -65,11 +65,12 @@ bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rec
 
 void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 {
-    for(UITextElementBase *textElement : textArray)
+    for(unsigned int i=0; i<textArray.size(); ++i)
     {
-        textElement->updateElement(window, GUIView, origPosition);
-        textElement->textWrap(windowBox.getGlobalBounds());
-        window.draw(*textElement);
+        textArray.at(i)->updateElement(window, GUIView, origPosition);
+        //textArray.at(i)->textWrap(windowBox.getGlobalBounds());
+        window.draw(*textArray.at(i));
+        //std::cout << textArray.at(i)->getPosition()<< "\n";
     }
     for(UIButton *button : buttonArray)
     {
@@ -111,6 +112,8 @@ UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedT
     windowBox.setSize(sf::Vector2f(width,height));
     windowBox.setFillColor(color);
 }
+
+UIWindow::~UIWindow() {}
 
 void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
 {
@@ -225,6 +228,30 @@ void UIWindow::changeOrigin(sf::RenderWindow &window, sf::Vector2i origin)
     else
         mouseOffset = static_cast<sf::Vector2i>(origPosition -
                                 window.mapPixelToCoords(origin));
+}
+
+void UIWindow::destroyAllElements()
+{
+    for(unsigned int i=0; i<textArray.size(); ++i)
+    {
+        delete textArray[i];
+        std::cout << "Delete: " << textArray.at(i) << "\n";
+    }
+    //delete textArray[0];
+    for(unsigned int i=0; i<buttonArray.size(); ++i)
+    {
+        buttonArray.at(i)->destroyAllElements();
+        delete buttonArray[i];
+    }
+    for(unsigned int i=0; i<groupArray.size(); ++i)
+    {
+        groupArray.at(i)->destroyAllElements();
+        delete groupArray[i];
+    }
+    textArray.clear();
+    buttonArray.clear();
+    groupArray.clear();
+
 }
 
 template void UIWindow::addElement<int>(std::string font, std::string str,

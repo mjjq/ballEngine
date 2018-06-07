@@ -30,6 +30,8 @@ public:
 
     bool isWindowDraggable();
     void dragWindow(sf::RenderWindow &window);
+    void destroyWindow(unsigned int index);
+    void destroyAllWindows();
 
     static void setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2);
 };

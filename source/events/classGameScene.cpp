@@ -21,14 +21,6 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
-/**
-    Increases the spawn mass by 1.
-*/
-void GameScene::increaseMass()
-{
-    spawnMass += 1;
-    //std::cout << "Hello\n";
-}
 
 
 /**
@@ -222,8 +214,6 @@ void GameScene::adjustViewSize(sf::Vector2u newSize)
     sf::Vector2f effectiveZoom = getEffectiveZoom(wSize.x, wSize.y);
     worldView.setSize(newSize.x, newSize.y);
     GUIView.setSize(newSize.x, newSize.y);
-    windowSizeX = newSize.x;
-    windowSizeY = newSize.y;
 
     if(effectiveZoom.y > effectiveZoom.x)
         worldView.zoom(effectiveZoom.y);
@@ -570,48 +560,6 @@ void GameScene::decTimeStep(sf::Time delta)
         timestep-=delta;
 }
 
-/**
-    Returns the current x-direction window size.
-
-    @return x-direction window size.
-*/
-float GameScene::getWindowSizeX()
-{
-    return windowSizeX;
-}
-
-
-void GameScene::updateFPS(sf::Time interval, float framerate)
-{
-    if(timeSinceFSample >= interval)
-    {
-        currentFPS = framerate;
-        timeSinceFSample = sf::milliseconds(0);
-    }
-}
-
-/**
-    Stores the current frametime to a std::vector containing the
-    "history" of frametimes. Also erases the oldest entry in the
-    history vector given by positionSize.
-
-    @return Void.
-*/
-sf::Time GameScene::sampleNextFrame(sf::Time frameTime)
-{
-    unsigned int positionSize = 10;
-    previousFrames.push_back(frameTime.asSeconds());
-    if(previousFrames.size()>positionSize)
-    {
-        int eraseUpperLimit = previousFrames.size() - positionSize;
-        previousFrames.erase(previousFrames.begin(),
-                                previousFrames.begin()+eraseUpperLimit);
-    }
-    return sf::seconds(std::accumulate(previousFrames.begin(),
-                                       previousFrames.end(), 0.0f)/
-                           static_cast<float>(previousFrames.size()));
-
-}
 
 void GameScene::setSpawnValues(float value,
                                         SpawnQuantity toChange)
@@ -689,17 +637,20 @@ void GameScene::load()
     container.getWindow(3).addButton("./fonts/cour.ttf", "Pl Trj", 12, {90,90}, {60,30}, [&]{ballSim.togglePlayerTraj();});
     container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {170,90}, {60,30}, [&]{ballSim.toggleRK4();});
     //container.getWindow(3).addSlider({10,50}, 210.0f, {10,20}, {0.1,3.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass);
-
-
 }
 
+void GameScene::unload()
+{
+    container.destroyAllWindows();
+    ballSim.clearSimulation();
+}
 
 void GameScene::redraw(sf::RenderWindow &window)
 {
-        ballSim.drawBalls(window);
-        window.draw(boundaryRect);
+    ballSim.drawBalls(window);
+    window.draw(boundaryRect);
 
-        container.renderWindows(window, GUIView, worldView);
+    container.renderWindows(window, GUIView, worldView);
 }
 
 void GameScene::update(sf::RenderWindow &window)
