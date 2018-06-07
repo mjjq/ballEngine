@@ -1,10 +1,12 @@
 #ifndef CLASSES_H
 #define CLASSES_H
 
+
+#include "classScene.h"
 #include "classUniverse.h"
 #include "classUIContainer.h"
 
-class NonSimulationStuff
+class GameScene : public Scene
 {
     enum SpawnQuantity
     {
@@ -13,19 +15,19 @@ class NonSimulationStuff
         SQ_DENSITY,
     };
 
-    int windowSizeX;
-    int windowSizeY;
+    int windowSizeX = 800;
+    int windowSizeY = 800;
     //sf::Text mousePos;
     sf::ContextSettings settings;
-    sf::RenderWindow window{sf::VideoMode(windowSizeX,windowSizeY), "N-body"};
+    sf::RenderWindow &window;
     sf::View worldView = window.getDefaultView();
     sf::View GUIView = window.getDefaultView();
     float currentZoom = 1.0f;
-    sf::Time timestep = sf::seconds(1.0f/60.0f);
+    sf::Time &timestep;
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
     sf::Time timeToNextSpawn = sf::milliseconds(0);
-    sf::Time currentFrameTime = sf::seconds(1.0f/60.0f);
-    float currentFPS = 0.0f;
+    sf::Time &currentFrameTime;
+    float &currentFPS;
     sf::Time timeSinceFSample = sf::milliseconds(0);
     std::deque<float> previousFrames;
     sf::Clock frameClock;
@@ -46,18 +48,18 @@ class NonSimulationStuff
 
     sf::Vector2f recentViewCoords;
     sf::Vector2i wSize;
-    int spawnVelFactor;
-    float spawnRadius;
-    float spawnMass;
-    float ballGridSpacing;
-    int ballGridHeight;
-    int ballGridWidth;
+    int spawnVelFactor = 10;
+    float spawnRadius = 10.0f;
+    float spawnMass = 1.0f;
+    float ballGridSpacing = 1.0f;
+    int ballGridHeight = 10;
+    int ballGridWidth = 10;
 
-    bool simFitsInWindow;
+    bool simFitsInWindow = true;
 
     int playerBallIndex = 0;
 
-    BallUniverse ballSim;
+    BallUniverse ballSim{2000, 2000, 1.0f, true, false};
 
     UIContainer container;
 
@@ -70,9 +72,7 @@ class NonSimulationStuff
     void focusOnBall(int ballIndex, bool keyBool);
 
     void resetView();
-    void adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY);//, float zoom);
-    void toggleFullScreen();
-    void setAALevel(unsigned int level);
+    void adjustViewSize(sf::Vector2u newSize);//, float zoom);
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
     sf::Vector2f velocityFromMouse(sf::Vector2i mousePosOnClick, int spawnVelFactor);
     void changeBoundaryRect(sf::Vector2i worldSize);
@@ -81,7 +81,7 @@ class NonSimulationStuff
     void clickOnUI();
     void updateFPS(sf::Time interval, float framerate);
     sf::Time sampleNextFrame(sf::Time frameTime);
-    void limitFramerate(int framerate);
+
 
     void mouseWorldEvents(sf::Event &event);
     void mouseViewEvents(sf::Event &event);
@@ -100,11 +100,12 @@ class NonSimulationStuff
 
 
 public:
-    NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int spawnVelFactor,
-                        float spawnRadius, float spawnMass, float ballGridSpacing, int ballGridHeight,
-                        int ballGridWidth, bool simFitsInWindow, BallUniverse sim);
-
-    void mainLoop();
+    GameScene(sf::RenderWindow &window, sf::Time &targetFTime,
+              sf::Time &currentFTime, float &currentFPS);
+    void update(sf::RenderWindow &window);
+    void load();
+    void events(sf::Event &event);
+    void redraw(sf::RenderWindow &window);
 
 };
 

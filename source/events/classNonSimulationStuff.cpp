@@ -24,7 +24,7 @@
 /**
     Increases the spawn mass by 1.
 */
-void NonSimulationStuff::increaseMass()
+void GameScene::increaseMass()
 {
     spawnMass += 1;
     //std::cout << "Hello\n";
@@ -38,7 +38,7 @@ void NonSimulationStuff::increaseMass()
     @param &initPos The click position of the mouse.
     @param mouseType Boolean which draws line if set to true.
 */
-void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)
+void GameScene::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 {
     sf::Vector2i finalPos;
     sf::Vertex line[2];
@@ -67,7 +67,7 @@ void NonSimulationStuff::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 
     @return The calculated velocity.
 */
-sf::Vector2f NonSimulationStuff::velocityFromMouse(sf::Vector2i mousePosOnClick,
+sf::Vector2f GameScene::velocityFromMouse(sf::Vector2i mousePosOnClick,
                                                             int spawnVelFactor)
 {
 
@@ -95,7 +95,7 @@ sf::Vector2f NonSimulationStuff::velocityFromMouse(sf::Vector2i mousePosOnClick,
 
     @param zoomFactor The factor by which to zoom the current view.
 */
-void NonSimulationStuff::zoomToMouse(float zoomFactor)
+void GameScene::zoomToMouse(float zoomFactor)
 {
     if(currentZoom*zoomFactor < 2.0)
     {
@@ -123,7 +123,7 @@ void NonSimulationStuff::zoomToMouse(float zoomFactor)
 
     @return The effective world zoom of each direction in vector form.
 */
-sf::Vector2f NonSimulationStuff::getEffectiveZoom(int worldSizeX, int worldSizeY)
+sf::Vector2f GameScene::getEffectiveZoom(int worldSizeX, int worldSizeY)
 {
     sf::Vector2f effectiveZoom;
     if(simFitsInWindow)
@@ -157,7 +157,7 @@ sf::Vector2f NonSimulationStuff::getEffectiveZoom(int worldSizeX, int worldSizeY
 
     @return Void.
 */
-void NonSimulationStuff::checkForViewPan(sf::Vector2i initialPos,
+void GameScene::checkForViewPan(sf::Vector2i initialPos,
     sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool)
 {
     if(keyBool==true)
@@ -192,7 +192,7 @@ void NonSimulationStuff::checkForViewPan(sf::Vector2i initialPos,
 
     @return Void.
 */
-void NonSimulationStuff::focusOnBall(int ballIndex, bool keyBool)
+void GameScene::focusOnBall(int ballIndex, bool keyBool)
 {
     if(keyBool==true)
     {
@@ -217,13 +217,13 @@ void NonSimulationStuff::focusOnBall(int ballIndex, bool keyBool)
 
     @return Void.
 */
-void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, int worldSizeY)
+void GameScene::adjustViewSize(sf::Vector2u newSize)
 {
-    sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX,worldSizeY);
-    worldView.setSize(sizeX,sizeY);
-    GUIView.setSize(sizeX, sizeY);
-    windowSizeX = sizeX;
-    windowSizeY = sizeY;
+    sf::Vector2f effectiveZoom = getEffectiveZoom(wSize.x, wSize.y);
+    worldView.setSize(newSize.x, newSize.y);
+    GUIView.setSize(newSize.x, newSize.y);
+    windowSizeX = newSize.x;
+    windowSizeY = newSize.y;
 
     if(effectiveZoom.y > effectiveZoom.x)
         worldView.zoom(effectiveZoom.y);
@@ -234,76 +234,17 @@ void NonSimulationStuff::adjustViewSize(int sizeX, int sizeY, int worldSizeX, in
 }
 
 /**
-    Toggles the window between windowed and fullscreen mode.
-
-    @return Void.
-*/
-void NonSimulationStuff::toggleFullScreen()
-{
-    //setAALevel(8);
-    if(!isFullScreen)
-    {
-        prevWindowSizeX = windowSizeX;
-        prevWindowSizeY = windowSizeY;
-        prevWindowPosition = window.getPosition();
-
-        sf::VideoMode mode = sf::VideoMode::getDesktopMode();
-        window.setSize({mode.width,mode.height});
-        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None, settings);
-        adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);
-        isFullScreen = true;
-    }
-    else
-    {
-        //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
-        window.setSize(sf::Vector2u(prevWindowSizeX,prevWindowSizeY));
-        window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine");
-        adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);
-        window.setPosition(prevWindowPosition);
-        isFullScreen = false;
-    }
-    limitFramerate(static_cast<int>(1.0f/timestep.asSeconds()));
-}
-
-void NonSimulationStuff::setAALevel(unsigned int level)
-{
-    settings.antialiasingLevel = level;
-    prevWindowSizeX = windowSizeX;
-    prevWindowSizeY = windowSizeY;
-    prevWindowPosition = window.getPosition();
-    if(isFullScreen)
-    {
-        sf::VideoMode mode = sf::VideoMode::getDesktopMode();
-        window.setSize({mode.width,mode.height});
-        window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None, settings);
-        adjustViewSize(mode.width, mode.height, wSize.x, wSize.y);
-        isFullScreen = true;
-    }
-    else
-    {
-        //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
-        window.setSize(sf::Vector2u(prevWindowSizeX,prevWindowSizeY));
-        window.create(sf::VideoMode(prevWindowSizeX,prevWindowSizeY), "ballEngine",
-                                                    sf::Style::Default, settings);
-        adjustViewSize(prevWindowSizeX,prevWindowSizeY, wSize.x, wSize.y);
-        window.setPosition(prevWindowPosition);
-        isFullScreen = false;
-    }
-    limitFramerate(static_cast<int>(1.0f/timestep.asSeconds()));
-}
-
-/**
     Resets the window view to a zoom of 1, centered on the simulation world
     centre.
 
     @return Void.
 */
-void NonSimulationStuff::resetView()
+void GameScene::resetView()
 {
     currentZoom = 1.0;
-    sf::Vector2i woSize = ballSim.getWorldSize();
-    worldView.setCenter(woSize.x/2,woSize.y/2);
-    adjustViewSize(window.getSize().x, window.getSize().y, woSize.x, woSize.y);//, currentZoom);
+    sf::Vector2i wSize = ballSim.getWorldSize();
+    worldView.setCenter(wSize.x/2,wSize.y/2);
+    adjustViewSize({window.getSize().x, window.getSize().y});//, currentZoom);
 
     window.setView(worldView);
 }
@@ -316,7 +257,7 @@ void NonSimulationStuff::resetView()
 
     @return Void.
 */
-void NonSimulationStuff::changeBoundaryRect(sf::Vector2i worldSize)
+void GameScene::changeBoundaryRect(sf::Vector2i worldSize)
 {
     sf::Color grey(50,50,50);
     boundaryRect.setSize(static_cast<sf::Vector2f>(worldSize));
@@ -336,7 +277,7 @@ void NonSimulationStuff::changeBoundaryRect(sf::Vector2i worldSize)
 
     @return Void.
 */
-void NonSimulationStuff::mouseWheelZoom(bool keyPress, float delta)
+void GameScene::mouseWheelZoom(bool keyPress, float delta)
 {
     if(keyPress)
     {
@@ -353,7 +294,7 @@ void NonSimulationStuff::mouseWheelZoom(bool keyPress, float delta)
 
     @return Void.
 */
-void NonSimulationStuff::clickOnUI()
+void GameScene::clickOnUI()
 {
     container.checkMouseIntersection(window, GUIView, worldView);
     mouseOnUIWhenClicked = container.doesMIntExist();
@@ -366,7 +307,7 @@ void NonSimulationStuff::clickOnUI()
 
     @return Void.
 */
-void NonSimulationStuff::resetUIClick()
+void GameScene::resetUIClick()
 {
     container.resetUIClick();
     clickedWindowToDrag = false;
@@ -381,7 +322,7 @@ void NonSimulationStuff::resetUIClick()
 
     @return Void.
 */
-void NonSimulationStuff::mouseViewEvents(sf::Event &event)
+void GameScene::mouseViewEvents(sf::Event &event)
 {
     if(event.type == sf::Event::MouseButtonPressed)
     {
@@ -415,7 +356,7 @@ void NonSimulationStuff::mouseViewEvents(sf::Event &event)
 
     @return Void.
 */
-void NonSimulationStuff::mouseUIEvents(sf::Event &event)
+void GameScene::mouseUIEvents(sf::Event &event)
 {
         if(event.type == sf::Event::MouseButtonPressed)
             clickedWindowToDrag = container.isWindowDraggable();
@@ -430,7 +371,7 @@ void NonSimulationStuff::mouseUIEvents(sf::Event &event)
 
     @return Void.
 */
-void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
+void GameScene::mouseWorldEvents(sf::Event &event)
 {
     if(event.type == sf::Event::MouseButtonPressed)
     {
@@ -473,7 +414,7 @@ void NonSimulationStuff::mouseWorldEvents(sf::Event &event)
 
     @return Void.
 */
-void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
+void GameScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 {
     if(newLayerKeys[0]&&(!newLayerKeys[1]))
     {
@@ -494,8 +435,8 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
     }
     else if(newLayerKeys[2])
     {
-        if(event.key.code == sf::Keyboard::Return)
-            toggleFullScreen();
+        //if(event.key.code == sf::Keyboard::Return)
+        //    toggleFullScreen();
     }
 }
 
@@ -509,7 +450,7 @@ void NonSimulationStuff::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Even
 
     @return Void.
 */
-void NonSimulationStuff::keyEvents(sf::Event &event)
+void GameScene::keyEvents(sf::Event &event)
 {
     std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
                                        sf::Keyboard::isKeyPressed(sf::Keyboard::LShift),
@@ -522,13 +463,13 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
     {
         if(!newLayerPressed)
         {
-            if(event.key.code == sf::Keyboard::PageUp)
-                limitFramerate(60);
-            else if(event.key.code == sf::Keyboard::PageDown)
-                limitFramerate(400);
-            else if(event.key.code == sf::Keyboard::Home)
-                limitFramerate(5);
-            else if(event.key.code == sf::Keyboard::Comma)
+            //if(event.key.code == sf::Keyboard::PageUp)
+                //limitFramerate(60);
+            //else if(event.key.code == sf::Keyboard::PageDown)
+                //limitFramerate(400);
+            //else if(event.key.code == sf::Keyboard::Home)
+            //    limitFramerate(5);
+            if(event.key.code == sf::Keyboard::Comma)
                 ballSim.decSimStep(0.1);
             else if(event.key.code == sf::Keyboard::Period)
                 ballSim.incSimStep(0.1);
@@ -555,10 +496,6 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
                 ballSim.setPlayer(0);
             else if(event.key.code == sf::Keyboard::Num2)
                 ballSim.setPlayer(1);
-            else if(event.key.code == sf::Keyboard::F2)
-                setAALevel(0);
-            else if(event.key.code == sf::Keyboard::F3)
-                setAALevel(8);
         }
 
         newLayerEvent(newLayerKeys, event);
@@ -573,7 +510,7 @@ void NonSimulationStuff::keyEvents(sf::Event &event)
 
     @return Void.
 */
-void NonSimulationStuff::playerKeysDown(int player)
+void GameScene::playerKeysDown(int player)
 {
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
@@ -599,10 +536,10 @@ void NonSimulationStuff::playerKeysDown(int player)
 
     @return Void.
 */
-void NonSimulationStuff::resizeEvents(sf::Event &event)
+void GameScene::resizeEvents(sf::Event &event)
 {
     if(event.type == sf::Event::Resized)
-        adjustViewSize(event.size.width, event.size.height, wSize.x, wSize.y);//, currentZoom);
+        adjustViewSize({event.size.width, event.size.height});//, currentZoom);
 }
 
 
@@ -613,7 +550,7 @@ void NonSimulationStuff::resizeEvents(sf::Event &event)
 
     @return Void.
 */
-void NonSimulationStuff::incTimeStep(sf::Time delta)
+void GameScene::incTimeStep(sf::Time delta)
 {
     if(delta>sf::milliseconds(0))
         timestep+=delta;
@@ -627,7 +564,7 @@ void NonSimulationStuff::incTimeStep(sf::Time delta)
 
     @return Void.
 */
-void NonSimulationStuff::decTimeStep(sf::Time delta)
+void GameScene::decTimeStep(sf::Time delta)
 {
     if(delta>sf::milliseconds(0) && timestep>delta)
         timestep-=delta;
@@ -638,13 +575,13 @@ void NonSimulationStuff::decTimeStep(sf::Time delta)
 
     @return x-direction window size.
 */
-float NonSimulationStuff::getWindowSizeX()
+float GameScene::getWindowSizeX()
 {
     return windowSizeX;
 }
 
 
-void NonSimulationStuff::updateFPS(sf::Time interval, float framerate)
+void GameScene::updateFPS(sf::Time interval, float framerate)
 {
     if(timeSinceFSample >= interval)
     {
@@ -660,7 +597,7 @@ void NonSimulationStuff::updateFPS(sf::Time interval, float framerate)
 
     @return Void.
 */
-sf::Time NonSimulationStuff::sampleNextFrame(sf::Time frameTime)
+sf::Time GameScene::sampleNextFrame(sf::Time frameTime)
 {
     unsigned int positionSize = 10;
     previousFrames.push_back(frameTime.asSeconds());
@@ -676,15 +613,7 @@ sf::Time NonSimulationStuff::sampleNextFrame(sf::Time frameTime)
 
 }
 
-void NonSimulationStuff::limitFramerate(int framerate)
-{
-    window.setFramerateLimit(framerate);
-    timestep = sf::seconds(1.0f/static_cast<float>(framerate));
-    previousFrames.clear();
-    previousFrames.push_back(timestep.asSeconds());
-}
-
-void NonSimulationStuff::setSpawnValues(float value,
+void GameScene::setSpawnValues(float value,
                                         SpawnQuantity toChange)
 {
     float density = 1.0f;
@@ -703,71 +632,20 @@ void NonSimulationStuff::setSpawnValues(float value,
     }
 }
 
-
-void NonSimulationStuff::mainLoop()
+void GameScene::events(sf::Event &event)
 {
-    limitFramerate(60);
-    while(window.isOpen())
-    {
-        frameClock.restart();
+    mouseViewEvents(event);
 
-        window.clear();
-        sf::Event event;
-        while(window.pollEvent(event))
-        {
-            window.setKeyRepeatEnabled(false);
+    if(!mouseOnUIWhenClicked.first)
+        mouseWorldEvents(event);
+    else
+        mouseUIEvents(event);
 
-            if(event.type == sf::Event::Closed)
-                window.close();
-
-            mouseViewEvents(event);
-
-            if(!mouseOnUIWhenClicked.first)
-                mouseWorldEvents(event);
-            else
-                mouseUIEvents(event);
-
-            keyEvents(event);
-            resizeEvents(event);
-        }
-
-        if(!mouseOnUIWhenClicked.first)
-        {
-            checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
-            checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
-            checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
-        }
-        if(clickedWindowToDrag)
-            container.dragWindow(window);
-
-        checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
-        playerKeysDown(0);
-
-        ballSim.universeLoop(currentFrameTime, timestep);
-
-        ballSim.drawBalls(window);
-        window.draw(boundaryRect);
-
-        container.renderWindows(window, GUIView, worldView);
-
-        timeToNextSpawn -= timestep;
-
-        timeSinceFSample+=currentFrameTime;
-        updateFPS(sf::seconds(0.5f), 1.0f/currentFrameTime.asSeconds());
-
-        window.display();
-
-        currentFrameTime = sampleNextFrame(frameClock.getElapsedTime());
-    }
+    keyEvents(event);
+    resizeEvents(event);
 }
 
-NonSimulationStuff::NonSimulationStuff(int m_windowSizeX, int m_windowSizeY, int m_spawnVelFactor,
-                 float m_spawnRadius, float m_spawnMass, float m_ballGridSpacing, int m_ballGridHeight,
-                                    int m_ballGridWidth, bool m_simFitsInWindow, BallUniverse m_sim) :
-
-windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVelFactor},
-            spawnRadius{m_spawnRadius}, spawnMass{m_spawnMass}, ballGridSpacing{m_ballGridSpacing},
-            ballGridHeight{m_ballGridHeight}, ballGridWidth{m_ballGridWidth}, simFitsInWindow{m_simFitsInWindow}, ballSim{m_sim}
+void GameScene::load()
 {
     wSize = ballSim.getWorldSize();
     changeBoundaryRect(wSize);
@@ -794,11 +672,8 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
     container.getWindow(0).addSlider({10,50}, 210.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass);
     container.getWindow(0).addSlider({10,90}, 210.0f, {10,20}, {1.0,10.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius);
 
-    /*std::string font, std::string text, int fontSize, sf::Vector2f position, sf::Vector2f bSize,
-                                                bool fixedToWin, std::function<void> *func, sf::Color color*/
-
-    container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
-    container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
+    //container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeX:", 16, {00,00}, &windowSizeX);
+    //container.getWindow(1).addElement("./fonts/cour.ttf", "WindowSizeY:", 16, {0,20}, &windowSizeY);
     container.getWindow(1).addElement("./fonts/cour.ttf", "FPS:", 16, {0,40}, &currentFPS);
     //container.getWindow(1).addButton("./fonts/cour.ttf", "Rad -", 16, {0,50}, {80,40}, increaseMass);
 
@@ -817,3 +692,41 @@ windowSizeX{m_windowSizeX}, windowSizeY{m_windowSizeY}, spawnVelFactor{m_spawnVe
 
 
 }
+
+
+void GameScene::redraw(sf::RenderWindow &window)
+{
+        ballSim.drawBalls(window);
+        window.draw(boundaryRect);
+
+        container.renderWindows(window, GUIView, worldView);
+}
+
+void GameScene::update(sf::RenderWindow &window)
+{
+    if(!mouseOnUIWhenClicked.first)
+    {
+        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
+        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
+        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
+    }
+    if(clickedWindowToDrag)
+        container.dragWindow(window);
+
+    checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
+    playerKeysDown(0);
+
+    ballSim.universeLoop(currentFrameTime, timestep);
+
+    timeToNextSpawn -= currentFrameTime;
+}
+
+GameScene::GameScene(sf::RenderWindow &window, sf::Time &targetFTime,
+                     sf::Time &currentFTime, float &currentFPS) : window{window},
+                     timestep{targetFTime}, currentFrameTime{currentFTime},
+                     currentFPS{currentFPS}
+{
+
+}
+
+
