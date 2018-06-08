@@ -70,6 +70,7 @@
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
+		<Unit filename="headers/structs.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="source/UI/classUIButton.cpp" />
 		<Unit filename="source/UI/classUIContainer.cpp" />
@@ -83,6 +84,7 @@
 		<Unit filename="source/events/classSceneManager.cpp" />
 		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />
 		<Unit filename="source/miscellaneous/stringConversion.cpp" />
+		<Unit filename="source/miscellaneous/structs.cpp" />
 		<Unit filename="source/simulation/classBall.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
 		<Unit filename="source/simulation/forces.cpp" />

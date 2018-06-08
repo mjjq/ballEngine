@@ -13,9 +13,9 @@ class UISlider : public UIButton
     sf::Vector2f buttonPosOnRel{0,0};
     sf::Vector2f buttonSize{0,0};
     //sf::RectangleShape sliderLine{sf::Vector2f{range,thickness}};
-    sf::Color clickedColor = {50,50,50,255};
+    /*sf::Color clickedColor = {50,50,50,255};
     sf::Color mouseOverColor = {100,100,100,255};
-    sf::Color sliderColor = {150,150,150,255};
+    sf::Color sliderColor = {150,150,150,255};*/
 
     std::function<void(float)> sliderFunc;
     sf::Vector2f physRange;
@@ -24,11 +24,7 @@ class UISlider : public UIButton
     bool sliderDown = false;
 
 public:
-    UISlider(sf::Vector2f position, sf::Vector2f bSize,
-            bool fixedToWin, float range, sf::Color color,
-            sf::Vector2f physRange = {0,0},
-            std::function<void(float)> slideFunc = nullptr,
-            float *variable = nullptr);
+    UISlider(SliderParams &sParams, ButtonParams &bParams, WindowParams &wParams);
 
     void clickIntersectedButton(sf::RenderWindow &window);
     void clickIntersectedButton();

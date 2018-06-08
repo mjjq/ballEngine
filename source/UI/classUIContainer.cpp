@@ -8,6 +8,7 @@
 
 #include "../../headers/classUIContainer.h"
 #include "../../headers/sfVectorMath.h"
+#include "../../headers/structs.h"
 
 
 UIContainer::UIContainer()
@@ -15,9 +16,9 @@ UIContainer::UIContainer()
 
 }
 
-void UIContainer::addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable, sf::Color color)
+void UIContainer::addWindow(WindowParams &params)
 {
-    std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(position, width, height, fixedToWin, draggable, color);
+    std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(params);
     interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);

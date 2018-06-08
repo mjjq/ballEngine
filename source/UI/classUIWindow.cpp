@@ -12,11 +12,11 @@
 #include "../../headers/classUIButton.h"
 #include "../../headers/classUISlider.h"
 #include "../../headers/classUIGroup.h"
+#include "../../headers/structs.h"
 
-void UIWindow::addGroup(sf::Vector2f position, float width,
-                        float height, bool fixedToWin, bool draggable)
+void UIWindow::addGroup(WindowParams &wParams)
 {
-    std::unique_ptr<UIGroup> newGroup = std::make_unique<UIGroup>(position, width, height, fixedToWin, color);
+    std::unique_ptr<UIGroup> newGroup = std::make_unique<UIGroup>(wParams);
     groupArray.emplace_back(std::move(newGroup));
 }
 
@@ -34,25 +34,31 @@ void UIWindow::addElement(std::string font, std::string str,
 }
 
 
-void UIWindow::addButton(std::string font, std::string text, int fontSize,
-                         sf::Vector2f position, sf::Vector2f bSize,
-                         std::function<void()> const& func, sf::Color color,
-                         bool changeState)
+void UIWindow::addButton(ButtonParams &bParams)
 {
-    addGroup(position, bSize.x, bSize.y, fixedToWindow, false);
-    groupArray.back()->addButton(font, text, fontSize, {0,0}, bSize, func,
-                                                        color, changeState);
+    WindowParams wParams = {
+        bParams.position,
+        bParams.bSize,
+        fixedToWindow,
+        false,
+    };
+    bParams.position = {0,0};
+    addGroup(wParams);
+    groupArray.back()->addButton(bParams);
 }
 
-void UIWindow::addSlider(sf::Vector2f position, float range, sf::Vector2f bSize,
-                         sf::Vector2f physRange, std::function<void(float)> sliderFunc,
-                         float *variable)
+void UIWindow::addSlider(SliderParams &sParams)
 {
-    addGroup(position, range+bSize.x, bSize.y, fixedToWindow, false);
-    float thickness = 2.0f;
-
-    groupArray.back()->addSlider({0,0}, range, thickness, bSize,
-                                 physRange, sliderFunc, variable);
+    WindowParams wParams = {
+        sParams.position,
+        sf::Vector2f{sParams.range + sParams.bSize.x, sParams.bSize.y},
+        fixedToWindow,
+        false,
+    };
+    //std::cout << sParams.position << "\n";
+    addGroup(wParams);
+    //sParams.position = {0,0};
+    groupArray.back()->addSlider(sParams);
 }
 
 bool UIWindow::ifElementsCollide(sf::Rect<float> rectBound1, sf::Rect<float> rectBound2)
@@ -103,10 +109,9 @@ void UIWindow::renderWindow(sf::RenderWindow &window, sf::View &GUIView)
 }
 
 
-UIWindow::UIWindow(sf::Vector2f position, float width, float height, bool fixedToWin,
-                bool draggable, sf::Color color) : origPosition{position}, width{width},
-                height{height}, color{color}, fixedToWindow{fixedToWin},
-                draggable{draggable}
+UIWindow::UIWindow(WindowParams &params) : origPosition{params.position}, width{params.wSize.x},
+                height{params.wSize.y}, color{params.color}, fixedToWindow{params.fixedToWin},
+                draggable{params.draggable}
 {
     windowBox.setPosition(origPosition);
     windowBox.setSize(sf::Vector2f(width,height));

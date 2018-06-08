@@ -1,6 +1,7 @@
 #ifndef CLASS_UICONTAINER_H
 #define CLASS_UICONTAINER_H
 #include "classUIWindow.h"
+#include "structs.h"
 
 class UIContainer
 {
@@ -18,7 +19,7 @@ class UIContainer
 public:
     UIContainer();
 
-    void addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
+    void addWindow(WindowParams &params);
     void renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
     UIWindow &getWindow(unsigned int windowIndex);
 

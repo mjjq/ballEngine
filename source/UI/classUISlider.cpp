@@ -10,13 +10,10 @@
 #include "../../headers/stringConversion.h"
 
 
-UISlider::UISlider(sf::Vector2f position, sf::Vector2f bSize,
-                   bool fixedToWin, float range, sf::Color color,
-                   sf::Vector2f physRange, std::function<void(float)> slideFunc,
-                   float *variable) :
-                   UIButton("", "", 1, [&]{}, position, bSize, fixedToWin, color),
-                   range{range}, sliderFunc{slideFunc}, physRange{physRange},
-                   variable{variable}
+UISlider::UISlider(SliderParams &sParams, ButtonParams &bParams, WindowParams &wParams) :
+                   UIButton(bParams, wParams), range{sParams.range},
+                   sliderFunc{sParams.sliderFunc}, physRange{sParams.physRange},
+                   variable{sParams.variable}
 {
 }
 
