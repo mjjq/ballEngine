@@ -5,6 +5,7 @@
 #include <limits>
 #include <tuple>
 #include <functional>
+#include <memory>
 
 #include "../../headers/classUIGroup.h"
 #include "../../headers/sfVectorMath.h"
@@ -24,32 +25,35 @@ void UIGroup::addButton(std::string font, std::string text, int fontSize,
                         std::function<void()> const& func, sf::Color color,
                         bool changeState)
 {
-    UIButton *button = new UIButton{font, text, fontSize, func, position, bSize,
-                            fixedToWindow, color, changeState};
+    std::unique_ptr<UIButton> button = std::make_unique<UIButton>(font, text,
+                    fontSize, func, position, bSize, fixedToWindow, color, changeState);
     //button->addElement<int>(font, text, fontSize, {10.0,10.0});
-    buttonArray.emplace_back(button);
+    buttonArray.push_back(std::move(button));
 }
 
 void UIGroup::addSlider(sf::Vector2f position, float range, float thickness,
                         sf::Vector2f bSize, sf::Vector2f physRange,
                         std::function<void(float)> sliderFunc, float *variable)
 {
-    UIButton *sliderBox = new UIButton{"", "", 1, [&]{},
-                            {bSize.x/2.0f,(bSize.y-thickness)/2.0f}, {range, thickness},
-                            fixedToWindow, {200,200,200,255}, false};
+    std::unique_ptr<UIButton> sliderBox = std::make_unique<UIButton>("", "", 1,
+                            std::function<void()>{}, sf::Vector2f{bSize.x/2.0f,
+                            (bSize.y-thickness)/2.0f}, sf::Vector2f{range, thickness},
+                            fixedToWindow, sf::Color{200,200,200,255}, false);
 
-    UIButton *sliderClickBox = new UIButton{"", "", 1, [&]{},
-                            {0,0}, {range, bSize.y},
-                            fixedToWindow, {0,0,0,0}, false};
+    std::unique_ptr<UIButton> sliderClickBox = std::make_unique<UIButton>("", "",
+                            1, std::function<void()>{}, sf::Vector2f{0,0},
+                            sf::Vector2f{range, bSize.y}, fixedToWindow,
+                            sf::Color{0,0,0,0}, false);
 
-    UISlider *slider = new UISlider{position, bSize,
-                   fixedToWindow, range, {70,70,70,255}, physRange, sliderFunc, variable};
+    std::unique_ptr<UISlider> slider = std::make_unique<UISlider>(position, bSize,
+                            fixedToWindow, range, sf::Color{70,70,70,255}, physRange,
+                            sliderFunc, variable);
 
     //sliderBox->setDownFunction([&]{slider->clickIntersectedButton();});
     //sliderBox->setUpFunction([&]{slider->releaseClickedButton();});
-    buttonArray.emplace_back(sliderBox);
-    buttonArray.emplace_back(sliderClickBox);
-    buttonArray.emplace_back(slider);
+    buttonArray.emplace_back(std::move(sliderBox));
+    buttonArray.emplace_back(std::move(sliderClickBox));
+    buttonArray.emplace_back(std::move(slider));
 
     buttonArray.at(1)->setDownFunction([&]{buttonArray.at(2)->clickIntersectedButton();});
     buttonArray.at(1)->setUpFunction([&]{buttonArray.at(2)->releaseClickedButton();});
@@ -70,21 +74,21 @@ void UIGroup::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositio
 
 void UIGroup::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 {
-    for(UITextElementBase *textElement : textArray)
+    for(unsigned int i=0; i<textArray.size(); ++i)
     {
-        textElement->updateElement(window, GUIView, currPosition);
-        textElement->textWrap(windowBox.getGlobalBounds());
-        window.draw(*textElement);
+        textArray.at(i)->updateElement(window, GUIView, currPosition);
+        textArray.at(i)->textWrap(windowBox.getGlobalBounds());
+        window.draw(*textArray.at(i));
     }
-    for(UIButton *button : buttonArray)
+    for(unsigned int i=0; i<buttonArray.size(); ++i)
     {
-        button->updateElement(window, currPosition);
-        button->renderButton(window,GUIView);
+        buttonArray.at(i)->updateElement(window, currPosition);
+        buttonArray.at(i)->renderButton(window,GUIView);
     }
-    for(UIGroup *group : groupArray)
+    for(unsigned int i=0; i<groupArray.size(); ++i)
     {
-        group->updateElement(window, currPosition);
-        group->renderElements(window, GUIView);
+        groupArray.at(i)->updateElement(window, currPosition);
+        groupArray.at(i)->renderElements(window, GUIView);
     }
 }
 
@@ -110,8 +114,3 @@ UIButton& UIGroup::getButton(unsigned int index)
     return *buttonArray.at(index);
 }
 
-void UIGroup::printButtonAddress()
-{
-    if(buttonArray.size()>0)
-        std::cout << buttonArray.at(1) << "\n";
-}

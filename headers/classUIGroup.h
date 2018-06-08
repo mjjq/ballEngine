@@ -7,6 +7,7 @@ class UIGroup : public UIWindow
 {
     sf::Vector2f currPosition = origPosition;
 
+
 public:
     UIGroup(sf::Vector2f position, float width, float height, bool fixedToWin,
             sf::Color color = {150,0,0,100});

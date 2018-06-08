@@ -30,9 +30,9 @@ protected:
     sf::Color color;
     sf::RectangleShape windowBox;
 
-    std::vector<UITextElementBase*> textArray;
-    std::vector<UIButton*> buttonArray;
-    std::vector<UIGroup*> groupArray;
+    std::vector<std::unique_ptr<UITextElementBase>> textArray;
+    std::vector<std::unique_ptr<UIButton>> buttonArray;
+    std::vector<std::unique_ptr<UIGroup>> groupArray;
 
     bool isButton = false;
     bool fixedToWindow = true;

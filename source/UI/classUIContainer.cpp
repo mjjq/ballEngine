@@ -17,8 +17,8 @@ UIContainer::UIContainer()
 
 void UIContainer::addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable, sf::Color color)
 {
-    UIWindow newWindow{position, width, height, fixedToWin, draggable, color};
-    interfaceWindows.push_back(newWindow);
+    std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(position, width, height, fixedToWin, draggable, color);
+    interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);
 }
@@ -28,8 +28,8 @@ void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf:
     for(unsigned int i=0; i<interfaceWindows.size(); i++)
     {
         int j = interfaceWindows.size() - 1 - i;
-        interfaceWindows.at(j).renderWindow(window, GUIView);
-        interfaceWindows.at(j).renderElements(window,GUIView);
+        interfaceWindows.at(j)->renderWindow(window, GUIView);
+        interfaceWindows.at(j)->renderElements(window,GUIView);
         window.setView(originalView);
     }
 }
@@ -46,7 +46,7 @@ UIWindow &UIContainer::getWindow(unsigned int windowIndex)
         std::cerr << "Error: " << err << "\n";
     }
 
-    return interfaceWindows.at(windowIndex);
+    return *interfaceWindows.at(windowIndex);
 }
 
 
@@ -55,8 +55,8 @@ void UIContainer::checkMouseIntersection(sf::RenderWindow &window, sf::View &GUI
     //window.setView(GUIView);
     for(unsigned int i=0; i<interfaceWindows.size(); i++)
     {
-        interfaceWindows.at(i).checkMouseIntersection(window);
-        mouseIntersectionList.at(i) = interfaceWindows.at(i).getIsMouseIntersecting();
+        interfaceWindows.at(i)->checkMouseIntersection(window);
+        mouseIntersectionList.at(i) = interfaceWindows.at(i)->getIsMouseIntersecting();
     }
     //window.setView(originalView);
 }
@@ -131,7 +131,7 @@ void UIContainer::destroyWindow(unsigned int index)
 {
     if(index >= 0 && index < interfaceWindows.size())
     {
-        interfaceWindows.at(index).destroyAllElements();
+        interfaceWindows.at(index)->destroyAllElements();
         interfaceWindows.erase(interfaceWindows.begin()+index);
         interfaceWindowIDs.erase(interfaceWindowIDs.begin()+index);
     }
@@ -141,10 +141,8 @@ void UIContainer::destroyAllWindows()
 {
     for(unsigned int i=0; i<interfaceWindows.size(); ++i)
     {
-        std::cout << interfaceWindows.size() << "\n";
-        interfaceWindows.at(i).destroyAllElements();
+        interfaceWindows.at(i)->destroyAllElements();
     }
     interfaceWindows.clear();
     interfaceWindowIDs.clear();
-    //destroyWindow(0);
 }

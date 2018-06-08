@@ -16,21 +16,21 @@
 void UIWindow::addGroup(sf::Vector2f position, float width,
                         float height, bool fixedToWin, bool draggable)
 {
-    UIGroup *newGroup = new UIGroup{position, width, height, fixedToWin, color};
-    groupArray.emplace_back(newGroup);
+    std::unique_ptr<UIGroup> newGroup = std::make_unique<UIGroup>(position, width, height, fixedToWin, color);
+    groupArray.emplace_back(std::move(newGroup));
 }
 
 template<class T>
 void UIWindow::addElement(std::string font, std::string str,
                           int fontSize, sf::Vector2f position, T *var)
 {
-    UITextElement<T> *text = new UITextElement<T>{str, position, fixedToWindow,
-                                    var, !isButton, windowBox.getLocalBounds()};
+    std::unique_ptr<UITextElement<T>> text = std::make_unique<UITextElement<T>>(str, position, fixedToWindow,
+                                    var, !isButton, windowBox.getLocalBounds());
     currentFont.loadFromFile(font);
     text->setFont(currentFont);
     text->setCharacterSize(fontSize);
     //UITextElementBase *text2 = text;
-    textArray.emplace_back(text);
+    textArray.emplace_back(std::move(text));
 }
 
 
@@ -72,15 +72,15 @@ void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
         window.draw(*textArray.at(i));
         //std::cout << textArray.at(i)->getPosition()<< "\n";
     }
-    for(UIButton *button : buttonArray)
+    for(unsigned int i=0; i<buttonArray.size(); ++i)
     {
-        button->updateElement(window, origPosition);
-        button->renderButton(window,GUIView);
+        buttonArray.at(i)->updateElement(window, origPosition);
+        buttonArray.at(i)->renderButton(window,GUIView);
     }
-    for(UIGroup *group : groupArray)
+    for(unsigned int i=0; i<groupArray.size(); ++i)
     {
-        group->updateElement(window, origPosition);
-        group->renderElements(window, GUIView);
+        groupArray.at(i)->updateElement(window, origPosition);
+        groupArray.at(i)->renderElements(window, GUIView);
     }
 }
 
@@ -193,7 +193,6 @@ void UIWindow::clickIntersectedButton(sf::RenderWindow &window)
     {
         mouseOnButtonWhenClicked = mouseOnButton;
         buttonArray.at(buttonIndex)->clickIntersectedButton(window);
-        //std::cout << buttonArray.at(buttonIndex) << "\n";
     }
     else if(groupIndex != -1)
     {
@@ -232,26 +231,9 @@ void UIWindow::changeOrigin(sf::RenderWindow &window, sf::Vector2i origin)
 
 void UIWindow::destroyAllElements()
 {
-    for(unsigned int i=0; i<textArray.size(); ++i)
-    {
-        delete textArray[i];
-        std::cout << "Delete: " << textArray.at(i) << "\n";
-    }
-    //delete textArray[0];
-    for(unsigned int i=0; i<buttonArray.size(); ++i)
-    {
-        buttonArray.at(i)->destroyAllElements();
-        delete buttonArray[i];
-    }
-    for(unsigned int i=0; i<groupArray.size(); ++i)
-    {
-        groupArray.at(i)->destroyAllElements();
-        delete groupArray[i];
-    }
     textArray.clear();
     buttonArray.clear();
     groupArray.clear();
-
 }
 
 template void UIWindow::addElement<int>(std::string font, std::string str,

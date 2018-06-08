@@ -8,7 +8,7 @@ class UIContainer
     static sf::View &originalView;
     static sf::View &GUIView;
 
-    std::vector<UIWindow> interfaceWindows;
+    std::vector<std::unique_ptr<UIWindow>> interfaceWindows;
     std::vector<int> interfaceWindowIDs;
     std::vector<bool> mouseIntersectionList;
     std::pair<bool,int> currentIntButton;
