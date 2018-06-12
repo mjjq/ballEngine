@@ -23,6 +23,7 @@ void UIWindow::addGroup(WindowParams &wParams)
 template<class T>
 void UIWindow::addElement(TextElParams<T> &tParams)
 {
+    //dynamic_cast<TextElParams<T>>(tParams);
     std::unique_ptr<UITextElement<T>> text = std::make_unique<UITextElement<T>>
             (tParams.str, tParams.position, fixedToWindow, tParams.var, !isButton,
              windowBox.getLocalBounds());

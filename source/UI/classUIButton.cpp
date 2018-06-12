@@ -35,7 +35,7 @@ UIButton::UIButton(ButtonParams &bParams, WindowParams &wParams, bool changeStat
         tempParams.position = sf::Vector2f{0,0};
     }
 
-    addElement<int>(tempParams);
+    addElement(tempParams);
     sf::Rect<float> buttonBounds = windowBox.getLocalBounds();
     sf::Rect<float> textBounds = textArray.at(0)->getLocalBounds();
 

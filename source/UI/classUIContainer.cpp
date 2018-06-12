@@ -16,12 +16,48 @@ UIContainer::UIContainer()
 
 }
 
-void UIContainer::addWindow(WindowParams &params)
+/*void UIContainer::addWindow(WindowParams &params)
 {
     std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(params);
     interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);
+}*/
+
+
+void UIContainer::addWindow(CompleteWindow &compWindow)
+{
+    std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(compWindow.wParams);
+
+    for(unsigned int i=0; i<compWindow.bParamsVec.size(); ++i)
+    {
+        newWindow->addButton(compWindow.bParamsVec.at(i));
+    }
+    for(unsigned int i=0; i<compWindow.sParamsVec.size(); ++i)
+        newWindow->addSlider(compWindow.sParamsVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParamsIntVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsIntVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParamsFloatVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsFloatVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParamsBoolVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsBoolVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParams2iVec.size(); ++i)
+        newWindow->addElement(compWindow.tParams2iVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParams2fVec.size(); ++i)
+        newWindow->addElement(compWindow.tParams2fVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParamsIntegVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsIntegVec.at(i));
+
+
+    std::cout << compWindow.bParamsVec.size();
+    interfaceWindows.push_back(std::move(newWindow));
+    interfaceWindowIDs.push_back(interfaceWindows.size()-1);
+    mouseIntersectionList.push_back(false);
+}
+
+void UIContainer::addTextElType(TextElBaseParams &tParams)
+{
+    //if(dynamic_cast<TextElParams<int>*>(tParams) != nullptr)
 }
 
 void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
@@ -147,3 +183,5 @@ void UIContainer::destroyAllWindows()
     interfaceWindows.clear();
     interfaceWindowIDs.clear();
 }
+
+//template void UIContainer::addWindow<int>(CompleteWindow &compWindow);

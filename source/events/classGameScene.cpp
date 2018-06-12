@@ -599,31 +599,55 @@ void GameScene::load()
     changeBoundaryRect(wSize);
     resetView();
 
-    std::vector<WindowParams> winPars;
-    std::vector<ButtonParams> windowZeroButtons;
-    std::vector<SliderParams> windowZeroSliders;
-    std::vector<std::unique_ptr<TextElBaseParams>> windowZeroText;
+    std::vector<CompleteWindow> completeWindows;
 
-    winPars.push_back( {{0,100}, {250, 250}, true, false} );
+    /*winPars.push_back( {{0,100}, {250, 250}, true, false} );
     winPars.push_back( {{0,0}, {250, 70}, true, false} );
     winPars.push_back( {{0,400}, {250, 50}, true, false} );
-    winPars.push_back( {{0,500}, {250, 150}, true, false} );
-    //container.addWindow(winPars);
-     for(unsigned int i=0; i<winPars.size(); ++i)
-    {
-        container.addWindow(winPars.at(i));
-    }
+    winPars.push_back( {{0,500}, {250, 150}, true, false} );*/
 
 
-    TextElParams<int> text1{"./fonts/cour.ttf", "No. Balls:", 16, sf::Vector2f{0,0}, &ballSim.getNumOfBalls()};
+
+    CompleteWindow window0;
+    window0.wParams = {{0,100}, {250, 250}, true, false};
+    window0.bParamsVec =  std::vector<ButtonParams>{
+        {"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;}},
+        {"./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}}},
+        {"./fonts/cour.ttf", "Rad +", 12, {10,220}, {60,30}, [&]{spawnRadius+=1;}},
+        {"./fonts/cour.ttf", "Rad -", 12, {90,220}, {60,30}, [&]{if(spawnRadius>1){spawnRadius-=1;}}},
+        {"./fonts/cour.ttf", "Rst Rad", 12, {170,220}, {60,30}, [&]{spawnRadius=10;}},
+        {"./fonts/cour.ttf", "Rst Mass", 12, {170,180}, {60,30}, [&]{spawnMass=1;}}
+    };
+    window0.sParamsVec = std::vector<SliderParams>{
+        {{10,50}, 210.0f, 2.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass},
+        {{10,90}, 210.0f, 2.0f, {10,20}, {1.0,10.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}
+    };
+    window0.tParamsIntVec = std::vector<TextElParams<int>>{
+        {"./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls()},
+    };
+    window0.tParamsFloatVec = std::vector<TextElParams<float>>{
+        {"./fonts/cour.ttf", "Timestep:", 16, {0,150}, &ballSim.getTimeStep()},
+        {"./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass},
+        {"./fonts/cour.ttf", "Spawn Radius:", 16, {00,70}, &spawnRadius}
+    };
+    window0.tParamsBoolVec = std::vector<TextElParams<bool>>{
+        {"./fonts/cour.ttf", "Forces Enabled:", 16, {0,110}, &ballSim.getForcesEnabled()},
+        {"./fonts/cour.ttf", "Collisions Enabled:", 16, {0,130}, &ballSim.getCollisionsEnabled()}
+    };
+    completeWindows.push_back(window0);
+
+    //container.addWindow(window1);
+
+
+    /*TextElParams<int> text1{"./fonts/cour.ttf", "No. Balls:", 16, sf::Vector2f{0,0}, &ballSim.getNumOfBalls()};
     //windowZeroText.push_back( text1 );
-    container.getWindow(0).addElement(text1);
+    //container.getWindow(0).addElement(text1);
     //container.getWindow(0).addElement("./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls());
     /*container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass);
     container.getWindow(0).addElement("./fonts/cour.ttf", "Spawn Radius:", 16, {00,70}, &spawnRadius);
     container.getWindow(0).addElement("./fonts/cour.ttf", "Forces Enabled:", 16, {0,110}, &ballSim.getForcesEnabled());
     container.getWindow(0).addElement("./fonts/cour.ttf", "Collisions Enabled:", 16, {0,130}, &ballSim.getCollisionsEnabled());
-    container.getWindow(0).addElement("./fonts/cour.ttf", "Timestep:", 16, {0,150}, &ballSim.getTimeStep());*/
+    container.getWindow(0).addElement("./fonts/cour.ttf", "Timestep:", 16, {0,150}, &ballSim.getTimeStep());
 
 
     windowZeroButtons.push_back({"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;}});
@@ -658,18 +682,9 @@ void GameScene::load()
     container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {170,90}, {60,30}, [&]{ballSim.toggleRK4();});
     //container.getWindow(3).addSlider({10,50}, 210.0f, {10,20}, {0.1,3.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass);*/
 
-    for(unsigned int i=0; i<windowZeroButtons.size(); ++i)
-    {
-        container.getWindow(0).addButton(windowZeroButtons.at(i));
-    }
-    for(unsigned int i=0; i<windowZeroSliders.size(); ++i)
-    {
-        container.getWindow(0).addSlider(windowZeroSliders.at(i));
-    }
-    /*for(unsigned int i=0; i<windowZeroText.size(); ++i)
-    {
-        container.getWindow(0).addElement(windowZeroText.at(i));
-    }*/
+    for(unsigned int i=0; i<completeWindows.size(); ++i)
+       container.addWindow(completeWindows.at(i));
+
 }
 
 void GameScene::unload()

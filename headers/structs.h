@@ -1,6 +1,7 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 #include <functional>
+#include "integrators.h"
 
 struct WindowParams
 {
@@ -75,7 +76,12 @@ struct CompleteWindow
     WindowParams wParams;
     std::vector<ButtonParams> bParamsVec;
     std::vector<SliderParams> sParamsVec;
-    std::vector<std::unique_ptr<TextElBaseParams>> tParamsVec;
+    std::vector<TextElParams<int>> tParamsIntVec;
+    std::vector<TextElParams<float>> tParamsFloatVec;
+    std::vector<TextElParams<bool>> tParamsBoolVec;
+    std::vector<TextElParams<sf::Vector2i>> tParams2iVec;
+    std::vector<TextElParams<sf::Vector2f>> tParams2fVec;
+    std::vector<TextElParams<Integrators>> tParamsIntegVec;
 };
 
 template struct TextElParams<int>;

@@ -19,7 +19,11 @@ class UIContainer
 public:
     UIContainer();
 
-    void addWindow(WindowParams &params);
+    //void addWindow(WindowParams &params);
+
+    //template <class T>
+    void addWindow(CompleteWindow &compWindow);
+    void addTextElType(TextElBaseParams &tParams);
     void renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
     UIWindow &getWindow(unsigned int windowIndex);
 
