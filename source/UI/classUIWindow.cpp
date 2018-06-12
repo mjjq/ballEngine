@@ -21,14 +21,14 @@ void UIWindow::addGroup(WindowParams &wParams)
 }
 
 template<class T>
-void UIWindow::addElement(std::string font, std::string str,
-                          int fontSize, sf::Vector2f position, T *var)
+void UIWindow::addElement(TextElParams<T> &tParams)
 {
-    std::unique_ptr<UITextElement<T>> text = std::make_unique<UITextElement<T>>(str, position, fixedToWindow,
-                                    var, !isButton, windowBox.getLocalBounds());
-    currentFont.loadFromFile(font);
+    std::unique_ptr<UITextElement<T>> text = std::make_unique<UITextElement<T>>
+            (tParams.str, tParams.position, fixedToWindow, tParams.var, !isButton,
+             windowBox.getLocalBounds());
+    currentFont.loadFromFile(tParams.font);
     text->setFont(currentFont);
-    text->setCharacterSize(fontSize);
+    text->setCharacterSize(tParams.fontSize);
     //UITextElementBase *text2 = text;
     textArray.emplace_back(std::move(text));
 }
@@ -241,16 +241,10 @@ void UIWindow::destroyAllElements()
     groupArray.clear();
 }
 
-template void UIWindow::addElement<int>(std::string font, std::string str,
-                                int fontSize, sf::Vector2f position, int *var);
-template void UIWindow::addElement<float>(std::string font, std::string str,
-                                int fontSize, sf::Vector2f position, float *var);
-template void UIWindow::addElement<bool>(std::string font, std::string str,
-                                int fontSize, sf::Vector2f position, bool *var);
-template void UIWindow::addElement<sf::Vector2i>(std::string font, std::string str,
-                                int fontSize, sf::Vector2f position, sf::Vector2i *var);
-template void UIWindow::addElement<sf::Vector2f>(std::string font, std::string str,
-                                int fontSize, sf::Vector2f position, sf::Vector2f *var);
-template void UIWindow::addElement<Integrators>(std::string font, std::string str,
-                                int fontSize, sf::Vector2f position, Integrators *var);
+template void UIWindow::addElement<int>(TextElParams<int> &tParams);
+template void UIWindow::addElement<float>(TextElParams<float> &tParams);
+template void UIWindow::addElement<bool>(TextElParams<bool> &tParams);
+template void UIWindow::addElement<sf::Vector2i>(TextElParams<sf::Vector2i> &tParams);
+template void UIWindow::addElement<sf::Vector2f>(TextElParams<sf::Vector2f> &tParams);
+template void UIWindow::addElement<Integrators>(TextElParams<Integrators> &tParams);
 

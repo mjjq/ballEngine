@@ -18,10 +18,24 @@ UIButton::UIButton(ButtonParams &bParams, WindowParams &wParams, bool changeStat
 {
 
     isButton = true;
+    TextElParams<int> tempParams;
     if(bParams.font != "")
-        addElement<int>(bParams.font, bParams.text, bParams.fontSize, {0.0,0.0});
+    {
+        tempParams.font = bParams.font;
+        tempParams.str = bParams.text;
+        tempParams.fontSize = bParams.fontSize;
+        tempParams.position = sf::Vector2f{0,0};
+    }
+        //addElement<int>(bParams.font, bParams.text, bParams.fontSize, {0.0,0.0});
     else
-        addElement<int>("./fonts/cour.ttf", "", 1, {0.0,0.0});
+    {
+        tempParams.font = "./fonts/cour.ttf";
+        tempParams.str = "";
+        tempParams.fontSize = 1;
+        tempParams.position = sf::Vector2f{0,0};
+    }
+
+    addElement<int>(tempParams);
     sf::Rect<float> buttonBounds = windowBox.getLocalBounds();
     sf::Rect<float> textBounds = textArray.at(0)->getLocalBounds();
 

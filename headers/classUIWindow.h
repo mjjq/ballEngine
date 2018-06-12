@@ -48,8 +48,7 @@ public:
     virtual ~UIWindow();
 
     template<class T>
-    void addElement(std::string font, std::string str,
-                    int fontSize, sf::Vector2f position, T *var = nullptr);
+    void addElement(TextElParams<T> &tParams);
 
     virtual void addButton(ButtonParams &bParams);
 
