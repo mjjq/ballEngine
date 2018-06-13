@@ -194,7 +194,7 @@ void UIWindow::clickIntersectedButton(sf::RenderWindow &window)
 {
     int buttonIndex = std::get<1>(mouseOnButton);
     int groupIndex = std::get<1>(mouseOnGroup);
-    std::cout << "Button on Click: " << groupIndex << "\n";
+    //std::cout << "Button on Click: " << groupIndex << "\n";
     if(buttonIndex != -1)
     {
         mouseOnButtonWhenClicked = mouseOnButton;

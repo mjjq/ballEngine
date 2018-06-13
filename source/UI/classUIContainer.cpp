@@ -49,7 +49,7 @@ void UIContainer::addWindow(CompleteWindow &compWindow)
         newWindow->addElement(compWindow.tParamsIntegVec.at(i));
 
 
-    std::cout << compWindow.bParamsVec.size();
+    //std::cout << compWindow.bParamsVec.size();
     interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);

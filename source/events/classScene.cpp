@@ -3,6 +3,16 @@
 
 #include "../../headers/classScene.h"
 
+void Scene::requestScene(SceneEnum scEnum)
+{
+    nextScene = scEnum;
+}
+
+SceneEnum Scene::pollNextScene()
+{
+    return nextScene;
+}
+
 void Scene::update(sf::RenderWindow &window)
 {
 

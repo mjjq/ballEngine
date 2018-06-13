@@ -1,9 +1,19 @@
 #ifndef CLASS_SCENE_H
 #define CLASS_SCENE_H
 
+enum class SceneEnum
+{
+    SCENE_MENU,
+    SCENE_GAME,
+    LAST
+};
+
 class Scene
 {
+    SceneEnum nextScene = SceneEnum::LAST;
 public:
+    void requestScene(SceneEnum scEnum);
+    SceneEnum pollNextScene();
     virtual void update(sf::RenderWindow &window);
     virtual void redraw(sf::RenderWindow &window);
     virtual void load();

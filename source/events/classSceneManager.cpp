@@ -11,7 +11,7 @@
 
 void SceneManager::mainLoop()
 {
-    game.load();
+    currScene->load();
     limitFramerate(60);
     window.setKeyRepeatEnabled(false);
 
@@ -27,25 +27,28 @@ void SceneManager::mainLoop()
             {
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)
                 && event.key.code == sf::Keyboard::Return)
-                    toggleFullScreen(game);
+                    toggleFullScreen(*currScene);
                 else if(event.key.code == sf::Keyboard::F2)
-                    setAALevel(0, game);
+                    setAALevel(0, *currScene);
                 else if(event.key.code == sf::Keyboard::F3)
-                    setAALevel(8, game);
-                else if(event.key.code == sf::Keyboard::F5)
-                    game.unload();
-                else if(event.key.code == sf::Keyboard::F6)
-                    game.load();
+                    setAALevel(8, *currScene);
+                else if(event.key.code == sf::Keyboard::Escape)
+                    currScene->requestScene(SceneEnum::SCENE_MENU);
             }
             else if(event.type == sf::Event::Closed)
                 window.close();
 
-            game.events(event);
+            currScene->events(event);
         }
 
-        game.update(window);
-        game.redraw(window);
+        currScene->update(window);
+        currScene->redraw(window);
         window.display();
+
+        nextSceneEnum = currScene->pollNextScene();
+
+        if(nextSceneEnum!=SceneEnum::LAST && nextSceneEnum!=thisSceneEnum)
+            loadNextScene(nextSceneEnum);
 
         updateFPS(sf::seconds(0.5f), 1.0f/currentFrameTime.asSeconds());
         timeSinceFSample+=currentFrameTime;
@@ -157,4 +160,24 @@ void SceneManager::setAALevel(unsigned int level, Scene &currScene)
     }
     limitFramerate(static_cast<int>(1.0f/targetFTime.asSeconds()));
     window.setKeyRepeatEnabled(false);
+}
+
+void SceneManager::loadNextScene(SceneEnum nextScene)
+{
+    std::cout << static_cast<int>(nextScene) << "\n";
+    thisSceneEnum = nextSceneEnum;
+    currScene->requestScene(SceneEnum::LAST);
+    currScene->unload();
+    switch(nextScene)
+    {
+        case(SceneEnum::SCENE_GAME):
+            currScene = &game;
+            break;
+        case(SceneEnum::SCENE_MENU):
+            currScene = &menu;
+            break;
+        default:
+            break;
+    }
+    currScene->load();
 }
