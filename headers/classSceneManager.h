@@ -3,6 +3,7 @@
 
 #include "classScene.h"
 #include "classGameScene.h"
+#include "classMenuScene.h"
 #include "classUIContainer.h"
 
 class SceneManager
@@ -25,7 +26,8 @@ class SceneManager
     sf::View GUIView = window.getDefaultView();
     sf::ContextSettings settings;
 
-    GameScene game{window, targetFTime, currentFrameTime, currentFPS};
+    //GameScene game{window, targetFTime, currentFrameTime, currentFPS};
+    MenuScene game{window, currentFrameTime, currentFPS};
 
     void limitFramerate(int framerate);
     void updateFPS(sf::Time interval, float framerate);
