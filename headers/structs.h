@@ -42,7 +42,7 @@ struct ButtonParams
     int fontSize;
     sf::Vector2f position;
     sf::Vector2f bSize;
-    std::function<void()> const& func;
+    std::function<void()> func;
     sf::Color color = {80,80,80,150};
     bool changeState = true;
 

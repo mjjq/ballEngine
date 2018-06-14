@@ -12,11 +12,11 @@
 #include "../../headers/stringConversion.h"
 #include "../../headers/structs.h"
 
-UIButton::UIButton(ButtonParams &bParams, WindowParams &wParams, bool changeState) :
+UIButton::UIButton(ButtonParams bParams, WindowParams &wParams, bool changeState) :
             UIWindow(wParams), unclickedColor{bParams.color}, upFunc{bParams.func},
             changeState{bParams.changeState}
 {
-
+    //upFunc = std::function<void()>{bParams.func};
     isButton = true;
     TextElParams<int> tempParams;
     if(bParams.font != "")

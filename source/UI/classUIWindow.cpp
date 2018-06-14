@@ -17,7 +17,7 @@
 void UIWindow::addGroup(WindowParams &wParams)
 {
     std::unique_ptr<UIGroup> newGroup = std::make_unique<UIGroup>(wParams);
-    groupArray.emplace_back(std::move(newGroup));
+    groupArray.push_back(std::move(newGroup));
 }
 
 template<class T>
@@ -43,8 +43,10 @@ void UIWindow::addButton(ButtonParams &bParams)
         fixedToWindow,
         false,
     };
+
     bParams.position = {0,0};
     addGroup(wParams);
+    //std::cout << &groupArray.back() << "\n";
     groupArray.back()->addButton(bParams);
 }
 

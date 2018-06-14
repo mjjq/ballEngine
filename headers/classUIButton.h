@@ -13,7 +13,7 @@ protected:
     sf::Color unclickedColor;
     sf::Color clickedColor = unclickedColor - sf::Color{20,20,20,0};
     sf::Color mouseOverColor = unclickedColor + sf::Color{20,20,20,0};
-    std::function<void()> upFunc;
+    std::function<void()> upFunc = [&]{};
     std::function<void()> downFunc = [&]{};
 
     bool buttonDown = false;
@@ -26,7 +26,7 @@ protected:
     //bool fixedToWindow;
 
 public:
-    UIButton(ButtonParams &bParams, WindowParams &wParams, bool changeState = true);
+    UIButton(ButtonParams bParams, WindowParams &wParams, bool changeState = true);
 
     virtual void clickIntersectedButton(sf::RenderWindow &window);
     virtual void clickIntersectedButton();

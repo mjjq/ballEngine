@@ -56,6 +56,7 @@
 		</Linker>
 		<Unit filename="headers/classBall.h" />
 		<Unit filename="headers/classGameScene.h" />
+		<Unit filename="headers/classMenuScene.h" />
 		<Unit filename="headers/classScene.h" />
 		<Unit filename="headers/classSceneManager.h" />
 		<Unit filename="headers/classTextElement.h" />
@@ -80,6 +81,7 @@
 		<Unit filename="source/UI/classUITextElementBase.cpp" />
 		<Unit filename="source/UI/classUIWindow.cpp" />
 		<Unit filename="source/events/classGameScene.cpp" />
+		<Unit filename="source/events/classMenuScene.cpp" />
 		<Unit filename="source/events/classScene.cpp" />
 		<Unit filename="source/events/classSceneManager.cpp" />
 		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />

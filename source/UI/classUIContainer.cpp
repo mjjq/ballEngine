@@ -27,6 +27,7 @@ UIContainer::UIContainer()
 
 void UIContainer::addWindow(CompleteWindow &compWindow)
 {
+
     std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(compWindow.wParams);
 
     for(unsigned int i=0; i<compWindow.bParamsVec.size(); ++i)
@@ -49,7 +50,6 @@ void UIContainer::addWindow(CompleteWindow &compWindow)
         newWindow->addElement(compWindow.tParamsIntegVec.at(i));
 
 
-    //std::cout << compWindow.bParamsVec.size();
     interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);
