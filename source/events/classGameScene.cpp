@@ -564,16 +564,16 @@ void GameScene::decTimeStep(sf::Time delta)
 void GameScene::setSpawnValues(float value,
                                         SpawnQuantity toChange)
 {
-    float density = 1.0f;
+    //float density = 1.0f;
     switch(toChange)
     {
         case(SQ_MASS):
             spawnMass = value;
-            spawnRadius = density*value;
+            //spawnRadius = density*value;
             break;
         case(SQ_RADIUS):
             spawnRadius = value;
-            spawnMass = density*value;
+            //spawnMass = density*value;
             break;
         default:
             break;
@@ -620,7 +620,7 @@ void GameScene::load()
     };
     window0.sParamsVec = std::vector<SliderParams>{
         {{10,50}, 210.0f, 2.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass},
-        {{10,90}, 210.0f, 2.0f, {10,20}, {1.0,10.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}
+        {{10,90}, 210.0f, 2.0f, {10,20}, {4.0,50.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}
     };
     window0.tParamsIntVec = std::vector<TextElParams<int>>{
         {"./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls()},
