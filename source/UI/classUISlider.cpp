@@ -93,7 +93,7 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     }
 
     sf::Rect<float> newButtonRect{currButtonPosition,{width,height}};
-    origRect = newButtonRect;
+    //origRect = newButtonRect;
     if(fixedToWindow)
         windowBox.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>
                                                             (currButtonPosition)));
@@ -124,7 +124,7 @@ void UISlider::checkMouseIntersection(sf::RenderWindow &window)
     else
         mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-    if(origRect.contains(mousePosf))
+    if(windowBox.getGlobalBounds().contains(mousePosf))
     {
         mouseIntersecting = true;
         for(unsigned int i=0; i<buttonArray.size(); i++)

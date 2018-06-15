@@ -258,7 +258,7 @@ void MenuScene::load()
 
 
     CompleteWindow window0;
-    window0.wParams = {{0,200}, {250, 250}, true, false, {0,0,0,0}};
+    window0.wParams = {{0.0f,0.5f}, {0,-125}, {250, 250}, true, false, {0,0,0,0}};
     window0.bParamsVec =  std::vector<ButtonParams>{
         {"./fonts/cour.ttf", "New Game", 12, {20,30}, {100,30}, [&]{requestScene(SceneEnum::SCENE_GAME);}},
         {"./fonts/cour.ttf", "Options", 12, {20,70}, {100,30}, [&]{}},

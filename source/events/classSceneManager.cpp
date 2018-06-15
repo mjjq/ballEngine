@@ -9,8 +9,15 @@
 
 #include "../../headers/classSceneManager.h"
 
+
+SceneManager::SceneManager()
+{
+    //UIWindow::appWinSize = windowSize;
+}
+
 void SceneManager::mainLoop()
 {
+    //UIWindow::appWinSize = windowSize;
     currScene->load();
     limitFramerate(60);
     window.setKeyRepeatEnabled(false);
@@ -164,7 +171,7 @@ void SceneManager::setAALevel(unsigned int level, Scene &currScene)
 
 void SceneManager::loadNextScene(SceneEnum nextScene)
 {
-    std::cout << static_cast<int>(nextScene) << "\n";
+    //std::cout << static_cast<int>(nextScene) << "\n";
     thisSceneEnum = nextSceneEnum;
     currScene->requestScene(SceneEnum::LAST);
     currScene->unload();

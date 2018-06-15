@@ -5,6 +5,7 @@
 #include "classGameScene.h"
 #include "classMenuScene.h"
 #include "classUIContainer.h"
+#include "classUIWindow.h"
 
 class SceneManager
 {
@@ -16,7 +17,7 @@ class SceneManager
 
     sf::Clock frameClock;
 
-    sf::Vector2u windowSize{800,800};
+    sf::Vector2u windowSize{1000,800};
     sf::Vector2u prevWinSize{800,800};
     sf::Vector2i prevWinPos;
     bool isFullScreen = false;
@@ -43,6 +44,7 @@ class SceneManager
     void loadNextScene(SceneEnum nextScene);
 
 public:
+    SceneManager();
     void mainLoop();
 };
 

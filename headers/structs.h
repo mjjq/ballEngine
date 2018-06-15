@@ -5,7 +5,8 @@
 
 struct WindowParams
 {
-    sf::Vector2f position;
+    sf::Vector2f normPosition;
+    sf::Vector2f positionOffset;
     sf::Vector2f wSize;
     bool fixedToWin;
     bool draggable;

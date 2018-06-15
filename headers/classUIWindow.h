@@ -14,6 +14,8 @@ class UIGroup;
 
 class UIWindow
 {
+    sf::Vector2f normPosition{0.0f,0.0f};
+    sf::Vector2f effOrigPos{0.0f,0.0f};
 protected:
     std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
     std::pair<bool,int> mouseOnButton{false, -1};
@@ -26,7 +28,7 @@ protected:
     sf::Vector2f origPosition;
     float width;
     float height;
-    sf::Rect<float> origRect{origPosition, {width,height}};
+    //sf::Rect<float> origRect;//{effOrigPos, {width,height}};
 
     sf::Color color;
     sf::RectangleShape windowBox;
@@ -43,6 +45,8 @@ protected:
     void addGroup(WindowParams &wParams);
 
 public:
+    //static sf::Vector2u appWinSize;
+
     UIWindow(WindowParams &params);
 
     virtual ~UIWindow();
@@ -69,6 +73,8 @@ public:
     void destroyAllElements();
 
     void moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition);
+
+    bool getFixedToWin();
 };
 
 #endif // CLASS_UIWIN_H

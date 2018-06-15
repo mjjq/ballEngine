@@ -609,7 +609,7 @@ void GameScene::load()
 
 
     CompleteWindow window0;
-    window0.wParams = {{0,100}, {250, 250}, true, false};
+    window0.wParams = {{0.0f,0.2f},{0,0}, {250, 250}, true, false};
     window0.bParamsVec =  std::vector<ButtonParams>{
         {"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;}},
         {"./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}}},
@@ -636,6 +636,33 @@ void GameScene::load()
     };
     completeWindows.push_back(window0);
 
+    /*CompleteWindow window1;
+    window1.wParams = {{1.0f,0.2f},{-250,0}, {250, 250}, true, true};
+    window1.bParamsVec =  std::vector<ButtonParams>{
+        {"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;}},
+        {"./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}}},
+        {"./fonts/cour.ttf", "Rad +", 12, {10,220}, {60,30}, [&]{spawnRadius+=1;}},
+        {"./fonts/cour.ttf", "Rad -", 12, {90,220}, {60,30}, [&]{if(spawnRadius>1){spawnRadius-=1;}}},
+        {"./fonts/cour.ttf", "Rst Rad", 12, {170,220}, {60,30}, [&]{spawnRadius=10;}},
+        {"./fonts/cour.ttf", "Rst Mass", 12, {170,180}, {60,30}, [&]{spawnMass=1;}},
+    };
+    window1.sParamsVec = std::vector<SliderParams>{
+        {{10,50}, 210.0f, 2.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass},
+        {{10,90}, 210.0f, 2.0f, {10,20}, {4.0,50.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}
+    };
+    window1.tParamsIntVec = std::vector<TextElParams<int>>{
+        {"./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls()},
+    };
+    window1.tParamsFloatVec = std::vector<TextElParams<float>>{
+        {"./fonts/cour.ttf", "Timestep:", 16, {0,150}, &ballSim.getTimeStep()},
+        {"./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass},
+        {"./fonts/cour.ttf", "Spawn Radius:", 16, {00,70}, &spawnRadius}
+    };
+    window1.tParamsBoolVec = std::vector<TextElParams<bool>>{
+        {"./fonts/cour.ttf", "Forces Enabled:", 16, {0,110}, &ballSim.getForcesEnabled()},
+        {"./fonts/cour.ttf", "Collisions Enabled:", 16, {0,130}, &ballSim.getCollisionsEnabled()}
+    };
+    completeWindows.push_back(window1);*/
     //container.addWindow(window1);
 
 

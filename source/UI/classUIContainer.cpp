@@ -66,7 +66,7 @@ void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf:
     {
         int j = interfaceWindows.size() - 1 - i;
         interfaceWindows.at(j)->renderWindow(window, GUIView);
-        interfaceWindows.at(j)->renderElements(window,GUIView);
+        //interfaceWindows.at(j)->renderElements(window,GUIView);
         window.setView(originalView);
     }
 }
@@ -89,13 +89,14 @@ UIWindow &UIContainer::getWindow(unsigned int windowIndex)
 
 void UIContainer::checkMouseIntersection(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
-    //window.setView(GUIView);
     for(unsigned int i=0; i<interfaceWindows.size(); i++)
     {
+        if(interfaceWindows.at(i)->getFixedToWin())
+            window.setView(GUIView);
         interfaceWindows.at(i)->checkMouseIntersection(window);
         mouseIntersectionList.at(i) = interfaceWindows.at(i)->getIsMouseIntersecting();
+        window.setView(originalView);
     }
-    //window.setView(originalView);
 }
 
 std::pair<bool,int> UIContainer::doesMIntExist()

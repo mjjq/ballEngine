@@ -81,7 +81,7 @@ void UIButton::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     currPosition = origPosition+parentPosition;
     //std::cout << parentPosition << "\n";
     sf::Rect<float> newRect{currPosition,{width,height}};
-    origRect = newRect;
+    //origRect = newRect;
     if(fixedToWindow)
         windowBox.setPosition(window.mapPixelToCoords
                              (static_cast<sf::Vector2i>(currPosition)));

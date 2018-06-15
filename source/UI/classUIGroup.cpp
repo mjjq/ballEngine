@@ -22,6 +22,7 @@ UIGroup::UIGroup(WindowParams &params) : UIWindow(params)
 void UIGroup::addButton(ButtonParams &bParams)
 {
     WindowParams wParams = {
+        {0.0f, 0.0f},
         bParams.position,
         bParams.bSize,
         fixedToWindow,
@@ -64,6 +65,7 @@ void UIGroup::addSlider(SliderParams &sParams)
         sParams.buttonColor,
     };
     WindowParams wParams = {
+        {0.0f,0.0f},
         sliderBParams.position,
         sliderBParams.bSize,
         fixedToWindow,
@@ -86,7 +88,8 @@ void UIGroup::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositio
 {
     currPosition = origPosition + parentPosition;
     sf::Rect<float> newRect{currPosition,{width,height}};
-    origRect = newRect;
+    //std::cout << windowBox.getGlobalBounds().left << "\n";
+    //origRect = newRect;
     if(fixedToWindow)
         windowBox.setPosition(window.mapPixelToCoords
                              (static_cast<sf::Vector2i>(currPosition)));
