@@ -598,6 +598,7 @@ void GameScene::load()
     wSize = ballSim.getWorldSize();
     changeBoundaryRect(wSize);
     resetView();
+    adjustViewSize(window.getSize());
 
     std::vector<CompleteWindow> completeWindows;
 
@@ -609,7 +610,7 @@ void GameScene::load()
 
 
     CompleteWindow window0;
-    window0.wParams = {{0.0f,0.2f},{0,0}, {250, 250}, true, false};
+    window0.wParams = {{0.0f, 0.15f}, {0, 0}, {250, 250}, true, false};
     window0.bParamsVec =  std::vector<ButtonParams>{
         {"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;}},
         {"./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}}},
@@ -636,34 +637,39 @@ void GameScene::load()
     };
     completeWindows.push_back(window0);
 
-    /*CompleteWindow window1;
-    window1.wParams = {{1.0f,0.2f},{-250,0}, {250, 250}, true, true};
+    CompleteWindow window1;
+    window1.wParams = {{0.0f,0.15f}, {0,270}, {250, 50}, true, false};
     window1.bParamsVec =  std::vector<ButtonParams>{
-        {"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;}},
-        {"./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}}},
-        {"./fonts/cour.ttf", "Rad +", 12, {10,220}, {60,30}, [&]{spawnRadius+=1;}},
-        {"./fonts/cour.ttf", "Rad -", 12, {90,220}, {60,30}, [&]{if(spawnRadius>1){spawnRadius-=1;}}},
-        {"./fonts/cour.ttf", "Rst Rad", 12, {170,220}, {60,30}, [&]{spawnRadius=10;}},
-        {"./fonts/cour.ttf", "Rst Mass", 12, {170,180}, {60,30}, [&]{spawnMass=1;}},
+        {"./fonts/cour.ttf", "Star", 12, {10,10}, {60,30}, [&]{spawnRadius=50;spawnMass=10000;}},
+        {"./fonts/cour.ttf", "Planet", 12, {90,10}, {60,30}, [&]{spawnRadius=10;spawnMass=1;}},
+        {"./fonts/cour.ttf", "Asteroid", 12, {170,10}, {60,30}, [&]{spawnRadius=3;spawnMass=0.01;}}
     };
-    window1.sParamsVec = std::vector<SliderParams>{
-        {{10,50}, 210.0f, 2.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass},
-        {{10,90}, 210.0f, 2.0f, {10,20}, {4.0,50.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}
+    completeWindows.push_back(window1);
+
+    CompleteWindow window2;
+    window2.wParams = {{1.0f,0.0f}, {-150,0}, {150, 50}, true, false, {0,0,0,0}};
+    window2.tParamsFloatVec = std::vector<TextElParams<float>>{
+        {"./fonts/cour.ttf", "FPS:", 16, {0,00}, &currentFPS},
     };
-    window1.tParamsIntVec = std::vector<TextElParams<int>>{
-        {"./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls()},
-    };
-    window1.tParamsFloatVec = std::vector<TextElParams<float>>{
-        {"./fonts/cour.ttf", "Timestep:", 16, {0,150}, &ballSim.getTimeStep()},
-        {"./fonts/cour.ttf", "Spawn Mass:", 16, {00,30}, &spawnMass},
-        {"./fonts/cour.ttf", "Spawn Radius:", 16, {00,70}, &spawnRadius}
-    };
-    window1.tParamsBoolVec = std::vector<TextElParams<bool>>{
-        {"./fonts/cour.ttf", "Forces Enabled:", 16, {0,110}, &ballSim.getForcesEnabled()},
-        {"./fonts/cour.ttf", "Collisions Enabled:", 16, {0,130}, &ballSim.getCollisionsEnabled()}
-    };
-    completeWindows.push_back(window1);*/
+    completeWindows.push_back(window2);
     //container.addWindow(window1);
+
+    CompleteWindow window3;
+    window3.wParams = {{0.0f,0.15f}, {0,350}, {250, 150}, true, false};
+    window3.bParamsVec = {
+        {"./fonts/cour.ttf", "Trj", 12, {10,90}, {60,30}, [&]{ballSim.toggleTrajectories();}},
+        {"./fonts/cour.ttf", "Pl Trj", 12, {90,90}, {60,30}, [&]{ballSim.togglePlayerTraj();}},
+        {"./fonts/cour.ttf", "Toggle\nRK4", 12, {170,90}, {60,30}, [&]{ballSim.toggleRK4();}}
+    };
+    window3.tParamsFloatVec = std::vector<TextElParams<float>>{
+        {"./fonts/cour.ttf", "Total KE: ", 16, {0,0}, &ballSim.getTotalKE()},
+        //{"./fonts/cour.ttf", "Total Momentum: ", 16, {0,20}, &ballSim.getTotalMomentum())},
+        {"./fonts/cour.ttf", "Total Energy: ", 16, {0,20}, &ballSim.getTotalEnergy()}
+    };
+    window3.tParamsIntegVec = std::vector<TextElParams<Integrators>>{
+        {"./fonts/cour.ttf", "Int method: ", 16, {0,40}, &ballSim.getUseRK4()}
+    };
+    completeWindows.push_back(window3);
 
 
     /*TextElParams<int> text1{"./fonts/cour.ttf", "No. Balls:", 16, sf::Vector2f{0,0}, &ballSim.getNumOfBalls()};

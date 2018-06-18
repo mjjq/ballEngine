@@ -17,7 +17,7 @@ class SceneManager
 
     sf::Clock frameClock;
 
-    sf::Vector2u windowSize{1000,800};
+    sf::Vector2u windowSize{800,800};
     sf::Vector2u prevWinSize{800,800};
     sf::Vector2i prevWinPos;
     bool isFullScreen = false;

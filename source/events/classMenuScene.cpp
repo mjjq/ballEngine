@@ -248,6 +248,8 @@ void MenuScene::events(sf::Event &event)
 
 void MenuScene::load()
 {
+    adjustViewSize(window.getSize());
+
     std::vector<CompleteWindow> completeWindows;
 
     /*winPars.push_back( {{0,100}, {250, 250}, true, false} );
