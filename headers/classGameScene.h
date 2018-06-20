@@ -48,8 +48,9 @@ class GameScene : public Scene
 
     int playerBallIndex = 0;
     BallUniverse ballSim{2000, 2000, 1.0f, true, false};
+    bool isLoaded = false;
 
-    UIContainer container;
+    UIContainer container{true};
 
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
@@ -79,7 +80,7 @@ class GameScene : public Scene
 
     void setSpawnValues(float value, SpawnQuantity toChange);
 
-
+    void togglePause();
 
 public:
     GameScene(sf::RenderWindow &window, sf::Time &targetFTime,

@@ -4,6 +4,7 @@
 #include "classScene.h"
 #include "classGameScene.h"
 #include "classMenuScene.h"
+#include "classPauseMenuScene.h"
 #include "classUIContainer.h"
 #include "classUIWindow.h"
 
@@ -29,6 +30,7 @@ class SceneManager
 
     GameScene game{window, targetFTime, currentFrameTime, currentFPS};
     MenuScene menu{window, currentFrameTime, currentFPS};
+    PauseMenuScene pauseMenu{window, currentFrameTime, currentFPS};
     Scene *currScene = &menu;
 
     SceneEnum thisSceneEnum = SceneEnum::LAST;

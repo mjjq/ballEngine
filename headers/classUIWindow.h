@@ -16,6 +16,9 @@ class UIWindow
 {
     sf::Vector2f normPosition{0.0f,0.0f};
     sf::Vector2f effOrigPos{0.0f,0.0f};
+
+    bool canInteract = true;
+    bool isVisible = true;
 protected:
     std::pair<bool,int> mouseOnButtonWhenClicked{false, -1};
     std::pair<bool,int> mouseOnButton{false, -1};
@@ -75,6 +78,9 @@ public:
     void moveWindow(sf::RenderWindow &window, sf::Vector2i newPosition);
 
     bool getFixedToWin();
+
+    void setIsVisible(bool value);
+    void setCanInteract(bool value);
 };
 
 #endif // CLASS_UIWIN_H

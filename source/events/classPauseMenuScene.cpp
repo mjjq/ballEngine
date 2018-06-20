@@ -16,7 +16,7 @@
 #include <functional>
 #include <numeric>
 
-#include "../../headers/classMenuScene.h"
+#include "../../headers/classPauseMenuScene.h"
 #include "../../headers/classTextElementBase.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
@@ -30,7 +30,7 @@
     @param &initPos The click position of the mouse.
     @param mouseType Boolean which draws line if set to true.
 */
-void MenuScene::checkMBPress(sf::Vector2i &initPos, bool mouseType)
+void PauseMenuScene::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 {
     sf::Vector2i finalPos;
     sf::Vertex line[2];
@@ -55,7 +55,7 @@ void MenuScene::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 
     @return Void.
 */
-void MenuScene::resetView()
+void PauseMenuScene::resetView()
 {
     currentZoom = 1.0;
     window.setView(worldView);
@@ -67,7 +67,7 @@ void MenuScene::resetView()
 
     @return Void.
 */
-void MenuScene::clickOnUI()
+void PauseMenuScene::clickOnUI()
 {
     container.checkMouseIntersection(window, GUIView, worldView);
     mouseOnUIWhenClicked = container.doesMIntExist();
@@ -80,7 +80,7 @@ void MenuScene::clickOnUI()
 
     @return Void.
 */
-void MenuScene::resetUIClick()
+void PauseMenuScene::resetUIClick()
 {
     container.resetUIClick();
     clickedWindowToDrag = false;
@@ -95,7 +95,7 @@ void MenuScene::resetUIClick()
 
     @return Void.
 */
-void MenuScene::mouseViewEvents(sf::Event &event)
+void PauseMenuScene::mouseViewEvents(sf::Event &event)
 {
     if(event.type == sf::Event::MouseButtonPressed)
     {
@@ -124,7 +124,7 @@ void MenuScene::mouseViewEvents(sf::Event &event)
 
     @return Void.
 */
-void MenuScene::mouseUIEvents(sf::Event &event)
+void PauseMenuScene::mouseUIEvents(sf::Event &event)
 {
     if(event.type == sf::Event::MouseButtonPressed)
         clickedWindowToDrag = container.isWindowDraggable();
@@ -142,7 +142,7 @@ void MenuScene::mouseUIEvents(sf::Event &event)
 
     @return Void.
 */
-void MenuScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
+void PauseMenuScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 {
     if(newLayerKeys[0]&&(!newLayerKeys[1]))
     {
@@ -164,7 +164,7 @@ void MenuScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 
     @return Void.
 */
-void MenuScene::keyEvents(sf::Event &event)
+void PauseMenuScene::keyEvents(sf::Event &event)
 {
     std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
                                        sf::Keyboard::isKeyPressed(sf::Keyboard::LShift),
@@ -177,7 +177,8 @@ void MenuScene::keyEvents(sf::Event &event)
     {
         if(!newLayerPressed)
         {
-
+            if(event.key.code == sf::Keyboard::Escape)
+                requestScene(SceneEnum::SCENE_GAME);
         }
 
         newLayerEvent(newLayerKeys, event);
@@ -192,7 +193,7 @@ void MenuScene::keyEvents(sf::Event &event)
 
     @return Void.
 */
-void MenuScene::playerKeysDown(int player)
+void PauseMenuScene::playerKeysDown(int player)
 {
 
 
@@ -206,7 +207,7 @@ void MenuScene::playerKeysDown(int player)
 
     @return Void.
 */
-void MenuScene::resizeEvents(sf::Event &event)
+void PauseMenuScene::resizeEvents(sf::Event &event)
 {
     if(event.type == sf::Event::Resized)
         adjustViewSize({event.size.width, event.size.height});//, currentZoom);
@@ -225,7 +226,7 @@ void MenuScene::resizeEvents(sf::Event &event)
 
     @return Void.
 */
-void MenuScene::adjustViewSize(sf::Vector2u newSize)
+void PauseMenuScene::adjustViewSize(sf::Vector2u newSize)
 {
     worldView.setSize(newSize.x, newSize.y);
     GUIView.setSize(newSize.x, newSize.y);
@@ -235,7 +236,7 @@ void MenuScene::adjustViewSize(sf::Vector2u newSize)
 
 
 
-void MenuScene::events(sf::Event &event)
+void PauseMenuScene::events(sf::Event &event)
 {
     mouseViewEvents(event);
 
@@ -246,37 +247,21 @@ void MenuScene::events(sf::Event &event)
     resizeEvents(event);
 }
 
-void MenuScene::load()
+void PauseMenuScene::load()
 {
     adjustViewSize(window.getSize());
 
     std::vector<CompleteWindow> completeWindows;
 
-    /*winPars.push_back( {{0,100}, {250, 250}, true, false} );
-    winPars.push_back( {{0,0}, {250, 70}, true, false} );
-    winPars.push_back( {{0,400}, {250, 50}, true, false} );
-    winPars.push_back( {{0,500}, {250, 150}, true, false} );*/
-
-
-
     CompleteWindow window0;
-    window0.wParams = {{0.0f,0.5f}, {0,-125}, {250, 250}, true, false, true, {0,0,0,0}};
-    window0.bParamsVec =  std::vector<ButtonParams>{
-        {"./fonts/cour.ttf", "New Game", 12, {20,30}, {100,30}, [&]{requestScene(SceneEnum::SCENE_GAME);}},
+    window0.wParams = {{0.5f,0.5f}, {-70,-70}, {140, 150}, true, false, true, {0,0,0,0}};
+    window0.bParamsVec = {
+        {"./fonts/cour.ttf", "Resume", 12, {20,30}, {100,30}, [&]{requestScene(SceneEnum::SCENE_GAME);}},
         {"./fonts/cour.ttf", "Options", 12, {20,70}, {100,30}, [&]{}},
-        {"./fonts/cour.ttf", "Exit", 12, {20,110}, {100,30}, [&]{window.close();}}
-    };
-    window0.sParamsVec = std::vector<SliderParams>{
-
+        {"./fonts/cour.ttf", "Main Menu", 12, {20,110}, {100,30}, [&]{requestScene(SceneEnum::SCENE_MENU);}}
     };
     window0.tParamsIntVec = std::vector<TextElParams<int>>{
-        {"./fonts/cour.ttf", "ballEngine", 16, {10,00}, nullptr}
-    };
-    window0.tParamsFloatVec = std::vector<TextElParams<float>>{
-
-    };
-    window0.tParamsBoolVec = std::vector<TextElParams<bool>>{
-
+        {"./fonts/cour.ttf", "Paused", 16, {20,00}, nullptr}
     };
     completeWindows.push_back(window0);
 
@@ -285,17 +270,17 @@ void MenuScene::load()
 
 }
 
-void MenuScene::unload()
+void PauseMenuScene::unload()
 {
     container.destroyAllWindows();
 }
 
-void MenuScene::redraw(sf::RenderWindow &window)
+void PauseMenuScene::redraw(sf::RenderWindow &window)
 {
     container.renderWindows(window, GUIView, worldView);
 }
 
-void MenuScene::update(sf::RenderWindow &window)
+void PauseMenuScene::update(sf::RenderWindow &window)
 {
     if(!mouseOnUIWhenClicked.first)
     {
@@ -306,7 +291,7 @@ void MenuScene::update(sf::RenderWindow &window)
     playerKeysDown(0);
 }
 
-MenuScene::MenuScene(sf::RenderWindow &_window,
+PauseMenuScene::PauseMenuScene(sf::RenderWindow &_window,
                      sf::Time &_currentFTime, float &_currentFPS) : window{_window},
                      currentFrameTime{_currentFTime}, currentFPS{_currentFPS}
 {

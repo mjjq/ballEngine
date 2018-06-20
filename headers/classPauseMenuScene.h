@@ -1,11 +1,11 @@
-#ifndef CLASS_MENUSCENE_H
-#define CLASS_MENUSCENE_H
+#ifndef CLASS_PAUSEMENUSCENE_H
+#define CLASS_PAUSEMENUSCENE_H
 
 
 #include "classScene.h"
 #include "classUIContainer.h"
 
-class MenuScene : public Scene
+class PauseMenuScene : public Scene
 {
     sf::RenderWindow &window;
     sf::View worldView = window.getDefaultView();
@@ -40,7 +40,7 @@ class MenuScene : public Scene
     void newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event);
 
 public:
-    MenuScene(sf::RenderWindow &window,
+    PauseMenuScene(sf::RenderWindow &window,
               sf::Time &currentFTime, float &currentFPS);
     void update(sf::RenderWindow &window);
     void load();

@@ -39,8 +39,8 @@ void SceneManager::mainLoop()
                     setAALevel(0, *currScene);
                 else if(event.key.code == sf::Keyboard::F3)
                     setAALevel(8, *currScene);
-                else if(event.key.code == sf::Keyboard::Escape)
-                    currScene->requestScene(SceneEnum::SCENE_MENU);
+                //else if(event.key.code == sf::Keyboard::Escape)
+                //    currScene->requestScene(SceneEnum::SCENE_MENU);
             }
             else if(event.type == sf::Event::Closed)
                 window.close();
@@ -174,17 +174,23 @@ void SceneManager::loadNextScene(SceneEnum nextScene)
     //std::cout << static_cast<int>(nextScene) << "\n";
     thisSceneEnum = nextSceneEnum;
     currScene->requestScene(SceneEnum::LAST);
-    currScene->unload();
     switch(nextScene)
     {
         case(SceneEnum::SCENE_GAME):
+            currScene->unload();
             currScene = &game;
             break;
         case(SceneEnum::SCENE_MENU):
+            currScene->unload();
             currScene = &menu;
+            game.unload();
+            break;
+        case(SceneEnum::SCENE_PAUSEMENU):
+            currScene = &pauseMenu;
             break;
         default:
             break;
     }
     currScene->load();
+    currScene->adjustViewSize(window.getSize());
 }

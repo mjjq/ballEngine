@@ -12,12 +12,13 @@ class UIContainer
     std::vector<std::unique_ptr<UIWindow>> interfaceWindows;
     std::vector<int> interfaceWindowIDs;
     std::vector<bool> mouseIntersectionList;
-    std::pair<bool,int> currentIntButton;
-    std::pair<bool,int> currentIntWindow;
+    std::pair<bool,int> currentIntButton{false, -1};
+    std::pair<bool,int> currentIntWindow{false, -1};
 
-
+    bool canInteract = true;
+    bool isVisible = true;
 public:
-    UIContainer();
+    UIContainer(bool _isVisible);
 
     //void addWindow(WindowParams &params);
 
@@ -38,7 +39,8 @@ public:
     void destroyWindow(unsigned int index);
     void destroyAllWindows();
 
-    static void setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2);
+    void setWindowIsVisible(int index, bool value);
+    void setWindowCanInteract(int index, bool value);
 };
 
 

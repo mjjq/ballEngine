@@ -11,7 +11,8 @@
 #include "../../headers/structs.h"
 
 
-UIContainer::UIContainer()
+UIContainer::UIContainer(bool _isVisible) :
+    canInteract{_isVisible}, isVisible{_isVisible}
 {
 
 }
@@ -62,13 +63,14 @@ void UIContainer::addTextElType(TextElBaseParams &tParams)
 
 void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
-    for(unsigned int i=0; i<interfaceWindows.size(); i++)
-    {
-        int j = interfaceWindows.size() - 1 - i;
-        interfaceWindows.at(j)->renderWindow(window, GUIView);
-        //interfaceWindows.at(j)->renderElements(window,GUIView);
-        window.setView(originalView);
-    }
+    if(isVisible)
+        for(unsigned int i=0; i<interfaceWindows.size(); i++)
+        {
+            int j = interfaceWindows.size() - 1 - i;
+            interfaceWindows.at(j)->renderWindow(window, GUIView);
+            //interfaceWindows.at(j)->renderElements(window,GUIView);
+            window.setView(originalView);
+        }
 }
 
 UIWindow &UIContainer::getWindow(unsigned int windowIndex)
@@ -89,14 +91,15 @@ UIWindow &UIContainer::getWindow(unsigned int windowIndex)
 
 void UIContainer::checkMouseIntersection(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
-    for(unsigned int i=0; i<interfaceWindows.size(); i++)
-    {
-        if(interfaceWindows.at(i)->getFixedToWin())
-            window.setView(GUIView);
-        interfaceWindows.at(i)->checkMouseIntersection(window);
-        mouseIntersectionList.at(i) = interfaceWindows.at(i)->getIsMouseIntersecting();
-        window.setView(originalView);
-    }
+    if(canInteract && isVisible)
+        for(unsigned int i=0; i<interfaceWindows.size(); i++)
+        {
+            if(interfaceWindows.at(i)->getFixedToWin())
+                window.setView(GUIView);
+            interfaceWindows.at(i)->checkMouseIntersection(window);
+            mouseIntersectionList.at(i) = interfaceWindows.at(i)->getIsMouseIntersecting();
+            window.setView(originalView);
+        }
 }
 
 std::pair<bool,int> UIContainer::doesMIntExist()
@@ -161,10 +164,6 @@ void UIContainer::dragWindow(sf::RenderWindow &window)
     getWindow(currentIntWindow.second).moveWindow(window, sf::Mouse::getPosition(window));
 }
 
-void UIContainer::setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2)
-{
-}
-
 void UIContainer::destroyWindow(unsigned int index)
 {
     if(index >= 0 && index < interfaceWindows.size())
@@ -183,6 +182,34 @@ void UIContainer::destroyAllWindows()
     }
     interfaceWindows.clear();
     interfaceWindowIDs.clear();
+}
+
+void UIContainer::setWindowIsVisible(int index, bool value)
+{
+    UIWindow *tempWindow;
+    if(index >= 0)
+        tempWindow = &getWindow(index);
+    else
+        tempWindow = &getWindow(interfaceWindows.size()+index);
+
+    tempWindow->setIsVisible(value);
+    tempWindow->setCanInteract(value);
+    resetUIClick();
+}
+
+void UIContainer::setWindowCanInteract(int index, bool value)
+{
+    UIWindow *tempWindow;
+    if(index >= 0)
+        tempWindow = &getWindow(index);
+    else
+        tempWindow = &getWindow(interfaceWindows.size()+index);
+
+    if(isVisible)
+    {
+        tempWindow->setCanInteract(value);
+    }
+    resetUIClick();
 }
 
 //template void UIContainer::addWindow<int>(CompleteWindow &compWindow);

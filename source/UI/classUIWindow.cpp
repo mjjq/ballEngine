@@ -100,30 +100,37 @@ void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 
 void UIWindow::renderWindow(sf::RenderWindow &window, sf::View &GUIView)
 {
-    effOrigPos = origPosition + sf::Vector2f{window.getSize().x*normPosition.x,
-                                             window.getSize().y*normPosition.y};
-                                           // std::cout << window.getSize().x << "\n";
-    if(fixedToWindow)
+    if(isVisible)
     {
-        window.setView(GUIView);
-        windowBox.setPosition(window.mapPixelToCoords
-            (static_cast<sf::Vector2i>(effOrigPos)));
+        effOrigPos = origPosition + sf::Vector2f{window.getSize().x*normPosition.x,
+                                                 window.getSize().y*normPosition.y};
+                                               // std::cout << window.getSize().x << "\n";
+        if(fixedToWindow)
+        {
+            window.setView(GUIView);
+            windowBox.setPosition(window.mapPixelToCoords
+                (static_cast<sf::Vector2i>(effOrigPos)));
+        }
+        else
+        {
+            //window.setView(GUIView);
+            //std::cout << "hello\n";
+            windowBox.setPosition(effOrigPos);
+        }
+        window.draw(windowBox);
+        renderElements(window, GUIView);
     }
-    else
-    {
-        //window.setView(GUIView);
-        //std::cout << "hello\n";
-        windowBox.setPosition(effOrigPos);
-    }
-    window.draw(windowBox);
-    renderElements(window, GUIView);
 }
 
 
 UIWindow::UIWindow(WindowParams &params) : normPosition{params.normPosition},
-                   origPosition{params.positionOffset}, width{params.wSize.x},
-                   height{params.wSize.y}, color{params.color}, fixedToWindow{params.fixedToWin},
-                   draggable{params.draggable}
+                    canInteract{params.isVisible},
+                    isVisible{params.isVisible},
+                    origPosition{params.positionOffset},
+                    width{params.wSize.x},
+                    height{params.wSize.y}, color{params.color},
+                    fixedToWindow{params.fixedToWin},
+                    draggable{params.draggable}
 {
     if(!fixedToWindow)
         normPosition = sf::Vector2f{0.0f,0.0f};
@@ -138,41 +145,44 @@ UIWindow::~UIWindow() {}
 
 void UIWindow::checkMouseIntersection(sf::RenderWindow &window)
 {
-    mouseIntersecting = false;
-    resetButtonPair();
-    sf::Vector2f mousePosf;
-
-    if(!fixedToWindow)
-        mousePosf = window.mapPixelToCoords
-                        (sf::Mouse::getPosition(window));
-    else
-        mousePosf = window.mapPixelToCoords
-                        (sf::Mouse::getPosition(window));
-
-    if(windowBox.getGlobalBounds().contains(mousePosf))
-    {
-        mouseIntersecting = true;
-    }
-    else
+    if(isVisible && canInteract)
     {
         mouseIntersecting = false;
-        //std::cout << "no int\n";
-    }
+        resetButtonPair();
+        sf::Vector2f mousePosf;
 
-    for(unsigned int i=0; i<buttonArray.size(); ++i)
-    {
-        buttonArray.at(i)->checkMouseIntersection(window);
-        bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
-        if(isIntersectingWithButton)
-            mouseOnButton = std::make_pair(isIntersectingWithButton, i);
-    }
+        if(!fixedToWindow)
+            mousePosf = window.mapPixelToCoords
+                            (sf::Mouse::getPosition(window));
+        else
+            mousePosf = window.mapPixelToCoords
+                            (sf::Mouse::getPosition(window));
 
-    for(unsigned int j=0; j<groupArray.size(); ++j)
-    {
-        groupArray.at(j)->checkMouseIntersection(window);
-        bool isIntWithGroup = groupArray.at(j)->getIsMouseIntersecting();
-        if(isIntWithGroup)
-            mouseOnGroup = std::make_pair(isIntWithGroup, j);
+        if(windowBox.getGlobalBounds().contains(mousePosf))
+        {
+            mouseIntersecting = true;
+        }
+        else
+        {
+            mouseIntersecting = false;
+            //std::cout << "no int\n";
+        }
+
+        for(unsigned int i=0; i<buttonArray.size(); ++i)
+        {
+            buttonArray.at(i)->checkMouseIntersection(window);
+            bool isIntersectingWithButton = buttonArray.at(i)->getIsMouseIntersecting();
+            if(isIntersectingWithButton)
+                mouseOnButton = std::make_pair(isIntersectingWithButton, i);
+        }
+
+        for(unsigned int j=0; j<groupArray.size(); ++j)
+        {
+            groupArray.at(j)->checkMouseIntersection(window);
+            bool isIntWithGroup = groupArray.at(j)->getIsMouseIntersecting();
+            if(isIntWithGroup)
+                mouseOnGroup = std::make_pair(isIntWithGroup, j);
+        }
     }
 }
 
@@ -265,6 +275,16 @@ void UIWindow::destroyAllElements()
 bool UIWindow::getFixedToWin()
 {
     return fixedToWindow;
+}
+
+void UIWindow::setIsVisible(bool value)
+{
+    isVisible = value;
+}
+
+void UIWindow::setCanInteract(bool value)
+{
+    canInteract = value;
 }
 
 template void UIWindow::addElement<int>(TextElParams<int> &tParams);

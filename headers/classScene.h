@@ -5,6 +5,7 @@ enum class SceneEnum
 {
     SCENE_MENU,
     SCENE_GAME,
+    SCENE_PAUSEMENU,
     LAST
 };
 

@@ -486,6 +486,8 @@ void GameScene::keyEvents(sf::Event &event)
                 ballSim.setPlayer(0);
             else if(event.key.code == sf::Keyboard::Num2)
                 ballSim.setPlayer(1);
+            else if(event.key.code == sf::Keyboard::Escape)
+                togglePause();
         }
 
         newLayerEvent(newLayerKeys, event);
@@ -593,8 +595,16 @@ void GameScene::events(sf::Event &event)
     resizeEvents(event);
 }
 
+void GameScene::togglePause()
+{
+    requestScene(SceneEnum::SCENE_PAUSEMENU);
+}
+
 void GameScene::load()
 {
+    if(!isLoaded)
+    {
+    isLoaded = true;
     wSize = ballSim.getWorldSize();
     changeBoundaryRect(wSize);
     resetView();
@@ -647,7 +657,7 @@ void GameScene::load()
     completeWindows.push_back(window1);
 
     CompleteWindow window2;
-    window2.wParams = {{1.0f,0.0f}, {-150,0}, {150, 50}, true, false, {0,0,0,0}};
+    window2.wParams = {{1.0f,0.0f}, {-150,0}, {150, 50}, true, false, true, {0,0,0,0}};
     window2.tParamsFloatVec = std::vector<TextElParams<float>>{
         {"./fonts/cour.ttf", "FPS:", 16, {0,00}, &currentFPS},
     };
@@ -670,6 +680,7 @@ void GameScene::load()
         {"./fonts/cour.ttf", "Int method: ", 16, {0,40}, &ballSim.getUseRK4()}
     };
     completeWindows.push_back(window3);
+
 
 
     /*TextElParams<int> text1{"./fonts/cour.ttf", "No. Balls:", 16, sf::Vector2f{0,0}, &ballSim.getNumOfBalls()};
@@ -717,11 +728,12 @@ void GameScene::load()
 
     for(unsigned int i=0; i<completeWindows.size(); ++i)
        container.addWindow(completeWindows.at(i));
-
+    }
 }
 
 void GameScene::unload()
 {
+    isLoaded = false;
     container.destroyAllWindows();
     ballSim.clearSimulation();
 }
