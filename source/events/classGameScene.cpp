@@ -509,15 +509,15 @@ void GameScene::playerKeysDown(int player)
         focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        ballSim.pushPlayer(0.01, 0);
+        ballSim.playerInFunc(180);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        ballSim.pushPlayer(0.01, 180);
+        ballSim.playerInFunc(0);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        ballSim.pushPlayer(0.01, 270);
+        ballSim.playerInFunc(90);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        ballSim.pushPlayer(0.01, 90);
+        ballSim.playerInFunc(270);
 
-    ballSim.drawSampledPositions(window);
+
 }
 
 
@@ -740,6 +740,7 @@ void GameScene::unload()
 
 void GameScene::redraw(sf::RenderWindow &window)
 {
+    ballSim.drawSampledPositions(window);
     ballSim.drawBalls(window);
     window.draw(boundaryRect);
 

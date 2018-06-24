@@ -74,8 +74,7 @@ float Ball::newtonForce(float x, float x_0, float r, float G, float M)
     @param initVel The initial velocity of the ball.
 */
 Ball::Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel) :
-sf::CircleShape(radius), cStepVelocity{initVel}, nStepPosition(initPos), mass(mass),
-radius(radius)
+sf::CircleShape(radius), cStepVelocity{initVel}, nStepPosition(initPos), mass(mass)
 {
     setPosition(initPos);
     //nStepPosition = initPos;
@@ -156,10 +155,10 @@ float Ball::getMass()
 
     @return The radius of the ball.
 */
-float Ball::getRadius()
+/*float Ball::getRadius()
 {
     return radius;
-}
+}*/
 
 /**
     Get the current velocity of the ball.

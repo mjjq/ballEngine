@@ -31,7 +31,7 @@ class SceneManager
     GameScene game{window, targetFTime, currentFrameTime, currentFPS};
     MenuScene menu{window, currentFrameTime, currentFPS};
     PauseMenuScene pauseMenu{window, currentFrameTime, currentFPS};
-    Scene *currScene = &menu;
+    Scene *currScene = &game;
 
     SceneEnum thisSceneEnum = SceneEnum::LAST;
     SceneEnum nextSceneEnum = SceneEnum::LAST;

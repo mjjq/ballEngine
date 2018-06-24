@@ -47,7 +47,7 @@ class GameScene : public Scene
     bool simFitsInWindow = true;
 
     int playerBallIndex = 0;
-    BallUniverse ballSim{2000, 2000, 1.0f, true, false};
+    BallUniverse ballSim{2000, 2000, 1.0f, false, false};
     bool isLoaded = false;
 
     UIContainer container{true};

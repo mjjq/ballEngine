@@ -39,6 +39,10 @@ void SceneManager::mainLoop()
                     setAALevel(0, *currScene);
                 else if(event.key.code == sf::Keyboard::F3)
                     setAALevel(8, *currScene);
+                //else if(event.key.code == sf::Keyboard::End)
+                //    limitFramerate(240);
+                //else if(event.key.code == sf::Keyboard::Home)
+                //    limitFramerate(30);
                 //else if(event.key.code == sf::Keyboard::Escape)
                 //    currScene->requestScene(SceneEnum::SCENE_MENU);
             }
