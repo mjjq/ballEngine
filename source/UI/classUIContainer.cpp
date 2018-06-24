@@ -8,30 +8,69 @@
 
 #include "../../headers/classUIContainer.h"
 #include "../../headers/sfVectorMath.h"
+#include "../../headers/structs.h"
 
 
-UIContainer::UIContainer()
+UIContainer::UIContainer(bool _isVisible) :
+    canInteract{_isVisible}, isVisible{_isVisible}
 {
 
 }
 
-void UIContainer::addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable, sf::Color color)
+/*void UIContainer::addWindow(WindowParams &params)
 {
-    UIWindow newWindow{position, width, height, fixedToWin, draggable, color};
-    interfaceWindows.push_back(newWindow);
+    std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(params);
+    interfaceWindows.push_back(std::move(newWindow));
+    interfaceWindowIDs.push_back(interfaceWindows.size()-1);
+    mouseIntersectionList.push_back(false);
+}*/
+
+
+void UIContainer::addWindow(CompleteWindow &compWindow)
+{
+
+    std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(compWindow.wParams);
+
+    for(unsigned int i=0; i<compWindow.bParamsVec.size(); ++i)
+    {
+        newWindow->addButton(compWindow.bParamsVec.at(i));
+    }
+    for(unsigned int i=0; i<compWindow.sParamsVec.size(); ++i)
+        newWindow->addSlider(compWindow.sParamsVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParamsIntVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsIntVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParamsFloatVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsFloatVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParamsBoolVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsBoolVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParams2iVec.size(); ++i)
+        newWindow->addElement(compWindow.tParams2iVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParams2fVec.size(); ++i)
+        newWindow->addElement(compWindow.tParams2fVec.at(i));
+    for(unsigned int i=0; i<compWindow.tParamsIntegVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsIntegVec.at(i));
+
+
+    interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);
 }
 
+void UIContainer::addTextElType(TextElBaseParams &tParams)
+{
+    //if(dynamic_cast<TextElParams<int>*>(tParams) != nullptr)
+}
+
 void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
-    for(unsigned int i=0; i<interfaceWindows.size(); i++)
-    {
-        int j = interfaceWindows.size() - 1 - i;
-        interfaceWindows.at(j).renderWindow(window, GUIView);
-        interfaceWindows.at(j).renderElements(window,GUIView);
-        window.setView(originalView);
-    }
+    if(isVisible)
+        for(unsigned int i=0; i<interfaceWindows.size(); i++)
+        {
+            int j = interfaceWindows.size() - 1 - i;
+            interfaceWindows.at(j)->renderWindow(window, GUIView);
+            //interfaceWindows.at(j)->renderElements(window,GUIView);
+            window.setView(originalView);
+        }
 }
 
 UIWindow &UIContainer::getWindow(unsigned int windowIndex)
@@ -46,19 +85,21 @@ UIWindow &UIContainer::getWindow(unsigned int windowIndex)
         std::cerr << "Error: " << err << "\n";
     }
 
-    return interfaceWindows.at(windowIndex);
+    return *interfaceWindows.at(windowIndex);
 }
 
 
 void UIContainer::checkMouseIntersection(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
-    //window.setView(GUIView);
-    for(unsigned int i=0; i<interfaceWindows.size(); i++)
-    {
-        interfaceWindows.at(i).checkMouseIntersection(window);
-        mouseIntersectionList.at(i) = interfaceWindows.at(i).getIsMouseIntersecting();
-    }
-    //window.setView(originalView);
+    if(canInteract && isVisible)
+        for(unsigned int i=0; i<interfaceWindows.size(); i++)
+        {
+            if(interfaceWindows.at(i)->getFixedToWin())
+                window.setView(GUIView);
+            interfaceWindows.at(i)->checkMouseIntersection(window);
+            mouseIntersectionList.at(i) = interfaceWindows.at(i)->getIsMouseIntersecting();
+            window.setView(originalView);
+        }
 }
 
 std::pair<bool,int> UIContainer::doesMIntExist()
@@ -123,6 +164,52 @@ void UIContainer::dragWindow(sf::RenderWindow &window)
     getWindow(currentIntWindow.second).moveWindow(window, sf::Mouse::getPosition(window));
 }
 
-void UIContainer::setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2)
+void UIContainer::destroyWindow(unsigned int index)
 {
+    if(index >= 0 && index < interfaceWindows.size())
+    {
+        interfaceWindows.at(index)->destroyAllElements();
+        interfaceWindows.erase(interfaceWindows.begin()+index);
+        interfaceWindowIDs.erase(interfaceWindowIDs.begin()+index);
+    }
 }
+
+void UIContainer::destroyAllWindows()
+{
+    for(unsigned int i=0; i<interfaceWindows.size(); ++i)
+    {
+        interfaceWindows.at(i)->destroyAllElements();
+    }
+    interfaceWindows.clear();
+    interfaceWindowIDs.clear();
+}
+
+void UIContainer::setWindowIsVisible(int index, bool value)
+{
+    UIWindow *tempWindow;
+    if(index >= 0)
+        tempWindow = &getWindow(index);
+    else
+        tempWindow = &getWindow(interfaceWindows.size()+index);
+
+    tempWindow->setIsVisible(value);
+    tempWindow->setCanInteract(value);
+    resetUIClick();
+}
+
+void UIContainer::setWindowCanInteract(int index, bool value)
+{
+    UIWindow *tempWindow;
+    if(index >= 0)
+        tempWindow = &getWindow(index);
+    else
+        tempWindow = &getWindow(interfaceWindows.size()+index);
+
+    if(isVisible)
+    {
+        tempWindow->setCanInteract(value);
+    }
+    resetUIClick();
+}
+
+//template void UIContainer::addWindow<int>(CompleteWindow &compWindow);

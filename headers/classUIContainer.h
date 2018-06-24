@@ -1,6 +1,7 @@
 #ifndef CLASS_UICONTAINER_H
 #define CLASS_UICONTAINER_H
 #include "classUIWindow.h"
+#include "structs.h"
 
 class UIContainer
 {
@@ -8,17 +9,22 @@ class UIContainer
     static sf::View &originalView;
     static sf::View &GUIView;
 
-    std::vector<UIWindow> interfaceWindows;
+    std::vector<std::unique_ptr<UIWindow>> interfaceWindows;
     std::vector<int> interfaceWindowIDs;
     std::vector<bool> mouseIntersectionList;
-    std::pair<bool,int> currentIntButton;
-    std::pair<bool,int> currentIntWindow;
+    std::pair<bool,int> currentIntButton{false, -1};
+    std::pair<bool,int> currentIntWindow{false, -1};
 
-
+    bool canInteract = true;
+    bool isVisible = true;
 public:
-    UIContainer();
+    UIContainer(bool _isVisible);
 
-    void addWindow(sf::Vector2f position, float width, float height, bool fixedToWin, bool draggable = false, sf::Color color = {50,50,50,150});
+    //void addWindow(WindowParams &params);
+
+    //template <class T>
+    void addWindow(CompleteWindow &compWindow);
+    void addTextElType(TextElBaseParams &tParams);
     void renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
     UIWindow &getWindow(unsigned int windowIndex);
 
@@ -30,8 +36,11 @@ public:
 
     bool isWindowDraggable();
     void dragWindow(sf::RenderWindow &window);
+    void destroyWindow(unsigned int index);
+    void destroyAllWindows();
 
-    static void setViewParameters(sf::RenderWindow &window, sf::View view1, sf::View view2);
+    void setWindowIsVisible(int index, bool value);
+    void setWindowCanInteract(int index, bool value);
 };
 
 

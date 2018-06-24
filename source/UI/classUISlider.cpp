@@ -10,13 +10,10 @@
 #include "../../headers/stringConversion.h"
 
 
-UISlider::UISlider(sf::Vector2f position, sf::Vector2f bSize,
-                   bool fixedToWin, float range, sf::Color color,
-                   sf::Vector2f physRange, std::function<void(float)> slideFunc,
-                   float *variable) :
-                   UIButton("", "", 1, [&]{}, position, bSize, fixedToWin, color),
-                   range{range}, sliderFunc{slideFunc}, physRange{physRange},
-                   variable{variable}
+UISlider::UISlider(SliderParams &sParams, ButtonParams &bParams, WindowParams &wParams) :
+                   UIButton(bParams, wParams), range{sParams.range},
+                   sliderFunc{sParams.sliderFunc}, physRange{sParams.physRange},
+                   variable{sParams.variable}
 {
 }
 
@@ -96,7 +93,7 @@ void UISlider::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     }
 
     sf::Rect<float> newButtonRect{currButtonPosition,{width,height}};
-    origRect = newButtonRect;
+    //origRect = newButtonRect;
     if(fixedToWindow)
         windowBox.setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>
                                                             (currButtonPosition)));
@@ -127,7 +124,7 @@ void UISlider::checkMouseIntersection(sf::RenderWindow &window)
     else
         mousePosf = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-    if(origRect.contains(mousePosf))
+    if(windowBox.getGlobalBounds().contains(mousePosf))
     {
         mouseIntersecting = true;
         for(unsigned int i=0; i<buttonArray.size(); i++)

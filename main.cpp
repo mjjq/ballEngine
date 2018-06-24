@@ -5,13 +5,11 @@
 #include <limits>
 #include <tuple>
 
-#include "./headers/classNonSim.h"
-#include "./headers/sfVectorMath.h"
-#include "./headers/stringConversion.h"
+#include "./headers/classSceneManager.h"
 
 int main()
 {
-    int windowSizeX = 700;
+    /*int windowSizeX = 700;
     int windowSizeY = 700;
     int worldSizeX = 2000;
     int worldSizeY = 2000;
@@ -26,13 +24,10 @@ int main()
     int ballGridWidth = 10;
 
     bool enableForces = true;
-    bool enableCollisions = false;
+    bool enableCollisions = false;*/
 
-    BallUniverse universe1(worldSizeX, worldSizeY, dt, enableForces, enableCollisions);
-    NonSimulationStuff window1(windowSizeX, windowSizeY, spawnVelFactor, spawnRadius,
-                                spawnMass1, ballGridSpacing, ballGridHeight, ballGridWidth,
-                                simFitsInWindow, universe1);
+    SceneManager game;
 
-    window1.mainLoop();
+    game.mainLoop();
 
 }

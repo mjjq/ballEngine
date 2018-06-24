@@ -13,7 +13,7 @@ class Ball : public sf::CircleShape
     sf::Vector2f pStepPosition = nStepPosition;
     float dampingFactor = 1;
     float mass;
-    float radius;
+    //float radius;
     bool collidedThisFrame = false;
 
     float lenJonesForce(float x, float x_0, float r, float m);
@@ -34,7 +34,7 @@ public:
     void sampleCurrentPosition();
 
     float getMass();
-    float getRadius();
+    //float getRadius();
     sf::Vector2f getVelocity();
     void setVelocity(sf::Vector2f vel);
     void addSolvedVelocity(sf::Vector2f &cStep, sf::Vector2f &nStep);

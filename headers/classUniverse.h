@@ -14,6 +14,8 @@ class BallUniverse
     int collider2 = 0;
     bool enable_forces;
     bool enable_collisions;
+    float minBallSize = 0.001;
+    float collAccumulator = 0.0f;
 
     float currentTime = 0;
     float timeToNextColl = 1e+15;
@@ -28,6 +30,7 @@ class BallUniverse
     float timeToNextSample = sampledt;
     bool enable_trajectories;
     int currentPlayer = -1;
+    std::pair<bool, float> playerInput{false, 0.0f};
 
     std::tuple<int,int,float> findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt=1e+10);
 
@@ -53,7 +56,9 @@ public:
     void updateAllObjects(bool enableForces, float dt);
     float timeToCollision(Ball &firstBall, Ball &secondBall);
     void ballCollision(Ball &firstBall, Ball &secondBall);
+    void ballAbsorption(Ball &firstBall, Ball &secondBall, float dt);
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
+    void removeBall(unsigned int index);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
     void createAltBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
@@ -90,6 +95,9 @@ public:
     void pushBall(float force, float relDirection, int i);
     void pushPlayer(float force, float relDirection);
     void setPlayer(unsigned int playerIndex);
+    void splitBalls(int ballIndex, float relDirection, float speed);
+    void playerInFunc(float relDirection);
+
 };
 
 #endif // CLASS_UNIVERSE_H

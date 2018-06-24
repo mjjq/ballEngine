@@ -5,51 +5,79 @@
 #include <limits>
 #include <tuple>
 #include <functional>
+#include <memory>
 
 #include "../../headers/classUIGroup.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 #include "../../headers/classUIButton.h"
 #include "../../headers/classUISlider.h"
+#include "../../headers/structs.h"
 
-UIGroup::UIGroup(sf::Vector2f position, float width, float height, bool fixedToWin,
-                 sf::Color color) :
-                 UIWindow(position, width, height, fixedToWin, false, color)
+UIGroup::UIGroup(WindowParams &params) : UIWindow(params)
 {
 
 }
 
-void UIGroup::addButton(std::string font, std::string text, int fontSize,
-                        sf::Vector2f position, sf::Vector2f bSize,
-                        std::function<void()> const& func, sf::Color color,
-                        bool changeState)
+void UIGroup::addButton(ButtonParams &bParams)
 {
-    UIButton *button = new UIButton{font, text, fontSize, func, position, bSize,
-                            fixedToWindow, color, changeState};
+    WindowParams wParams = {
+        {0.0f, 0.0f},
+        bParams.position,
+        bParams.bSize,
+        fixedToWindow,
+        false,
+    };
+    std::unique_ptr<UIButton> button = std::make_unique<UIButton>(bParams, wParams);
     //button->addElement<int>(font, text, fontSize, {10.0,10.0});
-    buttonArray.emplace_back(button);
+    buttonArray.push_back(std::move(button));
 }
 
-void UIGroup::addSlider(sf::Vector2f position, float range, float thickness,
-                        sf::Vector2f bSize, sf::Vector2f physRange,
-                        std::function<void(float)> sliderFunc, float *variable)
+void UIGroup::addSlider(SliderParams &sParams)
 {
-    UIButton *sliderBox = new UIButton{"", "", 1, [&]{},
-                            {bSize.x/2.0f,(bSize.y-thickness)/2.0f}, {range, thickness},
-                            fixedToWindow, {200,200,200,255}, false};
+    ButtonParams sliderBoxParams = {
+        "",
+        "",
+        1,
+        sf::Vector2f{sParams.bSize.x/2.0f,(sParams.bSize.y-sParams.thickness)/2.0f},
+        sf::Vector2f{sParams.range, sParams.thickness},
+        std::function<void()>{},
+        sParams.barColor,
+        false,
+    };
+    ButtonParams sliderClickBoxParams = {
+        "",
+        "",
+        1,
+        sf::Vector2f{0,0},
+        sf::Vector2f{sParams.range+sParams.bSize.x, sParams.bSize.y},
+        std::function<void()>{},
+        sf::Color{0,0,0,0},
+        false,
+    };
+    ButtonParams sliderBParams = {
+        "",
+        "",
+        1,
+        sf::Vector2f{0,0},
+        sParams.bSize,
+        std::function<void()>{},
+        sParams.buttonColor,
+    };
+    WindowParams wParams = {
+        {0.0f,0.0f},
+        sliderBParams.position,
+        sliderBParams.bSize,
+        fixedToWindow,
+        false,
+    };
 
-    UIButton *sliderClickBox = new UIButton{"", "", 1, [&]{},
-                            {0,0}, {range, bSize.y},
-                            fixedToWindow, {0,0,0,0}, false};
+    addButton(sliderBoxParams);
+    addButton(sliderClickBoxParams);
+    std::unique_ptr<UISlider> slider = std::make_unique<UISlider>(sParams,
+                                                    sliderBParams, wParams);
 
-    UISlider *slider = new UISlider{position, bSize,
-                   fixedToWindow, range, {70,70,70,255}, physRange, sliderFunc, variable};
-
-    //sliderBox->setDownFunction([&]{slider->clickIntersectedButton();});
-    //sliderBox->setUpFunction([&]{slider->releaseClickedButton();});
-    buttonArray.emplace_back(sliderBox);
-    buttonArray.emplace_back(sliderClickBox);
-    buttonArray.emplace_back(slider);
+    buttonArray.emplace_back(std::move(slider));
 
     buttonArray.at(1)->setDownFunction([&]{buttonArray.at(2)->clickIntersectedButton();});
     buttonArray.at(1)->setUpFunction([&]{buttonArray.at(2)->releaseClickedButton();});
@@ -60,7 +88,8 @@ void UIGroup::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositio
 {
     currPosition = origPosition + parentPosition;
     sf::Rect<float> newRect{currPosition,{width,height}};
-    origRect = newRect;
+    //std::cout << windowBox.getGlobalBounds().left << "\n";
+    //origRect = newRect;
     if(fixedToWindow)
         windowBox.setPosition(window.mapPixelToCoords
                              (static_cast<sf::Vector2i>(currPosition)));
@@ -70,21 +99,21 @@ void UIGroup::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositio
 
 void UIGroup::renderElements(sf::RenderWindow &window, sf::View &GUIView)
 {
-    for(UITextElementBase *textElement : textArray)
+    for(unsigned int i=0; i<textArray.size(); ++i)
     {
-        textElement->updateElement(window, GUIView, currPosition);
-        textElement->textWrap(windowBox.getGlobalBounds());
-        window.draw(*textElement);
+        textArray.at(i)->updateElement(window, GUIView, currPosition);
+        textArray.at(i)->textWrap(windowBox.getGlobalBounds());
+        window.draw(*textArray.at(i));
     }
-    for(UIButton *button : buttonArray)
+    for(unsigned int i=0; i<buttonArray.size(); ++i)
     {
-        button->updateElement(window, currPosition);
-        button->renderButton(window,GUIView);
+        buttonArray.at(i)->updateElement(window, currPosition);
+        buttonArray.at(i)->renderButton(window,GUIView);
     }
-    for(UIGroup *group : groupArray)
+    for(unsigned int i=0; i<groupArray.size(); ++i)
     {
-        group->updateElement(window, currPosition);
-        group->renderElements(window, GUIView);
+        groupArray.at(i)->updateElement(window, currPosition);
+        groupArray.at(i)->renderElements(window, GUIView);
     }
 }
 
@@ -110,8 +139,3 @@ UIButton& UIGroup::getButton(unsigned int index)
     return *buttonArray.at(index);
 }
 
-void UIGroup::printButtonAddress()
-{
-    if(buttonArray.size()>0)
-        std::cout << buttonArray.at(1) << "\n";
-}

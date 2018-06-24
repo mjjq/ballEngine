@@ -10,20 +10,32 @@
 #include "../../headers/classUIWindow.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
+#include "../../headers/structs.h"
 
-UIButton::UIButton(std::string font, std::string text, int fontSize,
-                   std::function<void()> const& upFunc, sf::Vector2f position,
-                   sf::Vector2f bSize, bool fixedToWin, sf::Color color,
-                   bool changeState) :
-            UIWindow(position, bSize.x, bSize.y, fixedToWin, false, color),
-            unclickedColor{color}, upFunc{upFunc}, changeState{changeState}
+UIButton::UIButton(ButtonParams bParams, WindowParams &wParams, bool changeState) :
+            UIWindow(wParams), unclickedColor{bParams.color}, upFunc{bParams.func},
+            changeState{bParams.changeState}
 {
-
+    //upFunc = std::function<void()>{bParams.func};
     isButton = true;
-    if(font != "")
-        addElement<int>(font, text, fontSize, {0.0,0.0});
+    TextElParams<int> tempParams;
+    if(bParams.font != "")
+    {
+        tempParams.font = bParams.font;
+        tempParams.str = bParams.text;
+        tempParams.fontSize = bParams.fontSize;
+        tempParams.position = sf::Vector2f{0,0};
+    }
+        //addElement<int>(bParams.font, bParams.text, bParams.fontSize, {0.0,0.0});
     else
-        addElement<int>("./fonts/cour.ttf", "", 1, {0.0,0.0});
+    {
+        tempParams.font = "./fonts/cour.ttf";
+        tempParams.str = "";
+        tempParams.fontSize = 1;
+        tempParams.position = sf::Vector2f{0,0};
+    }
+
+    addElement(tempParams);
     sf::Rect<float> buttonBounds = windowBox.getLocalBounds();
     sf::Rect<float> textBounds = textArray.at(0)->getLocalBounds();
 
@@ -69,7 +81,7 @@ void UIButton::updateElement(sf::RenderWindow &window, sf::Vector2f parentPositi
     currPosition = origPosition+parentPosition;
     //std::cout << parentPosition << "\n";
     sf::Rect<float> newRect{currPosition,{width,height}};
-    origRect = newRect;
+    //origRect = newRect;
     if(fixedToWindow)
         windowBox.setPosition(window.mapPixelToCoords
                              (static_cast<sf::Vector2i>(currPosition)));
