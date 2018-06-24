@@ -15,10 +15,11 @@ class BallUniverse
     bool enable_forces;
     bool enable_collisions;
     float minBallSize = 0.001;
+
     float collAccumulator = 0.0f;
+    float timeToNextColl = 1e+15;
 
     float currentTime = 0;
-    float timeToNextColl = 1e+15;
     float dt;
     float accumulator = 0.0f;
     sf::Clock thresholdTimer;

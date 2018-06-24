@@ -193,9 +193,6 @@ void BallUniverse::ballAbsorption(Ball &firstBall, Ball &secondBall, float dt)
     sf::Vector2f rhat = norm(firstBall.getPosition() - secondBall.getPosition());
     float projVel = dot(v2-v1, rhat)*dt;
 
-    float m1 = firstBall.getMass();
-    float m2 = secondBall.getMass();
-
     if(projVel > 0)
     {
         if(rad1 >= rad2)
