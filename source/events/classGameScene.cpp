@@ -390,7 +390,7 @@ void GameScene::mouseWorldEvents(sf::Event &event)
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
         sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
-        ballSim.createBallGrid(ballGridWidth,ballGridHeight,ballGridSpacing,
+        ballSim.createBallGrid(10,10,ballGridSpacing,
                         static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnMass,spawnRadius);
     }
 }

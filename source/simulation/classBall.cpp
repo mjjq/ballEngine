@@ -86,27 +86,7 @@ sf::CircleShape(radius), cStepVelocity{initVel}, nStepPosition(initPos), mass(ma
 }
 
 
-/**
-    Checks if the ball is about to intersect the world boundary and executes a
-    damped collision.
 
-    @param worldSizeX The x-component size of the simulation world.
-    @param worldSizeY The y-component size of the simulation world.
-
-    @return Void.
-*/
-void Ball::checkForBounce(int worldSizeX, int worldSizeY)
-{
-    sf::Vector2f shapePos = getPosition();
-    float shapeRadius = getRadius();
-
-    if(((shapePos.x+shapeRadius >= worldSizeX) && (nStepVelocity.x>=0))
-    || ((shapePos.x-shapeRadius <= 0  && (nStepVelocity.x<=0))))
-        nStepVelocity.x = -nStepVelocity.x*dampingFactor;
-    if(((shapePos.y+shapeRadius >= worldSizeY) && (nStepVelocity.y>=0))
-    || ((shapePos.y-shapeRadius <= 0  && (nStepVelocity.y<=0))))
-        nStepVelocity.y = -nStepVelocity.y*dampingFactor;
-}
 
 
 /**
