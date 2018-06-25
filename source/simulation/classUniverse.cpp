@@ -326,8 +326,8 @@ float BallUniverse::physicsLoop()
                 if(collider1 != collider2)
                 {
                     colliderArray.addConstValue(-dtR);
-                    for(int i=0; i<ballArray.size(); ++i)
-                        for(int j=i; j<ballArray.size(); ++j)
+                    for(unsigned int i=0; i<ballArray.size(); ++i)
+                        for(unsigned int j=i; j<ballArray.size(); ++j)
                             if(colliderArray.getElementValue(i,j) <= epsilon)
                             {
                                 ballCollision(ballArray.at(i), ballArray.at(j));
@@ -579,12 +579,12 @@ void BallUniverse::createAltBallGrid(int numWide, int numHigh, float spacing, sf
 
 void BallUniverse::createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVelocity)
 {
-    /*spawnNewBall(centralPosition, initVelocity, 50, 1000);
+    spawnNewBall(centralPosition, initVelocity, 50, 1000);
     spawnNewBall(centralPosition+sf::Vector2f{0.0f, 100.0f}, initVelocity+sf::Vector2f{3.0f, 0.0f}, 10, 1);
-    spawnNewBall(centralPosition+sf::Vector2f{0.0f, -200.0f}, initVelocity+sf::Vector2f{-2.0f, 0.0f}, 10, 1);*/
-    spawnNewBall({worldSizeX/2, worldSizeY/2}, {0,0}, 50, 1000);
-    spawnNewBall({worldSizeX/2 + 200, worldSizeY/2}, {5,0}, 50, 1000);
-    spawnNewBall({worldSizeX/2 - 205, worldSizeY/2}, {-5,0}, 50, 1000);
+    spawnNewBall(centralPosition+sf::Vector2f{0.0f, -200.0f}, initVelocity+sf::Vector2f{-2.0f, 0.0f}, 10, 1);
+    /*spawnNewBall({worldSizeX/2.0f, worldSizeY/2.0f}, {0,0}, 50, 1000);
+    spawnNewBall({worldSizeX/2.0f + 200.0f, worldSizeY/2}, {5,0}, 50, 1000);
+    spawnNewBall({worldSizeX/2 - 205, worldSizeY/2}, {-5,0}, 50, 1000);*/
 }
 
 sf::Vector2i BallUniverse::getWorldSize()
