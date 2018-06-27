@@ -509,13 +509,13 @@ void GameScene::playerKeysDown(int player)
         focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        ballSim.playerInFunc(180);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         ballSim.playerInFunc(0);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        ballSim.playerInFunc(180);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        ballSim.playerInFunc(90);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         ballSim.playerInFunc(270);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        ballSim.playerInFunc(90);
 
 
 }
