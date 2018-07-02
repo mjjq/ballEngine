@@ -390,7 +390,7 @@ void GameScene::mouseWorldEvents(sf::Event &event)
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
         sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
-        ballSim.createBallGrid(ballGridWidth,ballGridHeight,ballGridSpacing,
+        ballSim.createBallGrid(10,10,ballGridSpacing,
                         static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnMass,spawnRadius);
     }
 }
@@ -509,13 +509,13 @@ void GameScene::playerKeysDown(int player)
         focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        ballSim.playerInFunc(180);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         ballSim.playerInFunc(0);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        ballSim.playerInFunc(180);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        ballSim.playerInFunc(90);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         ballSim.playerInFunc(270);
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        ballSim.playerInFunc(90);
 
 
 }

@@ -2,6 +2,7 @@
 #define CLASS_UNIVERSE_H
 #include "integrators.h"
 #include "classBall.h"
+#include "class2DMatrix.h"
 
 class BallUniverse
 {
@@ -15,10 +16,13 @@ class BallUniverse
     bool enable_forces;
     bool enable_collisions;
     float minBallSize = 0.001;
+
     float collAccumulator = 0.0f;
+    float timeToNextColl = 1e+15;
+    Matrix2d colliderArray;
+    bool hasCollided = false;
 
     float currentTime = 0;
-    float timeToNextColl = 1e+15;
     float dt;
     float accumulator = 0.0f;
     sf::Clock thresholdTimer;
@@ -44,7 +48,10 @@ class BallUniverse
     void calcTotalGPE(std::vector<Ball> &ballArray);
     void calcTotalEnergy();
 
+    bool checkForBounce(Ball &ball);
+
     float physicsLoop();
+    float physicsLoopAbsorb();
 
 
 public:
@@ -65,6 +72,7 @@ public:
                         sf::Vector2f init_velocity, float ballMass, float ballRadius);
     void createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVelocity);
     void drawBalls(sf::RenderWindow &windowRef);
+    void collTimeForBall(unsigned int index, float dt);
 
     sf::Vector2i getWorldSize();
     void incSimStep(float delta);

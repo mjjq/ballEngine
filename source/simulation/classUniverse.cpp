@@ -19,6 +19,9 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
         numOfBalls++;
         ballArray.back().setSamplePrevPosBool(enable_trajectories);
         //setPlayer(ballArray.size()-1);
+        colliderArray.insertColumn(0);
+        colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.printMatrix();
     }
 }
 
@@ -82,6 +85,37 @@ void BallUniverse::updateAllObjects(bool enableForces, float dt)
 }
 
 /**
+    Checks if the ball is about to intersect the world boundary and executes a
+    damped collision.
+
+    @param worldSizeX The x-component size of the simulation world.
+    @param worldSizeY The y-component size of the simulation world.
+
+    @return Void.
+*/
+bool BallUniverse::checkForBounce(Ball &ball)
+{
+    sf::Vector2f shapePos = ball.getPosition();
+    float shapeRadius = ball.getRadius();
+    sf::Vector2f velocity = ball.getVelocity();
+
+    if(((shapePos.x+shapeRadius >= worldSizeX) && (velocity.x>=0))
+    || ((shapePos.x-shapeRadius <= 0  && (velocity.x<=0))))
+    {
+        ball.setVelocity({-velocity.x, velocity.y});
+        return true;
+    }
+    else if(((shapePos.y+shapeRadius >= worldSizeY) && (velocity.y>=0))
+    || ((shapePos.y-shapeRadius <= 0  && (velocity.y<=0))))
+    {
+        ball.setVelocity({velocity.x, -velocity.y});
+        return true;
+    }
+    return false;
+}
+
+
+/**
     Calculate the time to collision with another ball.
 
     @param &otherBall Reference to the other ball.
@@ -95,7 +129,7 @@ float BallUniverse::timeToCollision(Ball &firstBall, Ball &secondBall)
     sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
     float radSum = firstBall.getRadius() + secondBall.getRadius();
 
-    if(dot(relPos,relPos) < pow(radSum, 2))
+    if(dot(relPos,relPos) <= pow(radSum, 2))
         return std::numeric_limits<float>::quiet_NaN();
 
     sf::Vector2f relVel = firstBall.getVelocity() - secondBall.getVelocity();
@@ -130,31 +164,32 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
         {
             if(i!=j)
             {
-                /*if(ballArray.at(i).getDistance(ballArray.at(j)) < 0.8*(ballArray.at(i).getRadius() + ballArray.at(j).getRadius()))
-                    std::cout << "Overlapping balls at: " << ballArray.at(i).getPosition().x << "\n";*/
-                if(ballArray.at(i).getHasCollided()==false && ballArray.at(j).getHasCollided()==false)
-                {
+                //if(ballArray.at(i).getDistance(ballArray.at(j)) < 0.99*(ballArray.at(i).getRadius() + ballArray.at(j).getRadius()))
+                //{
+                //     std::cout << "Overlapping balls " << i << " " << j << " at " << ballArray.at(i).getPosition() << " \n";
+                //     std::cout << colliderArray.getElementValue(i,j) << "\n";
+                //}
+                //if(ballArray.at(i).getHasCollided()==false && ballArray.at(j).getHasCollided()==false)
+                //{
                 //++num;
-                if(ballArray.at(i).getRadius() + 2.0*ballArray.at(i).getRelSpeed(ballArray.at(j))*dt //2.0 factor to prevent need for second call of this function
-                 + ballArray.at(j).getRadius()
-                 > ballArray.at(i).getDistance(ballArray.at(j)))
-                {
-                    //std::cout << "within distance: " << ballArray.at(i).getDistance(ballArray.at(j)) << "\n";
-                    //float t_collPrime = ballArray.at(i).timeToCollision(ballArray.at(j));
+                //if(ballArray.at(i).getRadius() + 2.0*ballArray.at(i).getRelSpeed(ballArray.at(j))*dt //2.0 factor to prevent need for second call of this function
+                 //+ ballArray.at(j).getRadius()
+                 //> ballArray.at(i).getDistance(ballArray.at(j)))
+
                     float t_collPrime = timeToCollision(ballArray.at(i), ballArray.at(j));
+                    colliderArray.setElementValue(i,j, t_collPrime);
+
                     if(t_collPrime < localT_coll)
                     {
-                        //std::cout << t_collPrime << " is smaller than " << t_coll << "\n";
                         localT_coll = t_collPrime;
                         coll1 = i;
                         coll2 = j;
-                        //std::cout << localT_coll << "\n";
-                        //ballArray.at(i).setToCollided();
-                        //ballArray.at(j).setToCollided();
 
                     }
-                }
-                }
+
+                //else
+                //    colliderArray.setElementValue(i,j, std::numeric_limits<float>::quiet_NaN());
+                //}
 
             }
         }
@@ -163,6 +198,30 @@ std::tuple<int,int,float> BallUniverse::findShortestCollTime(float t_coll, std::
     //std::cout << num << "\n";
     //std::cout << localT_coll << "\n";
     return std::make_tuple(coll1,coll2,localT_coll);
+}
+
+void BallUniverse::collTimeForBall(unsigned int index, float dt)
+{
+    for(unsigned int i=0; i<ballArray.size(); ++i)
+    {
+        if(index < i)
+        {
+            //if(ballArray.at(index).getRadius() +
+            //   2.0*ballArray.at(index).getRelSpeed(ballArray.at(i))*dt >
+            //   ballArray.at(index).getDistance(ballArray.at(i)))
+            //{
+                float tColl = timeToCollision(ballArray.at(index), ballArray.at(i));
+                colliderArray.setElementValue(index, i, tColl);
+            //}
+            //else
+            //    colliderArray.setElementValue(index, i, std::numeric_limits<float>::quiet_NaN());
+        }
+        else if(index > i)
+        {
+            float tColl = timeToCollision(ballArray.at(index), ballArray.at(i));
+            colliderArray.setElementValue(i, index, tColl);
+        }
+    }
 }
 
 void BallUniverse::ballCollision(Ball &firstBall, Ball &secondBall)
@@ -193,9 +252,6 @@ void BallUniverse::ballAbsorption(Ball &firstBall, Ball &secondBall, float dt)
     sf::Vector2f rhat = norm(firstBall.getPosition() - secondBall.getPosition());
     float projVel = dot(v2-v1, rhat)*dt;
 
-    float m1 = firstBall.getMass();
-    float m2 = secondBall.getMass();
-
     if(projVel > 0)
     {
         if(rad1 >= rad2)
@@ -223,6 +279,8 @@ void BallUniverse::removeBall(unsigned int index)
     if(index >=0 && index < ballArray.size())
     {
         ballArray.erase(ballArray.begin() + index);
+        colliderArray.removeColumn(index);
+        colliderArray.removeRow(index);
         numOfBalls--;
     }
 }
@@ -235,21 +293,109 @@ float BallUniverse::physicsLoop()
         if(playerInput.first)
             pushBall(0.1f, playerInput.second, currentPlayer);
 
-        for(Ball &ball : ballArray)
+        for(unsigned int i=0; i<ballArray.size(); ++i)
         {
-            ball.resetToCollided();
-            ball.checkForBounce(worldSizeX,worldSizeY);
+            ballArray.at(i).resetToCollided();
+
+            bool check = checkForBounce(ballArray.at(i));
+            if(check)
+                collTimeForBall(i, dt);
         }
 
-        if(enable_collisions==true && dt)
+        if(enable_collisions==true)
         {
-            std::tuple<int,int,float> collTuple = findShortestCollTime(timeToNextColl, ballArray, dt);
+            if(hasCollided==false)
+                findShortestCollTime(timeToNextColl, ballArray, dt);
+
+            else if(hasCollided==true)
+                hasCollided = false;
+
+            std::tuple<int,int,float> collTuple = colliderArray.getMatrixMin();
             timeToNextColl = std::get<2>(collTuple);
             collider1 = std::get<0>(collTuple);
             collider2 = std::get<1>(collTuple);
         }
 
-        if(dt - timeToNextColl > 0)
+        if(dt >= timeToNextColl && timeToNextColl >= epsilon)
+        {
+            dtR = timeToNextColl;
+            if(std::abs(dtR) > epsilon)
+            {
+                updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
+
+                if(collider1 != collider2)
+                {
+                    colliderArray.addConstValue(-dtR);
+                    for(unsigned int i=0; i<ballArray.size(); ++i)
+                        for(unsigned int j=i; j<ballArray.size(); ++j)
+                            if(colliderArray.getElementValue(i,j) <= epsilon)
+                            {
+                                ballCollision(ballArray.at(i), ballArray.at(j));
+                                collTimeForBall(i, dt);
+                                collTimeForBall(j, dt);
+                            }
+                    hasCollided = true;
+                }
+            }
+            timeToNextColl = 1e+15;
+        }
+        else
+            updateAllObjects(enable_forces, dt);
+
+        return dtR;
+}
+
+float BallUniverse::physicsLoopAbsorb()
+{
+        float dtR = dt;
+        float epsilon = 1e-5;
+
+        if(playerInput.first)
+            pushBall(0.1f, playerInput.second, currentPlayer);
+
+        for(unsigned int i=0; i<ballArray.size(); ++i)
+        {
+            ballArray.at(i).resetToCollided();
+            //ball.checkForBounce(worldSizeX,worldSizeY);
+            bool check = checkForBounce(ballArray.at(i));
+            if(check)
+            {
+                std::cout << "true\n";
+                collTimeForBall(i, dt);
+            }
+        }
+
+        if(enable_collisions==true)
+        {
+            if(hasCollided==false)// && collAccumulator<=0.0f)
+            {
+                //std::tuple<int,int,float> collTuple =
+                findShortestCollTime(timeToNextColl, ballArray, dt);
+                //timeToNextColl = std::get<2>(collTuple);
+                //collider1 = std::get<0>(collTuple);
+                //collider2 = std::get<1>(collTuple);
+                //collAccumulator = dt;
+                //colliderArray.printMatrix();
+                //std::cout << "false\n";
+            }
+            else if(hasCollided==true)
+            {
+                collTimeForBall(collider2, dt);
+                collTimeForBall(collider1, dt);
+                hasCollided = false;
+                //colliderArray.printMatrix();
+                //::cout << "true\n";
+            }
+            std::tuple<int,int,float> collTuple = colliderArray.getMatrixMin();
+            timeToNextColl = std::get<2>(collTuple);
+            collider1 = std::get<0>(collTuple);
+            collider2 = std::get<1>(collTuple);
+            //std::cout << timeToNextColl << "\n";
+            //colliderArray.printMatrix();
+            //std::cout << "\n";
+        }
+
+        if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
         {
             dtR = timeToNextColl;
             if(std::abs(dtR) > epsilon)
@@ -260,12 +406,24 @@ float BallUniverse::physicsLoop()
                 //if(std::abs(dtR) < epsilon)
                 //    sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
                 //ballArray.at(collider1).ballCollision(ballArray.at(collider2));
-                //ballCollision(ballArray.at(collider1), ballArray.at(collider2));
-                ballAbsorption(ballArray.at(collider1), ballArray.at(collider2), dtR);
+                ballCollision(ballArray.at(collider1), ballArray.at(collider2));
+                //std::cout << "\ncollision" << collider1 << " " << collider2 << "\n";
+                colliderArray.addConstValue(-dtR);
+                /*ballAbsorption(ballArray.at(collider1), ballArray.at(collider2), dtR);
                 if(ballArray.at(collider1).getRadius() < minBallSize)
+                {
                     removeBall(collider1);
+                    collTimeForBall(collider2, dt);
+                }
                 else if(ballArray.at(collider2).getRadius() < minBallSize)
+                {
                     removeBall(collider2);
+                    collTimeForBall(collider1, dt);
+                }*/
+                hasCollided = true;
+
+                //colliderArray.printMatrix();
+                //std::cout << "\n";
                 //if(std::abs(dtR) < epsilon)
                 //    sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
             }
@@ -274,7 +432,7 @@ float BallUniverse::physicsLoop()
         else
             updateAllObjects(enable_forces, dt);
 
-
+        collAccumulator -= dtR;
         return dtR;
 }
 
@@ -424,6 +582,9 @@ void BallUniverse::createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVe
     spawnNewBall(centralPosition, initVelocity, 50, 1000);
     spawnNewBall(centralPosition+sf::Vector2f{0.0f, 100.0f}, initVelocity+sf::Vector2f{3.0f, 0.0f}, 10, 1);
     spawnNewBall(centralPosition+sf::Vector2f{0.0f, -200.0f}, initVelocity+sf::Vector2f{-2.0f, 0.0f}, 10, 1);
+    /*spawnNewBall({worldSizeX/2.0f, worldSizeY/2.0f}, {0,0}, 50, 1000);
+    spawnNewBall({worldSizeX/2.0f + 200.0f, worldSizeY/2}, {5,0}, 50, 1000);
+    spawnNewBall({worldSizeX/2 - 201, worldSizeY/2}, {-5,0}, 50, 1000);*/
 }
 
 sf::Vector2i BallUniverse::getWorldSize()
@@ -508,6 +669,7 @@ void BallUniverse::changeBallColour()
 void BallUniverse::clearSimulation()
 {
     ballArray.clear();
+    colliderArray.clearMatrix();
     numOfBalls = 0;
     currentPlayer = -1;
 }

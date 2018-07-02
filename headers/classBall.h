@@ -27,7 +27,7 @@ class Ball : public sf::CircleShape
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
 
-    void checkForBounce(int worldSizeX, int worldSizeY);
+
     void applyExternalImpulse(sf::Vector2f force, float dt);
     void updatePosition(float dt);
     void sampleNextPosition();
