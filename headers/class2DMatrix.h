@@ -12,7 +12,7 @@ class Matrix2d
 public:
     float getElementValue(int x, int y);
     void setElementValue(int x, int y, float value);
-    void insertColumn(int position);
+    void insertColumn(int position, float initVal = 0.0f);
     void removeColumn(int position);
     void insertRow(int position, float initVal = 0.0f);
     void removeRow(int position);
@@ -20,6 +20,8 @@ public:
     void clearMatrix();
     void printMatrix();
     void addConstValue(float value);
+    unsigned int getWidth();
+    unsigned int getHeight();
 };
 
 #endif // CLASS_2DMATRIX_H

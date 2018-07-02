@@ -12,19 +12,19 @@ void Matrix2d::setElementValue(int x, int y, float value)
     matrix.at(x).at(y) = value;
 }
 
-void Matrix2d::insertColumn(int position)
+void Matrix2d::insertColumn(int position, float initVal)
 {
     if(matrix.size()>0)
     {
         if(position >= 0 && std::abs(position) < matrix.size())
-            matrix.insert(matrix.begin() + position, std::vector<float>(height));
+            matrix.insert(matrix.begin() + position, std::vector<float>(height, initVal));
         else if(position < 0 && std::abs(position) < matrix.size())
-            matrix.insert(matrix.end() + position, std::vector<float>(height));
+            matrix.insert(matrix.end() + position, std::vector<float>(height, initVal));
         else
-            matrix.insert(matrix.end(), std::vector<float>(height));
+            matrix.insert(matrix.end(), std::vector<float>(height, initVal));
     }
     else
-        matrix.push_back(std::vector<float>(height));
+        matrix.push_back(std::vector<float>(height, initVal));
 
     width++;
 }
@@ -45,6 +45,8 @@ void Matrix2d::insertRow(int position, float initVal)
 {
     if(height>0)
     {
+        //if(width == 0)
+        //    insertColumn(0);
         if(position >= 0 && std::abs(position) < height)
             for(unsigned int i=0; i<width; ++i)
             {
@@ -62,10 +64,15 @@ void Matrix2d::insertRow(int position, float initVal)
             }
     }
     else
+    {
+        //if(width == 0)
+        //    insertColumn(0);
         for(unsigned int i=0; i<width; ++i)
         {
             matrix.at(i).push_back(initVal);
         }
+    }
+
 
     height++;
 }
@@ -120,6 +127,7 @@ void Matrix2d::printMatrix()
         }
         std::cout << "\n";
     }
+    std::cout << "\n";
 }
 
 void Matrix2d::addConstValue(float value)
@@ -136,4 +144,15 @@ void Matrix2d::clearMatrix()
     matrix.clear();
     width = 0;
     height = 0;
+}
+
+
+unsigned int Matrix2d::getWidth()
+{
+    return width;
+}
+
+unsigned int Matrix2d::getHeight()
+{
+    return height;
 }
