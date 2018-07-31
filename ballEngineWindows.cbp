@@ -69,6 +69,7 @@
 		<Unit filename="headers/classUISlider.h" />
 		<Unit filename="headers/classUIWindow.h" />
 		<Unit filename="headers/classUniverse.h" />
+		<Unit filename="headers/collisionDetection.h" />
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/sfVectorMath.h" />
@@ -93,6 +94,7 @@
 		<Unit filename="source/miscellaneous/structs.cpp" />
 		<Unit filename="source/simulation/classBall.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
+		<Unit filename="source/simulation/collisionDetection.cpp" />
 		<Unit filename="source/simulation/forces.cpp" />
 		<Unit filename="source/simulation/integrators.cpp" />
 		<Extensions>

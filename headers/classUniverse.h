@@ -1,6 +1,7 @@
 #ifndef CLASS_UNIVERSE_H
 #define CLASS_UNIVERSE_H
 #include "integrators.h"
+#include "collisionDetection.h"
 #include "classBall.h"
 #include "class2DMatrix.h"
 
@@ -62,12 +63,9 @@ public:
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
-    float timeToCollision(Ball &ball, sf::RectangleShape &origAARect);
     void updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall);
     void updateAllObjects(bool enableForces, float dt);
-    float timeToCollision(Ball &firstBall, Ball &secondBall);
-    void ballCollision(Ball &firstBall, Ball &secondBall);
-    void ballCollision(Ball &ball, sf::RectangleShape &rect);
+
     void ballAbsorption(Ball &firstBall, Ball &secondBall, float dt);
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass=1);
     void spawnNewRect(sf::Vector2f position, float width, float height);
@@ -78,7 +76,7 @@ public:
                         sf::Vector2f init_velocity, float ballMass, float ballRadius);
     void createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVelocity);
     void drawBalls(sf::RenderWindow &windowRef);
-    void collTimeForBall(unsigned int index, float dt);
+    void collTimeForBall(unsigned int index);
 
     sf::Vector2i getWorldSize();
     void incSimStep(float delta);

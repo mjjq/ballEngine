@@ -132,101 +132,6 @@ bool BallUniverse::checkForBounce(Ball &ball)
 }
 
 
-/**
-    Calculate the time to collision with another ball.
-
-    @param &otherBall Reference to the other ball.
-
-    @return Time to collision.
-*/
-float BallUniverse::timeToCollision(Ball &firstBall, Ball &secondBall)
-{
-    using namespace sfVectorMath;
-
-    sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
-    float radSum = firstBall.getRadius() + secondBall.getRadius();
-
-    if(dot(relPos,relPos) <= pow(radSum, 2))
-        return std::numeric_limits<float>::quiet_NaN();
-
-    sf::Vector2f relVel = firstBall.getVelocity() - secondBall.getVelocity();
-    float discriminant = pow(dot(relPos,relVel), 2) -
-                         dot(relVel,relVel)*(dot(relPos,relPos) - pow(radSum, 2));
-
-    if(discriminant < 0)
-        return std::numeric_limits<float>::quiet_NaN();
-
-    float root1 = -(dot(relPos,relVel) + pow(discriminant,0.5))/dot(relVel,relVel);
-    float root2 = -(dot(relPos,relVel) - pow(discriminant,0.5))/dot(relVel,relVel);
-
-    if(root1 < 0 && root2 < 0)
-        return std::numeric_limits<float>::quiet_NaN();
-    else if(root1 < 0 && root2 > 0)
-        return root2;
-    else if(root2 < 0 && root1 > 0)
-        return root1;
-    return (root2<root1)?root2:root1;
-}
-
-float BallUniverse::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
-{
-    sf::Vector2f v = ball.getVelocity();
-    sf::Vector2f r = ball.getPosition();
-    sf::Rect<float> AABB = origAARect.getGlobalBounds();
-    AABB.left -= ball.getRadius();
-    AABB.top -= ball.getRadius();
-    AABB.width += 2.0f*ball.getRadius();
-    AABB.height += 2.0f*ball.getRadius();
-    //std::cout << AABB << "\n";
-
-    float epsilon = 1e-5;
-    float tmin = 0.0f;
-    float tmax = 10000.0f;
-
-    if(AABB.contains(r.x,r.y))
-    {
-        //colliderArray.printMatrix(); std::cout << "\n";
-        //staticCollArray.printMatrix(); std::cout << "\n";
-        return std::numeric_limits<float>::quiet_NaN();
-    }
-
-    if(std::abs(v.x) < epsilon)
-    {
-        if(r.x < AABB.left || r.x > AABB.left + AABB.width)
-            return std::numeric_limits<float>::quiet_NaN();
-    }
-    else
-    {
-        float ood = 1.0f / v.x;
-        float t1 = (AABB.left - r.x) * ood;
-        float t2 = (AABB.left + AABB.width - r.x) * ood;
-
-        if(t1>t2) std::swap(t1,t2);
-        tmin = std::max(t1, tmin);
-        tmax = std::min(t2, tmax);
-        if(tmin > tmax) return std::numeric_limits<float>::quiet_NaN();
-    }
-
-    if(std::abs(v.y) < epsilon)
-    {
-        if(r.y < AABB.top || r.y > AABB.top + AABB.height)
-            return std::numeric_limits<float>::quiet_NaN();
-    }
-    else
-    {
-        float ood = 1.0f / v.y;
-        float t1 = (AABB.top - r.y) * ood;
-        float t2 = (AABB.top + AABB.height - r.y) * ood;
-
-        if(t1>t2) std::swap(t1,t2);
-        tmin = std::max(t1, tmin);
-        tmax = std::min(t2, tmax);
-        if(tmin > tmax) return std::numeric_limits<float>::quiet_NaN();
-    }
-    return tmin;
-
-
-}
 
 void BallUniverse::calcCollTimes()
 {
@@ -239,14 +144,14 @@ void BallUniverse::calcCollTimes()
                      std::cout << "Overlapping balls " << i << " " << j << " at " << ballArray.at(i).getPosition() << " \n";
                      std::cout << colliderArray.getElementValue(i,j) << "\n";
                 }*/
-                    float tColl = timeToCollision(ballArray.at(i), ballArray.at(j));
+                    float tColl = Collisions::timeToCollision(ballArray.at(i), ballArray.at(j));
                     colliderArray.setElementValue(i,j, tColl);
 
             }
     for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
         for(unsigned int j=0; j<staticCollArray.getWidth(); ++j)
         {
-            float tColl = timeToCollision(ballArray.at(i), AARectArray.at(j));
+            float tColl = Collisions::timeToCollision(ballArray.at(i), AARectArray.at(j));
             staticCollArray.setElementValue(j,i, tColl);
         }
 }
@@ -276,7 +181,7 @@ void BallUniverse::findShortestCollTime()
     //std::cout << timeToNextColl << ": " << collider1 << " " << collider2 << "\n";
 }
 
-void BallUniverse::collTimeForBall(unsigned int index, float dt)
+void BallUniverse::collTimeForBall(unsigned int index)
 {
     for(unsigned int i=0; i<ballArray.size(); ++i)
     {
@@ -286,7 +191,7 @@ void BallUniverse::collTimeForBall(unsigned int index, float dt)
             //   2.0*ballArray.at(index).getRelSpeed(ballArray.at(i))*dt >
             //   ballArray.at(index).getDistance(ballArray.at(i)))
             //{
-                float tColl = timeToCollision(ballArray.at(index), ballArray.at(i));
+                float tColl = Collisions::timeToCollision(ballArray.at(index), ballArray.at(i));
                 colliderArray.setElementValue(index, i, tColl);
             //}
             //else
@@ -294,43 +199,18 @@ void BallUniverse::collTimeForBall(unsigned int index, float dt)
         }
         else if(index > i)
         {
-            float tColl = timeToCollision(ballArray.at(index), ballArray.at(i));
+            float tColl = Collisions::timeToCollision(ballArray.at(index), ballArray.at(i));
             colliderArray.setElementValue(i, index, tColl);
         }
     }
     for(unsigned int i=0; i<staticCollArray.getWidth(); ++i)
     {
-        float tColl = timeToCollision(ballArray.at(index), AARectArray.at(i));
+        float tColl = Collisions::timeToCollision(ballArray.at(index), AARectArray.at(i));
         staticCollArray.setElementValue(i, index, tColl);
     }
 }
 
-void BallUniverse::ballCollision(Ball &firstBall, Ball &secondBall)
-{
-    using namespace sfVectorMath;
 
-    //sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
-    sf::Vector2f rhat = norm(firstBall.getPosition() - secondBall.getPosition());
-
-    sf::Vector2f v1 = firstBall.getVelocity();
-    sf::Vector2f v2 = secondBall.getVelocity();
-    float m1 = firstBall.getMass();
-    float m2 = secondBall.getMass();
-
-    firstBall.setVelocity(v1 - rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
-    secondBall.setVelocity(v2 + rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
-}
-
-void BallUniverse::ballCollision(Ball &ball, sf::RectangleShape &rect)
-{
-    sf::Vector2f r = ball.getPosition();
-    sf::Vector2f v = ball.getVelocity();
-    sf::Rect<float> rectBounds = rect.getGlobalBounds();
-    if(r.x < rectBounds.left || r.x > rectBounds.left + rectBounds.width)
-        ball.setVelocity({-v.x, v.y});
-    else if(r.y < rectBounds.top || r.y > rectBounds.top + rectBounds.height)
-        ball.setVelocity({v.x, -v.y});
-}
 
 void BallUniverse::ballAbsorption(Ball &firstBall, Ball &secondBall, float dt)
 {
@@ -391,7 +271,7 @@ float BallUniverse::physicsLoop()
 
             bool check = checkForBounce(ballArray.at(i));
             if(check)
-                collTimeForBall(i, dt);
+                collTimeForBall(i);
         }
 
         if(enable_collisions==true)
@@ -408,7 +288,7 @@ float BallUniverse::physicsLoop()
         if(dt >= timeToNextColl && timeToNextColl >= epsilon)
         {
             dtR = timeToNextColl;
-            if(std::abs(dtR) > epsilon)
+            //if(std::abs(dtR) >= epsilon)
             {
                 updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
                 colliderArray.addConstValue(-dtR);
@@ -421,8 +301,8 @@ float BallUniverse::physicsLoop()
                         {
                             if(staticCollArray.getElementValue(j,i) <= epsilon)
                             {
-                                ballCollision(ballArray.at(i), AARectArray.at(j));
-                                collTimeForBall(i, dt);
+                                Collisions::ballCollision(ballArray.at(i), AARectArray.at(j));
+                                collTimeForBall(i);
                             }
                         }
                 }
@@ -434,9 +314,9 @@ float BallUniverse::physicsLoop()
                             for(unsigned int j=i; j<ballArray.size(); ++j)
                                 if(colliderArray.getElementValue(i,j) <= epsilon)
                                 {
-                                    ballCollision(ballArray.at(i), ballArray.at(j));
-                                    collTimeForBall(i, dt);
-                                    collTimeForBall(j, dt);
+                                    Collisions::ballCollision(ballArray.at(i), ballArray.at(j));
+                                    collTimeForBall(i);
+                                    collTimeForBall(j);
                                 }
                     }
                 }
@@ -461,43 +341,25 @@ float BallUniverse::physicsLoopAbsorb()
         for(unsigned int i=0; i<ballArray.size(); ++i)
         {
             ballArray.at(i).resetToCollided();
-            //ball.checkForBounce(worldSizeX,worldSizeY);
-            bool check = checkForBounce(ballArray.at(i));
-            if(check)
-            {
-                std::cout << "true\n";
-                collTimeForBall(i, dt);
-            }
+            if( checkForBounce(ballArray.at(i)) )
+                collTimeForBall(i);
         }
 
         if(enable_collisions==true)
         {
-            if(hasCollided==false)// && collAccumulator<=0.0f)
-            {
-                //std::tuple<int,int,float> collTuple =
+            if(hasCollided==false)
                 calcCollTimes();
-                //timeToNextColl = std::get<2>(collTuple);
-                //collider1 = std::get<0>(collTuple);
-                //collider2 = std::get<1>(collTuple);
-                //collAccumulator = dt;
-                //colliderArray.printMatrix();
-                //std::cout << "false\n";
-            }
+
             else if(hasCollided==true)
             {
-                collTimeForBall(collider2, dt);
-                collTimeForBall(collider1, dt);
+                collTimeForBall(collider2);
+                collTimeForBall(collider1);
                 hasCollided = false;
-                //colliderArray.printMatrix();
-                //::cout << "true\n";
             }
             std::tuple<int,int,float> collTuple = colliderArray.getMatrixMin();
             timeToNextColl = std::get<2>(collTuple);
             collider1 = std::get<0>(collTuple);
             collider2 = std::get<1>(collTuple);
-            //std::cout << timeToNextColl << "\n";
-            //colliderArray.printMatrix();
-            //std::cout << "\n";
         }
 
         if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
@@ -508,29 +370,10 @@ float BallUniverse::physicsLoopAbsorb()
 
             if(collider1 != collider2)
             {
-                //if(std::abs(dtR) < epsilon)
-                //    sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
-                //ballArray.at(collider1).ballCollision(ballArray.at(collider2));
-                ballCollision(ballArray.at(collider1), ballArray.at(collider2));
-                //std::cout << "\ncollision" << collider1 << " " << collider2 << "\n";
+                Collisions::ballCollision(ballArray.at(collider1), ballArray.at(collider2));
                 colliderArray.addConstValue(-dtR);
-                /*ballAbsorption(ballArray.at(collider1), ballArray.at(collider2), dtR);
-                if(ballArray.at(collider1).getRadius() < minBallSize)
-                {
-                    removeBall(collider1);
-                    collTimeForBall(collider2, dt);
-                }
-                else if(ballArray.at(collider2).getRadius() < minBallSize)
-                {
-                    removeBall(collider2);
-                    collTimeForBall(collider1, dt);
-                }*/
-                hasCollided = true;
 
-                //colliderArray.printMatrix();
-                //std::cout << "\n";
-                //if(std::abs(dtR) < epsilon)
-                //    sfVectorMath::printVector(ballArray.at(collider1).getVelocity());
+                hasCollided = true;
             }
             timeToNextColl = 1e+15;
         }
