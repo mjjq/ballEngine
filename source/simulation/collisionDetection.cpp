@@ -7,6 +7,7 @@
 
 #include "../../headers/collisionDetection.h"
 #include "../../headers/sfVectorMath.h"
+#include "../../headers/stringConversion.h"
 
 float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
                                   sf::Vector2f rayDir,
@@ -57,6 +58,36 @@ float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
         if(tmin > tmax) return std::numeric_limits<float>::quiet_NaN();
     }
     return tmin;
+}
+
+float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir,
+                                     sf::Vector2f sphereCentre, float sphereRadius)
+{
+    float a = sfVectorMath::dot( rayDir, rayDir );
+    float b = 2.0f*sfVectorMath::dot(rayDir, (rayOrigin-sphereCentre) );
+    float c = sfVectorMath::dot( rayOrigin-sphereCentre, rayOrigin-sphereCentre )
+                                                - sphereRadius*sphereRadius;
+    float discriminant = b*b - 4.0f*a*c;
+    if(discriminant < 0)
+        return std::numeric_limits<float>::quiet_NaN();
+
+    //std::cout << rayOrigin << "\n";
+    //std::cout << rayDir << "\n";
+    //std::cout << sphereCentre << "\n";
+
+    float root1 = -(b + pow(discriminant,0.5f))/(2.0f*a);
+    float root2 = -(b - pow(discriminant,0.5f))/(2.0f*a);
+
+    //std::cout << root1 << " root1\n";
+    //std::cout << root2 << " root2\n";
+
+    if(root1 < 0 && root2 < 0)
+        return std::numeric_limits<float>::quiet_NaN();
+    else if(root1 < 0 && root2 > 0)
+        return root2;
+    else if(root2 < 0 && root1 > 0)
+        return root1;
+    return (root2<root1)?root2:root1;
 }
 
 
@@ -113,19 +144,40 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
     float tmax = 10000.0f;
 
     tmin = Collisions::rayAABBIntersect(r, v, AABB, tmin, tmax, epsilon);
-    if(tmin = std::numeric_limits<float>::quiet_NaN())
+    if(std::isnan(tmin))
         return tmin;
 
     sf::Vector2f intPoint = r+v*tmin;
-    sf::Rect origAABB = origAARect.getGlobalBounds();
+    sf::Rect<float> origAABB = origAARect.getGlobalBounds();
 
-    if(intPoint.x < origAABB.left && intPoint.y < origAABB.top)
-        tmin = std::min(tmin, raySphereIntersect())
-    else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y < origAABB.top)
+    if(!AABB.contains(r.x,r.y))
+    {
+        if(intPoint.x < origAABB.left && intPoint.y < origAABB.top)
+        {
+            //std::cout << tmin <<"\n";
+            tmin = raySphereIntersect(r,v, {origAABB.left, origAABB.top}, ball.getRadius());
+            //std::cout << tmin << "thing\n\n";
+        }
 
-    else if(intPoint.x < origAABB.left && intPoint.y > origAABB.top + origAABB.height)
+        else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y < origAABB.top)
+            tmin = std::min(tmin, raySphereIntersect(r,v, {origAABB.left+origAABB.width, origAABB.top}, ball.getRadius()));
 
-    else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y > origAABB.top + origAABB.height)
+        else if(intPoint.x < origAABB.left && intPoint.y > origAABB.top + origAABB.height)
+            tmin = std::min(tmin, raySphereIntersect(r,v, {origAABB.left, origAABB.top+origAABB.height}, ball.getRadius()));
+
+        else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y > origAABB.top + origAABB.height)
+            tmin = std::min(tmin, raySphereIntersect(r,v, {origAABB.left+origAABB.width, origAABB.top+origAABB.height}, ball.getRadius()));
+    }
+    else
+    {
+        std::cout << "inter1\n";
+        if(r.x < origAABB.left && r.y < origAABB.top)
+        {
+            //std::cout << tmin <<"\n";
+            tmin = raySphereIntersect(r,v, {origAABB.left, origAABB.top}, ball.getRadius());
+            std::cout << tmin << "inter2\n";
+        }
+    }
 
     return tmin;
 }

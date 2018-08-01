@@ -30,33 +30,49 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-std=c++11" />
+			<Add option="-std=c++14" />
 		</Compiler>
+		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classBall.h" />
-		<Unit filename="headers/classNonSim.h" />
+		<Unit filename="headers/classGameScene.h" />
+		<Unit filename="headers/classMenuScene.h" />
+		<Unit filename="headers/classPauseMenuScene.h" />
+		<Unit filename="headers/classScene.h" />
+		<Unit filename="headers/classSceneManager.h" />
 		<Unit filename="headers/classTextElement.h" />
 		<Unit filename="headers/classTextElementBase.h" />
 		<Unit filename="headers/classUIButton.h" />
 		<Unit filename="headers/classUIContainer.h" />
+		<Unit filename="headers/classUIGroup.h" />
 		<Unit filename="headers/classUISlider.h" />
 		<Unit filename="headers/classUIWindow.h" />
 		<Unit filename="headers/classUniverse.h" />
+		<Unit filename="headers/collisionDetection.h" />
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
+		<Unit filename="headers/structs.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="source/UI/classUIButton.cpp" />
 		<Unit filename="source/UI/classUIContainer.cpp" />
+		<Unit filename="source/UI/classUIGroup.cpp" />
 		<Unit filename="source/UI/classUISlider.cpp" />
 		<Unit filename="source/UI/classUITextElement.cpp" />
 		<Unit filename="source/UI/classUITextElementBase.cpp" />
 		<Unit filename="source/UI/classUIWindow.cpp" />
-		<Unit filename="source/events/classNonSimulationStuff.cpp" />
+		<Unit filename="source/events/classGameScene.cpp" />
+		<Unit filename="source/events/classMenuScene.cpp" />
+		<Unit filename="source/events/classPauseMenuScene.cpp" />
+		<Unit filename="source/events/classScene.cpp" />
+		<Unit filename="source/events/classSceneManager.cpp" />
+		<Unit filename="source/miscellaneous/class2DMatrix.cpp" />
 		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />
 		<Unit filename="source/miscellaneous/stringConversion.cpp" />
+		<Unit filename="source/miscellaneous/structs.cpp" />
 		<Unit filename="source/simulation/classBall.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
+		<Unit filename="source/simulation/collisionDetection.cpp" />
 		<Unit filename="source/simulation/forces.cpp" />
 		<Unit filename="source/simulation/integrators.cpp" />
 		<Extensions>
