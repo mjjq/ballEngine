@@ -276,7 +276,6 @@ float BallUniverse::physicsLoop()
 
         if(enable_collisions==true)
         {
-            //staticCollArray.printMatrix();
             if(hasCollided==false)
                 calcCollTimes();
 
@@ -284,10 +283,15 @@ float BallUniverse::physicsLoop()
                 hasCollided = false;
 
             findShortestCollTime();
+
+            //std::cout << "Hascolld: " << hasCollided << "Sht: " << timeToNextColl << "\n";
+            //staticCollArray.printMatrix();
+            //colliderArray.printMatrix();
         }
 
         if(dt >= timeToNextColl && timeToNextColl >= epsilon)
         {
+            //std::cout << "Collision\n";
             dtR = timeToNextColl;
             //if(std::abs(dtR) >= epsilon)
             {
@@ -302,6 +306,7 @@ float BallUniverse::physicsLoop()
                         {
                             if(staticCollArray.getElementValue(j,i) <= epsilon)
                             {
+                                //std::cout << "With static: " << i << " : " << j << "\n";
                                 Collisions::ballCollision(ballArray.at(i), AARectArray.at(j));
                                 collTimeForBall(i);
                             }

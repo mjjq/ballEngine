@@ -57,11 +57,9 @@ float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
         tmax = std::min(t2, tmax);
         if(tmin > tmax) return std::numeric_limits<float>::quiet_NaN();
     }
-    /*if(tmin < 0.0f || tmax < 0.0f)
-    {
-        tmin = 1e+12;
-    }*/
-
+    //if(tmin < 0.0f || tmax < 0.0f)
+    //    tmin = 1e+12;
+    //std::cout << tmin << "\n";
     return tmin;
 }
 
@@ -138,7 +136,7 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
     //std::cout << "MinkAABB: " << AABB << "\n";
 
     float epsilon = 1e-5;
-    float tmin = 0.0f;
+    float tmin = -1.0f;
     float tmax = 10000.0f;
 
     tmin = Collisions::rayAABBIntersect(r, v, AABB, tmin, tmax, epsilon);
@@ -151,19 +149,27 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
     //std::cout << "origAABB" << origAABB << "\n";
     //std::cout << r << "\n\n";
     if(origAABB.contains(r.x,r.y))
+    {
         return std::numeric_limits<float>::quiet_NaN();
+    }
 
-        if(intPoint.x < origAABB.left && intPoint.y < origAABB.top)
-            tmin = std::max(tmin,raySphereIntersect(r,v, {origAABB.left, origAABB.top}, ball.getRadius()));
+    if(intPoint.x < origAABB.left && intPoint.y < origAABB.top)
+        tmin = raySphereIntersect(r,v, {origAABB.left, origAABB.top}, ball.getRadius());
 
-        else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y < origAABB.top)
-            tmin = std::max(tmin, raySphereIntersect(r,v, {origAABB.left+origAABB.width, origAABB.top}, ball.getRadius()));
+    else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y < origAABB.top)
+        tmin = raySphereIntersect(r,v, {origAABB.left+origAABB.width, origAABB.top}, ball.getRadius());
 
-        else if(intPoint.x < origAABB.left && intPoint.y > origAABB.top + origAABB.height)
-            tmin = std::max(tmin, raySphereIntersect(r,v, {origAABB.left, origAABB.top+origAABB.height}, ball.getRadius()));
+    else if(intPoint.x < origAABB.left && intPoint.y > origAABB.top + origAABB.height)
+        tmin = raySphereIntersect(r,v, {origAABB.left, origAABB.top+origAABB.height}, ball.getRadius());
 
-        else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y > origAABB.top + origAABB.height)
-            tmin = std::max(tmin, raySphereIntersect(r,v, {origAABB.left+origAABB.width, origAABB.top+origAABB.height}, ball.getRadius()));
+    else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y > origAABB.top + origAABB.height)
+        tmin = raySphereIntersect(r,v, {origAABB.left+origAABB.width, origAABB.top+origAABB.height}, ball.getRadius());
+
+    else
+        if(tmin < 0.0f)
+        {
+            return std::numeric_limits<float>::quiet_NaN();
+        }
     //}
     /*else
     {
@@ -194,31 +200,89 @@ void Collisions::ballCollision(Ball &firstBall, Ball &secondBall)
     secondBall.setVelocity(v2 + rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
 }
 
+//void Collisions::ballCollision(Ball &ball, )
+
 void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
 {
     //std::cout << "Collisions\n";
     sf::Vector2f r = ball.getPosition();
     sf::Vector2f v = ball.getVelocity();
 
-    //std::cout << v << "\n";
+    std::cout << v << "\n";
     sf::Rect<float> rectBounds = rect.getGlobalBounds();
 
-    bool boolX = false;
-    bool boolY = false;
+    bool boolXMin = false;
+    bool boolXMax = false;
+    bool boolYMin = false;
+    bool boolYMax = false;
 
-    if(r.x <= rectBounds.left || r.x >= rectBounds.left + rectBounds.width)
-        boolX = true;
-    if(r.y <= rectBounds.top || r.y >= rectBounds.top + rectBounds.height)
-        boolY = true;
+    if(r.x <= rectBounds.left)
+        boolXMin = true;
+    else if(r.x >= rectBounds.left + rectBounds.width)
+        boolXMax = true;
+    if(r.y <= rectBounds.top)
+        boolYMin = true;
+    else if(r.y >= rectBounds.top + rectBounds.height)
+        boolYMax = true;
 
-    if(boolX && !boolY)
+    if((boolXMin || boolXMax) && !(boolYMin || boolYMax))
         ball.setVelocity({-v.x, v.y});
-    else if(!boolX && boolY)
+    else if(!(boolXMin || boolXMax) && (boolYMin || boolYMax))
         ball.setVelocity({v.x, -v.y});
-    else if(boolX && boolY)
+    else
     {
         Ball infMassBall(ball.getRadius(), 1e+15*ball.getMass(),
                         {rectBounds.left, rectBounds.top}, {0.0f, 0.0f});
+        if(boolXMax && boolYMin)
+            infMassBall.setPosition({rectBounds.left + rectBounds.width,
+                                     rectBounds.top});
+        else if(boolXMin && boolYMax)
+            infMassBall.setPosition({rectBounds.left,
+                                     rectBounds.top + rectBounds.height});
+        else if(boolXMax && boolYMax)
+            infMassBall.setPosition({rectBounds.left + rectBounds.width,
+                                     rectBounds.top + rectBounds.height});
         Collisions::ballCollision(ball, infMassBall);
     }
 }
+
+/*void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
+{
+    //std::cout << "Collisions\n";
+    sf::Vector2f r = ball.getPosition();
+    sf::Vector2f v = ball.getVelocity();
+
+    std::cout << v << "\n";
+    sf::Rect<float> rectBounds = rect.getGlobalBounds();
+
+    unsigned int bitwiseFlag = 0;
+
+    if(r.x <= rectBounds.left)
+        bitwiseFlag += 1;
+    else if(r.x >= rectBounds.left + rectBounds.width)
+        bitwiseFlag += 2;
+    if(r.y <= rectBounds.top)
+        bitwiseFlag += 4;
+    else if(r.y >= rectBounds.top + rectBounds.height)
+        bitwiseFlag += 8;
+
+    if(bitwiseFlag == 1 || bitwiseFlag == 2)
+        ball.setVelocity({-v.x, v.y});
+    else if(bitwiseFlag == 4 || bitwiseFlag == 8)
+        ball.setVelocity({v.x, -v.y});
+    else
+    {
+        Ball infMassBall(ball.getRadius(), 1e+15*ball.getMass(),
+                        {rectBounds.left, rectBounds.top}, {0.0f, 0.0f});
+        if(bitwiseFlag == 6)
+            infMassBall.setPosition({rectBounds.left + rectBounds.width,
+                                     rectBounds.top});
+        else if(bitwiseFlag == 9)
+            infMassBall.setPosition({rectBounds.left,
+                                     rectBounds.top + rectBounds.height});
+        else if(bitwiseFlag == 12)
+            infMassBall.setPosition({rectBounds.left + rectBounds.width,
+                                     rectBounds.top + rectBounds.height});
+        Collisions::ballCollision(ball, infMassBall);
+    }
+}*/
