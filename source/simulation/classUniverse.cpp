@@ -276,6 +276,7 @@ float BallUniverse::physicsLoop()
 
         if(enable_collisions==true)
         {
+            //staticCollArray.printMatrix();
             if(hasCollided==false)
                 calcCollTimes();
 
@@ -307,7 +308,6 @@ float BallUniverse::physicsLoop()
                         }
                 }
                 else
-                {
                     if(collider1 != collider2)
                     {
                         for(unsigned int i=0; i<ballArray.size(); ++i)
@@ -319,7 +319,6 @@ float BallUniverse::physicsLoop()
                                     collTimeForBall(j);
                                 }
                     }
-                }
 
             }
             timeToNextColl = 1e+15;

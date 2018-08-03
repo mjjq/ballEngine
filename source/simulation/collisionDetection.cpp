@@ -150,7 +150,8 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
     //std::cout << "MinkAABB: " << AABB << "\n";
     //std::cout << "origAABB" << origAABB << "\n";
     //std::cout << r << "\n\n";
-
+    if(origAABB.contains(r.x,r.y))
+        return std::numeric_limits<float>::quiet_NaN();
 
         if(intPoint.x < origAABB.left && intPoint.y < origAABB.top)
             tmin = std::max(tmin,raySphereIntersect(r,v, {origAABB.left, origAABB.top}, ball.getRadius()));
@@ -207,7 +208,6 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
 
     if(r.x <= rectBounds.left || r.x >= rectBounds.left + rectBounds.width)
         boolX = true;
-
     if(r.y <= rectBounds.top || r.y >= rectBounds.top + rectBounds.height)
         boolY = true;
 
