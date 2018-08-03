@@ -208,7 +208,7 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
     sf::Vector2f r = ball.getPosition();
     sf::Vector2f v = ball.getVelocity();
 
-    std::cout << v << "\n";
+    //std::cout << v << "\n";
     sf::Rect<float> rectBounds = rect.getGlobalBounds();
 
     bool boolXMin = false;
