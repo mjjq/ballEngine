@@ -4,32 +4,33 @@
 
 float Matrix2d::getElementValue(int x, int y)
 {
-    return matrix.at(x).at(y);
+    return matrix.at(x + y*width);
 }
 
 void Matrix2d::setElementValue(int x, int y, float value)
 {
-    matrix.at(x).at(y) = value;
+    matrix.at(x + y*width) = value;
 }
 
 void Matrix2d::insertColumn(int position, float initVal)
 {
-    if(matrix.size()>0)
+    if(height == 0)
     {
-        if(position >= 0 && std::abs(position) < matrix.size())
-            matrix.insert(matrix.begin() + position, std::vector<float>(height, initVal));
-        else if(position < 0 && std::abs(position) < matrix.size())
-            matrix.insert(matrix.end() + position, std::vector<float>(height, initVal));
-        else
-            matrix.insert(matrix.end(), std::vector<float>(height, initVal));
+        matrix.push_back(initVal);
+        height++;
     }
     else
-        matrix.push_back(std::vector<float>(height, initVal));
-
+    {
+        for(int i=0; i<height-1; ++i)
+        {
+            matrix.insert(matrix.begin() + i*height + width, initVal);
+        }
+        matrix.push_back(initVal);
+    }
     width++;
 }
 
-void Matrix2d::removeColumn(int position)
+/*void Matrix2d::removeColumn(int position)
 {
     if(position >= 0 && std::abs(position) < matrix.size())
         matrix.erase(matrix.begin() + position);
@@ -39,45 +40,25 @@ void Matrix2d::removeColumn(int position)
         matrix.erase(matrix.end() - 1);
 
     width--;
-}
+}*/
 
 void Matrix2d::insertRow(int position, float initVal)
 {
-    if(height>0)
+    if(width == 0)
     {
-        //if(width == 0)
-        //    insertColumn(0);
-        if(position >= 0 && std::abs(position) < height)
-            for(unsigned int i=0; i<width; ++i)
-            {
-                matrix.at(i).insert(matrix.at(i).begin() + position, initVal);
-            }
-        else if(position < 0 && std::abs(position) < height)
-            for(unsigned int i=0; i<width; ++i)
-            {
-                matrix.at(i).insert(matrix.at(i).end() + position, initVal);
-            }
-        else
-            for(unsigned int i=0; i<width; ++i)
-            {
-                matrix.at(i).insert(matrix.at(i).end() -1, initVal);
-            }
+        matrix.push_back(initVal);
+        width++;
     }
     else
     {
-        //if(width == 0)
-        //    insertColumn(0);
-        for(unsigned int i=0; i<width; ++i)
-        {
-            matrix.at(i).push_back(initVal);
-        }
+        for(int i=0; i<width; ++i)
+            matrix.push_back(initVal);
     }
-
 
     height++;
 }
 
-void Matrix2d::removeRow(int position)
+/*void Matrix2d::removeRow(int position)
 {
     if(position >= 0 && std::abs(position) < height)
         for(unsigned int i=0; i<width; ++i)
@@ -95,7 +76,7 @@ void Matrix2d::removeRow(int position)
             matrix.at(i).erase(matrix.at(i).end() -1);
         }
     height--;
-}
+}*/
 
 std::tuple<int, int, float> Matrix2d::getMatrixMin()
 {
@@ -103,40 +84,47 @@ std::tuple<int, int, float> Matrix2d::getMatrixMin()
     unsigned int y=0;
     float minimum = 1e+15;
 
-    for(unsigned int i=0; i<width; ++i)
-        for(unsigned int j=0; j<height; ++j)
+    /*for(unsigned int i=0; i<height; ++i)
+        for(unsigned int j=0; j<width; ++j)
         {
-            float temp = matrix.at(i).at(j);
+            float temp = matrix.at(i*width+j);
             if(temp < minimum)
             {
                 x=i;
                 y=j;
                 minimum = temp;
             }
+        }*/
+    for(unsigned int i=0; i<matrix.size(); ++i)
+    {
+        float temp = matrix.at(i);
+        if(temp < minimum)
+        {
+            x = i % width;
+            y = (i-x)/width;
+            minimum = temp;
         }
+    }
     return std::make_tuple(x,y,minimum);
 }
 
 void Matrix2d::printMatrix()
 {
-    for(unsigned int i=0; i<width; ++i)
+    for(unsigned int i=0; i<height; ++i)
     {
-        for(unsigned int j=0; j<height; ++j)
+        for(unsigned int j=0; j<width; ++j)
         {
-            std::cout << matrix.at(i).at(j) << " ";
+            std::cout << matrix.at(i*width+j) << " ";
         }
         std::cout << "\n";
     }
-    std::cout << "\n";
+    std::cout << "width: " << width << ", height: " << height << "\n\n";
 }
 
 void Matrix2d::addConstValue(float value)
 {
-    for(unsigned int i=0; i<width; ++i)
-    {
-        for(unsigned int j=0; j<height; ++j)
-            matrix.at(i).at(j) += value;
-    }
+    for(unsigned int i=0; i<matrix.size(); ++i)
+        matrix.at(i) += value;
 }
 
 void Matrix2d::clearMatrix()

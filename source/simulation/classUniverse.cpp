@@ -22,8 +22,13 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
         ballArray.back().setSamplePrevPosBool(enable_trajectories);
         //setPlayer(ballArray.size()-1);
         colliderArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
-        colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        if(ballArray.size()>1)
+            colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        if(ballArray.size() != 1 && AARectArray.size()>0)
+            staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        if(ballArray.size() == 1 && AARectArray.size() > 0)
+            for(int i=0; i<AARectArray.size(); ++i)
+                staticCollArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
         //colliderArray.printMatrix();
     }
 }
@@ -38,7 +43,11 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
         AARectArray.push_back(sf::RectangleShape({width, height}));
         AARectArray.back().setPosition(position);
         AARectArray.back().setFillColor(sf::Color::Blue);
-        staticCollArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
+        if(AARectArray.size()!=1 && ballArray.size() > 0)
+            staticCollArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
+        if(AARectArray.size() == 1 && ballArray.size()>0)
+            for(int i=0; i<ballArray.size(); ++i)
+                staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
     }
 }
 
@@ -135,8 +144,8 @@ bool BallUniverse::checkForBounce(Ball &ball)
 
 void BallUniverse::calcCollTimes()
 {
-    for(unsigned int i=0;i<colliderArray.getWidth();++i)
-        for(unsigned int j=i;j<colliderArray.getHeight();++j)
+    for(unsigned int i=0;i<colliderArray.getHeight();++i)
+        for(unsigned int j=i;j<colliderArray.getWidth();++j)
             if(i!=j)
             {
                 /*if(ballArray.at(i).getDistance(ballArray.at(j)) < 0.99*(ballArray.at(i).getRadius() + ballArray.at(j).getRadius()))
@@ -145,7 +154,7 @@ void BallUniverse::calcCollTimes()
                      std::cout << colliderArray.getElementValue(i,j) << "\n";
                 }*/
                     float tColl = Collisions::timeToCollision(ballArray.at(i), ballArray.at(j));
-                    colliderArray.setElementValue(i,j, tColl);
+                    colliderArray.setElementValue(j,i, tColl);
 
             }
     for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
@@ -192,7 +201,7 @@ void BallUniverse::collTimeForBall(unsigned int index)
             //   ballArray.at(index).getDistance(ballArray.at(i)))
             //{
                 float tColl = Collisions::timeToCollision(ballArray.at(index), ballArray.at(i));
-                colliderArray.setElementValue(index, i, tColl);
+                colliderArray.setElementValue(i, index, tColl);
             //}
             //else
             //    colliderArray.setElementValue(index, i, std::numeric_limits<float>::quiet_NaN());
@@ -200,7 +209,7 @@ void BallUniverse::collTimeForBall(unsigned int index)
         else if(index > i)
         {
             float tColl = Collisions::timeToCollision(ballArray.at(index), ballArray.at(i));
-            colliderArray.setElementValue(i, index, tColl);
+            colliderArray.setElementValue(index, i, tColl);
         }
     }
     for(unsigned int i=0; i<staticCollArray.getWidth(); ++i)
@@ -251,8 +260,8 @@ void BallUniverse::removeBall(unsigned int index)
     if(index >=0 && index < ballArray.size())
     {
         ballArray.erase(ballArray.begin() + index);
-        colliderArray.removeColumn(index);
-        colliderArray.removeRow(index);
+//        colliderArray.removeColumn(index);
+//        colliderArray.removeRow(index);
         numOfBalls--;
     }
 }
@@ -283,15 +292,15 @@ float BallUniverse::physicsLoop()
                 hasCollided = false;
 
             findShortestCollTime();
-
             //std::cout << "Hascolld: " << hasCollided << "Sht: " << timeToNextColl << "\n";
             //staticCollArray.printMatrix();
             //colliderArray.printMatrix();
         }
+                    //colliderArray.printMatrix();
+            //std::cout << timeToNextColl << "\n";
 
         if(dt >= timeToNextColl && timeToNextColl >= epsilon)
         {
-            //std::cout << "Collision\n";
             dtR = timeToNextColl;
             //if(std::abs(dtR) >= epsilon)
             {
@@ -317,7 +326,7 @@ float BallUniverse::physicsLoop()
                     {
                         for(unsigned int i=0; i<ballArray.size(); ++i)
                             for(unsigned int j=i; j<ballArray.size(); ++j)
-                                if(colliderArray.getElementValue(i,j) <= epsilon)
+                                if(colliderArray.getElementValue(j,i) <= epsilon)
                                 {
                                     Collisions::ballCollision(ballArray.at(i), ballArray.at(j));
                                     collTimeForBall(i);
