@@ -38,7 +38,7 @@ float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
         if(t1>t2) std::swap(t1,t2);
         tmin = std::max(t1, tmin);
         tmax = std::min(t2, tmax);
-        if(tmin > tmax || tmin < 0.0f || tmax < 0.0f) return std::numeric_limits<float>::quiet_NaN();
+        if(tmin > tmax) return std::numeric_limits<float>::quiet_NaN();
     }
 
     if(std::abs(v.y) < epsilon)
@@ -55,8 +55,13 @@ float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
         if(t1>t2) std::swap(t1,t2);
         tmin = std::max(t1, tmin);
         tmax = std::min(t2, tmax);
-        if(tmin > tmax || tmin < 0.0f || tmax < 0.0f) return std::numeric_limits<float>::quiet_NaN();
+        if(tmin > tmax) return std::numeric_limits<float>::quiet_NaN();
     }
+    if(tmin < 0.0f || tmax < 0.0f)
+    {
+        tmin = 1e+12;
+    }
+
     return tmin;
 }
 
@@ -132,7 +137,7 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
     //std::cout << "MinkAABB: " << AABB << "\n";
 
     float epsilon = 1e-5;
-    float tmin = 0.0f;
+    float tmin = -1.0f;
     float tmax = 10000.0f;
 
     tmin = Collisions::rayAABBIntersect(r, v, AABB, tmin, tmax, epsilon);
@@ -141,9 +146,9 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
 
     sf::Vector2f intPoint = r+v*tmin;
     sf::Rect<float> origAABB = origAARect.getGlobalBounds();
-    std::cout << "MinkAABB: " << AABB << "\n";
-    std::cout << "origAABB" << origAABB << "\n";
-    std::cout << r << "\n\n";
+    //std::cout << "MinkAABB: " << AABB << "\n";
+    //std::cout << "origAABB" << origAABB << "\n";
+    //std::cout << r << "\n\n";
 
     //if(!AABB.contains(r.x,r.y))
     //{
@@ -197,11 +202,12 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
     //std::cout << "Collisions\n";
     sf::Vector2f r = ball.getPosition();
     sf::Vector2f v = ball.getVelocity();
+
+    std::cout << r << "\n";
+    std::cout << v << "\n";
     sf::Rect<float> rectBounds = rect.getGlobalBounds();
     if(r.x <= rectBounds.left || r.x >= rectBounds.left + rectBounds.width)
         ball.setVelocity({-v.x, v.y});
-    else if(r.y <= rectBounds.top || r.y >= rectBounds.top + rectBounds.height)
+    if(r.y <= rectBounds.top || r.y >= rectBounds.top + rectBounds.height)
         ball.setVelocity({v.x, -v.y});
-    else
-        ball.setVelocity({-v.x, -v.y});
 }
