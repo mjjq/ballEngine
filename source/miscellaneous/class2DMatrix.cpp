@@ -2,6 +2,7 @@
 #include "../../headers/class2DMatrix.h"
 #include <tuple>
 #include <algorithm>
+#include <cmath>
 
 float Matrix2d::getElementValue(int x, int y)
 {
@@ -131,7 +132,8 @@ void Matrix2d::printMatrix()
 void Matrix2d::addConstValue(float value)
 {
     for(unsigned int i=0; i<matrix.size(); ++i)
-        matrix.at(i) += value;
+        if(!std::isnan(matrix[i]))
+            matrix[i] += value;
     //use .at(i) for debug if testing for out of range errors
 }
 
