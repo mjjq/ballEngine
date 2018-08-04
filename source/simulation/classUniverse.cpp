@@ -61,53 +61,54 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
 
     @return Void.
 */
-void BallUniverse::updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall)
+void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, Ball &_firstBall, Ball &_secondBall)
 {
-    sf::Vector2f relVec = firstBall.getPosition() - secondBall.getPosition();
+    sf::Vector2f relVec = _firstBall.getPosition() - _secondBall.getPosition();
     float r2 = sfVectorMath::dot(relVec, relVec);
 
-    if(r2 > pow(firstBall.getRadius()+secondBall.getRadius(), 2))
+    if(r2 > pow(_firstBall.getRadius()+_secondBall.getRadius(), 2))
     {
         //nStepVelocity = {0,0};
         float G = 1;
-        float M = secondBall.getMass();
-        sf::Vector2f firstVelocity = firstBall.getVelocity();
-        sf::Vector2f secondVelocity = secondBall.getVelocity();
+        float M = _secondBall.getMass();
+        sf::Vector2f firstVelocity = _firstBall.getVelocity();
+        sf::Vector2f secondVelocity = _secondBall.getVelocity();
         std::pair<sf::Vector2f,sf::Vector2f> solution;
-        switch(integType)
+        switch(_integType)
         {
             case(Integrators::INTEG_EULER):
-                solution = integrators::eulerMethod(relVec, dt, M, G);
+                solution = integrators::eulerMethod(relVec, _dt, M, G);
                 break;
             case(Integrators::INTEG_SEM_IMP_EULER):
-                solution = integrators::semImpEulerMethod(relVec, dt, M, G);
+                solution = integrators::semImpEulerMethod(relVec, _dt, M, G);
                 break;
             case(Integrators::INTEG_RK4):
-                solution = integrators::RK4Method2ndODE(relVec, firstVelocity, secondVelocity, dt, M, G);
+                solution = integrators::RK4Method2ndODE(relVec, firstVelocity, secondVelocity, _dt, M, G);
                 break;
             case(Integrators::INTEG_VERLET):
-                solution = integrators::verletMethod(relVec, firstVelocity, secondVelocity, dt, M, G);
+                solution = integrators::verletMethod(relVec, firstVelocity, secondVelocity, _dt, M, G);
                 break;
+            case(Integrators::LAST):
             default:
                 break;
         }
-        firstBall.addSolvedVelocity(solution.first, solution.second);
+        _firstBall.addSolvedVelocity(solution.first, solution.second);
         /*cStepModVelocity += solution.first;
         nStepVelocity += solution.second;*/
     }
 
 }
 
-void BallUniverse::updateAllObjects(bool enableForces, float dt)
+void BallUniverse::updateAllObjects(bool _enableForces, float _dt)
 {
-    if(enableForces==true)
+    if(_enableForces==true)
         for(Ball &ball1 : ballArray)
             for(Ball &ball2 : ballArray)
                 if(&ball1 != &ball2)
-                    updateFirstVelocity(intEnum, dt, ball1, ball2);
+                    updateFirstVelocity(intEnum, _dt, ball1, ball2);
 
     for(Ball &ball : ballArray)
-        ball.updatePosition(dt);
+        ball.updatePosition(_dt);
 }
 
 /**
@@ -221,17 +222,17 @@ void BallUniverse::collTimeForBall(unsigned int index)
 
 
 
-void BallUniverse::ballAbsorption(Ball &firstBall, Ball &secondBall, float dt)
+void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall, float _dt)
 {
     using namespace sfVectorMath;
 
-    float rad1 = firstBall.getRadius();
-    float rad2 = secondBall.getRadius();
+    float rad1 = _firstBall.getRadius();
+    float rad2 = _secondBall.getRadius();
 
-    sf::Vector2f v1 = firstBall.getVelocity();
-    sf::Vector2f v2 = secondBall.getVelocity();
-    sf::Vector2f rhat = norm(firstBall.getPosition() - secondBall.getPosition());
-    float projVel = dot(v2-v1, rhat)*dt;
+    sf::Vector2f v1 = _firstBall.getVelocity();
+    sf::Vector2f v2 = _secondBall.getVelocity();
+    sf::Vector2f rhat = norm(_firstBall.getPosition() - _secondBall.getPosition());
+    float projVel = dot(v2-v1, rhat)*_dt;
 
     if(projVel > 0)
     {
@@ -245,10 +246,10 @@ void BallUniverse::ballAbsorption(Ball &firstBall, Ball &secondBall, float dt)
             rad1 -= projVel;
             rad2 = pow(rad2*rad2 + projVel*projVel , 0.5);
         }
-        firstBall.setRadius(rad1);
-        firstBall.setOrigin({rad1,rad1});
-        secondBall.setRadius(rad2);
-        secondBall.setOrigin({rad2,rad2});
+        _firstBall.setRadius(rad1);
+        _firstBall.setOrigin({rad1,rad1});
+        _secondBall.setRadius(rad2);
+        _secondBall.setOrigin({rad2,rad2});
     }
 
 
@@ -474,23 +475,23 @@ void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer ve
     }
 }
 
-void BallUniverse::calcTotalKE(std::vector<Ball> &ballArray)
+void BallUniverse::calcTotalKE(std::vector<Ball> &_ballArray)
 {
     totalKE = 0;
     float KE{0};
-    for(Ball &ball : ballArray)
+    for(Ball &ball : _ballArray)
         KE += ball.getKE();
     totalKE = KE;
 }
 
-void BallUniverse::calcTotalGPE(std::vector<Ball> &ballArray)
+void BallUniverse::calcTotalGPE(std::vector<Ball> &_ballArray)
 {
     totalGPE = 0;
-    if(ballArray.size()>1)
+    if(_ballArray.size()>1)
     {
         float GPE{0};
-        for(Ball &ball1 : ballArray)
-            for(Ball &ball2 : ballArray)
+        for(Ball &ball1 : _ballArray)
+            for(Ball &ball2 : _ballArray)
                 if(&ball1 != &ball2)
                     GPE+=ball1.getGPE(ball2)/2;
         totalGPE = GPE;
@@ -502,10 +503,10 @@ void BallUniverse::calcTotalEnergy()
     totalEnergy = totalKE + totalGPE;
 }
 
-void BallUniverse::calcTotalMomentum(std::vector<Ball> &ballArray)
+void BallUniverse::calcTotalMomentum(std::vector<Ball> &_ballArray)
 {
     sf::Vector2f momentum{0,0};
-    for(Ball &ball : ballArray)
+    for(Ball &ball : _ballArray)
         momentum += ball.getMomentum();
     totalMomentum = momentum;
 }
@@ -707,7 +708,7 @@ void BallUniverse::pushBall(float force, float relDirection, int i)
     {
         sf::Vector2f velocity = ballArray.at(i).getVelocity();
         sf::Vector2f forceVec{0,0};
-        if(sfVectorMath::dot(velocity, velocity) != 0)
+        if(sfVectorMath::dot(velocity, velocity) > 1e-10)
             forceVec = sfVectorMath::rotate(force*sfVectorMath::norm(velocity), relDirection);
         else
             forceVec = sfVectorMath::rotate({0,-force}, relDirection);
@@ -784,7 +785,7 @@ void BallUniverse::splitBalls(int ballIndex, float relDirection, float speed)
         {
             sf::Vector2f initialVelocity = ballArray.at(ballIndex).getVelocity();
             sf::Vector2f v2;
-            if(initialVelocity.x == 0 && initialVelocity.y == 0)
+            if(initialVelocity.x < 1e-10 && initialVelocity.y < 1e-10)
                 v2 = speed*sfVectorMath::rotate({0,-1}, relDirection);
             else
                 v2 = sfVectorMath::rotate(speed*sfVectorMath::norm(initialVelocity), relDirection);
@@ -807,9 +808,9 @@ void BallUniverse::playerInFunc(float relDirection)
     playerInput = std::pair<bool, float>(true, relDirection);
 }
 
-BallUniverse::BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force, bool collision) :
+BallUniverse::BallUniverse(int _worldSizeX, int _worldSizeY, float _dt, bool _force, bool _collision) :
 
-worldSizeX{worldSizeX}, worldSizeY{worldSizeY}, enable_forces(force), enable_collisions(collision), dt{dt}
+worldSizeX{_worldSizeX}, worldSizeY{_worldSizeY}, enable_forces{_force}, enable_collisions{_collision}, dt{_dt}
 {
 
 }

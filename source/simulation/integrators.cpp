@@ -76,6 +76,7 @@ std::string integrators::returnIntTypeStr(const Integrators &value)
             return std::string("RK4");
         case(Integrators::INTEG_VERLET):
             return std::string("Vel Verlet");
+        case(Integrators::LAST):
         default:
             return std::string("Error, invalid integrator");
     }

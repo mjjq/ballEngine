@@ -297,18 +297,18 @@ void MenuScene::unload()
     container.destroyAllWindows();
 }
 
-void MenuScene::redraw(sf::RenderWindow &window)
+void MenuScene::redraw(sf::RenderWindow &_window)
 {
-    container.renderWindows(window, GUIView, worldView);
+    container.renderWindows(_window, GUIView, worldView);
 }
 
-void MenuScene::update(sf::RenderWindow &window)
+void MenuScene::update(sf::RenderWindow &_window)
 {
     if(!mouseOnUIWhenClicked.first)
     {
     }
     if(clickedWindowToDrag)
-        container.dragWindow(window);
+        container.dragWindow(_window);
 
     playerKeysDown(0);
 }

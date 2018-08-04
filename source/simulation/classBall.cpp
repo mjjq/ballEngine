@@ -73,12 +73,12 @@ float Ball::newtonForce(float x, float x_0, float r, float G, float M)
     @param initPos The initial position of the ball.
     @param initVel The initial velocity of the ball.
 */
-Ball::Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel) :
-sf::CircleShape(radius), cStepVelocity{initVel}, nStepPosition(initPos), mass(mass)
+Ball::Ball(float _radius, float _mass, sf::Vector2f _initPos, sf::Vector2f _initVel) :
+sf::CircleShape(_radius), cStepVelocity{_initVel}, nStepPosition(_initPos), mass(_mass)
 {
-    setPosition(initPos);
+    setPosition(_initPos);
     //nStepPosition = initPos;
-    setOrigin(radius,radius);
+    setOrigin(_radius,_radius);
     if(mass>0)
         setFillColor(sf::Color::Green);
     else
