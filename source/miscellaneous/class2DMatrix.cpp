@@ -6,12 +6,12 @@
 
 float Matrix2d::getElementValue(int x, int y)
 {
-    return matrix.at(x + y*width);
+    return matrix[x + y*width];
 }
 
 void Matrix2d::setElementValue(int x, int y, float value)
 {
-    matrix.at(x + y*width) = value;
+    matrix[x + y*width] = value;
 }
 
 void Matrix2d::insertColumn(int position, float initVal)

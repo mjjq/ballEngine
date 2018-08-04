@@ -66,9 +66,9 @@ float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
 float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir,
                                      sf::Vector2f sphereCentre, float sphereRadius)
 {
-    float a = sfVectorMath::dot( rayDir, rayDir );
+    float a = sfVectorMath::square(rayDir);
     float b = 2.0f*sfVectorMath::dot(rayDir, (rayOrigin-sphereCentre) );
-    float c = sfVectorMath::dot( rayOrigin-sphereCentre, rayOrigin-sphereCentre )
+    float c = sfVectorMath::square( rayOrigin-sphereCentre )
                                                 - sphereRadius*sphereRadius;
     float discriminant = b*b - 4.0f*a*c;
     if(discriminant < 0)
@@ -105,18 +105,19 @@ float Collisions::timeToCollision(Ball &firstBall, Ball &secondBall)
     sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
     float radSum = firstBall.getRadius() + secondBall.getRadius();
 
-    if(dot(relPos,relPos) <= pow(radSum, 2))
-        return std::numeric_limits<float>::quiet_NaN();
-
     sf::Vector2f relVel = firstBall.getVelocity() - secondBall.getVelocity();
-    float discriminant = pow(dot(relPos,relVel), 2) -
-                         dot(relVel,relVel)*(dot(relPos,relPos) - pow(radSum, 2));
+
+    float relSpeed = square(relVel);
+    float projVec = dot(relPos, relVel);
+
+    float discriminant = pow(projVec, 2) -
+                         relSpeed*(square(relPos) - pow(radSum, 2));
 
     if(discriminant < 0)
         return std::numeric_limits<float>::quiet_NaN();
 
-    float root1 = -(dot(relPos,relVel) + pow(discriminant,0.5))/dot(relVel,relVel);
-    float root2 = -(dot(relPos,relVel) - pow(discriminant,0.5))/dot(relVel,relVel);
+    float root1 = -(projVec + pow(discriminant,0.5))/relSpeed;
+    float root2 = -(projVec - pow(discriminant,0.5))/relSpeed;
 
     if(root1 < 0 || root2 < 0)
         return std::numeric_limits<float>::quiet_NaN();

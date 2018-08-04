@@ -42,6 +42,12 @@ float sfVectorMath::dot(sf::Vector2f vec1, sf::Vector2f vec2)
     return prod;
 }
 
+float sfVectorMath::square(sf::Vector2f vec)
+{
+    float square = vec.x*vec.x + vec.y*vec.y;
+    return square;
+}
+
 /**
     Get the unit/normlised vector of an integer vector.
 
