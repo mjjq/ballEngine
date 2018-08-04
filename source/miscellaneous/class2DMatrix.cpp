@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../../headers/class2DMatrix.h"
 #include <tuple>
+#include <algorithm>
 
 float Matrix2d::getElementValue(int x, int y)
 {
@@ -21,11 +22,17 @@ void Matrix2d::insertColumn(int position, float initVal)
     }
     else
     {
-        for(int i=0; i<height-1; ++i)
+        int j=0;
+        for(unsigned int i=0; i<height-1; ++i)
         {
-            matrix.insert(matrix.begin() + i*height + width, initVal);
+            matrix.insert(matrix.begin() + i*width + width + j, initVal);
+            j++;
         }
         matrix.push_back(initVal);
+        /*for(unsigned int i=0; i<height; ++i)
+        {
+            matrix.push_back(initVal);
+        }*/
     }
     width++;
 }
@@ -51,7 +58,7 @@ void Matrix2d::insertRow(int position, float initVal)
     }
     else
     {
-        for(int i=0; i<width; ++i)
+        for(unsigned int i=0; i<width; ++i)
             matrix.push_back(initVal);
     }
 
@@ -125,6 +132,7 @@ void Matrix2d::addConstValue(float value)
 {
     for(unsigned int i=0; i<matrix.size(); ++i)
         matrix.at(i) += value;
+    //use .at(i) for debug if testing for out of range errors
 }
 
 void Matrix2d::clearMatrix()

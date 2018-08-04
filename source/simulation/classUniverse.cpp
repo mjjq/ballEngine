@@ -27,7 +27,7 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
         if(ballArray.size() != 1 && AARectArray.size()>0)
             staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         if(ballArray.size() == 1 && AARectArray.size() > 0)
-            for(int i=0; i<AARectArray.size(); ++i)
+            for(unsigned int i=0; i<AARectArray.size(); ++i)
                 staticCollArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
         //colliderArray.printMatrix();
     }
@@ -46,7 +46,7 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
         if(AARectArray.size()!=1 && ballArray.size() > 0)
             staticCollArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
         if(AARectArray.size() == 1 && ballArray.size()>0)
-            for(int i=0; i<ballArray.size(); ++i)
+            for(unsigned int i=0; i<ballArray.size(); ++i)
                 staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
     }
 }
@@ -145,8 +145,8 @@ bool BallUniverse::checkForBounce(Ball &ball)
 void BallUniverse::calcCollTimes()
 {
     for(unsigned int i=0;i<colliderArray.getHeight();++i)
-        for(unsigned int j=i;j<colliderArray.getWidth();++j)
-            if(i!=j)
+        for(unsigned int j=i+1;j<colliderArray.getWidth();++j)
+            //if(i!=j)
             {
                 /*if(ballArray.at(i).getDistance(ballArray.at(j)) < 0.99*(ballArray.at(i).getRadius() + ballArray.at(j).getRadius()))
                 {
@@ -307,6 +307,7 @@ float BallUniverse::physicsLoop()
                 updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
                 colliderArray.addConstValue(-dtR);
                 staticCollArray.addConstValue(-dtR);
+                //calcCollTimes();
                 hasCollided = true;
                 if(collWithStatic)
                 {

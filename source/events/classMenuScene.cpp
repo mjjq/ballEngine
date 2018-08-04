@@ -280,6 +280,13 @@ void MenuScene::load()
     };
     completeWindows.push_back(window0);
 
+    CompleteWindow window1;
+    window1.wParams = {{0.0f,1.0f}, {0,-30}, {50, 20}, true, false, true, {000,0,0,000}};
+    window1.tParamsIntVec = std::vector<TextElParams<int>>{
+        {"./fonts/cour.ttf", "Version 0.1.2b", 16, {10,00}, nullptr}
+    };
+    completeWindows.push_back(window1);
+
     for(unsigned int i=0; i<completeWindows.size(); ++i)
        container.addWindow(completeWindows.at(i));
 
