@@ -108,6 +108,8 @@ float Collisions::timeToCollision(Ball &firstBall, Ball &secondBall)
     sf::Vector2f relVel = firstBall.getVelocity() - secondBall.getVelocity();
 
     float relSpeed = square(relVel);
+    if(relSpeed < 1e-10)
+        return std::numeric_limits<float>::quiet_NaN();
     float projVec = dot(relPos, relVel);
 
     float discriminant = pow(projVec, 2) -
