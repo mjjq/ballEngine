@@ -131,9 +131,13 @@ void Matrix2d::printMatrix()
 
 void Matrix2d::addConstValue(float value)
 {
-    for(unsigned int i=0; i<matrix.size(); ++i)
+    /*for(unsigned int i=0; i<matrix.size(); ++i)
         if(!std::isnan(matrix[i]))
-            matrix[i] += value;
+            matrix[i] += value;*/
+
+    for(auto &element : matrix)
+        if(!std::isnan(element))
+            element += value;
     //use .at(i) for debug if testing for out of range errors
 }
 
