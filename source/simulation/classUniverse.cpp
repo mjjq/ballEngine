@@ -267,7 +267,7 @@ void BallUniverse::removeBall(unsigned int index)
     }
 }
 
-float BallUniverse::physicsLoop()
+/*float BallUniverse::physicsLoop()
 {
         float dtR = dt;
         float epsilon = 1e-5;
@@ -338,9 +338,9 @@ float BallUniverse::physicsLoop()
             updateAllObjects(enable_forces, dt);
 
         return dtR;
-}
+}*/
 
-/*float BallUniverse::physicsLoop()
+float BallUniverse::physicsLoop()
 {
         float dtR = dt;
         float epsilon = 1e-5;
@@ -396,7 +396,7 @@ float BallUniverse::physicsLoop()
 
         collAccumulator -= dtR;
         return dtR;
-}*/
+}
 
 float BallUniverse::physicsLoopAbsorb()
 {
@@ -465,7 +465,7 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
         int maxLimit = 12;
         while(accumulator >= dt && limiting < maxLimit)
         {
-            accumulator -= physicsLoopAbsorb();
+            accumulator -= physicsLoop();
             sampleAllPositions();
             if(maxLimit*thresholdTimer.restart().asSeconds() > frameLimit.asSeconds())
                 ++limiting;
