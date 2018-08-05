@@ -253,7 +253,7 @@ void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall, float _dt
     }
 
 
-    //ballCollision(firstBall, secondBall);
+    Collisions::ballCollision(_firstBall, _secondBall);
 }
 
 void BallUniverse::removeBall(unsigned int index)
@@ -293,50 +293,45 @@ float BallUniverse::physicsLoop()
                 hasCollided = false;
 
             findShortestCollTime();
-            //std::cout << "Hascolld: " << hasCollided << "Sht: " << timeToNextColl << "\n";
-            //staticCollArray.printMatrix();
-            //colliderArray.printMatrix();
         }
-                    //colliderArray.printMatrix();
-            //std::cout << timeToNextColl << "\n";
 
         if(dt >= timeToNextColl && timeToNextColl >= epsilon)
         {
             dtR = timeToNextColl;
-            //if(std::abs(dtR) >= epsilon)
-            {
-                updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
-                colliderArray.addConstValue(-dtR);
-                staticCollArray.addConstValue(-dtR);
-                //calcCollTimes();
-                hasCollided = true;
-                if(collWithStatic)
-                {
-                    for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
-                        for(unsigned int j=0; j<staticCollArray.getWidth(); ++j)
-                        {
-                            if(staticCollArray.getElementValue(j,i) <= epsilon)
-                            {
-                                //std::cout << "With static: " << i << " : " << j << "\n";
-                                Collisions::ballCollision(ballArray.at(i), AARectArray.at(j));
-                                collTimeForBall(i);
-                            }
-                        }
-                }
-                else
-                    if(collider1 != collider2)
-                    {
-                        for(unsigned int i=0; i<ballArray.size(); ++i)
-                            for(unsigned int j=i; j<ballArray.size(); ++j)
-                                if(colliderArray.getElementValue(j,i) <= epsilon)
-                                {
-                                    Collisions::ballCollision(ballArray.at(i), ballArray.at(j));
-                                    collTimeForBall(i);
-                                    collTimeForBall(j);
-                                }
-                    }
 
+            updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
+            colliderArray.addConstValue(-dtR);
+            staticCollArray.addConstValue(-dtR);
+
+            hasCollided = true;
+            if(collWithStatic)
+            {
+                for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
+                    for(unsigned int j=0; j<staticCollArray.getWidth(); ++j)
+                    {
+                        if(staticCollArray.getElementValue(j,i) <= epsilon)
+                        {
+                            //std::cout << "With static: " << i << " : " << j << "\n";
+                            Collisions::ballCollision(ballArray.at(i), AARectArray.at(j));
+                            collTimeForBall(i);
+                        }
+                    }
             }
+            else
+                if(collider1 != collider2)
+                {
+                    for(unsigned int i=0; i<ballArray.size(); ++i)
+                        for(unsigned int j=i; j<ballArray.size(); ++j)
+                            if(colliderArray.getElementValue(j,i) <= epsilon)
+                            {
+                                Collisions::ballCollision(ballArray.at(i), ballArray.at(j));
+                                //ballAbsorption(ballArray.at(i), ballArray.at(j), dtR);
+                                collTimeForBall(i);
+                                collTimeForBall(j);
+                            }
+                }
+
+
             timeToNextColl = 1e+15;
         }
         else
@@ -344,6 +339,64 @@ float BallUniverse::physicsLoop()
 
         return dtR;
 }
+
+/*float BallUniverse::physicsLoop()
+{
+        float dtR = dt;
+        float epsilon = 1e-5;
+
+        if(playerInput.first)
+            pushBall(0.1f, playerInput.second, currentPlayer);
+
+        for(unsigned int i=0; i<ballArray.size(); ++i)
+        {
+            ballArray.at(i).resetToCollided();
+            if( checkForBounce(ballArray.at(i)) )
+                collTimeForBall(i);
+        }
+
+        if(enable_collisions==true)
+        {
+            if(hasCollided==false)
+                calcCollTimes();
+
+            else if(hasCollided==true)
+            {
+                collTimeForBall(collider2);
+                if(!collWithStatic)
+                    collTimeForBall(collider1);
+                hasCollided = false;
+            }
+
+            findShortestCollTime();
+        }
+
+        if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
+        {
+            dtR = timeToNextColl;
+            if(std::abs(dtR) > epsilon)
+                updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
+
+            colliderArray.addConstValue(-dtR);
+            staticCollArray.addConstValue(-dtR);
+
+            if(collWithStatic)
+                Collisions::ballCollision(ballArray.at(collider2), AARectArray.at(collider1));
+
+            else if(collider1 != collider2)
+                {
+                    Collisions::ballCollision(ballArray.at(collider1), ballArray.at(collider2));
+                    hasCollided = true;
+                }
+
+            timeToNextColl = 1e+15;
+        }
+        else
+            updateAllObjects(enable_forces, dt);
+
+        collAccumulator -= dtR;
+        return dtR;
+}*/
 
 float BallUniverse::physicsLoopAbsorb()
 {
@@ -368,13 +421,12 @@ float BallUniverse::physicsLoopAbsorb()
             else if(hasCollided==true)
             {
                 collTimeForBall(collider2);
-                collTimeForBall(collider1);
+                if(!collWithStatic)
+                    collTimeForBall(collider1);
                 hasCollided = false;
             }
-            std::tuple<int,int,float> collTuple = colliderArray.getMatrixMin();
-            timeToNextColl = std::get<2>(collTuple);
-            collider1 = std::get<0>(collTuple);
-            collider2 = std::get<1>(collTuple);
+
+            findShortestCollTime();
         }
 
         if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
@@ -383,13 +435,18 @@ float BallUniverse::physicsLoopAbsorb()
             if(std::abs(dtR) > epsilon)
                 updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
 
-            if(collider1 != collider2)
-            {
-                Collisions::ballCollision(ballArray.at(collider1), ballArray.at(collider2));
-                colliderArray.addConstValue(-dtR);
+            colliderArray.addConstValue(-dtR);
+            staticCollArray.addConstValue(-dtR);
 
-                hasCollided = true;
-            }
+            if(collWithStatic)
+                Collisions::ballCollision(ballArray.at(collider2), AARectArray.at(collider1));
+
+            else if(collider1 != collider2)
+                {
+                    Collisions::ballCollision(ballArray.at(collider1), ballArray.at(collider2));
+                    hasCollided = true;
+                }
+
             timeToNextColl = 1e+15;
         }
         else
@@ -408,7 +465,7 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
         int maxLimit = 12;
         while(accumulator >= dt && limiting < maxLimit)
         {
-            accumulator -= physicsLoop();
+            accumulator -= physicsLoopAbsorb();
             sampleAllPositions();
             if(maxLimit*thresholdTimer.restart().asSeconds() > frameLimit.asSeconds())
                 ++limiting;
