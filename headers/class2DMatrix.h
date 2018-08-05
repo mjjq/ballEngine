@@ -18,6 +18,7 @@ public:
     //void removeRow(int position);
     std::tuple<int, int, float> getMatrixMin();
     void clearMatrix();
+    void fillMatrix(float value);
     void printMatrix();
     void addConstValue(float value);
     unsigned int getWidth();

@@ -30,25 +30,9 @@ void Matrix2d::insertColumn(int position, float initVal)
             j++;
         }
         matrix.push_back(initVal);
-        /*for(unsigned int i=0; i<height; ++i)
-        {
-            matrix.push_back(initVal);
-        }*/
     }
     width++;
 }
-
-/*void Matrix2d::removeColumn(int position)
-{
-    if(position >= 0 && std::abs(position) < matrix.size())
-        matrix.erase(matrix.begin() + position);
-    else if(position < 0 && std::abs(position) < matrix.size())
-        matrix.erase(matrix.end() + position);
-    else
-        matrix.erase(matrix.end() - 1);
-
-    width--;
-}*/
 
 void Matrix2d::insertRow(int position, float initVal)
 {
@@ -66,43 +50,12 @@ void Matrix2d::insertRow(int position, float initVal)
     height++;
 }
 
-/*void Matrix2d::removeRow(int position)
-{
-    if(position >= 0 && std::abs(position) < height)
-        for(unsigned int i=0; i<width; ++i)
-        {
-            matrix.at(i).erase(matrix.at(i).begin() + position);
-        }
-    else if(position < 0 && std::abs(position) < height)
-        for(unsigned int i=0; i<width; ++i)
-        {
-            matrix.at(i).erase(matrix.at(i).end() + position);
-        }
-    else
-        for(unsigned int i=0; i<width; ++i)
-        {
-            matrix.at(i).erase(matrix.at(i).end() -1);
-        }
-    height--;
-}*/
-
 std::tuple<int, int, float> Matrix2d::getMatrixMin()
 {
     unsigned int x=0;
     unsigned int y=0;
     float minimum = 1e+15;
 
-    /*for(unsigned int i=0; i<height; ++i)
-        for(unsigned int j=0; j<width; ++j)
-        {
-            float temp = matrix.at(i*width+j);
-            if(temp < minimum)
-            {
-                x=i;
-                y=j;
-                minimum = temp;
-            }
-        }*/
     for(unsigned int i=0; i<matrix.size(); ++i)
     {
         float temp = matrix.at(i);
@@ -131,10 +84,6 @@ void Matrix2d::printMatrix()
 
 void Matrix2d::addConstValue(float value)
 {
-    /*for(unsigned int i=0; i<matrix.size(); ++i)
-        if(!std::isnan(matrix[i]))
-            matrix[i] += value;*/
-
     for(auto &element : matrix)
         if(!std::isnan(element))
             element += value;
@@ -146,6 +95,11 @@ void Matrix2d::clearMatrix()
     matrix.clear();
     width = 0;
     height = 0;
+}
+
+void Matrix2d::fillMatrix(float value)
+{
+    std::fill(matrix.begin(), matrix.end(), value);
 }
 
 
