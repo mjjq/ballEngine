@@ -21,15 +21,17 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
         numOfBalls++;
         ballArray.back().setSamplePrevPosBool(enable_trajectories);
         //setPlayer(ballArray.size()-1);
-        colliderArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
+        colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(ballArray.size()>1)
             colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         if(ballArray.size() != 1 && AARectArray.size()>0)
             staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         if(ballArray.size() == 1 && AARectArray.size() > 0)
             for(unsigned int i=0; i<AARectArray.size(); ++i)
-                staticCollArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
+                staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         //colliderArray.printMatrix();
+        if(enable_collisions)
+            calcCollTimes();
     }
 }
 
@@ -44,10 +46,12 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
         AARectArray.back().setPosition(position);
         AARectArray.back().setFillColor(sf::Color::Blue);
         if(AARectArray.size()!=1 && ballArray.size() > 0)
-            staticCollArray.insertColumn(0, std::numeric_limits<float>::quiet_NaN());
+            staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(AARectArray.size() == 1 && ballArray.size()>0)
             for(unsigned int i=0; i<ballArray.size(); ++i)
                 staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        if(enable_collisions)
+            calcCollTimes();
     }
 }
 
@@ -64,9 +68,10 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
 void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, Ball &_firstBall, Ball &_secondBall)
 {
     sf::Vector2f relVec = _firstBall.getPosition() - _secondBall.getPosition();
-    float r2 = sfVectorMath::dot(relVec, relVec);
+    float r2 = sfVectorMath::square(relVec);
+    float totalR = _firstBall.getRadius()+_secondBall.getRadius();
 
-    if(r2 > pow(_firstBall.getRadius()+_secondBall.getRadius(), 2))
+    if(r2 > totalR*totalR)
     {
         //nStepVelocity = {0,0};
         float G = 1;

@@ -13,6 +13,7 @@ public:
     float getElementValue(int x, int y);
     void setElementValue(int x, int y, float value);
     void insertColumn(int position, float initVal = 0.0f);
+    void insertColumnQuick(float initVal = 0.0f);
     //void removeColumn(int position);
     void insertRow(int position, float initVal = 0.0f);
     //void removeRow(int position);
