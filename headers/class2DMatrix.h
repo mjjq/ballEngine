@@ -15,7 +15,9 @@ public:
     void insertColumn(int position, float initVal = 0.0f);
     void insertColumnQuick(float initVal = 0.0f);
     //void removeColumn(int position);
+    void removeColumnQuick(float initVal);
     void insertRow(int position, float initVal = 0.0f);
+    void removeEndRow();
     //void removeRow(int position);
     std::tuple<int, int, float> getMatrixMin();
     float getMatrixMin(int &x, int &y);

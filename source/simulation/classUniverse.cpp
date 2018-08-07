@@ -22,13 +22,8 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
         ballArray.back().setSamplePrevPosBool(enable_trajectories);
         //setPlayer(ballArray.size()-1);
         colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        if(ballArray.size()>1)
-            colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        if(ballArray.size() != 1 && AARectArray.size()>0)
-            staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        if(ballArray.size() == 1 && AARectArray.size() > 0)
-            for(unsigned int i=0; i<AARectArray.size(); ++i)
-                staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         //colliderArray.printMatrix();
         if(enable_collisions)
             calcCollTimes();
@@ -45,11 +40,8 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
         AARectArray.push_back(sf::RectangleShape({width, height}));
         AARectArray.back().setPosition(position);
         AARectArray.back().setFillColor(sf::Color::Blue);
-        if(AARectArray.size()!=1 && ballArray.size() > 0)
-            staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        if(AARectArray.size() == 1 && ballArray.size()>0)
-            for(unsigned int i=0; i<ballArray.size(); ++i)
-                staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+
+        staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(enable_collisions)
             calcCollTimes();
     }
@@ -291,14 +283,52 @@ void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall, float _dt
     Collisions::ballCollision(_firstBall, _secondBall);
 }
 
-void BallUniverse::removeBall(unsigned int index)
+void BallUniverse::removeBall(int index)
 {
-    if(index >=0 && index < ballArray.size())
+    if(std::abs(index) < ballArray.size())
     {
-        ballArray.erase(ballArray.begin() + index);
-//        colliderArray.removeColumn(index);
-//        colliderArray.removeRow(index);
+        if(index >=0)
+            ballArray.erase(ballArray.begin() + index);
+        else if(index < 0)
+            ballArray.erase(ballArray.end() + index + 1);
+
         numOfBalls--;
+        colliderArray.removeEndRow();
+        colliderArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
+
+        staticCollArray.removeEndRow();
+
+        if(enable_collisions)
+            calcCollTimes();
+    }
+    else if(index == -1 && ballArray.size() == 1)
+    {
+        numOfBalls = 0;
+        ballArray.clear();
+        colliderArray.clearMatrix();
+
+        staticCollArray.removeEndRow();
+    }
+}
+
+void BallUniverse::removeRect(int index)
+{
+    if(std::abs(index) < AARectArray.size())
+    {
+        if(index >= 0)
+            AARectArray.erase(AARectArray.begin() + index);
+        else if(index < 0)
+            AARectArray.erase(AARectArray.end() + index + 1);
+
+        staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
+
+        if(enable_collisions)
+            calcCollTimes();
+    }
+    else if(index == -1 && AARectArray.size() == 1)
+    {
+        AARectArray.clear();
+        staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
     }
 }
 

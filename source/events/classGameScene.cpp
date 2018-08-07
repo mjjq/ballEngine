@@ -422,11 +422,15 @@ void GameScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
             ballSim.decSimStep(1);
         else if(event.key.code == sf::Keyboard::Period)
             ballSim.incSimStep(1);
+        else if(event.key.code == sf::Keyboard::Z)
+            ballSim.removeBall(-1);
     }
     else if(newLayerKeys[2])
     {
         //if(event.key.code == sf::Keyboard::Return)
         //    toggleFullScreen();
+        if(event.key.code == sf::Keyboard::Z)
+            ballSim.removeRect(-1);
     }
 }
 

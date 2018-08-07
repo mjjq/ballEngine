@@ -69,7 +69,8 @@ public:
     void ballAbsorption(Ball &firstBall, Ball &secondBall, float dt);
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass=1);
     void spawnNewRect(sf::Vector2f position, float width, float height);
-    void removeBall(unsigned int index);
+    void removeBall(int index);
+    void removeRect(int index);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
     void createAltBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,

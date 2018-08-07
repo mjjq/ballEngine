@@ -36,12 +36,7 @@ void Matrix2d::insertColumn(int position, float initVal)
 
 void Matrix2d::insertColumnQuick(float initVal)
 {
-    if(height == 0)
-    {
-        matrix.push_back(initVal);
-        height++;
-    }
-    else
+    if(height!=0)
     {
         for(unsigned int i=0; i<height; ++i)
             matrix.push_back(initVal);
@@ -50,20 +45,36 @@ void Matrix2d::insertColumnQuick(float initVal)
     width++;
 }
 
+void Matrix2d::removeColumnQuick(float initVal)
+{
+    if(width > 0)
+    {
+        for(unsigned int i=0; i<height; ++i)
+            matrix.pop_back();
+        fillMatrix(initVal);
+        width--;
+    }
+}
+
 void Matrix2d::insertRow(int position, float initVal)
 {
-    if(width == 0)
-    {
-        matrix.push_back(initVal);
-        width++;
-    }
-    else
+    if(width!=0)
     {
         for(unsigned int i=0; i<width; ++i)
             matrix.push_back(initVal);
     }
 
     height++;
+}
+
+void Matrix2d::removeEndRow()
+{
+    if(height > 0)
+    {
+        for(unsigned int i=0; i<width; ++i)
+            matrix.pop_back();
+        height--;
+    }
 }
 
 std::tuple<int, int, float> Matrix2d::getMatrixMin()
