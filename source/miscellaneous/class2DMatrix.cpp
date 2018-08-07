@@ -74,8 +74,8 @@ std::tuple<int, int, float> Matrix2d::getMatrixMin()
 
     for(unsigned int i=0; i<matrix.size(); ++i)
     {
-        float temp = matrix.at(i);
-        if(temp < minimum)
+        float temp = matrix[i];
+        if(!std::isnan(temp) && temp < minimum)
         {
             x = i % width;
             y = (i-x)/width;
@@ -85,13 +85,68 @@ std::tuple<int, int, float> Matrix2d::getMatrixMin()
     return std::make_tuple(x,y,minimum);
 }
 
+/*std::tuple<int, int, float> Matrix2d::getMatrixMin()
+{
+    unsigned int x=0;
+    unsigned int y=0;
+    float minimum = 1e+15;
+    int i=0;
+
+    for(auto &value : matrix)
+    {
+        if(!std::isnan(value) && value < minimum)
+        {
+            x = i % width;
+            y = (i-x)/width;
+            minimum = value;
+        }
+        i++;
+    }
+    return std::make_tuple(x,y,minimum);
+}*/
+
+/*float Matrix2d::getMatrixMin(int &x, int &y)
+{
+    float minimum = 1e+15;
+
+    for(unsigned int i=0; i<matrix.size(); ++i)
+    {
+        float temp = matrix[i];
+        if(!std::isnan(temp) && temp < minimum)
+        {
+            x = i % width;
+            y = (i-x)/width;
+            minimum = temp;
+        }
+    }
+    return minimum;
+}*/
+
+float Matrix2d::getMatrixMin(int &x, int &y)
+{
+    float minimum = 1e+15;
+    int i=0;
+
+    for(auto &value : matrix)
+    {
+        if(!std::isnan(value) && value < minimum)
+        {
+            x = i % width;
+            y = (i-x)/width;
+            minimum = value;
+        }
+        i++;
+    }
+    return minimum;
+}
+
 void Matrix2d::printMatrix()
 {
     for(unsigned int i=0; i<height; ++i)
     {
         for(unsigned int j=0; j<width; ++j)
         {
-            std::cout << matrix.at(i*width+j) << " ";
+            std::cout << matrix[i*width+j] << " ";
         }
         std::cout << "\n";
     }

@@ -18,6 +18,7 @@ public:
     void insertRow(int position, float initVal = 0.0f);
     //void removeRow(int position);
     std::tuple<int, int, float> getMatrixMin();
+    float getMatrixMin(int &x, int &y);
     void clearMatrix();
     void fillMatrix(float value);
     void printMatrix();

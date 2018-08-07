@@ -171,7 +171,7 @@ void BallUniverse::calcCollTimes()
         }
 }
 
-void BallUniverse::findShortestCollTime()
+/*void BallUniverse::findShortestCollTime()
 {
     std::tuple<int,int,float> collTupleDyn = colliderArray.getMatrixMin();
     std::tuple<int,int,float> collTupleStat = staticCollArray.getMatrixMin();
@@ -192,6 +192,36 @@ void BallUniverse::findShortestCollTime()
         timeToNextColl = std::get<2>(collTupleStat);
         collider1 = std::get<0>(collTupleStat);
         collider2 = std::get<1>(collTupleStat);
+    }
+    //std::cout << timeToNextColl << ": " << collider1 << " " << collider2 << "\n";
+}*/
+
+
+void BallUniverse::findShortestCollTime()
+{
+    int xDyn = 0;
+    int yDyn = 0;
+    int xStat = 0;
+    int yStat = 0;
+    float collTupleDyn = colliderArray.getMatrixMin(xDyn, yDyn);
+    float collTupleStat = staticCollArray.getMatrixMin(xStat, yStat);
+    //colliderArray.printMatrix(); std::cout << "\n";
+    //staticCollArray.printMatrix(); std::cout << "\n";
+    if(collTupleDyn < collTupleStat)
+    {
+        //std::cout << "Dyn\n";
+        collWithStatic = false;
+        timeToNextColl = collTupleDyn;
+        collider1 = xDyn;
+        collider2 = yDyn;
+    }
+    else
+    {
+        //std::cout << "stat\n";
+        collWithStatic = true;
+        timeToNextColl = collTupleStat;
+        collider1 = xStat;
+        collider2 = yStat;
     }
     //std::cout << timeToNextColl << ": " << collider1 << " " << collider2 << "\n";
 }
