@@ -1,0 +1,20 @@
+{
+ "Ball1" : {
+	"radius" : 50,
+	"mass" : 1000,
+	"position" : [0, 0],
+	"velocity" : [0, 0]
+ },
+ "Ball2" : {
+	"radius" : 10,
+	"mass" : 10,
+	"position" : [0, 100],
+	"velocity" : [3, 0]
+ },
+ "Ball3" : {
+	"radius" : 10,
+	"mass" : 10,
+	"position" : [0, -200],
+	"velocity" : [-2, 0]
+ }
+}

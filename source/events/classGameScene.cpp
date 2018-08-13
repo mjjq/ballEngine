@@ -15,6 +15,8 @@
 #include <tuple>
 #include <functional>
 #include <numeric>
+#include <fstream>
+#include "../../extern/json.hpp"
 
 #include "../../headers/classGameScene.h"
 #include "../../headers/classTextElementBase.h"
@@ -195,6 +197,29 @@ void GameScene::focusOnBall(int ballIndex, bool keyBool)
             window.setView(worldView);
         }
     }
+}
+
+void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
+{
+    using json = nlohmann::json;
+    std::ifstream input("./json/spawnparams.json");
+    json j;
+    //if(json::parse(input))
+    //{
+        input >> j;
+        for(json::iterator it = j.begin(); it != j.end(); it++)
+        {
+            json currJ = *it;
+            float currRad = currJ["radius"];
+            float currMass = currJ["mass"];
+            sf::Vector2f currVel = {currJ["velocity"][0], currJ["velocity"][1]};// + velocity;
+            sf::Vector2f currPos = {currJ["position"][0], currJ["position"][1]};// + position;
+            currVel += velocity;
+            currPos += position;
+
+            ballSim.spawnNewBall(currPos, currVel, currRad, currMass);
+        }
+    //}
 }
 
 /**
@@ -382,7 +407,8 @@ void GameScene::mouseWorldEvents(sf::Event &event)
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
         sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
-        ballSim.createSPSys(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+        //ballSim.createSPSys(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+        spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
     }
 
     else if(event.type == sf::Event::EventType::MouseButtonReleased

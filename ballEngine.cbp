@@ -32,6 +32,7 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++14" />
 		</Compiler>
+		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classBall.h" />
 		<Unit filename="headers/classGameScene.h" />

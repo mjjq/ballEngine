@@ -56,6 +56,7 @@ class GameScene : public Scene
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
     void checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool);
     void focusOnBall(int ballIndex, bool keyBool);
+    void spawnFromJson(sf::Vector2f position, sf::Vector2f velocity);
 
     void resetView();
     void adjustViewSize(sf::Vector2u newSize);//, float zoom);
