@@ -280,7 +280,7 @@ void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall, float _dt
     }
 
 
-    Collisions::ballCollision(_firstBall, _secondBall);
+    //Collisions::ballCollision(_firstBall, _secondBall);
 }
 
 void BallUniverse::removeBall(int index)
@@ -415,8 +415,8 @@ float BallUniverse::physicsLoop()
 
         for(unsigned int i=0; i<ballArray.size(); ++i)
         {
-            ballArray.at(i).resetToCollided();
-            if( checkForBounce(ballArray.at(i)) )
+            ballArray[i].resetToCollided();
+            if( checkForBounce(ballArray[i]) )
                 collTimeForBall(i);
         }
 
@@ -438,6 +438,7 @@ float BallUniverse::physicsLoop()
 
         if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
         {
+            hasCollided = true;
             dtR = timeToNextColl;
             if(std::abs(dtR) > epsilon)
                 updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
@@ -446,13 +447,12 @@ float BallUniverse::physicsLoop()
             staticCollArray.addConstValue(-dtR);
 
             if(collWithStatic)
-                Collisions::ballCollision(ballArray.at(collider2), AARectArray.at(collider1));
+                Collisions::ballCollision(ballArray[collider2], AARectArray[collider1]);
 
             else if(collider1 != collider2)
-                {
-                    Collisions::ballCollision(ballArray.at(collider1), ballArray.at(collider2));
-                    hasCollided = true;
-                }
+            {
+                Collisions::ballCollision(ballArray[collider1], ballArray[collider2]);
+            }
 
             timeToNextColl = 1e+15;
         }
@@ -473,8 +473,8 @@ float BallUniverse::physicsLoopAbsorb()
 
         for(unsigned int i=0; i<ballArray.size(); ++i)
         {
-            ballArray.at(i).resetToCollided();
-            if( checkForBounce(ballArray.at(i)) )
+            ballArray[i].resetToCollided();
+            if( checkForBounce(ballArray[i]) )
                 collTimeForBall(i);
         }
 
@@ -496,6 +496,7 @@ float BallUniverse::physicsLoopAbsorb()
 
         if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
         {
+            hasCollided = true;
             dtR = timeToNextColl;
             if(std::abs(dtR) > epsilon)
                 updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
@@ -504,13 +505,26 @@ float BallUniverse::physicsLoopAbsorb()
             staticCollArray.addConstValue(-dtR);
 
             if(collWithStatic)
-                Collisions::ballCollision(ballArray.at(collider2), AARectArray.at(collider1));
+                Collisions::ballCollision(ballArray[collider2], AARectArray[collider1]);
 
             else if(collider1 != collider2)
+            {
+                ballAbsorption(ballArray[collider1], ballArray[collider2], dt);
+                if(ballArray[collider1].getRadius() < 0.01f)
                 {
-                    Collisions::ballCollision(ballArray.at(collider1), ballArray.at(collider2));
-                    hasCollided = true;
+                    hasCollided = false;
+                    removeBall(collider1);
+                    if(collider2 > collider1)
+                        collider2--;
                 }
+                if(ballArray[collider2].getRadius() < 0.01f)
+                {
+                    hasCollided = false;
+                    removeBall(collider2);
+                    if(collider2 < collider1)
+                        collider1--;
+                }
+            }
 
             timeToNextColl = 1e+15;
         }
