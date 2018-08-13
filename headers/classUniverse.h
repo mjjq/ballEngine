@@ -66,7 +66,7 @@ public:
     void updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall);
     void updateAllObjects(bool enableForces, float dt);
 
-    void ballAbsorption(Ball &firstBall, Ball &secondBall, float dt);
+    void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass=1);
     void spawnNewRect(sf::Vector2f position, float width, float height);
     void removeBall(int index);

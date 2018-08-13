@@ -249,34 +249,50 @@ void BallUniverse::collTimeForBall(unsigned int index)
 
 
 
-void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall, float _dt)
+void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall)
 {
     using namespace sfVectorMath;
 
     float rad1 = _firstBall.getRadius();
     float rad2 = _secondBall.getRadius();
 
-    sf::Vector2f v1 = _firstBall.getVelocity();
-    sf::Vector2f v2 = _secondBall.getVelocity();
-    sf::Vector2f rhat = norm(_firstBall.getPosition() - _secondBall.getPosition());
-    float projVel = dot(v2-v1, rhat)*_dt;
+    float projVel = dot( _secondBall.getVelocity() - _firstBall.getVelocity(),
+                         norm(_firstBall.getPosition() - _secondBall.getPosition()) );
 
     if(projVel > 0)
     {
-        if(rad1 >= rad2)
+        if(projVel < rad1 && projVel < rad2)
         {
-            rad2 -= projVel;
-            rad1 = pow(rad1*rad1 + projVel*projVel , 0.5);
+            if(rad1 >= rad2)
+            {
+                rad2 -= projVel;
+                rad1 = pow(rad1*rad1 + projVel*projVel , 0.5);
+            }
+            else if(rad2 >= rad1)
+            {
+                rad1 -= projVel;
+                rad2 = pow(rad2*rad2 + projVel*projVel , 0.5);
+            }
         }
-        else if(rad2 >= rad1)
+        else
         {
-            rad1 -= projVel;
-            rad2 = pow(rad2*rad2 + projVel*projVel , 0.5);
+            if(rad1 >= rad2)
+            {
+                rad2 = 0;
+                rad1 = pow(rad1*rad1 + rad2*rad2 , 0.5);
+            }
+            else if(rad2 >= rad1)
+            {
+                rad1 = 0;
+                rad2 = pow(rad2*rad2 + rad1*rad1 , 0.5);
+            }
         }
         _firstBall.setRadius(rad1);
         _firstBall.setOrigin({rad1,rad1});
+        _firstBall.setMass(3.14159265359*rad1*rad1*_firstBall.getDensity());
         _secondBall.setRadius(rad2);
         _secondBall.setOrigin({rad2,rad2});
+        _secondBall.setMass(3.14159265359*rad2*rad2*_secondBall.getDensity());
     }
 
 
@@ -509,7 +525,7 @@ float BallUniverse::physicsLoopAbsorb()
 
             else if(collider1 != collider2)
             {
-                ballAbsorption(ballArray[collider1], ballArray[collider2], dt);
+                ballAbsorption(ballArray[collider1], ballArray[collider2]);
                 if(ballArray[collider1].getRadius() < 0.01f)
                 {
                     hasCollided = false;
@@ -544,7 +560,7 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
         int maxLimit = 12;
         while(accumulator >= dt && limiting < maxLimit)
         {
-            accumulator -= physicsLoop();
+            accumulator -= physicsLoopAbsorb();
             sampleAllPositions();
             if(maxLimit*thresholdTimer.restart().asSeconds() > frameLimit.asSeconds())
                 ++limiting;

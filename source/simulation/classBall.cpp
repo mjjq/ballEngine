@@ -83,6 +83,8 @@ sf::CircleShape(_radius), cStepVelocity{_initVel}, nStepPosition(_initPos), mass
         setFillColor(sf::Color::Green);
     else
         setFillColor(sf::Color::Red);
+
+    density = _mass/(3.14159265359*_radius*_radius);
 }
 
 
@@ -127,6 +129,29 @@ void Ball::updatePosition(float dt)
 float Ball::getMass()
 {
     return mass;
+}
+
+/**
+    Set the current mass of the ball.
+
+    @param _mass the mass to set the ball.
+
+    @return Void.
+*/
+void Ball::setMass(float _mass)
+{
+    mass = _mass;
+}
+
+
+/**
+    Get the current density of the ball.
+
+    @return The density of the ball.
+*/
+float Ball::getDensity()
+{
+    return density;
 }
 
 
