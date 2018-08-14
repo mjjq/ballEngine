@@ -1,0 +1,43 @@
+{
+    "Windows" : [
+    {
+        "position" : [0, 0.15],
+        "posoffset" : [0, 0],
+        "dimensions" : [250, 250],
+        "draggable" : false,
+        "fixedtowindow" : true,
+
+        "Buttons" : [
+        {
+            "position" : [10, 180],
+            "dimensions"  : [60, 30],
+            "textfont" : "",
+            "fontsize" : 12,
+            "text" : "Mass +",
+            "function" : "incMass"
+        }
+        ],
+
+        "Sliders" : [
+        {
+            "position" : [10, 50],
+            "scrnrange" : 210,
+            "lthickness" : 2,
+            "bsize" : [10, 20],
+            "quanrange" : [0.1, 50],
+            "function" : "changeMass"
+        }
+        ],
+
+        "TextElements" : [
+        {
+            "position" : [0, 0],
+            "textfont" : "",
+            "fontsize" : 16,
+            "text" : "No. Balls",
+            "variable" : "numballs"
+        }
+        ]
+    }
+    ]
+}

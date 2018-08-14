@@ -16,6 +16,8 @@
 #include <functional>
 #include <numeric>
 #include <fstream>
+#include <map>
+#include <boost/variant.hpp>
 #include "../../extern/json.hpp"
 
 #include "../../headers/classGameScene.h"
@@ -666,25 +668,37 @@ void GameScene::load()
     winPars.push_back( {{0,0}, {250, 70}, true, false} );
     winPars.push_back( {{0,400}, {250, 50}, true, false} );
     winPars.push_back( {{0,500}, {250, 150}, true, false} );*/
-
+    std::map<std::string, std::function<void()>> buttonFuncMap = {
+        {"incMass", [&]{spawnMass+=1;}},
+        {"decMass", [&]{if(spawnMass>1){spawnMass-=1;}}},
+        {"incRad", [&]{spawnRadius+=1;}},
+        {"decRad", [&]{if(spawnRadius>1){spawnRadius-=1;}}}
+    };
+    std::map<std::string, std::pair<std::function<void(float)>, float*>> sliderFuncMap = {
+        {"changeMass", {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
+        {"changeRad", {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
+    };
+    std::map<std::string, int*> textVarMapInt = {
+        {"numBalls", &ballSim.getNumOfBalls()}
+    };
 
 
     CompleteWindow window0;
     window0.wParams = {{0.0f, 0.15f}, {0, 0}, {250, 250}, true, false};
     window0.bParamsVec =  std::vector<ButtonParams>{
-        {"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, [&]{spawnMass+=1;}},
-        {"./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, [&]{if(spawnMass>1){spawnMass-=1;}}},
-        {"./fonts/cour.ttf", "Rad +", 12, {10,220}, {60,30}, [&]{spawnRadius+=1;}},
-        {"./fonts/cour.ttf", "Rad -", 12, {90,220}, {60,30}, [&]{if(spawnRadius>1){spawnRadius-=1;}}},
+        {"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, buttonFuncMap["incMass"]},
+        {"./fonts/cour.ttf", "Mass -", 12, {90,180}, {60,30}, buttonFuncMap["decMass"]},
+        {"./fonts/cour.ttf", "Rad +", 12, {10,220}, {60,30}, buttonFuncMap["incRad"]},
+        {"./fonts/cour.ttf", "Rad -", 12, {90,220}, {60,30}, buttonFuncMap["decRad"]},
         {"./fonts/cour.ttf", "Rst Rad", 12, {170,220}, {60,30}, [&]{spawnRadius=10;}},
         {"./fonts/cour.ttf", "Rst Mass", 12, {170,180}, {60,30}, [&]{spawnMass=1;}},
     };
     window0.sParamsVec = std::vector<SliderParams>{
-        {{10,50}, 210.0f, 2.0f, {10,20}, {0.1,50.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass},
-        {{10,90}, 210.0f, 2.0f, {10,20}, {4.0,50.0}, [&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}
+        {{10,50}, 210.0f, 2.0f, {10,20}, {0.1,50.0}, sliderFuncMap["changeMass"].first, sliderFuncMap["changeMass"].second},
+        {{10,90}, 210.0f, 2.0f, {10,20}, {4.0,50.0}, sliderFuncMap["changeRad"].first, sliderFuncMap["changeRad"].second}
     };
     window0.tParamsIntVec = std::vector<TextElParams<int>>{
-        {"./fonts/cour.ttf", "No. Balls:", 16, {0,0}, &ballSim.getNumOfBalls()},
+        {"./fonts/cour.ttf", "No. Balls:", 16, {0,0}, textVarMapInt["numBalls"]}
     };
     window0.tParamsFloatVec = std::vector<TextElParams<float>>{
         {"./fonts/cour.ttf", "Timestep:", 16, {0,150}, &ballSim.getTimeStep()},

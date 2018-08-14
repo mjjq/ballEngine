@@ -55,6 +55,7 @@
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
+		<Unit filename="json/gamesceneUI.json" />
 		<Unit filename="json/spawnparams.json" />
 		<Unit filename="main.cpp" />
 		<Unit filename="source/UI/classUIButton.cpp" />
