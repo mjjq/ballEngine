@@ -15,11 +15,14 @@
 #include <tuple>
 #include <functional>
 #include <numeric>
+#include <fstream>
+#include "../../extern/json.hpp"
 
 #include "../../headers/classGameScene.h"
 #include "../../headers/classTextElementBase.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
+#include "../../headers/jsonParsing.h"
 
 
 
@@ -59,16 +62,16 @@ void GameScene::checkMBPress(sf::Vector2i &initPos, bool mouseType)
 
     @return The calculated velocity.
 */
-sf::Vector2f GameScene::velocityFromMouse(sf::Vector2i mousePosOnClick,
-                                                            int spawnVelFactor)
+sf::Vector2f GameScene::velocityFromMouse(sf::Vector2i _mousePosOnClick,
+                                                            int _spawnVelFactor)
 {
 
     sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-    sf::Vector2i mousePosOnRelease = static_cast<sf::Vector2i>
+    sf::Vector2i mPosOnRelease = static_cast<sf::Vector2i>
                                      (window.mapPixelToCoords(viewPos));
 
-    sf::Vector2i scaledVector = (spawnVelFactor)*(mousePosOnRelease-
-                                                  mousePosOnClick);
+    sf::Vector2i scaledVector = (_spawnVelFactor)*(mPosOnRelease-
+                                                  _mousePosOnClick);
 
     /*float windowDiagSize = pow(windowSizeX*windowSizeX +
                                windowSizeY*windowSizeY, 0.5);*/
@@ -197,6 +200,48 @@ void GameScene::focusOnBall(int ballIndex, bool keyBool)
     }
 }
 
+void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
+{
+    using json = nlohmann::json;
+    std::ifstream input("./json/spawnparams.json");
+    if(json::accept(input))
+    {
+        std::ifstream input("./json/spawnparams.json");
+        json j;
+        input >> j;
+
+        for(json &currJ : j["Ball"])
+        {
+            BallSpawnVals sVals;
+            if(beParser::checkBallJson(currJ, sVals))
+                ballSim.spawnNewBall(sVals.position+position,
+                                     sVals.velocity+velocity,
+                                     sVals.radius,
+                                     sVals.mass);
+        }
+        for(json &currJ : j["Ballgrid"])
+        {
+            BallGridSpawnVals sVals;
+            if(beParser::checkBallGridJson(currJ, sVals))
+                ballSim.createBallGrid(sVals.dimensions.x,
+                                       sVals.dimensions.y,
+                                       sVals.spacing,
+                                       sVals.position+position,
+                                       sVals.velocity+velocity,
+                                       sVals.mass,
+                                       sVals.radius);
+        }
+        for(json &currJ : j["AABB"])
+        {
+            AABBSpawnVals sVals;
+            if(beParser::checkAABBJson(currJ, sVals))
+                ballSim.spawnNewRect(sVals.position + position,
+                                     sVals.dimensions.x,
+                                     sVals.dimensions.y);
+        }
+    }
+}
+
 /**
     Scales the view to the window based on the current window and world sizes.
     This function ensure the world level zoom is preserved as well as accounting
@@ -232,8 +277,8 @@ void GameScene::adjustViewSize(sf::Vector2u newSize)
 void GameScene::resetView()
 {
     currentZoom = 1.0;
-    sf::Vector2i wSize = ballSim.getWorldSize();
-    worldView.setCenter(wSize.x/2,wSize.y/2);
+    sf::Vector2i woSize = ballSim.getWorldSize();
+    worldView.setCenter(woSize.x/2,woSize.y/2);
     adjustViewSize({window.getSize().x, window.getSize().y});//, currentZoom);
 
     window.setView(worldView);
@@ -390,8 +435,7 @@ void GameScene::mouseWorldEvents(sf::Event &event)
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
         sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
-        ballSim.createBallGrid(10,10,ballGridSpacing,
-                        static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnMass,spawnRadius);
+        spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
     }
 }
 
@@ -422,11 +466,15 @@ void GameScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
             ballSim.decSimStep(1);
         else if(event.key.code == sf::Keyboard::Period)
             ballSim.incSimStep(1);
+        else if(event.key.code == sf::Keyboard::Z)
+            ballSim.removeBall(-1);
     }
     else if(newLayerKeys[2])
     {
         //if(event.key.code == sf::Keyboard::Return)
         //    toggleFullScreen();
+        if(event.key.code == sf::Keyboard::Z)
+            ballSim.removeRect(-1);
     }
 }
 
@@ -576,6 +624,8 @@ void GameScene::setSpawnValues(float value,
         case(SQ_RADIUS):
             spawnRadius = value;
             //spawnMass = density*value;
+            break;
+        case(SQ_DENSITY):
             break;
         default:
             break;
@@ -738,16 +788,16 @@ void GameScene::unload()
     ballSim.clearSimulation();
 }
 
-void GameScene::redraw(sf::RenderWindow &window)
+void GameScene::redraw(sf::RenderWindow &_window)
 {
-    ballSim.drawSampledPositions(window);
-    ballSim.drawBalls(window);
+    ballSim.drawSampledPositions(_window);
+    ballSim.drawBalls(_window);
     window.draw(boundaryRect);
 
-    container.renderWindows(window, GUIView, worldView);
+    container.renderWindows(_window, GUIView, worldView);
 }
 
-void GameScene::update(sf::RenderWindow &window)
+void GameScene::update(sf::RenderWindow &_window)
 {
     if(!mouseOnUIWhenClicked.first)
     {
@@ -756,7 +806,7 @@ void GameScene::update(sf::RenderWindow &window)
         checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
     }
     if(clickedWindowToDrag)
-        container.dragWindow(window);
+        container.dragWindow(_window);
 
     checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
     playerKeysDown(0);
@@ -766,10 +816,10 @@ void GameScene::update(sf::RenderWindow &window)
     timeToNextSpawn -= currentFrameTime;
 }
 
-GameScene::GameScene(sf::RenderWindow &window, sf::Time &targetFTime,
-                     sf::Time &currentFTime, float &currentFPS) : window{window},
-                     timestep{targetFTime}, currentFrameTime{currentFTime},
-                     currentFPS{currentFPS}
+GameScene::GameScene(sf::RenderWindow &_window, sf::Time &_targetFTime,
+                     sf::Time &_currentFTime, float &_currentFPS) : window{_window},
+                     timestep{_targetFTime}, currentFrameTime{_currentFTime},
+                     currentFPS{_currentFPS}
 {
 
 }

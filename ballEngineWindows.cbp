@@ -4,19 +4,18 @@
 	<Project>
 		<Option title="ballEngine" />
 		<Option pch_mode="2" />
-		<Option compiler="gcc" />
+		<Option compiler="gnu_gcc_610_compiler" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/ballEngine" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
-				<Option compiler="gcc" />
+				<Option compiler="gnu_gcc_610_compiler" />
 				<Compiler>
+					<Add option="-std=c++14" />
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add option="-static-libstdc++" />
-					<Add option="-static-libgcc" />
 					<Add library="sfml-graphics" />
 					<Add library="sfml-window" />
 					<Add library="sfml-system" />
@@ -26,15 +25,17 @@
 				<Option output="bin/Release/ballEngine" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="0" />
-				<Option compiler="gcc" />
+				<Option compiler="gnu_gcc_610_compiler" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-std=c++14" />
 					<Add option="-DSFML_STATIC" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-static-libstdc++" />
 					<Add option="-static-libgcc" />
+					<Add option="-static" />
 					<Add library="sfml-graphics-s" />
 					<Add library="sfml-window-s" />
 					<Add library="sfml-system-s" />
@@ -47,12 +48,24 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wshadow" />
+			<Add option="-Winit-self" />
+			<Add option="-Wredundant-decls" />
+			<Add option="-Wcast-align" />
+			<Add option="-Wfloat-equal" />
+			<Add option="-Wunreachable-code" />
+			<Add option="-Wmissing-include-dirs" />
+			<Add option="-Wswitch-enum" />
+			<Add option="-Wswitch-default" />
+			<Add option="-pedantic-errors" />
+			<Add option="-pedantic" />
 			<Add option="-Wall" />
+			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
-			<Add directory="C:/Program Files (x86)/CodeBlocks/sfml/include" />
+			<Add directory="C:/Program Files/CodeBlocks/SFML-2.4.2/include" />
 		</Compiler>
 		<Linker>
-			<Add directory="C:/Program Files (x86)/CodeBlocks/sfml/lib" />
+			<Add directory="C:/Program Files/CodeBlocks/SFML-2.4.2/lib" />
 		</Linker>
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classBall.h" />
@@ -69,6 +82,7 @@
 		<Unit filename="headers/classUISlider.h" />
 		<Unit filename="headers/classUIWindow.h" />
 		<Unit filename="headers/classUniverse.h" />
+		<Unit filename="headers/collisionDetection.h" />
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/sfVectorMath.h" />
@@ -93,6 +107,7 @@
 		<Unit filename="source/miscellaneous/structs.cpp" />
 		<Unit filename="source/simulation/classBall.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
+		<Unit filename="source/simulation/collisionDetection.cpp" />
 		<Unit filename="source/simulation/forces.cpp" />
 		<Unit filename="source/simulation/integrators.cpp" />
 		<Extensions>

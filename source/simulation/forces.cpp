@@ -22,8 +22,8 @@
 */
 sf::Vector2f forces::newtonForce(sf::Vector2f vec, float M, float G)
 {
-    float r = sqrt(sfVectorMath::dot(vec,vec));
-    float dvMag = -G*M/pow(r,3);
+    float r = sqrt(sfVectorMath::square(vec));
+    float dvMag = -G*M/(r*r*r);
 
     return sf::Vector2f{vec.x*dvMag, vec.y*dvMag};
 }

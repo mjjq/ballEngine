@@ -56,7 +56,7 @@ sfPair integrators::RK4Method2ndODE(sf::Vector2f xvec, sf::Vector2f thisVel, sf:
     return dv*dt;
 }*/
 
-sfPair integrators::verletMethod(sf::Vector2f xSep, sf::Vector2f thisVel, sf::Vector2f otherVel, float dt, float M, float G)
+sfPair integrators::verletMethod(sf::Vector2f &xSep, sf::Vector2f &thisVel, sf::Vector2f &otherVel, float &dt, float M, float G)
 {
     sf::Vector2f dv = dt*forces::newtonForce(xSep + 0.5f*dt*(thisVel - otherVel), M, G);
     sf::Vector2f dx = 0.5f*(dv);
@@ -76,6 +76,7 @@ std::string integrators::returnIntTypeStr(const Integrators &value)
             return std::string("RK4");
         case(Integrators::INTEG_VERLET):
             return std::string("Vel Verlet");
+        case(Integrators::LAST):
         default:
             return std::string("Error, invalid integrator");
     }

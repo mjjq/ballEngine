@@ -116,7 +116,7 @@ void SceneManager::updateFPS(sf::Time interval, float framerate)
 
     @return Void.
 */
-void SceneManager::toggleFullScreen(Scene &currScene)
+void SceneManager::toggleFullScreen(Scene &_currScene)
 {
     //setAALevel(8);
     if(!isFullScreen)
@@ -127,7 +127,7 @@ void SceneManager::toggleFullScreen(Scene &currScene)
         sf::VideoMode mode = sf::VideoMode::getDesktopMode();
         window.setSize({mode.width,mode.height});
         window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None, settings);
-        currScene.adjustViewSize({mode.width, mode.height});
+        _currScene.adjustViewSize({mode.width, mode.height});
         isFullScreen = true;
     }
     else
@@ -135,7 +135,7 @@ void SceneManager::toggleFullScreen(Scene &currScene)
         //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
         window.setSize(prevWinSize);
         window.create(sf::VideoMode(prevWinSize.x, prevWinSize.y), "ballEngine");
-        currScene.adjustViewSize({prevWinSize.x, prevWinSize.y});
+        _currScene.adjustViewSize({prevWinSize.x, prevWinSize.y});
         window.setPosition(prevWinPos);
         isFullScreen = false;
     }
@@ -144,7 +144,7 @@ void SceneManager::toggleFullScreen(Scene &currScene)
 }
 
 
-void SceneManager::setAALevel(unsigned int level, Scene &currScene)
+void SceneManager::setAALevel(unsigned int level, Scene &_currScene)
 {
     settings.antialiasingLevel = level;
 
@@ -155,7 +155,7 @@ void SceneManager::setAALevel(unsigned int level, Scene &currScene)
         sf::VideoMode mode = sf::VideoMode::getDesktopMode();
         window.setSize({mode.width,mode.height});
         window.create(sf::VideoMode(mode.width,mode.height), "ballEngine", sf::Style::None, settings);
-        currScene.adjustViewSize({mode.width, mode.height});
+        _currScene.adjustViewSize({mode.width, mode.height});
         isFullScreen = true;
     }
     else
@@ -165,7 +165,7 @@ void SceneManager::setAALevel(unsigned int level, Scene &currScene)
         //sf::Vector2u prevSize = sf::Vector2u(prevWindowSizeX,prevWindowSizeY);
         window.setSize(prevWinSize);
         window.create(sf::VideoMode(prevWinSize.x, prevWinSize.y), "ballEngine");
-        currScene.adjustViewSize({prevWinSize.x, prevWinSize.y});
+        _currScene.adjustViewSize({prevWinSize.x, prevWinSize.y});
         window.setPosition(prevWinPos);
         isFullScreen = false;
     }
@@ -191,6 +191,8 @@ void SceneManager::loadNextScene(SceneEnum nextScene)
             break;
         case(SceneEnum::SCENE_PAUSEMENU):
             currScene = &pauseMenu;
+            break;
+        case(SceneEnum::LAST):
             break;
         default:
             break;

@@ -47,7 +47,7 @@ void UITextElementBase::setOrigPosition(sf::Vector2f newPosition)
     origPosition = newPosition;
 }*/
 
-UITextElementBase::~UITextElementBase() {};
+UITextElementBase::~UITextElementBase() {}
 
 UITextElementBase::UITextElementBase() //:
                             //initialText{text}, origPosition{position}, fixedToWindow{fixedToWin}

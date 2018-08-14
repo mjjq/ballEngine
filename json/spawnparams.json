@@ -1,0 +1,46 @@
+{
+ "Balls" : [
+ {
+	"radius" : 50,
+	"mass" : 1000,
+	"position" : [0, 0],
+	"velocity" : [0, 0]
+ },
+ {
+	"radius" : 10,
+	"mass" : 10,
+	"position" : [0, 100],
+	"velocity" : [3, 0]
+ },
+ {
+	"radius" : 10,
+	"mass" : 10,
+	"position" : [0, -200],
+	"velocity" : [-2, 0]
+ },
+ {
+    "radius" : 10,
+    "mass" : 10,
+    "position" : [0, -300],
+    "velocity" : [-1.5, 0]
+ }
+ ],
+
+ "Ballgrid" : [
+ {
+    "radius" : 10,
+    "mass" : 10,
+    "position" : [0, 0],
+    "velocity" : [0, 0],
+    "dimensions" : [3, 2],
+    "spacing" : 5
+ }
+ ],
+
+ "AABBs" : [
+ {
+    "position" : [0, 0],
+    "dimensions" : [100, 100]
+ }
+ ]
+}

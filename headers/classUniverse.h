@@ -1,12 +1,14 @@
 #ifndef CLASS_UNIVERSE_H
 #define CLASS_UNIVERSE_H
 #include "integrators.h"
+#include "collisionDetection.h"
 #include "classBall.h"
 #include "class2DMatrix.h"
 
 class BallUniverse
 {
     std::vector<Ball> ballArray;
+    std::vector<sf::RectangleShape > AARectArray;
 
     int worldSizeX;
     int worldSizeY;
@@ -20,7 +22,9 @@ class BallUniverse
     float collAccumulator = 0.0f;
     float timeToNextColl = 1e+15;
     Matrix2d colliderArray;
+    Matrix2d staticCollArray;
     bool hasCollided = false;
+    bool collWithStatic = false;
 
     float currentTime = 0;
     float dt;
@@ -36,7 +40,8 @@ class BallUniverse
     int currentPlayer = -1;
     std::pair<bool, float> playerInput{false, 0.0f};
 
-    std::tuple<int,int,float> findShortestCollTime(float t_coll, std::vector<Ball> &ballArray, float dt=1e+10);
+    void calcCollTimes();
+    void findShortestCollTime();
 
     float totalKE = 0;
     float totalGPE = 0;
@@ -58,21 +63,21 @@ public:
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
-
     void updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall);
     void updateAllObjects(bool enableForces, float dt);
-    float timeToCollision(Ball &firstBall, Ball &secondBall);
-    void ballCollision(Ball &firstBall, Ball &secondBall);
-    void ballAbsorption(Ball &firstBall, Ball &secondBall, float dt);
-    void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius=1, float mass=1);
-    void removeBall(unsigned int index);
+
+    void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
+    void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass=1);
+    void spawnNewRect(sf::Vector2f position, float width, float height);
+    void removeBall(int index);
+    void removeRect(int index);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity = {0,0}, float ballMass=1, float ballRadius=1);
     void createAltBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
                         sf::Vector2f init_velocity, float ballMass, float ballRadius);
     void createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVelocity);
     void drawBalls(sf::RenderWindow &windowRef);
-    void collTimeForBall(unsigned int index, float dt);
+    void collTimeForBall(unsigned int index);
 
     sf::Vector2i getWorldSize();
     void incSimStep(float delta);

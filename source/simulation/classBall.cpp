@@ -73,16 +73,18 @@ float Ball::newtonForce(float x, float x_0, float r, float G, float M)
     @param initPos The initial position of the ball.
     @param initVel The initial velocity of the ball.
 */
-Ball::Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel) :
-sf::CircleShape(radius), cStepVelocity{initVel}, nStepPosition(initPos), mass(mass)
+Ball::Ball(float _radius, float _mass, sf::Vector2f _initPos, sf::Vector2f _initVel) :
+sf::CircleShape(_radius), cStepVelocity{_initVel}, nStepPosition(_initPos), mass(_mass)
 {
-    setPosition(initPos);
+    setPosition(_initPos);
     //nStepPosition = initPos;
-    setOrigin(radius,radius);
+    setOrigin(_radius,_radius);
     if(mass>0)
         setFillColor(sf::Color::Green);
     else
         setFillColor(sf::Color::Red);
+
+    density = _mass/(3.14159265359*_radius*_radius);
 }
 
 
@@ -127,6 +129,29 @@ void Ball::updatePosition(float dt)
 float Ball::getMass()
 {
     return mass;
+}
+
+/**
+    Set the current mass of the ball.
+
+    @param _mass the mass to set the ball.
+
+    @return Void.
+*/
+void Ball::setMass(float _mass)
+{
+    mass = _mass;
+}
+
+
+/**
+    Get the current density of the ball.
+
+    @return The density of the ball.
+*/
+float Ball::getDensity()
+{
+    return density;
 }
 
 

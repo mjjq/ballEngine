@@ -12,18 +12,18 @@
 #include "../../headers/stringConversion.h"
 #include "../../headers/structs.h"
 
-UIButton::UIButton(ButtonParams bParams, WindowParams &wParams, bool changeState) :
-            UIWindow(wParams), unclickedColor{bParams.color}, upFunc{bParams.func},
-            changeState{bParams.changeState}
+UIButton::UIButton(ButtonParams _bParams, WindowParams &_wParams, bool _changeState) :
+            UIWindow(_wParams), unclickedColor{_bParams.color}, upFunc{_bParams.func},
+            changeState{_bParams.changeState}
 {
     //upFunc = std::function<void()>{bParams.func};
     isButton = true;
     TextElParams<int> tempParams;
-    if(bParams.font != "")
+    if(_bParams.font != "")
     {
-        tempParams.font = bParams.font;
-        tempParams.str = bParams.text;
-        tempParams.fontSize = bParams.fontSize;
+        tempParams.font = _bParams.font;
+        tempParams.str = _bParams.text;
+        tempParams.fontSize = _bParams.fontSize;
         tempParams.position = sf::Vector2f{0,0};
     }
         //addElement<int>(bParams.font, bParams.text, bParams.fontSize, {0.0,0.0});
