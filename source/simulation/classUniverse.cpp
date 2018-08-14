@@ -560,7 +560,7 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
         int maxLimit = 12;
         while(accumulator >= dt && limiting < maxLimit)
         {
-            accumulator -= physicsLoopAbsorb();
+            accumulator -= physicsLoop();
             sampleAllPositions();
             if(maxLimit*thresholdTimer.restart().asSeconds() > frameLimit.asSeconds())
                 ++limiting;

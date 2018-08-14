@@ -51,9 +51,11 @@
 		<Unit filename="headers/collisionDetection.h" />
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
+		<Unit filename="headers/jsonParsing.h" />
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
+		<Unit filename="json/spawnparams.json" />
 		<Unit filename="main.cpp" />
 		<Unit filename="source/UI/classUIButton.cpp" />
 		<Unit filename="source/UI/classUIContainer.cpp" />
@@ -68,6 +70,7 @@
 		<Unit filename="source/events/classScene.cpp" />
 		<Unit filename="source/events/classSceneManager.cpp" />
 		<Unit filename="source/miscellaneous/class2DMatrix.cpp" />
+		<Unit filename="source/miscellaneous/jsonParsing.cpp" />
 		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />
 		<Unit filename="source/miscellaneous/stringConversion.cpp" />
 		<Unit filename="source/miscellaneous/structs.cpp" />

@@ -46,3 +46,17 @@ bool beParser::checkBallGridJson(json &j, BallGridSpawnVals &sVals)
     };
     return true;
 }
+
+bool beParser::checkAABBJson(json &j, AABBSpawnVals &sVals)
+{
+    if(j["position"].is_null())
+        return false;
+    if(j["dimensions"].is_null())
+        return false;
+
+    sVals = {
+        sf::Vector2f({j["position"][0], j["position"][1]}),
+        sf::Vector2f({j["dimensions"][0], j["dimensions"][1]})
+    };
+    return true;
+}

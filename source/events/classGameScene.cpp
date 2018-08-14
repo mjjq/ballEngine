@@ -231,6 +231,14 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
                                        sVals.mass,
                                        sVals.radius);
         }
+        for(json &currJ : j["AABB"])
+        {
+            AABBSpawnVals sVals;
+            if(beParser::checkAABBJson(currJ, sVals))
+                ballSim.spawnNewRect(sVals.position + position,
+                                     sVals.dimensions.x,
+                                     sVals.dimensions.y);
+        }
     }
 }
 
@@ -419,8 +427,7 @@ void GameScene::mouseWorldEvents(sf::Event &event)
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
         sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
-        //ballSim.createSPSys(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
-        spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+        ballSim.createSPSys(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
     }
 
     else if(event.type == sf::Event::EventType::MouseButtonReleased
@@ -428,8 +435,7 @@ void GameScene::mouseWorldEvents(sf::Event &event)
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
         sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
-        ballSim.createBallGrid(10,10,ballGridSpacing,
-                        static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnMass,spawnRadius);
+        spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
     }
 }
 

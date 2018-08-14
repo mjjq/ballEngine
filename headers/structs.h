@@ -104,6 +104,12 @@ struct BallGridSpawnVals
     float spacing;
 };
 
+struct AABBSpawnVals
+{
+    sf::Vector2f position;
+    sf::Vector2f dimensions;
+};
+
 template struct TextElParams<int>;
 #endif // STRUCTS_H
 

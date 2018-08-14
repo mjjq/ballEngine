@@ -11,7 +11,7 @@ namespace beParser
 
 bool checkBallJson(json &j, BallSpawnVals &sVals);
 bool checkBallGridJson(json &j, BallGridSpawnVals &sVals);
-
+bool checkAABBJson(json &j, AABBSpawnVals &sVals);
 }
 
 #endif // JSON_PARSING_H
