@@ -100,7 +100,7 @@ sf::Vector2f sfVectorMath::rotate(sf::Vector2f vec1, float angleDegree)
 
     @return Void.
 */
-//void sfVectorMath::printVector(sf::Vector2f vec)
+void sfVectorMath::printVector(sf::Vector2f vec)
 {
    std::cout << "(" << vec.x << ", " << vec.y << ")\n";
 }
@@ -113,7 +113,7 @@ sf::Vector2f sfVectorMath::rotate(sf::Vector2f vec1, float angleDegree)
 
     @return Void.
 */
-//void sfVectorMath::printVector(sf::Vector2i vec)
+void sfVectorMath::printVector(sf::Vector2i vec)
 {
     std::cout << "(" << vec.x << ", " << vec.y << ")\n";
 }

@@ -204,10 +204,10 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
 {
     using json = nlohmann::json;
     std::ifstream input("./json/spawnparams.json");
-    json j;
     if(json::accept(input))
     {
         std::ifstream input("./json/spawnparams.json");
+        json j;
         input >> j;
 
         for(json &currJ : j["Ball"])
