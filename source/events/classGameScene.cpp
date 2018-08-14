@@ -22,6 +22,7 @@
 #include "../../headers/classTextElementBase.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
+#include "../../headers/jsonParsing.h"
 
 
 
@@ -204,22 +205,33 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
     using json = nlohmann::json;
     std::ifstream input("./json/spawnparams.json");
     json j;
-    //if(json::parse(input))
-    //{
+    if(json::accept(input))
+    {
+        std::ifstream input("./json/spawnparams.json");
         input >> j;
-        for(json::iterator it = j.begin(); it != j.end(); it++)
-        {
-            json currJ = *it;
-            float currRad = currJ["radius"];
-            float currMass = currJ["mass"];
-            sf::Vector2f currVel = {currJ["velocity"][0], currJ["velocity"][1]};// + velocity;
-            sf::Vector2f currPos = {currJ["position"][0], currJ["position"][1]};// + position;
-            currVel += velocity;
-            currPos += position;
 
-            ballSim.spawnNewBall(currPos, currVel, currRad, currMass);
+        for(json &currJ : j["Ball"])
+        {
+            BallSpawnVals sVals;
+            if(beParser::checkBallJson(currJ, sVals))
+                ballSim.spawnNewBall(sVals.position+position,
+                                     sVals.velocity+velocity,
+                                     sVals.radius,
+                                     sVals.mass);
         }
-    //}
+        for(json &currJ : j["Ballgrid"])
+        {
+            BallGridSpawnVals sVals;
+            if(beParser::checkBallGridJson(currJ, sVals))
+                ballSim.createBallGrid(sVals.dimensions.x,
+                                       sVals.dimensions.y,
+                                       sVals.spacing,
+                                       sVals.position+position,
+                                       sVals.velocity+velocity,
+                                       sVals.mass,
+                                       sVals.radius);
+        }
+    }
 }
 
 /**

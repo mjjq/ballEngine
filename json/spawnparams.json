@@ -1,20 +1,38 @@
 {
- "Ball1" : {
+ "Ball" : [
+ {
 	"radius" : 50,
 	"mass" : 1000,
 	"position" : [0, 0],
 	"velocity" : [0, 0]
  },
- "Ball2" : {
+ {
 	"radius" : 10,
 	"mass" : 10,
 	"position" : [0, 100],
 	"velocity" : [3, 0]
  },
- "Ball3" : {
+ {
 	"radius" : 10,
 	"mass" : 10,
 	"position" : [0, -200],
 	"velocity" : [-2, 0]
+ },
+ {
+    "radius" : 10,
+    "mass" : 10,
+    "position" : [0, -300],
+    "velocity" : [-1.5, 0]
  }
+ ],
+
+ "Ballgrids" : [
+ {
+    "radius" : 10,
+    "mass" : 10,
+    "position" : [0, 0],
+    "velocity" : [0, 0],
+    "dimensions" : [15, 5],
+    "spacing" : 0
+ }]
 }

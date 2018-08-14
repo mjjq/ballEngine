@@ -86,6 +86,24 @@ struct CompleteWindow
     std::vector<TextElParams<Integrators>> tParamsIntegVec;
 };
 
+struct BallSpawnVals
+{
+    float radius;
+    float mass;
+    sf::Vector2f position;
+    sf::Vector2f velocity;
+};
+
+struct BallGridSpawnVals
+{
+    float radius;
+    float mass;
+    sf::Vector2f position;
+    sf::Vector2f velocity;
+    sf::Vector2i dimensions;
+    float spacing;
+};
+
 template struct TextElParams<int>;
 #endif // STRUCTS_H
 
