@@ -260,9 +260,9 @@ void PauseMenuScene::load()
         {"./fonts/cour.ttf", "Options", 12, {20,70}, {100,30}, [&]{}},
         {"./fonts/cour.ttf", "Main Menu", 12, {20,110}, {100,30}, [&]{requestScene(SceneEnum::SCENE_MENU);}}
     };
-    window0.tParamsIntVec = std::vector<TextElParams<int>>{
+ /*   window0.tParamsIntVec = std::vector<TextElParams>{
         {"./fonts/cour.ttf", "Paused", 16, {20,00}, nullptr}
-    };
+    };*/
     completeWindows.push_back(window0);
 
     for(unsigned int i=0; i<completeWindows.size(); ++i)

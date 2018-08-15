@@ -91,7 +91,7 @@ public:
     void changeBallColour();
 
     const int& getWorldSizeX();
-    int& getNumOfBalls();
+    std::string getNumOfBalls();
     bool& getCollisionsEnabled();
     bool& getForcesEnabled();
     float& getTotalKE();

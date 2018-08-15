@@ -19,14 +19,9 @@ bool checkBParamsJson(json &j, ButtonParams &bVals,
 bool checkSlParamsJson(json &j, SliderParams &sVals,
                         std::map<std::string,
                         std::pair<std::function<void(float)>, float*>> &funcMap);
-bool checkTParamsJson(json &j, TextElBoostParams &tParams);
+bool checkTParamsJson(json &j, TextElParams &tParams,
+                                std::map<std::string, std::function<std::string()>> &varMap);
 
-template <typename T>
-TextElParams<T> generateTParams(json &j,
-                                   std::map<std::string, T*> &varMap);
-template <typename T>
-bool checkVMapVariable(std::string str,
-                                   std::map<std::string, T*> &varMap);
 }
 
 #endif // JSON_PARSING_H

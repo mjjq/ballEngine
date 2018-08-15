@@ -9,7 +9,7 @@
 
         "Buttons" : [
         {
-            "position" : [10, 180],
+            "position" : [15, 180],
             "dimensions"  : [60, 30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -17,7 +17,7 @@
             "function" : "incMass"
         },
         {
-            "position" : [90,180],
+            "position" : [95,180],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -25,7 +25,7 @@
             "function" : "decMass"
         },
         {
-            "position" : [160,180],
+            "position" : [175,180],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -47,11 +47,11 @@
 
         "TextElements" : [
         {
-            "position" : [0, 0],
-            "textfont" : "",
+            "position" : [20, 0],
+            "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "No. Balls",
-            "variable" : "numballs"
+            "text" : "No. Balls:",
+            "variable" : "numBalls"
         }
         ]
     }

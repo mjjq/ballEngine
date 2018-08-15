@@ -25,22 +25,21 @@ struct TextElBaseParams
 
 };
 
-template <typename T>
 struct TextElParams : public TextElBaseParams
 {
      TextElParams( std::string _font = "",
                    std::string _str = "",
                    int _fontSize = 1,
                    sf::Vector2f _position = {0,0},
-                   T *_var = nullptr ) :
+                   std::function<std::string()> _variable = []{return "";}) :
                    font{_font}, str{_str}, fontSize{_fontSize},
-                   position{_position}, var{_var} {}
+                   position{_position}, variable{_variable} {}
 
     std::string font;
     std::string str;
     int fontSize;
     sf::Vector2f position;
-    T *var;// = nullptr;
+    std::function<std::string()> variable;// = nullptr;
 };
 
 struct TextElBoostParams
@@ -80,7 +79,7 @@ struct SliderParams
     float thickness;
     sf::Vector2f bSize;
     sf::Vector2f physRange = {0,0};
-    std::function<void(float)> sliderFunc = nullptr;
+    std::function<void(float)> sliderFunc = [](float i){};
     float *variable = nullptr;
     sf::Color buttonColor = {80,80,80,255};
     sf::Color barColor = {200,200,200,255};
@@ -92,12 +91,7 @@ struct CompleteWindow
     WindowParams wParams;
     std::vector<ButtonParams> bParamsVec;
     std::vector<SliderParams> sParamsVec;
-    std::vector<TextElParams<int>> tParamsIntVec;
-    std::vector<TextElParams<float>> tParamsFloatVec;
-    std::vector<TextElParams<bool>> tParamsBoolVec;
-    std::vector<TextElParams<sf::Vector2i>> tParams2iVec;
-    std::vector<TextElParams<sf::Vector2f>> tParams2fVec;
-    std::vector<TextElParams<Integrators>> tParamsIntegVec;
+    std::vector<TextElParams> tParamsIntVec;
 };
 
 struct BallSpawnVals
@@ -124,6 +118,5 @@ struct AABBSpawnVals
     sf::Vector2f dimensions;
 };
 
-template struct TextElParams<int>;
 #endif // STRUCTS_H
 

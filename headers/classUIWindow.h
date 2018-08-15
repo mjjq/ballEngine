@@ -54,8 +54,7 @@ public:
 
     virtual ~UIWindow();
 
-    template<class T>
-    void addElement(TextElParams<T> &tParams);
+    void addElement(TextElParams &tParams);
     template<class T>
     void addElement(TextElBoostParams &tParams, T *var);
 

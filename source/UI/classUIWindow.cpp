@@ -22,12 +22,12 @@ void UIWindow::addGroup(WindowParams &wParams)
     groupArray.push_back(std::move(newGroup));
 }
 
-template<class T>
-void UIWindow::addElement(TextElParams<T> &tParams)
+
+void UIWindow::addElement(TextElParams &tParams)
 {
     //dynamic_cast<TextElParams<T>>(tParams);
-    std::unique_ptr<UITextElement<T>> text = std::make_unique<UITextElement<T>>
-            (tParams.str, tParams.position, fixedToWindow, tParams.var, !isButton,
+    std::unique_ptr<UITextElement> text = std::make_unique<UITextElement>
+            (tParams.str, tParams.position, fixedToWindow, tParams.variable, !isButton,
              windowBox.getLocalBounds());
     currentFont.loadFromFile(tParams.font);
     text->setFont(currentFont);
@@ -39,14 +39,14 @@ void UIWindow::addElement(TextElParams<T> &tParams)
 template <class T>
 void UIWindow::addElement(TextElBoostParams &tParams, T *var)
 {
-    std::unique_ptr<UITextElement<T>> text = std::make_unique<UITextElement<T>>
+    /*std::unique_ptr<UITextElement<T>> text = std::make_unique<UITextElement<T>>
             (tParams.str, tParams.position, fixedToWindow, var, !isButton,
              windowBox.getLocalBounds());
     currentFont.loadFromFile(tParams.font);
     text->setFont(currentFont);
     text->setCharacterSize(tParams.fontSize);
     //UITextElementBase *text2 = text;
-    textArray.emplace_back(std::move(text));
+    textArray.emplace_back(std::move(text));*/
 }
 
 void UIWindow::addButton(ButtonParams &bParams)
@@ -298,11 +298,4 @@ void UIWindow::setCanInteract(bool value)
 {
     canInteract = value;
 }
-
-template void UIWindow::addElement<int>(TextElParams<int> &tParams);
-template void UIWindow::addElement<float>(TextElParams<float> &tParams);
-template void UIWindow::addElement<bool>(TextElParams<bool> &tParams);
-template void UIWindow::addElement<sf::Vector2i>(TextElParams<sf::Vector2i> &tParams);
-template void UIWindow::addElement<sf::Vector2f>(TextElParams<sf::Vector2f> &tParams);
-template void UIWindow::addElement<Integrators>(TextElParams<Integrators> &tParams);
 

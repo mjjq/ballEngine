@@ -13,16 +13,15 @@
 #include "../../headers/integrators.h"
 
 
-template <typename T>
-void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition)
+void UITextElement::updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition)
 {
     //std::cout << variable << " : " << displayVariable << "\n";
-        if(variable!=nullptr)
+        //if(variable!=nullptr)
         {
-            using namespace std;
+            //using namespace std;
             //std::cout << variable << " : " << displayVariable << "\n";
-            displayVariable = *variable;
-            std::string strDispVariable = initialText + " " + to_string(displayVariable);
+            std::string varText = variable();
+            std::string strDispVariable = initialText + " " + varText;
             //std::cout << displayVariable << "\n";
             setString(strDispVariable);
         }
@@ -37,8 +36,8 @@ void UITextElement<T>::updateElement(sf::RenderWindow &window, sf::View &GUIView
         }
 }
 
-template <typename T>
-void UITextElement<T>::textWrap(sf::Rect<float> parentRect)
+
+void UITextElement::textWrap(sf::Rect<float> parentRect)
 {
     //std::cout << static_cast<std::string>(getString());
     const sf::String insertString = "\n";
@@ -67,17 +66,22 @@ void UITextElement<T>::textWrap(sf::Rect<float> parentRect)
     //std::cout << wrappedText << "\n";
 }
 
-template <typename T>
-void UITextElement<T>::setOrigPosition(sf::Vector2f newPosition)
+
+void UITextElement::setOrigPosition(sf::Vector2f newPosition)
 {
     origPosition = newPosition;
 }
 
 
 
-template <typename T>
-UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, bool fixedToWin, T *var, bool wrapText,
-                                sf::Rect<float> wrapBounds) : UITextElementBase(), variable{var}, initialText{text},
+
+UITextElement::UITextElement(std::string text,
+                  sf::Vector2f position,
+                  bool fixedToWin,
+                  std::function<std::string()> var,
+                  bool wrapText,
+                  sf::Rect<float> wrapBounds) :
+                  UITextElementBase(), variable{var}, initialText{text},
                                 origPosition{position}, fixedToWindow{fixedToWin}
 
 {
@@ -90,11 +94,3 @@ UITextElement<T>::UITextElement(std::string text, sf::Vector2f position, bool fi
     }*/
 }
 
-
-template class UITextElement<int>;
-//template class UITextElement<const int>;
-template class UITextElement<float>;
-template class UITextElement<bool>;
-template class UITextElement<sf::Vector2i>;
-template class UITextElement<sf::Vector2f>;
-template class UITextElement<Integrators>;

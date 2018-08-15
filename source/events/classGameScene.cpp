@@ -679,8 +679,8 @@ void GameScene::load()
         {"changeMass", {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
         {"changeRad", {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
     };
-    std::map<std::string, boostset> textVarMapInt = {
-        {"numBalls", &ballSim.getNumOfBalls()}
+    std::map<std::string, std::function<std::string()> > textVarMap = {
+        {"numBalls", [&]{return ballSim.getNumOfBalls();}}
     };
 
     using json = nlohmann::json;
@@ -691,7 +691,7 @@ void GameScene::load()
         json j;
         input >> j;
         //std::cout << j["Windows"][0] << "\n";
-        container.addWindow(j["Windows"][0], buttonFuncMap, sliderFuncMap, textVarMapInt);
+        container.addWindow(j["Windows"][0], buttonFuncMap, sliderFuncMap, textVarMap);
     }
 
     /*CompleteWindow window0;

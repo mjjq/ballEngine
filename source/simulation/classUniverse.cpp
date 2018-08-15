@@ -806,9 +806,10 @@ const int& BallUniverse::getWorldSizeX()
     return worldSizeX;
 }
 
-int& BallUniverse::getNumOfBalls()
+std::string BallUniverse::getNumOfBalls()
 {
-    return numOfBalls;
+
+    return std::to_string(numOfBalls);
 }
 
 bool& BallUniverse::getCollisionsEnabled()

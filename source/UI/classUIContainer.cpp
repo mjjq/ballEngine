@@ -41,7 +41,7 @@ void UIContainer::addWindow(CompleteWindow &compWindow)
         newWindow->addSlider(compWindow.sParamsVec.at(i));
     for(unsigned int i=0; i<compWindow.tParamsIntVec.size(); ++i)
         newWindow->addElement(compWindow.tParamsIntVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParamsFloatVec.size(); ++i)
+/*    for(unsigned int i=0; i<compWindow.tParamsFloatVec.size(); ++i)
         newWindow->addElement(compWindow.tParamsFloatVec.at(i));
     for(unsigned int i=0; i<compWindow.tParamsBoolVec.size(); ++i)
         newWindow->addElement(compWindow.tParamsBoolVec.at(i));
@@ -50,7 +50,7 @@ void UIContainer::addWindow(CompleteWindow &compWindow)
     for(unsigned int i=0; i<compWindow.tParams2fVec.size(); ++i)
         newWindow->addElement(compWindow.tParams2fVec.at(i));
     for(unsigned int i=0; i<compWindow.tParamsIntegVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsIntegVec.at(i));
+        newWindow->addElement(compWindow.tParamsIntegVec.at(i));*/
 
 
     interfaceWindows.push_back(std::move(newWindow));
@@ -61,7 +61,7 @@ void UIContainer::addWindow(CompleteWindow &compWindow)
 void UIContainer::addWindow(json &j,
                             mapstrvoid &bFuncMap,
                             mapstrvoidfloat &sFuncMap,
-                            std::map<std::string, boostset> &varMap)
+                            std::map<std::string, std::function<std::string()> > &varMap)
 {
     WindowParams wParams;
     if(beParser::checkwParamsJson(j, wParams))
@@ -81,10 +81,10 @@ void UIContainer::addWindow(json &j,
         }
         for(json &textJ : j["TextElements"])
         {
-            TextElBoostParams tParams;
-            if(beParser::checkTParamsJson(textJ, tParams))
+            TextElParams tParams;
+            if(beParser::checkTParamsJson(textJ, tParams, varMap))
             {
-                //newWindow->addSlider(tParams, &varMap[textJ["variable"]]);
+                newWindow->addElement(tParams);
             }
         }
         interfaceWindows.push_back(std::move(newWindow));

@@ -18,7 +18,7 @@ UIButton::UIButton(ButtonParams _bParams, WindowParams &_wParams, bool _changeSt
 {
     //upFunc = std::function<void()>{bParams.func};
     isButton = true;
-    TextElParams<int> tempParams;
+    TextElParams tempParams;
     if(_bParams.font != "")
     {
         tempParams.font = _bParams.font;
