@@ -93,15 +93,23 @@ bool beParser::checkBParamsJson(json &j, ButtonParams &bVals,
         j["function"].is_null()
        )
         return false;
-
-    bVals = {
-        j["textfont"],
-        j["text"],
-        j["fontsize"],
-        sf::Vector2f{j["position"][0], j["position"][1]},
-        sf::Vector2f{j["dimensions"][0], j["dimensions"][1]},
-        funcMap[j["function"]]
-    };
+    if(funcMap.find(j["function"]) != funcMap.end())
+        bVals = {
+            j["textfont"],
+            j["text"],
+            j["fontsize"],
+            sf::Vector2f{j["position"][0], j["position"][1]},
+            sf::Vector2f{j["dimensions"][0], j["dimensions"][1]},
+            funcMap[j["function"]]
+        };
+    else
+        bVals = {
+            j["textfont"],
+            j["text"],
+            j["fontsize"],
+            sf::Vector2f{j["position"][0], j["position"][1]},
+            sf::Vector2f{j["dimensions"][0], j["dimensions"][1]}
+        };
     return true;
 }
 

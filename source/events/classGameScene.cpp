@@ -672,7 +672,8 @@ void GameScene::load()
         {"incMass", [&]{spawnMass+=1;}},
         {"decMass", [&]{if(spawnMass>1){spawnMass-=1;}}},
         {"incRad", [&]{spawnRadius+=1;}},
-        {"decRad", [&]{if(spawnRadius>1){spawnRadius-=1;}}}
+        {"decRad", [&]{if(spawnRadius>1){spawnRadius-=1;}}},
+        {"rstMass", [&]{spawnMass=1;}}
     };
     std::map<std::string, std::pair<std::function<void(float)>, float*>> sliderFuncMap = {
         {"changeMass", {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
