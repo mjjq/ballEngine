@@ -2,6 +2,12 @@
 #define STRUCTS_H
 #include <functional>
 #include "integrators.h"
+#include <boost/variant.hpp>
+
+typedef std::map<std::string, std::function<void()> > mapstrvoid;
+typedef std::map<std::string, std::pair<std::function<void(float)>, float*> > mapstrvoidfloat;
+typedef boost::variant<int*, float*> boostset;
+
 
 struct WindowParams
 {
@@ -35,6 +41,14 @@ struct TextElParams : public TextElBaseParams
     int fontSize;
     sf::Vector2f position;
     T *var;// = nullptr;
+};
+
+struct TextElBoostParams
+{
+    std::string font;
+    std::string str;
+    int fontSize;
+    sf::Vector2f position;
 };
 
 struct ButtonParams

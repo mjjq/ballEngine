@@ -678,12 +678,22 @@ void GameScene::load()
         {"changeMass", {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
         {"changeRad", {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
     };
-    std::map<std::string, int*> textVarMapInt = {
+    std::map<std::string, boostset> textVarMapInt = {
         {"numBalls", &ballSim.getNumOfBalls()}
     };
 
+    using json = nlohmann::json;
+    std::ifstream input("./json/gamesceneUI.json");
+    if(json::accept(input))
+    {
+        std::ifstream input("./json/gamesceneUI.json");
+        json j;
+        input >> j;
+        //std::cout << j["Windows"][0] << "\n";
+        container.addWindow(j["Windows"][0], buttonFuncMap, sliderFuncMap, textVarMapInt);
+    }
 
-    CompleteWindow window0;
+    /*CompleteWindow window0;
     window0.wParams = {{0.0f, 0.15f}, {0, 0}, {250, 250}, true, false};
     window0.bParamsVec =  std::vector<ButtonParams>{
         {"./fonts/cour.ttf", "Mass +", 12, {10,180}, {60,30}, buttonFuncMap["incMass"]},
@@ -743,7 +753,7 @@ void GameScene::load()
     window3.tParamsIntegVec = std::vector<TextElParams<Integrators>>{
         {"./fonts/cour.ttf", "Int method: ", 16, {0,40}, &ballSim.getUseRK4()}
     };
-    completeWindows.push_back(window3);
+    completeWindows.push_back(window3);*/
 
 
 
@@ -788,10 +798,10 @@ void GameScene::load()
     container.getWindow(3).addButton("./fonts/cour.ttf", "Trj", 12, {10,90}, {60,30}, [&]{ballSim.toggleTrajectories();});
     container.getWindow(3).addButton("./fonts/cour.ttf", "Pl Trj", 12, {90,90}, {60,30}, [&]{ballSim.togglePlayerTraj();});
     container.getWindow(3).addButton("./fonts/cour.ttf", "Toggle\nRK4", 12, {170,90}, {60,30}, [&]{ballSim.toggleRK4();});
-    //container.getWindow(3).addSlider({10,50}, 210.0f, {10,20}, {0.1,3.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass);*/
+    //container.getWindow(3).addSlider({10,50}, 210.0f, {10,20}, {0.1,3.0}, [&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass);
 
     for(unsigned int i=0; i<completeWindows.size(); ++i)
-       container.addWindow(completeWindows.at(i));
+       container.addWindow(completeWindows.at(i));*/
     }
 }
 

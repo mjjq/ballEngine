@@ -129,3 +129,41 @@ bool beParser::checkSlParamsJson(json &j, SliderParams &sVals,
     };
     return true;
 }
+
+
+bool beParser::checkTParamsJson(json &j, TextElBoostParams &tParams)
+{
+    if(j["position"].is_null() ||
+    j["textfont"].is_null() ||
+    j["fontsize"].is_null() ||
+    j["text"].is_null() ||
+    j["variable"].is_null()
+       )
+        return false;
+
+    tParams = {
+        j["textfont"],
+        j["text"],
+        j["fontsize"],
+        sf::Vector2f{j["position"][0], j["position"][1]}
+    };
+    return true;
+}
+
+template <typename T>
+bool beParser::checkVMapVariable(std::string str,
+                                   std::map<std::string, T*> &varMap)
+{
+    return varMap.find(str) != varMap.end();
+}
+
+template <typename T>
+TextElParams<T> beParser::generateTParams(json &j,
+                                   std::map<std::string, T*> &varMap)
+{
+    TextElParams<T> tParams;
+    //if(checkTParamsJson(j))
+    //{
+
+    //}
+}

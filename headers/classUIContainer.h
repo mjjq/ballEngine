@@ -2,6 +2,9 @@
 #define CLASS_UICONTAINER_H
 #include "classUIWindow.h"
 #include "structs.h"
+#include "../extern/json.hpp"
+
+using json = nlohmann::json;
 
 class UIContainer
 {
@@ -24,6 +27,10 @@ public:
 
     //template <class T>
     void addWindow(CompleteWindow &compWindow);
+    void addWindow(json &j,
+                    mapstrvoid &bFuncMap,
+                    mapstrvoidfloat &sFuncMap,
+                    std::map<std::string, boostset> &varMap);
     void addTextElType(TextElBaseParams &tParams);
     void renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView);
     UIWindow &getWindow(unsigned int windowIndex);

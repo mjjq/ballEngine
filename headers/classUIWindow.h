@@ -56,6 +56,8 @@ public:
 
     template<class T>
     void addElement(TextElParams<T> &tParams);
+    template<class T>
+    void addElement(TextElBoostParams &tParams, T *var);
 
     virtual void addButton(ButtonParams &bParams);
 

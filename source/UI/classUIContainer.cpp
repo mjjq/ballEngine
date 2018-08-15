@@ -5,10 +5,12 @@
 #include <limits>
 #include <tuple>
 #include <functional>
+#include "../../extern/json.hpp"
 
 #include "../../headers/classUIContainer.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/structs.h"
+#include "../../headers/jsonParsing.h"
 
 
 UIContainer::UIContainer(bool _isVisible) :
@@ -54,6 +56,42 @@ void UIContainer::addWindow(CompleteWindow &compWindow)
     interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);
+}
+
+void UIContainer::addWindow(json &j,
+                            mapstrvoid &bFuncMap,
+                            mapstrvoidfloat &sFuncMap,
+                            std::map<std::string, boostset> &varMap)
+{
+    WindowParams wParams;
+    if(beParser::checkwParamsJson(j, wParams))
+    {
+        std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(wParams);
+        for(json &buttonJ : j["Buttons"])
+        {
+            ButtonParams bParams;
+            if(beParser::checkBParamsJson(buttonJ, bParams, bFuncMap))
+                newWindow->addButton(bParams);
+        }
+        for(json &sliderJ : j["Sliders"])
+        {
+            SliderParams sParams;
+            if(beParser::checkSlParamsJson(sliderJ, sParams, sFuncMap))
+                newWindow->addSlider(sParams);
+        }
+        for(json &textJ : j["TextElements"])
+        {
+            TextElBoostParams tParams;
+            if(beParser::checkTParamsJson(textJ, tParams))
+            {
+                //newWindow->addSlider(tParams, &varMap[textJ["variable"]]);
+            }
+        }
+        interfaceWindows.push_back(std::move(newWindow));
+        interfaceWindowIDs.push_back(interfaceWindows.size()-1);
+        mouseIntersectionList.push_back(false);
+    }
+
 }
 
 void UIContainer::addTextElType(TextElBaseParams &tParams)
