@@ -15,6 +15,8 @@
 #include <tuple>
 #include <functional>
 #include <numeric>
+#include <fstream>
+#include <map>
 
 #include "../../headers/classMenuScene.h"
 #include "../../headers/classTextElementBase.h"
@@ -250,45 +252,26 @@ void MenuScene::load()
 {
     adjustViewSize(window.getSize());
 
-    std::vector<CompleteWindow> completeWindows;
-
-    /*winPars.push_back( {{0,100}, {250, 250}, true, false} );
-    winPars.push_back( {{0,0}, {250, 70}, true, false} );
-    winPars.push_back( {{0,400}, {250, 50}, true, false} );
-    winPars.push_back( {{0,500}, {250, 150}, true, false} );*/
-
-
-
-    CompleteWindow window0;
-    window0.wParams = {{0.0f,0.5f}, {0,-125}, {250, 250}, true, false, true, {0,0,0,0}};
-    window0.bParamsVec =  std::vector<ButtonParams>{
-        {"./fonts/cour.ttf", "New Game", 12, {20,30}, {100,30}, [&]{requestScene(SceneEnum::SCENE_GAME);}},
-        {"./fonts/cour.ttf", "Options", 12, {20,70}, {100,30}, [&]{}},
-        {"./fonts/cour.ttf", "Exit", 12, {20,110}, {100,30}, [&]{window.close();}}
+    std::map<std::string, std::function<void()>> buttonFuncMap = {
+        {"newGame", [&]{requestScene(SceneEnum::SCENE_GAME);}},
+        {"options", [&]{}},
+        {"exit", [&]{window.close();}}
     };
-    window0.sParamsVec = std::vector<SliderParams>{
-
+    std::map<std::string, std::pair<std::function<void(float)>, float*>> sliderFuncMap = {
     };
-/*    window0.tParamsIntVec = std::vector<TextElParams<int>>{
-        {"./fonts/cour.ttf", "ballEngine", 16, {10,00}, nullptr}
+    std::map<std::string, std::function<std::string()> > textVarMap = {
     };
-    window0.tParamsFloatVec = std::vector<TextElParams<float>>{
 
-    };
-    window0.tParamsBoolVec = std::vector<TextElParams<bool>>{
-
-    };*/
-    completeWindows.push_back(window0);
-
-    CompleteWindow window1;
-    window1.wParams = {{0.0f,1.0f}, {0,-30}, {50, 20}, true, false, true, {000,0,0,000}};
-/*    window1.tParamsIntVec = std::vector<TextElParams<int>>{
-        {"./fonts/cour.ttf", "Version 0.1.2c", 16, {10,00}, nullptr}
-    };*/
-    completeWindows.push_back(window1);
-
-    for(unsigned int i=0; i<completeWindows.size(); ++i)
-       container.addWindow(completeWindows.at(i));
+    using json = nlohmann::json;
+    std::ifstream input("./json/menusceneUI.json");
+    if(json::accept(input))
+    {
+        std::ifstream input("./json/menusceneUI.json");
+        json j;
+        input >> j;
+        for(json &winJ : j["Windows"])
+            container.addWindow(winJ, buttonFuncMap, sliderFuncMap, textVarMap);
+    }
 
 }
 

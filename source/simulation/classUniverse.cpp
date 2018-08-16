@@ -812,29 +812,29 @@ std::string BallUniverse::getNumOfBalls()
     return std::to_string(numOfBalls);
 }
 
-bool& BallUniverse::getCollisionsEnabled()
+std::string BallUniverse::getCollisionsEnabled()
 {
-    return enable_collisions;
+    return std::to_string(enable_collisions);
 }
 
-bool& BallUniverse::getForcesEnabled()
+std::string BallUniverse::getForcesEnabled()
 {
-    return enable_forces;
+    return std::to_string(enable_forces);
 }
 
-float& BallUniverse::getTotalKE()
+std::string BallUniverse::getTotalKE()
 {
-    return totalKE;
+    return std::to_string(totalKE);
 }
 
-float& BallUniverse::getTotalEnergy()
+std::string BallUniverse::getTotalEnergy()
 {
-    return totalEnergy;
+    return std::to_string(totalEnergy);
 }
 
-sf::Vector2f& BallUniverse::getTotalMomentum()
+std::string BallUniverse::getTotalMomentum()
 {
-    return totalMomentum;
+    return to_string(totalMomentum);
 }
 
 sf::Vector2f BallUniverse::getBallPosition(unsigned int i)
@@ -845,14 +845,14 @@ sf::Vector2f BallUniverse::getBallPosition(unsigned int i)
                         std::numeric_limits<float>::quiet_NaN()};
 }
 
-float& BallUniverse::getTimeStep()
+std::string BallUniverse::getTimeStep()
 {
-    return dt;
+    return std::to_string(dt);
 }
 
-Integrators& BallUniverse::getUseRK4()
+std::string BallUniverse::getUseRK4()
 {
-    return intEnum;
+    return to_string(intEnum);
 }
 
 void BallUniverse::pushBall(float force, float relDirection, int i)

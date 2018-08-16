@@ -72,13 +72,23 @@ bool beParser::checkwParamsJson(json &j, WindowParams &wVals)
        )
         return false;
 
-    wVals = {
-        sf::Vector2f{j["position"][0], j["position"][1]},
-        sf::Vector2f{j["posoffset"][0], j["posoffset"][1]},
-        sf::Vector2f{j["dimensions"][0], j["dimensions"][1]},
-        j["fixedtowindow"],
-        j["draggable"]
-    };
+    if(j["colour"].is_null())
+        wVals = {
+            sf::Vector2f{j["position"][0], j["position"][1]},
+            sf::Vector2f{j["posoffset"][0], j["posoffset"][1]},
+            sf::Vector2f{j["dimensions"][0], j["dimensions"][1]},
+            j["fixedtowindow"],
+            j["draggable"]
+        };
+    else
+        wVals = {
+            sf::Vector2f{j["position"][0], j["position"][1]},
+            sf::Vector2f{j["posoffset"][0], j["posoffset"][1]},
+            sf::Vector2f{j["dimensions"][0], j["dimensions"][1]},
+            j["fixedtowindow"],
+            j["draggable"],
+            sf::Color(j["colour"][0], j["colour"][1], j["colour"][2], j["colour"][3])
+        };
     return true;
 }
 

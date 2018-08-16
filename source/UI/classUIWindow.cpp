@@ -93,7 +93,7 @@ void UIWindow::renderElements(sf::RenderWindow &window, sf::View &GUIView)
     for(unsigned int i=0; i<textArray.size(); ++i)
     {
         textArray.at(i)->updateElement(window, GUIView, effOrigPos);
-        //textArray.at(i)->textWrap(windowBox.getGlobalBounds());
+        textArray.at(i)->textWrap(windowBox.getGlobalBounds());
         window.draw(*textArray.at(i));
         //std::cout << textArray.at(i)->getPosition()<< "\n";
     }

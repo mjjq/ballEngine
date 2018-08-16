@@ -40,6 +40,11 @@ void UITextElement::updateElement(sf::RenderWindow &window, sf::View &GUIView, s
 void UITextElement::textWrap(sf::Rect<float> parentRect)
 {
     //std::cout << static_cast<std::string>(getString());
+    if(origPosition.x > 0 &&
+       origPosition.y > 0 &&
+       origPosition.x < parentRect.width &&
+       origPosition.y < parentRect.height)
+    {
     const sf::String insertString = "\n";
     int a=0;
     //std::cout << parentRect << "\n";
@@ -63,7 +68,9 @@ void UITextElement::textWrap(sf::Rect<float> parentRect)
         }
     }
     wrappedText = getString();
+    //std::cout << "hello\n";
     //std::cout << wrappedText << "\n";
+    }
 }
 
 

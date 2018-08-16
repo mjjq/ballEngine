@@ -3,7 +3,7 @@
     {
         "position" : [0.0, 0.15],
         "posoffset" : [0, 0],
-        "dimensions" : [250, 250],
+        "dimensions" : [250, 265],
         "draggable" : false,
         "fixedtowindow" : true,
 
@@ -31,6 +31,30 @@
             "fontsize" : 12,
             "text" : "Rst Mass",
             "function" : "rstMass"
+        },
+        {
+            "position" : [15,220],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Rad +",
+            "function" : "incRad"
+        },
+        {
+            "position" : [95,220],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text"  : "Rad -",
+            "function" : "decRad"
+        },
+        {
+            "position" : [175,220],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Rst Rad",
+            "function" : "rstRad"
         }
         ],
 
@@ -42,16 +66,169 @@
             "bsize" : [10, 20],
             "quanrange" : [0.1, 50],
             "function" : "changeMass"
+        },
+        {
+            "position" : [10, 90],
+            "scrnrange" : 210,
+            "lthickness" : 2,
+            "bsize" : [10, 20],
+            "quanrange" : [4.0, 50],
+            "function" : "changeRad"
         }
         ],
 
         "TextElements" : [
         {
-            "position" : [20, 0],
+            "position" : [5, 0],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
             "text" : "No. Balls:",
             "variable" : "numBalls"
+        },
+        {
+            "position" : [5, 30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Spawn Mass:",
+            "variable" : "spawnMass"
+        },
+        {
+            "position" : [5, 70],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Spawn Radius:",
+            "variable" : "spawnRad"
+        },
+        {
+            "position" : [5, 150],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Time Step:",
+            "variable" : "timeStep"
+        },
+        {
+            "position" : [5, 110],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Forces Enabled:",
+            "variable" : "forceEnld"
+        },
+        {
+            "position" : [5, 130],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Collisions Enabled:",
+            "variable" : "collsEnld"
+        }
+        ]
+    },
+    {
+        "position" : [0.0, 0.15],
+        "posoffset" : [0, 300],
+        "dimensions" : [250, 50],
+        "draggable" : false,
+        "fixedtowindow" : true,
+
+        "Buttons" : [
+        {
+            "position" : [15, 10],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Star",
+            "function" : "setStar"
+        },
+        {
+            "position" : [95, 10],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Planet",
+            "function" : "setPlanet"
+        },
+        {
+            "position" : [175, 10],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Asteroid",
+            "function" : "setAstrd"
+        }
+        ]
+    },
+    {
+        "position" : [0.0, 0.15],
+        "posoffset" : [0, 390],
+        "dimensions" : [250, 150],
+        "draggable" : false,
+        "fixedtowindow" : true,
+
+        "Buttons" : [
+        {
+            "position" : [15, 110],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Trj",
+            "function" : "tglTrj"
+        },
+        {
+            "position" : [95, 110],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Pl Trj",
+            "function" : "tglPTraj"
+        },
+        {
+            "position" : [175, 110],
+            "dimensions" : [60,30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Toggle\nInt Mtd",
+            "function" : "tglIntMthd"
+        }
+        ],
+
+        "TextElements" : [
+        {
+            "position" : [5, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Total KE:",
+            "variable" : "totalKE"
+        },
+        {
+            "position" : [5, 20],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Total Energy:",
+            "variable" : "totalEngy"
+        },
+        {
+            "position" : [5, 60],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Int Method:",
+            "variable" : "intMthd"
+        }
+        ]
+    },
+    {
+        "position" : [1.0, 0.0],
+        "posoffset" : [-150, 0],
+        "dimensions" : [250, 50],
+        "draggable" : false,
+        "fixedtowindow" : true,
+        "colour" : [0,0,0,0],
+
+        "TextElements" : [
+        {
+            "position" : [0, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "FPS:",
+            "variable" : "currFPS"
         }
         ]
     }

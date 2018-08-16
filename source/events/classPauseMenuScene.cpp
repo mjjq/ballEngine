@@ -15,6 +15,8 @@
 #include <tuple>
 #include <functional>
 #include <numeric>
+#include <fstream>
+#include <map>
 
 #include "../../headers/classPauseMenuScene.h"
 #include "../../headers/classTextElementBase.h"
@@ -251,22 +253,27 @@ void PauseMenuScene::load()
 {
     adjustViewSize(window.getSize());
 
-    std::vector<CompleteWindow> completeWindows;
-
-    CompleteWindow window0;
-    window0.wParams = {{0.5f,0.5f}, {-70,-70}, {140, 150}, true, false, true, {0,0,0,0}};
-    window0.bParamsVec = {
-        {"./fonts/cour.ttf", "Resume", 12, {20,30}, {100,30}, [&]{requestScene(SceneEnum::SCENE_GAME);}},
-        {"./fonts/cour.ttf", "Options", 12, {20,70}, {100,30}, [&]{}},
-        {"./fonts/cour.ttf", "Main Menu", 12, {20,110}, {100,30}, [&]{requestScene(SceneEnum::SCENE_MENU);}}
+    std::map<std::string, std::function<void()>> buttonFuncMap = {
+        {"resume", [&]{requestScene(SceneEnum::SCENE_GAME);}},
+        {"options", [&]{}},
+        {"exit", [&]{window.close();}},
+        {"mainMenu", [&]{requestScene(SceneEnum::SCENE_MENU);}}
     };
- /*   window0.tParamsIntVec = std::vector<TextElParams>{
-        {"./fonts/cour.ttf", "Paused", 16, {20,00}, nullptr}
-    };*/
-    completeWindows.push_back(window0);
+    std::map<std::string, std::pair<std::function<void(float)>, float*>> sliderFuncMap = {
+    };
+    std::map<std::string, std::function<std::string()> > textVarMap = {
+    };
 
-    for(unsigned int i=0; i<completeWindows.size(); ++i)
-       container.addWindow(completeWindows.at(i));
+    using json = nlohmann::json;
+    std::ifstream input("./json/pausemenusceneUI.json");
+    if(json::accept(input))
+    {
+        std::ifstream input("./json/pausemenusceneUI.json");
+        json j;
+        input >> j;
+        for(json &winJ : j["Windows"])
+            container.addWindow(winJ, buttonFuncMap, sliderFuncMap, textVarMap);
+    }
 
 }
 

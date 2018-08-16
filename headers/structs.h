@@ -16,8 +16,8 @@ struct WindowParams
     sf::Vector2f wSize;
     bool fixedToWin;
     bool draggable;
-    bool isVisible = true;
     sf::Color color = {50,50,50,150};
+    bool isVisible = true;
 };
 
 struct TextElBaseParams
