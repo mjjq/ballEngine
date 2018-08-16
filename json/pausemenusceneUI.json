@@ -1,0 +1,49 @@
+{
+    "Windows" : [
+    {
+        "position" : [0.5, 0.5],
+        "posoffset" : [-70, -70],
+        "dimensions" : [250, 250],
+        "draggable" : false,
+        "fixedtowindow" : true,
+        "colour" : [0, 0, 0, 0],
+
+        "Buttons" : [
+        {
+            "position" : [20, 30],
+            "dimensions"  : [100, 30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Resume",
+            "function" : "resume"
+        },
+        {
+            "position" : [20, 70],
+            "dimensions"  : [100, 30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Options",
+            "function" : "options"
+        },
+        {
+            "position" : [20, 110],
+            "dimensions"  : [100, 30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Main Menu",
+            "function" : "mainMenu"
+        }
+        ],
+
+        "TextElements" : [
+        {
+            "position" : [40, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Paused",
+            "variable" : ""
+        }
+        ]
+    }
+    ]
+}
