@@ -55,8 +55,6 @@ public:
     virtual ~UIWindow();
 
     void addElement(TextElParams &tParams);
-    template<class T>
-    void addElement(TextElBoostParams &tParams, T *var);
 
     virtual void addButton(ButtonParams &bParams);
 

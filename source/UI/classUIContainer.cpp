@@ -34,24 +34,11 @@ void UIContainer::addWindow(CompleteWindow &compWindow)
     std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(compWindow.wParams);
 
     for(unsigned int i=0; i<compWindow.bParamsVec.size(); ++i)
-    {
         newWindow->addButton(compWindow.bParamsVec.at(i));
-    }
     for(unsigned int i=0; i<compWindow.sParamsVec.size(); ++i)
         newWindow->addSlider(compWindow.sParamsVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParamsIntVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsIntVec.at(i));
-/*    for(unsigned int i=0; i<compWindow.tParamsFloatVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsFloatVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParamsBoolVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsBoolVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParams2iVec.size(); ++i)
-        newWindow->addElement(compWindow.tParams2iVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParams2fVec.size(); ++i)
-        newWindow->addElement(compWindow.tParams2fVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParamsIntegVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsIntegVec.at(i));*/
-
+    for(unsigned int i=0; i<compWindow.tParamsVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsVec.at(i));
 
     interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
@@ -94,10 +81,6 @@ void UIContainer::addWindow(json &j,
 
 }
 
-void UIContainer::addTextElType(TextElBaseParams &tParams)
-{
-    //if(dynamic_cast<TextElParams<int>*>(tParams) != nullptr)
-}
 
 void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
@@ -164,10 +147,6 @@ void UIContainer::clickOnUI(sf::RenderWindow &window)
         getWindow(windowIndex).changeOrigin(window, sf::Mouse::getPosition(window));
         getWindow(windowIndex).clickIntersectedButton(window);
         currentIntButton = getWindow(windowIndex).getClickedButton();
-        //std::swap(interfaceWindows.at(windowIndex), interfaceWindows.front());
-        //currentIntWindow = doesMIntExist();
-        //bool buttonBool = std::get<0>(currentIntButton);
-        //int buttonIndex = std::get<1>(currentIntButton);
     }
 
 }
@@ -250,4 +229,3 @@ void UIContainer::setWindowCanInteract(int index, bool value)
     resetUIClick();
 }
 
-//template void UIContainer::addWindow<int>(CompleteWindow &compWindow);

@@ -19,7 +19,6 @@
 #include <map>
 
 #include "../../headers/classMenuScene.h"
-#include "../../headers/classTextElementBase.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 

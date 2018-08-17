@@ -36,18 +36,6 @@ void UIWindow::addElement(TextElParams &tParams)
     textArray.emplace_back(std::move(text));
 }
 
-template <class T>
-void UIWindow::addElement(TextElBoostParams &tParams, T *var)
-{
-    /*std::unique_ptr<UITextElement<T>> text = std::make_unique<UITextElement<T>>
-            (tParams.str, tParams.position, fixedToWindow, var, !isButton,
-             windowBox.getLocalBounds());
-    currentFont.loadFromFile(tParams.font);
-    text->setFont(currentFont);
-    text->setCharacterSize(tParams.fontSize);
-    //UITextElementBase *text2 = text;
-    textArray.emplace_back(std::move(text));*/
-}
 
 void UIWindow::addButton(ButtonParams &bParams)
 {

@@ -21,7 +21,6 @@
 #include "../../extern/json.hpp"
 
 #include "../../headers/classGameScene.h"
-#include "../../headers/classTextElementBase.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 #include "../../headers/jsonParsing.h"

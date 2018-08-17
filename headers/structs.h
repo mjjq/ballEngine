@@ -2,11 +2,9 @@
 #define STRUCTS_H
 #include <functional>
 #include "integrators.h"
-#include <boost/variant.hpp>
 
 typedef std::map<std::string, std::function<void()> > mapstrvoid;
 typedef std::map<std::string, std::pair<std::function<void(float)>, float*> > mapstrvoidfloat;
-typedef boost::variant<int*, float*> boostset;
 
 
 struct WindowParams
@@ -20,35 +18,15 @@ struct WindowParams
     bool isVisible = true;
 };
 
-struct TextElBaseParams
-{
-
-};
-
-struct TextElParams : public TextElBaseParams
-{
-     TextElParams( std::string _font = "",
-                   std::string _str = "",
-                   int _fontSize = 1,
-                   sf::Vector2f _position = {0,0},
-                   std::function<std::string()> _variable = []{return "";}) :
-                   font{_font}, str{_str}, fontSize{_fontSize},
-                   position{_position}, variable{_variable} {}
-
-    std::string font;
-    std::string str;
-    int fontSize;
-    sf::Vector2f position;
-    std::function<std::string()> variable;// = nullptr;
-};
-
-struct TextElBoostParams
+struct TextElParams
 {
     std::string font;
     std::string str;
     int fontSize;
     sf::Vector2f position;
+    std::function<std::string()> variable = []{return "";};
 };
+
 
 struct ButtonParams
 {
@@ -60,16 +38,6 @@ struct ButtonParams
     std::function<void()> func = []{};
     sf::Color color = {80,80,80,150};
     bool changeState = true;
-
-   /* std::string font, std::string text, int fontSize,
-                         sf::Vector2f position, sf::Vector2f bSize,
-                         std::function<void()> const& func, sf::Color color,
-                         bool changeState
-
-    std::string font, std::string text, int fontSize,
-             std::function<void()> const& upFunc, sf::Vector2f position,
-             sf::Vector2f bSize, bool fixedToWin, sf::Color color = {80,80,80,150},
-             bool changeState = true*/
 };
 
 struct SliderParams
@@ -91,7 +59,7 @@ struct CompleteWindow
     WindowParams wParams;
     std::vector<ButtonParams> bParamsVec;
     std::vector<SliderParams> sParamsVec;
-    std::vector<TextElParams> tParamsIntVec;
+    std::vector<TextElParams> tParamsVec;
 };
 
 struct BallSpawnVals
