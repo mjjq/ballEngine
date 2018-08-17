@@ -23,6 +23,11 @@ void Scene::redraw(sf::RenderWindow &window)
 
 }
 
+void Scene::initBindings()
+{
+
+}
+
 void Scene::loadUI(std::string filePath, UIContainer &container)
 {
     using json = nlohmann::json;

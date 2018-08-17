@@ -26,6 +26,7 @@ public:
     SceneEnum pollNextScene();
     virtual void update(sf::RenderWindow &window);
     virtual void redraw(sf::RenderWindow &window);
+    virtual void initBindings();
     void loadUI(std::string filePath, UIContainer &container);
     virtual void load();
     virtual void unload();

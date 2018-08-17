@@ -34,6 +34,7 @@ class GameScene : public Scene
 
     std::pair<bool,int> mouseOnUIWhenClicked{false, -1};
     bool clickedWindowToDrag = false;
+    std::map<sf::Keyboard::Key, std::function<void()> > keyBinds;
 
     sf::Vector2f recentViewCoords;
     sf::Vector2i wSize;

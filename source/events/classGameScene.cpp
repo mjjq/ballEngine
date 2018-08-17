@@ -502,41 +502,8 @@ void GameScene::keyEvents(sf::Event &event)
     {
         if(!newLayerPressed)
         {
-            //if(event.key.code == sf::Keyboard::PageUp)
-                //limitFramerate(60);
-            //else if(event.key.code == sf::Keyboard::PageDown)
-                //limitFramerate(400);
-            //else if(event.key.code == sf::Keyboard::Home)
-            //    limitFramerate(5);
-            if(event.key.code == sf::Keyboard::Comma)
-                ballSim.decSimStep(0.1);
-            else if(event.key.code == sf::Keyboard::Period)
-                ballSim.incSimStep(0.1);
-            else if(event.key.code == sf::Keyboard::Delete)
-                ballSim.clearSimulation();
-            else if(event.key.code == sf::Keyboard::Dash)
-                zoomToMouse(2.0f);
-            else if(event.key.code == sf::Keyboard::Equal)
-                zoomToMouse(0.5f);
-            else if(event.key.code == sf::Keyboard::Num0)
-                resetView();
-            else if(event.key.code == sf::Keyboard::P)
-                ballSim.toggleSimPause();
-            else if(event.key.code == sf::Keyboard::Space)
-            {
-                recentViewCoords = worldView.getCenter();
-                mousePosOnPan = sf::Mouse::getPosition(window);
-            }
-            else if(event.key.code == sf::Keyboard::M)
-                spawnMass += 1;
-            else if(event.key.code == sf::Keyboard::R)
-                spawnRadius += 1;
-            else if(event.key.code == sf::Keyboard::Num1)
-                ballSim.setPlayer(0);
-            else if(event.key.code == sf::Keyboard::Num2)
-                ballSim.setPlayer(1);
-            else if(event.key.code == sf::Keyboard::Escape)
-                togglePause();
+            if(keyBinds.find(event.key.code) != keyBinds.end())
+                keyBinds[event.key.code]();
         }
 
         newLayerEvent(newLayerKeys, event);
@@ -655,45 +622,79 @@ void GameScene::load()
 {
     if(!isLoaded)
     {
-    isLoaded = true;
-    wSize = ballSim.getWorldSize();
-    changeBoundaryRect(wSize);
-    resetView();
-    adjustViewSize(window.getSize());
+        isLoaded = true;
+        wSize = ballSim.getWorldSize();
+        changeBoundaryRect(wSize);
+        resetView();
+        adjustViewSize(window.getSize());
 
-    buttonFuncMap = {
-        {"incMass",     [&]{spawnMass+=1;}},
-        {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
-        {"incRad",      [&]{spawnRadius+=1;}},
-        {"decRad",      [&]{if(spawnRadius>1){spawnRadius-=1;}}},
-        {"rstRad",      [&]{spawnRadius=10;}},
-        {"rstMass",     [&]{spawnMass=1;}},
-        {"setStar",     [&]{spawnRadius=50;spawnMass=10000;}},
-        {"setPlanet",   [&]{spawnRadius=10;spawnMass=1;}},
-        {"setAstrd",    [&]{spawnRadius=3;spawnMass=0.01;}},
-        {"tglTrj",      [&]{ballSim.toggleTrajectories();}},
-        {"tglPTraj",    [&]{ballSim.togglePlayerTraj();}},
-        {"tglIntMthd",  [&]{ballSim.toggleRK4();}}
-    };
-    sliderFuncMap = {
-        {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
-        {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
-    };
-    textVarMap = {
-        {"numBalls",    [&]{return ballSim.getNumOfBalls();}},
-        {"timeStep",    [&]{return ballSim.getTimeStep();}},
-        {"spawnMass",   [&]{return std::to_string(spawnMass);}},
-        {"spawnRad",    [&]{return std::to_string(spawnRadius);}},
-        {"forceEnld",   [&]{return ballSim.getForcesEnabled();}},
-        {"collsEnld",   [&]{return ballSim.getCollisionsEnabled();}},
-        {"totalKE",     [&]{return ballSim.getTotalKE();}},
-        {"totalMom",    [&]{return ballSim.getTotalMomentum();}},
-        {"totalEngy",   [&]{return ballSim.getTotalEnergy();}},
-        {"intMthd",     [&]{return ballSim.getUseRK4();}},
-        {"currFPS",     [&]{return std::to_string(currentFPS);}}
-    };
+        buttonFuncMap = {
+            {"incMass",     [&]{spawnMass+=1;}},
+            {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
+            {"incRad",      [&]{spawnRadius+=1;}},
+            {"decRad",      [&]{if(spawnRadius>1){spawnRadius-=1;}}},
+            {"rstRad",      [&]{spawnRadius=10;}},
+            {"rstMass",     [&]{spawnMass=1;}},
+            {"setStar",     [&]{spawnRadius=50;spawnMass=10000;}},
+            {"setPlanet",   [&]{spawnRadius=10;spawnMass=1;}},
+            {"setAstrd",    [&]{spawnRadius=3;spawnMass=0.01;}},
+            {"tglTrj",      [&]{ballSim.toggleTrajectories();}},
+            {"tglPTraj",    [&]{ballSim.togglePlayerTraj();}},
+            {"tglIntMthd",  [&]{ballSim.toggleRK4();}},
+            {"clearSim",    [&]{ballSim.clearSimulation();}},
+            {"decSimStep",  [&]{ballSim.decSimStep(0.1);}},
+            {"incSimStep",  [&]{ballSim.incSimStep(0.1);}},
+            {"zmToMse",     [&]{zoomToMouse(2.0f);}},
+            {"zmFromMse",   [&]{zoomToMouse(0.5f);}},
+            {"rstView",     [&]{resetView();}},
+            {"tglSimPse",   [&]{ballSim.toggleSimPause();}},
+            {"viewPan",     [&]{
+                    recentViewCoords = worldView.getCenter();
+                    mousePosOnPan = sf::Mouse::getPosition(window);}},
+            {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
+            {"setPlyr1",    [&]{ballSim.setPlayer(1);}},
+            {"pauseGme",    [&]{togglePause();}}
+        };
 
-    loadUI("./json/gamesceneUI.json", container);
+        keyBinds = {
+            {sf::Keyboard::Delete,  [&]{ballSim.clearSimulation();}},
+            {sf::Keyboard::Comma,   [&]{ballSim.decSimStep(0.1);}},
+            {sf::Keyboard::Period,  [&]{ballSim.incSimStep(0.1);}},
+            {sf::Keyboard::Delete,  [&]{ballSim.clearSimulation();}},
+            {sf::Keyboard::Dash,    [&]{zoomToMouse(2.0f);}},
+            {sf::Keyboard::Equal,   [&]{zoomToMouse(0.5f);}},
+            {sf::Keyboard::Num0,    [&]{resetView();}},
+            {sf::Keyboard::P,       [&]{ballSim.toggleSimPause();}},
+            {sf::Keyboard::Space,   [&]{
+                    recentViewCoords = worldView.getCenter();
+                    mousePosOnPan = sf::Mouse::getPosition(window);}},
+            {sf::Keyboard::M,       [&]{spawnMass += 1;}},
+            {sf::Keyboard::R,       [&]{spawnRadius += 1;}},
+            {sf::Keyboard::Num1,    [&]{ballSim.setPlayer(0);}},
+            {sf::Keyboard::Num2,    [&]{ballSim.setPlayer(1);}},
+            {sf::Keyboard::Escape,  [&]{togglePause();}}
+        };
+
+        sliderFuncMap = {
+            {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
+            {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
+        };
+        textVarMap = {
+            {"numBalls",    [&]{return ballSim.getNumOfBalls();}},
+            {"timeStep",    [&]{return ballSim.getTimeStep();}},
+            {"spawnMass",   [&]{return std::to_string(spawnMass);}},
+            {"spawnRad",    [&]{return std::to_string(spawnRadius);}},
+            {"forceEnld",   [&]{return ballSim.getForcesEnabled();}},
+            {"collsEnld",   [&]{return ballSim.getCollisionsEnabled();}},
+            {"totalKE",     [&]{return ballSim.getTotalKE();}},
+            {"totalMom",    [&]{return ballSim.getTotalMomentum();}},
+            {"totalEngy",   [&]{return ballSim.getTotalEnergy();}},
+            {"intMthd",     [&]{return ballSim.getUseRK4();}},
+            {"currFPS",     [&]{return std::to_string(currentFPS);}}
+        };
+
+        loadUI("./json/gamesceneUI.json", container);
+
     }
 }
 
