@@ -6,7 +6,6 @@
 #include <tuple>
 #include <functional>
 
-#include "../../headers/classTextElementBase.h"
 #include "../../headers/classTextElement.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
@@ -88,7 +87,7 @@ UITextElement::UITextElement(std::string text,
                   std::function<std::string()> var,
                   bool wrapText,
                   sf::Rect<float> wrapBounds) :
-                  UITextElementBase(), variable{var}, initialText{text},
+                  variable{var}, initialText{text},
                                 origPosition{position}, fixedToWindow{fixedToWin}
 
 {

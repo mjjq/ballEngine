@@ -3,7 +3,7 @@
     {
         "position" : [0.0, 0.15],
         "posoffset" : [0, 0],
-        "dimensions" : [250, 265],
+        "dimensions" : [250, 260],
         "draggable" : false,
         "fixedtowindow" : true,
 

@@ -1,9 +1,8 @@
 #ifndef CLASS_TXTEL_H
 #define CLASS_TXTEL_H
-#include "classTextElementBase.h"
 
 
-class UITextElement : public UITextElementBase
+class UITextElement : public sf::Text
 {
     std::function<std::string()> variable;//function which returns the variable to display
 
