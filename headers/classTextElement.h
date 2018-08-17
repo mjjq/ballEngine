@@ -1,6 +1,7 @@
 #ifndef CLASS_TXTEL_H
 #define CLASS_TXTEL_H
 
+#include <functional>
 
 class UITextElement : public sf::Text
 {

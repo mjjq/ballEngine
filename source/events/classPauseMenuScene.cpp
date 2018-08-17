@@ -252,27 +252,14 @@ void PauseMenuScene::load()
 {
     adjustViewSize(window.getSize());
 
-    std::map<std::string, std::function<void()>> buttonFuncMap = {
+    buttonFuncMap = {
         {"resume", [&]{requestScene(SceneEnum::SCENE_GAME);}},
         {"options", [&]{}},
         {"exit", [&]{window.close();}},
         {"mainMenu", [&]{requestScene(SceneEnum::SCENE_MENU);}}
     };
-    std::map<std::string, std::pair<std::function<void(float)>, float*>> sliderFuncMap = {
-    };
-    std::map<std::string, std::function<std::string()> > textVarMap = {
-    };
 
-    using json = nlohmann::json;
-    std::ifstream input("./json/pausemenusceneUI.json");
-    if(json::accept(input))
-    {
-        std::ifstream input("./json/pausemenusceneUI.json");
-        json j;
-        input >> j;
-        for(json &winJ : j["Windows"])
-            container.addWindow(winJ, buttonFuncMap, sliderFuncMap, textVarMap);
-    }
+    loadUI("./json/pausemenusceneUI.json", container);
 
 }
 

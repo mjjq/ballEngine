@@ -661,48 +661,39 @@ void GameScene::load()
     resetView();
     adjustViewSize(window.getSize());
 
-    std::map<std::string, std::function<void()>> buttonFuncMap = {
-        {"incMass", [&]{spawnMass+=1;}},
-        {"decMass", [&]{if(spawnMass>1){spawnMass-=1;}}},
-        {"incRad", [&]{spawnRadius+=1;}},
-        {"decRad", [&]{if(spawnRadius>1){spawnRadius-=1;}}},
-        {"rstRad", [&]{spawnRadius=10;}},
-        {"rstMass", [&]{spawnMass=1;}},
-        {"setStar", [&]{spawnRadius=50;spawnMass=10000;}},
-        {"setPlanet", [&]{spawnRadius=10;spawnMass=1;}},
-        {"setAstrd", [&]{spawnRadius=3;spawnMass=0.01;}},
-        {"tglTrj", [&]{ballSim.toggleTrajectories();}},
-        {"tglPTraj", [&]{ballSim.togglePlayerTraj();}},
-        {"tglIntMthd", [&]{ballSim.toggleRK4();}}
+    buttonFuncMap = {
+        {"incMass",     [&]{spawnMass+=1;}},
+        {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
+        {"incRad",      [&]{spawnRadius+=1;}},
+        {"decRad",      [&]{if(spawnRadius>1){spawnRadius-=1;}}},
+        {"rstRad",      [&]{spawnRadius=10;}},
+        {"rstMass",     [&]{spawnMass=1;}},
+        {"setStar",     [&]{spawnRadius=50;spawnMass=10000;}},
+        {"setPlanet",   [&]{spawnRadius=10;spawnMass=1;}},
+        {"setAstrd",    [&]{spawnRadius=3;spawnMass=0.01;}},
+        {"tglTrj",      [&]{ballSim.toggleTrajectories();}},
+        {"tglPTraj",    [&]{ballSim.togglePlayerTraj();}},
+        {"tglIntMthd",  [&]{ballSim.toggleRK4();}}
     };
-    std::map<std::string, std::pair<std::function<void(float)>, float*>> sliderFuncMap = {
-        {"changeMass", {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
-        {"changeRad", {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
+    sliderFuncMap = {
+        {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
+        {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
     };
-    std::map<std::string, std::function<std::string()> > textVarMap = {
-        {"numBalls", [&]{return ballSim.getNumOfBalls();}},
-        {"timeStep", [&]{return ballSim.getTimeStep();}},
-        {"spawnMass", [&]{return std::to_string(spawnMass);}},
-        {"spawnRad", [&]{return std::to_string(spawnRadius);}},
-        {"forceEnld", [&]{return ballSim.getForcesEnabled();}},
-        {"collsEnld", [&]{return ballSim.getCollisionsEnabled();}},
-        {"totalKE", [&]{return ballSim.getTotalKE();}},
-        {"totalMom", [&]{return ballSim.getTotalMomentum();}},
-        {"totalEngy", [&]{return ballSim.getTotalEnergy();}},
-        {"intMthd", [&]{return ballSim.getUseRK4();}},
-        {"currFPS", [&]{return std::to_string(currentFPS);}}
+    textVarMap = {
+        {"numBalls",    [&]{return ballSim.getNumOfBalls();}},
+        {"timeStep",    [&]{return ballSim.getTimeStep();}},
+        {"spawnMass",   [&]{return std::to_string(spawnMass);}},
+        {"spawnRad",    [&]{return std::to_string(spawnRadius);}},
+        {"forceEnld",   [&]{return ballSim.getForcesEnabled();}},
+        {"collsEnld",   [&]{return ballSim.getCollisionsEnabled();}},
+        {"totalKE",     [&]{return ballSim.getTotalKE();}},
+        {"totalMom",    [&]{return ballSim.getTotalMomentum();}},
+        {"totalEngy",   [&]{return ballSim.getTotalEnergy();}},
+        {"intMthd",     [&]{return ballSim.getUseRK4();}},
+        {"currFPS",     [&]{return std::to_string(currentFPS);}}
     };
 
-    using json = nlohmann::json;
-    std::ifstream input("./json/gamesceneUI.json");
-    if(json::accept(input))
-    {
-        std::ifstream input("./json/gamesceneUI.json");
-        json j;
-        input >> j;
-        for(json &winJ : j["Windows"])
-            container.addWindow(winJ, buttonFuncMap, sliderFuncMap, textVarMap);
-    }
+    loadUI("./json/gamesceneUI.json", container);
     }
 }
 

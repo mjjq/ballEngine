@@ -251,26 +251,13 @@ void MenuScene::load()
 {
     adjustViewSize(window.getSize());
 
-    std::map<std::string, std::function<void()>> buttonFuncMap = {
+    buttonFuncMap = {
         {"newGame", [&]{requestScene(SceneEnum::SCENE_GAME);}},
         {"options", [&]{}},
         {"exit", [&]{window.close();}}
     };
-    std::map<std::string, std::pair<std::function<void(float)>, float*>> sliderFuncMap = {
-    };
-    std::map<std::string, std::function<std::string()> > textVarMap = {
-    };
 
-    using json = nlohmann::json;
-    std::ifstream input("./json/menusceneUI.json");
-    if(json::accept(input))
-    {
-        std::ifstream input("./json/menusceneUI.json");
-        json j;
-        input >> j;
-        for(json &winJ : j["Windows"])
-            container.addWindow(winJ, buttonFuncMap, sliderFuncMap, textVarMap);
-    }
+    loadUI("./json/menusceneUI.json", container);
 
 }
 
