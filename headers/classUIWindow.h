@@ -36,7 +36,7 @@ protected:
     sf::Color color;
     sf::RectangleShape windowBox;
 
-    std::vector<std::unique_ptr<UITextElementBase>> textArray;
+    std::vector<std::unique_ptr<UITextElement>> textArray;
     std::vector<std::unique_ptr<UIButton>> buttonArray;
     std::vector<std::unique_ptr<UIGroup>> groupArray;
 
@@ -54,8 +54,7 @@ public:
 
     virtual ~UIWindow();
 
-    template<class T>
-    void addElement(TextElParams<T> &tParams);
+    void addElement(TextElParams &tParams);
 
     virtual void addButton(ButtonParams &bParams);
 

@@ -41,7 +41,6 @@
 		<Unit filename="headers/classScene.h" />
 		<Unit filename="headers/classSceneManager.h" />
 		<Unit filename="headers/classTextElement.h" />
-		<Unit filename="headers/classTextElementBase.h" />
 		<Unit filename="headers/classUIButton.h" />
 		<Unit filename="headers/classUIContainer.h" />
 		<Unit filename="headers/classUIGroup.h" />
@@ -55,6 +54,9 @@
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
+		<Unit filename="json/gamesceneUI.json" />
+		<Unit filename="json/menusceneUI.json" />
+		<Unit filename="json/pausemenusceneUI.json" />
 		<Unit filename="json/spawnparams.json" />
 		<Unit filename="main.cpp" />
 		<Unit filename="source/UI/classUIButton.cpp" />
@@ -62,7 +64,6 @@
 		<Unit filename="source/UI/classUIGroup.cpp" />
 		<Unit filename="source/UI/classUISlider.cpp" />
 		<Unit filename="source/UI/classUITextElement.cpp" />
-		<Unit filename="source/UI/classUITextElementBase.cpp" />
 		<Unit filename="source/UI/classUIWindow.cpp" />
 		<Unit filename="source/events/classGameScene.cpp" />
 		<Unit filename="source/events/classMenuScene.cpp" />

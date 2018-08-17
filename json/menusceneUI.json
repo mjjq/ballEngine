@@ -1,0 +1,67 @@
+{
+    "Windows" : [
+    {
+        "position" : [0.0, 0.5],
+        "posoffset" : [0, -125],
+        "dimensions" : [250, 250],
+        "draggable" : false,
+        "fixedtowindow" : true,
+        "colour" : [0, 0, 0, 0],
+
+        "Buttons" : [
+        {
+            "position" : [20, 30],
+            "dimensions"  : [100, 30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "New Game",
+            "function" : "newGame"
+        },
+        {
+            "position" : [20, 70],
+            "dimensions"  : [100, 30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Options",
+            "function" : "options"
+        },
+        {
+            "position" : [20, 110],
+            "dimensions"  : [100, 30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "Exit",
+            "function" : "exit"
+        }
+        ],
+
+        "TextElements" : [
+        {
+            "position" : [10, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "ballEngine",
+            "variable" : ""
+        }
+        ]
+    },
+    {
+        "position" : [0.0, 1.0],
+        "posoffset" : [0, -30],
+        "dimensions" : [50, 20],
+        "draggable" : false,
+        "fixedtowindow" : true,
+        "colour" : [0, 0, 0, 0],
+
+        "TextElements" : [
+        {
+            "position" : [10, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Version 0.1.3",
+            "variable" : ""
+        }
+        ]
+    }
+    ]
+}

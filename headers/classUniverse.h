@@ -4,6 +4,7 @@
 #include "collisionDetection.h"
 #include "classBall.h"
 #include "class2DMatrix.h"
+#include "stringConversion.h"
 
 class BallUniverse
 {
@@ -91,14 +92,14 @@ public:
     void changeBallColour();
 
     const int& getWorldSizeX();
-    int& getNumOfBalls();
-    bool& getCollisionsEnabled();
-    bool& getForcesEnabled();
-    float& getTotalKE();
-    float& getTotalEnergy();
-    float& getTimeStep();
-    sf::Vector2f& getTotalMomentum();
-    Integrators& getUseRK4();
+    std::string getNumOfBalls();
+    std::string getCollisionsEnabled();
+    std::string getForcesEnabled();
+    std::string getTotalKE();
+    std::string getTotalEnergy();
+    std::string getTimeStep();
+    std::string getTotalMomentum();
+    std::string getUseRK4();
 
     void sampleAllPositions();
     void drawSampledPositions(sf::RenderWindow &window);

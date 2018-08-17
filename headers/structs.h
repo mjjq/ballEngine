@@ -3,6 +3,10 @@
 #include <functional>
 #include "integrators.h"
 
+typedef std::map<std::string, std::function<void()> > mapstrvoid;
+typedef std::map<std::string, std::pair<std::function<void(float)>, float*> > mapstrvoidfloat;
+
+
 struct WindowParams
 {
     sf::Vector2f normPosition;
@@ -10,32 +14,19 @@ struct WindowParams
     sf::Vector2f wSize;
     bool fixedToWin;
     bool draggable;
-    bool isVisible = true;
     sf::Color color = {50,50,50,150};
+    bool isVisible = true;
 };
 
-struct TextElBaseParams
+struct TextElParams
 {
-
-};
-
-template <typename T>
-struct TextElParams : public TextElBaseParams
-{
-     TextElParams( std::string _font = "",
-                   std::string _str = "",
-                   int _fontSize = 1,
-                   sf::Vector2f _position = {0,0},
-                   T *_var = nullptr ) :
-                   font{_font}, str{_str}, fontSize{_fontSize},
-                   position{_position}, var{_var} {}
-
     std::string font;
     std::string str;
     int fontSize;
     sf::Vector2f position;
-    T *var;// = nullptr;
+    std::function<std::string()> variable = []{return "";};
 };
+
 
 struct ButtonParams
 {
@@ -44,19 +35,9 @@ struct ButtonParams
     int fontSize;
     sf::Vector2f position;
     sf::Vector2f bSize;
-    std::function<void()> func;
+    std::function<void()> func = []{};
     sf::Color color = {80,80,80,150};
     bool changeState = true;
-
-   /* std::string font, std::string text, int fontSize,
-                         sf::Vector2f position, sf::Vector2f bSize,
-                         std::function<void()> const& func, sf::Color color,
-                         bool changeState
-
-    std::string font, std::string text, int fontSize,
-             std::function<void()> const& upFunc, sf::Vector2f position,
-             sf::Vector2f bSize, bool fixedToWin, sf::Color color = {80,80,80,150},
-             bool changeState = true*/
 };
 
 struct SliderParams
@@ -66,7 +47,7 @@ struct SliderParams
     float thickness;
     sf::Vector2f bSize;
     sf::Vector2f physRange = {0,0};
-    std::function<void(float)> sliderFunc = nullptr;
+    std::function<void(float)> sliderFunc = [](float i){};
     float *variable = nullptr;
     sf::Color buttonColor = {80,80,80,255};
     sf::Color barColor = {200,200,200,255};
@@ -78,12 +59,7 @@ struct CompleteWindow
     WindowParams wParams;
     std::vector<ButtonParams> bParamsVec;
     std::vector<SliderParams> sParamsVec;
-    std::vector<TextElParams<int>> tParamsIntVec;
-    std::vector<TextElParams<float>> tParamsFloatVec;
-    std::vector<TextElParams<bool>> tParamsBoolVec;
-    std::vector<TextElParams<sf::Vector2i>> tParams2iVec;
-    std::vector<TextElParams<sf::Vector2f>> tParams2fVec;
-    std::vector<TextElParams<Integrators>> tParamsIntegVec;
+    std::vector<TextElParams> tParamsVec;
 };
 
 struct BallSpawnVals
@@ -110,6 +86,5 @@ struct AABBSpawnVals
     sf::Vector2f dimensions;
 };
 
-template struct TextElParams<int>;
 #endif // STRUCTS_H
 

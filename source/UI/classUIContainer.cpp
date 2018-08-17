@@ -5,10 +5,12 @@
 #include <limits>
 #include <tuple>
 #include <functional>
+#include "../../extern/json.hpp"
 
 #include "../../headers/classUIContainer.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/structs.h"
+#include "../../headers/jsonParsing.h"
 
 
 UIContainer::UIContainer(bool _isVisible) :
@@ -32,34 +34,53 @@ void UIContainer::addWindow(CompleteWindow &compWindow)
     std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(compWindow.wParams);
 
     for(unsigned int i=0; i<compWindow.bParamsVec.size(); ++i)
-    {
         newWindow->addButton(compWindow.bParamsVec.at(i));
-    }
     for(unsigned int i=0; i<compWindow.sParamsVec.size(); ++i)
         newWindow->addSlider(compWindow.sParamsVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParamsIntVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsIntVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParamsFloatVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsFloatVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParamsBoolVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsBoolVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParams2iVec.size(); ++i)
-        newWindow->addElement(compWindow.tParams2iVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParams2fVec.size(); ++i)
-        newWindow->addElement(compWindow.tParams2fVec.at(i));
-    for(unsigned int i=0; i<compWindow.tParamsIntegVec.size(); ++i)
-        newWindow->addElement(compWindow.tParamsIntegVec.at(i));
-
+    for(unsigned int i=0; i<compWindow.tParamsVec.size(); ++i)
+        newWindow->addElement(compWindow.tParamsVec.at(i));
 
     interfaceWindows.push_back(std::move(newWindow));
     interfaceWindowIDs.push_back(interfaceWindows.size()-1);
     mouseIntersectionList.push_back(false);
 }
 
-void UIContainer::addTextElType(TextElBaseParams &tParams)
+void UIContainer::addWindow(json &j,
+                            mapstrvoid &bFuncMap,
+                            mapstrvoidfloat &sFuncMap,
+                            std::map<std::string, std::function<std::string()> > &varMap)
 {
-    //if(dynamic_cast<TextElParams<int>*>(tParams) != nullptr)
+    WindowParams wParams;
+    if(beParser::checkwParamsJson(j, wParams))
+    {
+        std::unique_ptr<UIWindow> newWindow = std::make_unique<UIWindow>(wParams);
+        for(json &buttonJ : j["Buttons"])
+        {
+            ButtonParams bParams;
+            if(beParser::checkBParamsJson(buttonJ, bParams, bFuncMap))
+                newWindow->addButton(bParams);
+        }
+        for(json &sliderJ : j["Sliders"])
+        {
+            SliderParams sParams;
+            if(beParser::checkSlParamsJson(sliderJ, sParams, sFuncMap))
+                newWindow->addSlider(sParams);
+        }
+        for(json &textJ : j["TextElements"])
+        {
+            TextElParams tParams;
+            if(beParser::checkTParamsJson(textJ, tParams, varMap))
+            {
+                newWindow->addElement(tParams);
+            }
+        }
+        interfaceWindows.push_back(std::move(newWindow));
+        interfaceWindowIDs.push_back(interfaceWindows.size()-1);
+        mouseIntersectionList.push_back(false);
+    }
+
 }
+
 
 void UIContainer::renderWindows(sf::RenderWindow &window, sf::View &GUIView, sf::View &originalView)
 {
@@ -126,10 +147,6 @@ void UIContainer::clickOnUI(sf::RenderWindow &window)
         getWindow(windowIndex).changeOrigin(window, sf::Mouse::getPosition(window));
         getWindow(windowIndex).clickIntersectedButton(window);
         currentIntButton = getWindow(windowIndex).getClickedButton();
-        //std::swap(interfaceWindows.at(windowIndex), interfaceWindows.front());
-        //currentIntWindow = doesMIntExist();
-        //bool buttonBool = std::get<0>(currentIntButton);
-        //int buttonIndex = std::get<1>(currentIntButton);
     }
 
 }
@@ -212,4 +229,3 @@ void UIContainer::setWindowCanInteract(int index, bool value)
     resetUIClick();
 }
 
-//template void UIContainer::addWindow<int>(CompleteWindow &compWindow);
