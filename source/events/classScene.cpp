@@ -23,6 +23,20 @@ void Scene::redraw(sf::RenderWindow &window)
 
 }
 
+void Scene::loadUI(std::string filePath, UIContainer &container)
+{
+    using json = nlohmann::json;
+    std::ifstream input(filePath);
+    if(json::accept(input))
+    {
+        std::ifstream input(filePath);
+        json j;
+        input >> j;
+        for(json &winJ : j["Windows"])
+            container.addWindow(winJ, buttonFuncMap, sliderFuncMap, textVarMap);
+    }
+}
+
 void Scene::load()
 {
 
