@@ -4,10 +4,10 @@
 #include "structs.h"
 #include "../extern/json.hpp"
 
-using json = nlohmann::json;
-
 class UIContainer
 {
+    using json = nlohmann::json;
+
     static sf::RenderWindow &parentWindow;
     static sf::View &originalView;
     static sf::View &GUIView;

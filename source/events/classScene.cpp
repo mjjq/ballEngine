@@ -31,8 +31,8 @@ void Scene::initBindings()
 void Scene::loadUI(std::string filePath, UIContainer &container)
 {
     using json = nlohmann::json;
-    std::ifstream input(filePath);
-    if(json::accept(input))
+    std::ifstream initInput(filePath);
+    if(json::accept(initInput))
     {
         std::ifstream input(filePath);
         json j;

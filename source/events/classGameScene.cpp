@@ -17,7 +17,6 @@
 #include <numeric>
 #include <fstream>
 #include <map>
-#include <boost/variant.hpp>
 #include "../../extern/json.hpp"
 
 #include "../../headers/classGameScene.h"
@@ -204,8 +203,8 @@ void GameScene::focusOnBall(int ballIndex, bool keyBool)
 void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
 {
     using json = nlohmann::json;
-    std::ifstream input("./json/spawnparams.json");
-    if(json::accept(input))
+    std::ifstream initInput("./json/spawnparams.json");
+    if(json::accept(initInput))
     {
         std::ifstream input("./json/spawnparams.json");
         json j;
