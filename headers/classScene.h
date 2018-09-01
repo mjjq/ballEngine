@@ -2,6 +2,7 @@
 #define CLASS_SCENE_H
 
 #include "classUIContainer.h"
+#include "classKeyBinds.h"
 #include <fstream>
 
 enum class SceneEnum
@@ -28,6 +29,7 @@ public:
     virtual void redraw(sf::RenderWindow &window);
     virtual void initBindings();
     void loadUI(std::string filePath, UIContainer &container);
+    void loadKeybinds(std::string filePath, StringFuncMap &sfMap, KeyFuncMap &keyMap);
     virtual void load();
     virtual void unload();
     virtual void adjustViewSize(sf::Vector2u newSize);

@@ -42,6 +42,21 @@ void Scene::loadUI(std::string filePath, UIContainer &container)
     }
 }
 
+void Scene::loadKeybinds(std::string filePath, StringFuncMap &sfMap, KeyFuncMap &keyMap)
+{
+    using json = nlohmann::json;
+    std::ifstream initInput(filePath);
+    std::cout << filePath << "\n";
+    if(json::accept(initInput))
+    {
+        std::cout << "accepted\n";
+        std::ifstream input(filePath);
+        json j;
+        input >> j;
+        keyMap = KeyBinds::createMapFromJSON(j, sfMap);
+    }
+}
+
 void Scene::load()
 {
 

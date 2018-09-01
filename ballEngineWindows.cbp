@@ -69,6 +69,7 @@
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classBall.h" />
 		<Unit filename="headers/classGameScene.h" />
+		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classMenuScene.h" />
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classScene.h" />
@@ -95,6 +96,7 @@
 		<Unit filename="source/UI/classUITextElement.cpp" />
 		<Unit filename="source/UI/classUIWindow.cpp" />
 		<Unit filename="source/events/classGameScene.cpp" />
+		<Unit filename="source/events/classKeyBinds.cpp" />
 		<Unit filename="source/events/classMenuScene.cpp" />
 		<Unit filename="source/events/classPauseMenuScene.cpp" />
 		<Unit filename="source/events/classScene.cpp" />

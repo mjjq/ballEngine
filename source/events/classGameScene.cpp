@@ -655,7 +655,7 @@ void GameScene::load()
             {"pauseGme",    [&]{togglePause();}}
         };
 
-        keyBinds = {
+        /*keyBinds = {
             {sf::Keyboard::Delete,  [&]{ballSim.clearSimulation();}},
             {sf::Keyboard::Comma,   [&]{ballSim.decSimStep(0.1);}},
             {sf::Keyboard::Period,  [&]{ballSim.incSimStep(0.1);}},
@@ -672,7 +672,8 @@ void GameScene::load()
             {sf::Keyboard::Num1,    [&]{ballSim.setPlayer(0);}},
             {sf::Keyboard::Num2,    [&]{ballSim.setPlayer(1);}},
             {sf::Keyboard::Escape,  [&]{togglePause();}}
-        };
+        };*/
+
 
         sliderFuncMap = {
             {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
@@ -693,6 +694,7 @@ void GameScene::load()
         };
 
         loadUI("./json/gamesceneUI.json", container);
+        loadKeybinds("./json/keybinds.json", buttonFuncMap, keyBinds);
 
     }
 }
