@@ -46,10 +46,8 @@ void Scene::loadKeybinds(std::string filePath, StringFuncMap &sfMap, KeyFuncMap 
 {
     using json = nlohmann::json;
     std::ifstream initInput(filePath);
-    std::cout << filePath << "\n";
     if(json::accept(initInput))
     {
-        std::cout << "accepted\n";
         std::ifstream input(filePath);
         json j;
         input >> j;

@@ -1,3 +1,15 @@
 {
-	"decSimStep" : "Comma"
+	"pauseGme" 	 : "Escape",
+	"decSimStep" : "Comma",
+	"incSimStep" : "Period",
+	"clearSim"	 : "Delete",
+	"zmToMse"	 : "Dash",
+	"zmFromMse"	 : "Equal",
+	"rstView"	 : "Num0",
+	"tglSimPse"	 : "P",
+	"viewPan"	 : "Space",
+	"incMass" 	 : "Ma",
+	"incRad"	 : "R",
+	"setPlyr0"	 : "Num1",
+	"setPlyr1"	 : "Num2"
 }
