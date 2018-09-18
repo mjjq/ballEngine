@@ -79,7 +79,6 @@ class GameScene : public Scene
 
     void incTimeStep(sf::Time delta);
     void decTimeStep(sf::Time delta);
-    void newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event);
 
     void exePressedKeys();
 

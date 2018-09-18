@@ -1,7 +1,7 @@
 {
-	"pauseGme" 	 : ["Escape", "Num0"],
-	"decSimStep" : ["LControl", "Comma", "M"],
-	"incSimStep" : ["Period"],
+	"pauseGme" 	 : ["Escape"],
+	"decSimStep" 	 : ["Comma"],
+	"incSimStep" 	 : ["Period"],
 	"clearSim"	 : ["Delete"],
 	"zmToMse"	 : ["Dash"],
 	"zmFromMse"	 : ["Equal"],
@@ -16,7 +16,11 @@
 	"setPlyr1"	 : ["Num2"],
 	"tglCols"	 : ["LControl", "C"],
 	"tglForces"	 : ["LControl", "F"],
-	"chgBColour" : ["LControl", "K"],
-	"undoBall"   : ["LControl", "Z"],
-	"undoRect"   : ["LShift", "Z"]
+	"chgBColour" 	 : ["LControl", "K"],
+	"undoBall"   	 : ["LControl", "Z"],
+	"undoRect"   	 : ["LAlt", "Z"],
+	"mvPlrFwd"       : ["W"],
+	"mvPlrRgt"       : ["D"],
+	"mvPlrBck"       : ["S"],
+	"mvPlrLft"       : ["A"]
 }

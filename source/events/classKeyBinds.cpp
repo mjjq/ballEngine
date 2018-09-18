@@ -21,6 +21,11 @@ StringKeyMap KeyBinds::keyMap = {
     MAP(K),
     MAP(F),
     MAP(C),
+    MAP(LAlt),
+    MAP(W),
+    MAP(A),
+    MAP(S),
+    MAP(D)
 };
 
 KeyFuncMap KeyBinds::createMapFromJSON(nlohmann::json &json, StringFuncMap &sfMap)
@@ -29,33 +34,31 @@ KeyFuncMap KeyBinds::createMapFromJSON(nlohmann::json &json, StringFuncMap &sfMa
     ArrStringFuncMap newMap;
     for(auto it = json.begin(); it != json.end(); ++it)
         if(sfMap.find(it.key()) != sfMap.end())
-            newMap.insert( {it.value(), sfMap[it.key()]} );
+        {
+            auto tempArray = json[it.key()].get<std::vector<std::string>>();
+            newMap.insert( {tempArray, sfMap[it.key()]} );
+        }
 
     KeyFuncMap finalMap;
 
-    /*for(auto it = keyMap.begin(); it != keyMap.end(); ++it)
-        if(newMap.find(it->first) != newMap.end())
-            finalMap.insert( {it->second, newMap[it->first]} );*/
     for(auto kbArrayIt = newMap.begin(); kbArrayIt != newMap.end(); ++kbArrayIt)
     {
         bool successfulMap = true;
         std::vector<sf::Keyboard::Key> tempArray;
         for(auto &kbKey : kbArrayIt->first)
         {
-            std::cout << kbKey << "\n";
             if(keyMap.find(kbKey) != keyMap.end())
                 tempArray.push_back(keyMap[kbKey]);
             else
             {
                 successfulMap = false;
-                std::cout << kbKey << " badkey\n";
+                std::cout << kbKey << " doesn't exist in keyMap\n";
             }
         }
         if(successfulMap)
-        finalMap.insert({tempArray, kbArrayIt->second});
+            finalMap.insert({tempArray, kbArrayIt->second});
 
 
     }
-    std::cout << finalMap.size() << "\n";
     return finalMap;
 }

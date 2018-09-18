@@ -439,45 +439,6 @@ void GameScene::mouseWorldEvents(sf::Event &event)
     }
 }
 
-/**
-    Function which handles general key based events under some combination of
-    primary key presses e.g. ctrl, alt, shift.
-
-    @param &newLayerKeys Vector of isKeyPressed boolean.
-    @param &event The event case to process.
-
-    @return Void.
-*/
-void GameScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
-{
-    /*if(newLayerKeys[0]&&(!newLayerKeys[1]))
-    {
-        if(event.key.code == sf::Keyboard::C)
-            ballSim.toggleCollisions();
-        else if(event.key.code == sf::Keyboard::F)
-            ballSim.toggleForces();
-        else if(event.key.code == sf::Keyboard::K)
-            ballSim.changeBallColour();
-        else if(event.key.code == sf::Keyboard::R)
-            spawnRadius -= 1;
-        else if(event.key.code == sf::Keyboard::M)
-            spawnMass -= 1;
-        else if(event.key.code == sf::Keyboard::Comma)
-            ballSim.decSimStep(1);
-        else if(event.key.code == sf::Keyboard::Period)
-            ballSim.incSimStep(1);
-        else if(event.key.code == sf::Keyboard::Z)
-            ballSim.removeBall(-1);
-    }
-    else if(newLayerKeys[2])
-    {
-        //if(event.key.code == sf::Keyboard::Return)
-        //    toggleFullScreen();
-        if(event.key.code == sf::Keyboard::Z)
-            ballSim.removeRect(-1);
-    }*/
-}
-
 
 /**
     Function which handles general key based events. Events are processed provided
@@ -490,17 +451,9 @@ void GameScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 */
 void GameScene::keyEvents(sf::Event &event)
 {
-    std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LShift),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)};
-    bool newLayerPressed = false;
-    if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
-        newLayerPressed = true;
-
     if(event.type == sf::Event::EventType::KeyPressed)
-    {
         pressedKeyStack.push_back(event.key.code);
-    }
+
     else if(event.type == sf::Event::EventType::KeyReleased)
     {
         pressedKeyStack.erase(std::remove(pressedKeyStack.begin(),
@@ -525,6 +478,7 @@ void GameScene::exePressedKeys()
         {
             tempStack.pop_back();
         }
+
         if(tempStack.size() == 1);
         {
             for(unsigned int i=0; i<pressedKeyStack.size(); ++i)
@@ -550,17 +504,17 @@ void GameScene::exePressedKeys()
 void GameScene::playerKeysDown(int player)
 {
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
-        focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
+    /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
+        focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));*/
 
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+    /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         ballSim.playerInFunc(0);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         ballSim.playerInFunc(180);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         ballSim.playerInFunc(270);
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        ballSim.playerInFunc(90);
+        ballSim.playerInFunc(90);*/
 
 
 }
@@ -688,6 +642,10 @@ void GameScene::load()
             {"chgBColour",  [&]{ballSim.changeBallColour();}},
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
+            {"mvPlrFwd",    [&]{ballSim.playerInFunc(0);}},
+            {"mvPlrRgt",    [&]{ballSim.playerInFunc(90);}},
+            {"mvPlrBck",    [&]{ballSim.playerInFunc(180);}},
+            {"mvPlrLft",    [&]{ballSim.playerInFunc(270);}},
         };
 
         sliderFuncMap = {
