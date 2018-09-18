@@ -450,7 +450,7 @@ void GameScene::mouseWorldEvents(sf::Event &event)
 */
 void GameScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
 {
-    if(newLayerKeys[0]&&(!newLayerKeys[1]))
+    /*if(newLayerKeys[0]&&(!newLayerKeys[1]))
     {
         if(event.key.code == sf::Keyboard::C)
             ballSim.toggleCollisions();
@@ -475,7 +475,7 @@ void GameScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
         //    toggleFullScreen();
         if(event.key.code == sf::Keyboard::Z)
             ballSim.removeRect(-1);
-    }
+    }*/
 }
 
 
@@ -499,13 +499,43 @@ void GameScene::keyEvents(sf::Event &event)
 
     if(event.type == sf::Event::EventType::KeyPressed)
     {
-        if(!newLayerPressed)
-        {
-            if(keyBinds.find(event.key.code) != keyBinds.end())
-                keyBinds[event.key.code]();
-        }
+        pressedKeyStack.push_back(event.key.code);
+    }
+    else if(event.type == sf::Event::EventType::KeyReleased)
+    {
+        pressedKeyStack.erase(std::remove(pressedKeyStack.begin(),
+                                          pressedKeyStack.end(), event.key.code),
+                              pressedKeyStack.end());
+    }
+}
 
-        newLayerEvent(newLayerKeys, event);
+void GameScene::exePressedKeys()
+{
+    std::vector<sf::Keyboard::Key > tempStack = pressedKeyStack;
+    bool functionFound = false;
+    while(tempStack.size() > 0 && functionFound == false)
+    {
+        if(keyBinds.find(tempStack) != keyBinds.end() && tempStack.size()>1)
+        {
+            keyBinds[tempStack]();
+            functionFound = true;
+            pressedKeyStack.pop_back();
+        }
+        else
+        {
+            tempStack.pop_back();
+        }
+        if(tempStack.size() == 1);
+        {
+            for(unsigned int i=0; i<pressedKeyStack.size(); ++i)
+            {
+                if(keyBinds.find({pressedKeyStack.at(i)}) != keyBinds.end())
+                {
+                    keyBinds[{pressedKeyStack.at(i)}]();
+                    functionFound = true;
+                }
+            }
+        }
     }
 }
 
@@ -652,33 +682,19 @@ void GameScene::load()
                     mousePosOnPan = sf::Mouse::getPosition(window);}},
             {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
             {"setPlyr1",    [&]{ballSim.setPlayer(1);}},
-            {"pauseGme",    [&]{togglePause();}}
+            {"pauseGme",    [&]{togglePause();}},
+            {"tglForces",   [&]{ballSim.toggleForces();}},
+            {"tglCols",     [&]{ballSim.toggleCollisions();}},
+            {"chgBColour",  [&]{ballSim.changeBallColour();}},
+            {"undoBall",    [&]{ballSim.removeBall(-1);}},
+            {"undoRect",    [&]{ballSim.removeRect(-1);}},
         };
-
-        /*keyBinds = {
-            {sf::Keyboard::Delete,  [&]{ballSim.clearSimulation();}},
-            {sf::Keyboard::Comma,   [&]{ballSim.decSimStep(0.1);}},
-            {sf::Keyboard::Period,  [&]{ballSim.incSimStep(0.1);}},
-            {sf::Keyboard::Delete,  [&]{ballSim.clearSimulation();}},
-            {sf::Keyboard::Dash,    [&]{zoomToMouse(2.0f);}},
-            {sf::Keyboard::Equal,   [&]{zoomToMouse(0.5f);}},
-            {sf::Keyboard::Num0,    [&]{resetView();}},
-            {sf::Keyboard::P,       [&]{ballSim.toggleSimPause();}},
-            {sf::Keyboard::Space,   [&]{
-                    recentViewCoords = worldView.getCenter();
-                    mousePosOnPan = sf::Mouse::getPosition(window);}},
-            {sf::Keyboard::M,       [&]{spawnMass += 1;}},
-            {sf::Keyboard::R,       [&]{spawnRadius += 1;}},
-            {sf::Keyboard::Num1,    [&]{ballSim.setPlayer(0);}},
-            {sf::Keyboard::Num2,    [&]{ballSim.setPlayer(1);}},
-            {sf::Keyboard::Escape,  [&]{togglePause();}}
-        };*/
-
 
         sliderFuncMap = {
             {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
             {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
         };
+
         textVarMap = {
             {"numBalls",    [&]{return ballSim.getNumOfBalls();}},
             {"timeStep",    [&]{return ballSim.getTimeStep();}},
@@ -728,6 +744,7 @@ void GameScene::update(sf::RenderWindow &_window)
 
     checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
     playerKeysDown(0);
+    exePressedKeys();
 
     ballSim.universeLoop(currentFrameTime, timestep);
 

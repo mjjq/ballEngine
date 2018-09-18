@@ -10,8 +10,9 @@
 typedef std::map<sf::Keyboard::Key, std::string> KeyStringMap;
 typedef std::map<std::string, sf::Keyboard::Key> StringKeyMap;
 typedef std::map<std::string, std::function<void()> > StringFuncMap;
+typedef std::map<std::vector<std::string>, std::function<void()> > ArrStringFuncMap;
 typedef std::map<std::string, std::string > StringStringMap;
-typedef std::map<sf::Keyboard::Key, std::function<void()> > KeyFuncMap;
+typedef std::map<std::vector<sf::Keyboard::Key>, std::function<void()> > KeyFuncMap;
 
 class KeyBinds
 {
