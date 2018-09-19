@@ -11,6 +11,7 @@ namespace sfVectorMath
     sf::Vector2f rotate(sf::Vector2f vec1, float angleDegree);
     void printVector(sf::Vector2f vec);
     void printVector(sf::Vector2i vec);
+    float getAverage(std::vector<float> &vec);
 }
 
 #endif // SF_VECTOR_MATH_H

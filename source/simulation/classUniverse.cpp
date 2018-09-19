@@ -426,8 +426,8 @@ float BallUniverse::physicsLoop()
         float dtR = dt;
         float epsilon = 1e-5;
 
-        if(playerInput.first)
-            pushBall(0.1f, playerInput.second, currentPlayer);
+        pushBall(0.1f, playerInput, currentPlayer);
+        playerInput = {0,0};
 
         for(unsigned int i=0; i<ballArray.size(); ++i)
         {
@@ -484,8 +484,7 @@ float BallUniverse::physicsLoopAbsorb()
         float dtR = dt;
         float epsilon = 1e-5;
 
-        if(playerInput.first)
-            pushBall(0.1f, playerInput.second, currentPlayer);
+        pushBall(0.1f, playerInput, currentPlayer);
 
         for(unsigned int i=0; i<ballArray.size(); ++i)
         {
@@ -565,7 +564,7 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
             if(maxLimit*thresholdTimer.restart().asSeconds() > frameLimit.asSeconds())
                 ++limiting;
         }
-        playerInput.first = false;
+        //playerInput.first = false;
         calcTotalKE(ballArray);
         calcTotalMomentum(ballArray);
         calcTotalGPE(ballArray);
@@ -869,6 +868,28 @@ void BallUniverse::pushBall(float force, float relDirection, int i)
     }
 }
 
+void BallUniverse::pushBall(float force, sf::Vector2f &resVector, int ballArg)
+{
+    if(ballArray.size()>0 && currentPlayer >= 0)
+    {
+        sf::Vector2f currVel = ballArray.at(ballArg).getVelocity();
+        float currVelDir = 0;
+        if(currVel.y < 0)
+            currVelDir = 180;
+        if(std::abs(currVel.x) > 0)
+            currVelDir = 90+360.0f*atan(currVel.y/currVel.x)/(2.0f*3.14159265359f);
+
+        if(sfVectorMath::square(resVector) > 1e-10)
+        {
+
+            sf::Vector2f rotVec = sfVectorMath::rotate(force*sfVectorMath::norm(resVector), currVelDir);
+
+            ballArray.at(ballArg).applyExternalImpulse(rotVec, dt);
+        }
+    }
+
+}
+
 void BallUniverse::pushPlayer(float force, float relDirection)
 {
     pushBall(force, relDirection, currentPlayer);
@@ -956,9 +977,9 @@ void BallUniverse::splitBalls(int ballIndex, float relDirection, float speed)
     }
 }
 
-void BallUniverse::playerInFunc(float relDirection)
+void BallUniverse::playerInFunc(sf::Vector2f relVector)
 {
-    playerInput = std::pair<bool, float>(true, relDirection);
+    playerInput += relVector;
 }
 
 BallUniverse::BallUniverse(int _worldSizeX, int _worldSizeY, float _dt, bool _force, bool _collision) :

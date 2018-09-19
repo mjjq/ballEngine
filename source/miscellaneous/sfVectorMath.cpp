@@ -117,3 +117,13 @@ void sfVectorMath::printVector(sf::Vector2i vec)
 {
     std::cout << "(" << vec.x << ", " << vec.y << ")\n";
 }
+
+float sfVectorMath::getAverage(std::vector<float> &vec)
+{
+    float average = 0.0f;
+    for(auto &element : vec)
+        average += element;
+    average = average/vec.size();
+
+    return average;
+}

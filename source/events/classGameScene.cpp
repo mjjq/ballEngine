@@ -468,18 +468,21 @@ void GameScene::exePressedKeys()
     bool functionFound = false;
     while(tempStack.size() > 0 && functionFound == false)
     {
-        if(keyBinds.find(tempStack) != keyBinds.end() && tempStack.size()>1)
+        if(tempStack.size()>1)
         {
-            keyBinds[tempStack]();
-            functionFound = true;
-            pressedKeyStack.pop_back();
-        }
-        else
-        {
-            tempStack.pop_back();
+            if(keyBinds.find(tempStack) != keyBinds.end())
+            {
+                keyBinds[tempStack]();
+                functionFound = true;
+                pressedKeyStack.pop_back();
+            }
+            else
+            {
+                tempStack.pop_back();
+            }
         }
 
-        if(tempStack.size() == 1);
+        else if(tempStack.size() == 1);
         {
             for(unsigned int i=0; i<pressedKeyStack.size(); ++i)
             {
@@ -642,10 +645,10 @@ void GameScene::load()
             {"chgBColour",  [&]{ballSim.changeBallColour();}},
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
-            {"mvPlrFwd",    [&]{ballSim.playerInFunc(0);}},
-            {"mvPlrRgt",    [&]{ballSim.playerInFunc(90);}},
-            {"mvPlrBck",    [&]{ballSim.playerInFunc(180);}},
-            {"mvPlrLft",    [&]{ballSim.playerInFunc(270);}},
+            {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});}},
+            {"mvPlrRgt",    [&]{ballSim.playerInFunc({1,0});}},
+            {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});}},
+            {"mvPlrLft",    [&]{ballSim.playerInFunc({-1,0});}},
         };
 
         sliderFuncMap = {

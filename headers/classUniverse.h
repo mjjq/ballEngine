@@ -39,7 +39,7 @@ class BallUniverse
     float timeToNextSample = sampledt;
     bool enable_trajectories;
     int currentPlayer = -1;
-    std::pair<bool, float> playerInput{false, 0.0f};
+    sf::Vector2f playerInput{0, 0};
 
     void calcCollTimes();
     void findShortestCollTime();
@@ -107,10 +107,11 @@ public:
     void togglePlayerTraj();
     sf::Vector2f getBallPosition(unsigned int i);
     void pushBall(float force, float relDirection, int i);
+    void pushBall(float force, sf::Vector2f &resVector, int ballArg);
     void pushPlayer(float force, float relDirection);
     void setPlayer(unsigned int playerIndex);
     void splitBalls(int ballIndex, float relDirection, float speed);
-    void playerInFunc(float relDirection);
+    void playerInFunc(sf::Vector2f relVector);
 
 };
 
