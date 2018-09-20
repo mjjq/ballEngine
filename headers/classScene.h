@@ -22,6 +22,8 @@ protected:
     std::map<std::string, std::pair<std::function<void(float)>, float*> > sliderFuncMap = {};
     std::map<std::string, std::function<std::string()> > textVarMap = {};
 
+    std::vector<sf::Keyboard::Key > pressedKeyStack = {};
+
 public:
     void requestScene(SceneEnum scEnum);
     SceneEnum pollNextScene();

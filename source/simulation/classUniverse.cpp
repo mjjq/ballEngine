@@ -876,8 +876,10 @@ void BallUniverse::pushBall(float force, sf::Vector2f &resVector, int ballArg)
         float currVelDir = 0;
         if(currVel.y < 0)
             currVelDir = 180;
-        if(std::abs(currVel.x) > 0)
-            currVelDir = 90+360.0f*atan(currVel.y/currVel.x)/(2.0f*3.14159265359f);
+        if(currVel.x > 0)
+            currVelDir = -90.0f+180.0f*atan(currVel.y/currVel.x)/(3.14159265359f);
+        else if(currVel.x<0)
+            currVelDir = 90.0f+180.0f*atan(currVel.y/currVel.x)/(3.14159265359f);
 
         if(sfVectorMath::square(resVector) > 1e-10)
         {

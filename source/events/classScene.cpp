@@ -6,6 +6,7 @@
 void Scene::requestScene(SceneEnum scEnum)
 {
     nextScene = scEnum;
+    pressedKeyStack.clear();
 }
 
 SceneEnum Scene::pollNextScene()

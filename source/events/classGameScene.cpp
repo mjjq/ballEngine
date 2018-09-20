@@ -492,6 +492,7 @@ void GameScene::exePressedKeys()
                     functionFound = true;
                 }
             }
+            tempStack.pop_back();
         }
     }
 }
@@ -646,9 +647,9 @@ void GameScene::load()
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
             {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});}},
-            {"mvPlrRgt",    [&]{ballSim.playerInFunc({1,0});}},
+            {"mvPlrRgt",    [&]{ballSim.playerInFunc({-1,0});}},
             {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});}},
-            {"mvPlrLft",    [&]{ballSim.playerInFunc({-1,0});}},
+            {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});}},
         };
 
         sliderFuncMap = {
@@ -681,6 +682,7 @@ void GameScene::unload()
     isLoaded = false;
     container.destroyAllWindows();
     ballSim.clearSimulation();
+
 }
 
 void GameScene::redraw(sf::RenderWindow &_window)
