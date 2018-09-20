@@ -18,10 +18,11 @@ class Scene
     SceneEnum nextScene = SceneEnum::LAST;
 
 protected:
-    std::map<std::string, std::function<void()> > buttonFuncMap = {};
+    StringFuncMap buttonFuncMap = {};
     std::map<std::string, std::pair<std::function<void(float)>, float*> > sliderFuncMap = {};
     std::map<std::string, std::function<std::string()> > textVarMap = {};
 
+    KeyFuncMap keyBinds = {};
     std::vector<sf::Keyboard::Key > pressedKeyStack = {};
 
 public:
@@ -30,12 +31,18 @@ public:
     virtual void update(sf::RenderWindow &window);
     virtual void redraw(sf::RenderWindow &window);
     virtual void initBindings();
+
     void loadUI(std::string filePath, UIContainer &container);
-    void loadKeybinds(std::string filePath, StringFuncMap &sfMap, KeyFuncMap &keyMap);
+    void loadKeybinds(std::string filePath,
+                      std::string sceneType);
+
     virtual void load();
     virtual void unload();
     virtual void adjustViewSize(sf::Vector2u newSize);
     virtual void events(sf::Event &event);
+
+    void keyEvents(sf::Event &event);
+    void exePressedKeys();
 };
 
 #endif // CLASS_SCENE_H

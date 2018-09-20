@@ -441,90 +441,6 @@ void GameScene::mouseWorldEvents(sf::Event &event)
 
 
 /**
-    Function which handles general key based events. Events are processed provided
-    there are no key primary keys held. If these keys are held, the newLayerEvent
-    events are processed instead.
-
-    @param &event The event case to process.
-
-    @return Void.
-*/
-void GameScene::keyEvents(sf::Event &event)
-{
-    if(event.type == sf::Event::EventType::KeyPressed)
-        pressedKeyStack.push_back(event.key.code);
-
-    else if(event.type == sf::Event::EventType::KeyReleased)
-    {
-        pressedKeyStack.erase(std::remove(pressedKeyStack.begin(),
-                                          pressedKeyStack.end(), event.key.code),
-                              pressedKeyStack.end());
-    }
-}
-
-void GameScene::exePressedKeys()
-{
-    std::vector<sf::Keyboard::Key > tempStack = pressedKeyStack;
-    bool functionFound = false;
-    while(tempStack.size() > 0 && functionFound == false)
-    {
-        if(tempStack.size()>1)
-        {
-            if(keyBinds.find(tempStack) != keyBinds.end())
-            {
-                keyBinds[tempStack]();
-                functionFound = true;
-                pressedKeyStack.pop_back();
-            }
-            else
-            {
-                tempStack.pop_back();
-            }
-        }
-
-        else if(tempStack.size() == 1);
-        {
-            for(unsigned int i=0; i<pressedKeyStack.size(); ++i)
-            {
-                if(keyBinds.find({pressedKeyStack.at(i)}) != keyBinds.end())
-                {
-                    keyBinds[{pressedKeyStack.at(i)}]();
-                    functionFound = true;
-                }
-            }
-            tempStack.pop_back();
-        }
-    }
-}
-
-
-/**
-    Function which handles player key held cases.
-
-    @param player The ball index which the player controls.
-
-    @return Void.
-*/
-void GameScene::playerKeysDown(int player)
-{
-
-    /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
-        focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));*/
-
-    /*if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        ballSim.playerInFunc(0);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        ballSim.playerInFunc(180);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        ballSim.playerInFunc(270);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        ballSim.playerInFunc(90);*/
-
-
-}
-
-
-/**
     Function which handles events on window resize.
 
     @param &event The event case to process.
@@ -672,7 +588,7 @@ void GameScene::load()
         };
 
         loadUI("./json/gamesceneUI.json", container);
-        loadKeybinds("./json/keybinds.json", buttonFuncMap, keyBinds);
+        loadKeybinds("./json/keybinds.json", "GameScene");
 
     }
 }
@@ -706,7 +622,7 @@ void GameScene::update(sf::RenderWindow &_window)
         container.dragWindow(_window);
 
     checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
-    playerKeysDown(0);
+
     exePressedKeys();
 
     ballSim.universeLoop(currentFrameTime, timestep);

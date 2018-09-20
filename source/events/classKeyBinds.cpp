@@ -62,3 +62,17 @@ KeyFuncMap KeyBinds::createMapFromJSON(nlohmann::json &json, StringFuncMap &sfMa
     }
     return finalMap;
 }
+
+void KeyBinds::loadKeybinds(std::string filePath, std::string sceneType,
+                            StringFuncMap &sfMap, KeyFuncMap &keyMap)
+{
+    using json = nlohmann::json;
+    std::ifstream initInput(filePath);
+    if(json::accept(initInput))
+    {
+        std::ifstream input(filePath);
+        json j;
+        input >> j;
+        keyMap = KeyBinds::createMapFromJSON(j[sceneType], sfMap);
+    }
+}

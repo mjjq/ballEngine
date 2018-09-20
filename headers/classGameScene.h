@@ -34,7 +34,7 @@ class GameScene : public Scene
 
     std::pair<bool,int> mouseOnUIWhenClicked{false, -1};
     bool clickedWindowToDrag = false;
-    KeyFuncMap keyBinds;
+    //KeyFuncMap keyBinds;
     //std::vector<sf::Keyboard::Key > pressedKeyStack;
 
     sf::Vector2f recentViewCoords;
@@ -73,14 +73,10 @@ class GameScene : public Scene
     void mouseWorldEvents(sf::Event &event);
     void mouseViewEvents(sf::Event &event);
     void mouseUIEvents(sf::Event &event);
-    void keyEvents(sf::Event &event);
     void resizeEvents(sf::Event &event);
-    void playerKeysDown(int player);
 
     void incTimeStep(sf::Time delta);
     void decTimeStep(sf::Time delta);
-
-    void exePressedKeys();
 
     void setSpawnValues(float value, SpawnQuantity toChange);
 

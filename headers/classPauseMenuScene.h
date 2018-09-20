@@ -33,11 +33,7 @@ class PauseMenuScene : public Scene
 
     void mouseViewEvents(sf::Event &event);
     void mouseUIEvents(sf::Event &event);
-    void keyEvents(sf::Event &event);
     void resizeEvents(sf::Event &event);
-    void playerKeysDown(int player);
-
-    void newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event);
 
 public:
     PauseMenuScene(sf::RenderWindow &window,

@@ -133,74 +133,6 @@ void PauseMenuScene::mouseUIEvents(sf::Event &event)
 
 
 
-
-/**
-    Function which handles general key based events under some combination of
-    primary key presses e.g. ctrl, alt, shift.
-
-    @param &newLayerKeys Vector of isKeyPressed boolean.
-    @param &event The event case to process.
-
-    @return Void.
-*/
-void PauseMenuScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
-{
-    if(newLayerKeys[0]&&(!newLayerKeys[1]))
-    {
-    }
-    else if(newLayerKeys[2])
-    {
-        //if(event.key.code == sf::Keyboard::Return)
-        //    toggleFullScreen();
-    }
-}
-
-
-/**
-    Function which handles general key based events. Events are processed provided
-    there are no key primary keys held. If these keys are held, the newLayerEvent
-    events are processed instead.
-
-    @param &event The event case to process.
-
-    @return Void.
-*/
-void PauseMenuScene::keyEvents(sf::Event &event)
-{
-    std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LShift),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)};
-    bool newLayerPressed = false;
-    if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
-        newLayerPressed = true;
-
-    if(event.type == sf::Event::EventType::KeyPressed)
-    {
-        if(!newLayerPressed)
-        {
-            if(event.key.code == sf::Keyboard::Escape)
-                requestScene(SceneEnum::SCENE_GAME);
-        }
-
-        newLayerEvent(newLayerKeys, event);
-    }
-}
-
-
-/**
-    Function which handles player key held cases.
-
-    @param player The ball index which the player controls.
-
-    @return Void.
-*/
-void PauseMenuScene::playerKeysDown(int player)
-{
-
-
-}
-
-
 /**
     Function which handles events on window resize.
 
@@ -260,6 +192,7 @@ void PauseMenuScene::load()
     };
 
     loadUI("./json/pausemenusceneUI.json", container);
+    loadKeybinds("./json/keybinds.json", "PauseScene");
 
 }
 
@@ -281,7 +214,8 @@ void PauseMenuScene::update(sf::RenderWindow &_window)
     if(clickedWindowToDrag)
         container.dragWindow(_window);
 
-    playerKeysDown(0);
+    exePressedKeys();
+
 }
 
 PauseMenuScene::PauseMenuScene(sf::RenderWindow &_window,
