@@ -112,7 +112,7 @@ void Scene::exePressedKeys()
             }
         }
 
-        else if(tempStack.size() == 1);
+        else if(tempStack.size() == 1)
         {
             for(unsigned int i=0; i<pressedKeyStack.size(); ++i)
             {

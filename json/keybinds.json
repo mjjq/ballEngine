@@ -15,6 +15,7 @@
 		"decRad"	 : ["LControl", "R"],
 		"setPlyr0"	 : ["Num1"],
 		"setPlyr1"	 : ["Num2"],
+		"focusPlr"	 : ["F"],
 		"tglCols"	 : ["LControl", "C"],
 		"tglForces"	 : ["LControl", "F"],
 		"chgBColour" 	 : ["LControl", "K"],

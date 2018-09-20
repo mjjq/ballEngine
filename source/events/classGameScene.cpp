@@ -96,9 +96,6 @@ void GameScene::zoomToMouse(float zoomFactor)
     {
         currentZoom *= zoomFactor;
         worldView.zoom(zoomFactor);
-        sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-        sf::Vector2f mousePos = window.mapPixelToCoords(viewPos);
-        worldView.setCenter(mousePos);
         window.setView(worldView);
     }
 }
@@ -152,30 +149,26 @@ sf::Vector2f GameScene::getEffectiveZoom(int worldSizeX, int worldSizeY)
 
     @return Void.
 */
-void GameScene::checkForViewPan(sf::Vector2i initialPos,
-    sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool)
+void GameScene::checkForViewPan(sf::Vector2i initialPos)
 {
-    if(keyBool==true)
-    {
-        window.setMouseCursorVisible(false);
+    window.setMouseCursorVisible(false);
 
-        sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX, worldSizeY);
-        sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-        sf::Vector2f relPos = static_cast<sf::Vector2f>(initialPos - viewPos);
+    sf::Vector2f effectiveZoom = getEffectiveZoom(wSize.x, wSize.y);
+    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+    sf::Vector2f relPos = static_cast<sf::Vector2f>(initialPos - viewPos);
 
-        if(effectiveZoom.y > effectiveZoom.x)
-            relPos *= effectiveZoom.y;
-        else
-            relPos *= effectiveZoom.x;
-
-
-        worldView.setCenter(relPos + originalView);
-
-        window.setView(worldView);
-    }
+    if(effectiveZoom.y > effectiveZoom.x)
+        relPos *= effectiveZoom.y;
     else
-        window.setMouseCursorVisible(true);
+        relPos *= effectiveZoom.x;
+
+
+    worldView.move(relPos);// + originalView);
+
+    window.setView(worldView);
 }
+
+
 
 
 /**
@@ -187,16 +180,13 @@ void GameScene::checkForViewPan(sf::Vector2i initialPos,
 
     @return Void.
 */
-void GameScene::focusOnBall(int ballIndex, bool keyBool)
+void GameScene::focusOnBall(int ballIndex)
 {
-    if(keyBool==true)
+    sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
+    if(!std::isnan(relPos.x) && !std::isnan(relPos.y))
     {
-        sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
-        if(!std::isnan(relPos.x) && !std::isnan(relPos.y))
-        {
-            worldView.setCenter(relPos);
-            window.setView(worldView);
-        }
+        worldView.setCenter(relPos);
+        window.setView(worldView);
     }
 }
 
@@ -322,6 +312,7 @@ void GameScene::mouseWheelZoom(bool keyPress, float delta)
         else
             zoomToMouse(1.03);
     }
+    canZoom = false;
 }
 
 /**
@@ -373,7 +364,7 @@ void GameScene::mouseViewEvents(sf::Event &event)
     else if(event.type == sf::Event::MouseWheelScrolled)
     {
         float delta = event.mouseWheelScroll.delta;
-        mouseWheelZoom(sf::Keyboard::isKeyPressed(sf::Keyboard::Space), delta);
+        mouseWheelZoom(canZoom, delta);
     }
     else if(event.type == sf::Event::MouseButtonReleased)
     {
@@ -527,11 +518,12 @@ void GameScene::load()
             {"rstView",     [&]{resetView();}},
             {"tglSimPse",   [&]{ballSim.toggleSimPause();}},
             {"viewPan",     [&]{
-                    recentViewCoords = worldView.getCenter();
-                    mousePosOnPan = sf::Mouse::getPosition(window);
+                checkForViewPan(mousePosOnPan);
+                canZoom = true;
                     }},
             {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
             {"setPlyr1",    [&]{ballSim.setPlayer(1);}},
+            {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
             {"pauseGme",    [&]{togglePause();}},
             {"tglForces",   [&]{ballSim.toggleForces();}},
             {"tglCols",     [&]{ballSim.toggleCollisions();}},
@@ -597,9 +589,11 @@ void GameScene::update(sf::RenderWindow &_window)
     if(clickedWindowToDrag)
         container.dragWindow(_window);
 
-    checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
+    window.setMouseCursorVisible(true);
 
     exePressedKeys();
+
+    mousePosOnPan = sf::Mouse::getPosition(window);
 
     ballSim.universeLoop(currentFrameTime, timestep);
 
@@ -608,8 +602,8 @@ void GameScene::update(sf::RenderWindow &_window)
 
 GameScene::GameScene(sf::RenderWindow &_window, sf::Time &_targetFTime,
                      sf::Time &_currentFTime, float &_currentFPS) : window{_window},
-                     timestep{_targetFTime}, currentFrameTime{_currentFTime},
-                     currentFPS{_currentFPS}
+                     currentFrameTime{_currentFTime}, currentFPS{_currentFPS},
+                     timestep{_targetFTime}
 {
 
 }

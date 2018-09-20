@@ -53,6 +53,8 @@ class GameScene : public Scene
     BallUniverse ballSim{2000, 2000, 1.0f, false, false};
     sf::RectangleShape boundaryRect;
 
+    bool canZoom = false;
+
     //simulation parameters
     sf::Time &timestep;
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
@@ -66,8 +68,8 @@ class GameScene : public Scene
     //simulation functions
     void zoomToMouse(float zoomFactor);
     sf::Vector2f getEffectiveZoom(int worldSizeX, int worldSizeY);
-    void checkForViewPan(sf::Vector2i initialPos, sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool);
-    void focusOnBall(int ballIndex, bool keyBool);
+    void checkForViewPan(sf::Vector2i initialPos);
+    void focusOnBall(int ballIndex);
     void spawnFromJson(sf::Vector2f position, sf::Vector2f velocity);
 
 
