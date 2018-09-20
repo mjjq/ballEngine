@@ -454,32 +454,7 @@ void GameScene::resizeEvents(sf::Event &event)
 }
 
 
-/**
-    Increases the rendering timestep.
 
-    @param delta The amount to increase the rendering timestep by.
-
-    @return Void.
-*/
-void GameScene::incTimeStep(sf::Time delta)
-{
-    if(delta>sf::milliseconds(0))
-        timestep+=delta;
-}
-
-
-/**
-    Decreases the rendering timestep.
-
-    @param delta The amount to decrease the rendering timestep by.
-
-    @return Void.
-*/
-void GameScene::decTimeStep(sf::Time delta)
-{
-    if(delta>sf::milliseconds(0) && timestep>delta)
-        timestep-=delta;
-}
 
 
 void GameScene::setSpawnValues(float value,
@@ -553,7 +528,8 @@ void GameScene::load()
             {"tglSimPse",   [&]{ballSim.toggleSimPause();}},
             {"viewPan",     [&]{
                     recentViewCoords = worldView.getCenter();
-                    mousePosOnPan = sf::Mouse::getPosition(window);}},
+                    mousePosOnPan = sf::Mouse::getPosition(window);
+                    }},
             {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
             {"setPlyr1",    [&]{ballSim.setPlayer(1);}},
             {"pauseGme",    [&]{togglePause();}},
