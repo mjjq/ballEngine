@@ -25,9 +25,27 @@ protected:
     KeyFuncMap keyBinds = {};
     std::vector<sf::Keyboard::Key > pressedKeyStack = {};
 
+    sf::RenderWindow &window;
+    sf::View worldView = window.getDefaultView();
+    sf::View GUIView = window.getDefaultView();
+
+    UIContainer container{true};
+    std::pair<bool,int> mouseOnUIWhenClicked{false, -1};
+    bool clickedWindowToDrag = false;
+
+    virtual void resetUIClick();
+    virtual void clickOnUI();
+
+    virtual void mouseViewEvents(sf::Event &event);
+    virtual void mouseUIEvents(sf::Event &event);
+    virtual void resizeEvents(sf::Event &event);
+
 public:
+    Scene(sf::RenderWindow &_window);
+
     void requestScene(SceneEnum scEnum);
     SceneEnum pollNextScene();
+
     virtual void update(sf::RenderWindow &window);
     virtual void redraw(sf::RenderWindow &window);
     virtual void initBindings();

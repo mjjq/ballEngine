@@ -6,7 +6,7 @@
 #include "classUniverse.h"
 #include "classUIContainer.h"
 
-class SurvivalScene : public Scene
+class SurvivalScene : public GameScene
 {
     enum SpawnQuantity
     {

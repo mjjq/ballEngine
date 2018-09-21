@@ -409,8 +409,7 @@ void SurvivalScene::events(sf::Event &event)
 {
     mouseViewEvents(event);
 
-    if(!mouseOnUIWhenClicked.first)
-        mouseWorldEvents(event);
+    if(!mouseOnUIWhenClicked.first) {}
     else
         mouseUIEvents(event);
 
@@ -518,9 +517,6 @@ void SurvivalScene::update(sf::RenderWindow &_window)
 {
     if(!mouseOnUIWhenClicked.first)
     {
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
     }
     if(clickedWindowToDrag)
         container.dragWindow(_window);

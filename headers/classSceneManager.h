@@ -29,8 +29,8 @@ class SceneManager
     sf::ContextSettings settings;
 
     GameScene game{window, targetFTime, currentFrameTime, currentFPS};
-    MenuScene menu{window, currentFrameTime, currentFPS};
-    PauseMenuScene pauseMenu{window, currentFrameTime, currentFPS};
+    MenuScene menu{window};
+    PauseMenuScene pauseMenu{window};
     Scene *currScene = &menu;
 
     SceneEnum thisSceneEnum = SceneEnum::LAST;

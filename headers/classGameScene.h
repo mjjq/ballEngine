@@ -15,33 +15,22 @@ class GameScene : public Scene
         SQ_DENSITY,
     };
 
-    sf::RenderWindow &window;
-    sf::View worldView = window.getDefaultView();
-    sf::View GUIView = window.getDefaultView();
     float currentZoom = 1.0f;
-
-    sf::Time &currentFrameTime;
-    float &currentFPS;
 
     sf::Vector2i mousePosOnClick;
     sf::Vector2i mousePosOnPan;
     sf::Vector2i mousePosOnRelease;
 
-    std::pair<bool,int> mouseOnUIWhenClicked{false, -1};
-    bool clickedWindowToDrag = false;
-
-    UIContainer container{true};
-
-    void resetView();
+    void resetCamera();
     void adjustViewSize(sf::Vector2u newSize);//, float zoom);
 
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
-    void resetUIClick();
-    void clickOnUI();
 
     void mouseViewEvents(sf::Event &event);
-    void mouseUIEvents(sf::Event &event);
-    void resizeEvents(sf::Event &event);
+
+    sf::Time &targetFrameTime;
+    sf::Time &currentFrameTime;
+    float &currentFPS;
 
     sf::Vector2f recentViewCoords;
     sf::Vector2i wSize;
@@ -56,7 +45,6 @@ class GameScene : public Scene
     bool canZoom = false;
 
     //simulation parameters
-    sf::Time &timestep;
     sf::Time minTimeToNextSpawn = sf::milliseconds(500);
     sf::Time timeToNextSpawn = sf::milliseconds(0);
 
@@ -85,8 +73,8 @@ class GameScene : public Scene
     void togglePause();
 
 public:
-    GameScene(sf::RenderWindow &window, sf::Time &targetFTime,
-              sf::Time &currentFTime, float &currentFPS);
+    GameScene(sf::RenderWindow &_window, sf::Time &_targetFTime,
+              sf::Time &_currentFTime, float &_currentFPS);
     void update(sf::RenderWindow &window);
     void load();
     void events(sf::Event &event);
