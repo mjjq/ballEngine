@@ -3,6 +3,7 @@
 
 #include "classScene.h"
 #include "classSandboxScene.h"
+#include "classSurvivalScene.h"
 #include "classMainMenuScene.h"
 #include "classPauseMenuScene.h"
 #include "classUIContainer.h"
@@ -28,7 +29,8 @@ class SceneManager
     sf::View GUIView = window.getDefaultView();
     sf::ContextSettings settings;
 
-    SandboxScene game{window, targetFTime, currentFrameTime, currentFPS};
+    SandboxScene sandbox{window, targetFTime, currentFrameTime, currentFPS};
+    SurvivalScene game{window, targetFTime, currentFrameTime, currentFPS};
     MainMenuScene menu{window};
     PauseMenuScene pauseMenu{window};
     Scene *currScene = &menu;

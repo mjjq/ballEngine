@@ -14,11 +14,19 @@
             "dimensions"  : [100, 30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
-            "text" : "New Game",
-            "function" : "newGame"
+            "text" : "New Sandbox",
+            "function" : "newSandbox"
+        },
+	{
+            "position" : [20, 70],
+            "dimensions"  : [100, 30],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 12,
+            "text" : "New Survival",
+            "function" : "newSurvival"
         },
         {
-            "position" : [20, 70],
+            "position" : [20, 110],
             "dimensions"  : [100, 30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -26,7 +34,7 @@
             "function" : "options"
         },
         {
-            "position" : [20, 110],
+            "position" : [20, 150],
             "dimensions"  : [100, 30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,

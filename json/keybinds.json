@@ -26,6 +26,12 @@
 		"mvPlrBck"       : ["S"],
 		"mvPlrLft"       : ["A"]
 	},
+	"SurvivalScene" : {
+		"mvPlrRgt"       : ["D"],
+		"mvPlrLft"       : ["A"],
+		"pauseGme" 	 : ["Escape"],
+		"startGme"	 : ["Space"]
+	},
 	"PauseScene" : {
 		"resume"         : ["Escape"]	
 	}

@@ -40,8 +40,10 @@
 		<Unit filename="headers/classMainMenuScene.h" />
 		<Unit filename="headers/classMenuScene.h" />
 		<Unit filename="headers/classPauseMenuScene.h" />
+		<Unit filename="headers/classSandboxScene.h" />
 		<Unit filename="headers/classScene.h" />
 		<Unit filename="headers/classSceneManager.h" />
+		<Unit filename="headers/classSurvivalScene.h" />
 		<Unit filename="headers/classTextElement.h" />
 		<Unit filename="headers/classUIButton.h" />
 		<Unit filename="headers/classUIContainer.h" />
@@ -72,8 +74,10 @@
 		<Unit filename="source/events/classMainMenuScene.cpp" />
 		<Unit filename="source/events/classMenuScene.cpp" />
 		<Unit filename="source/events/classPauseMenuScene.cpp" />
+		<Unit filename="source/events/classSandboxScene.cpp" />
 		<Unit filename="source/events/classScene.cpp" />
 		<Unit filename="source/events/classSceneManager.cpp" />
+		<Unit filename="source/events/classSurvivalScene.cpp" />
 		<Unit filename="source/miscellaneous/class2DMatrix.cpp" />
 		<Unit filename="source/miscellaneous/jsonParsing.cpp" />
 		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />

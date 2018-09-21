@@ -67,7 +67,7 @@ protected:
     void changeBoundaryRect(sf::Vector2i worldSize);
     void mouseWheelZoom(bool keyPress, float delta);
 
-    void mouseWorldEvents(sf::Event &event);
+    virtual void mouseWorldEvents(sf::Event &event);
 
     void setSpawnValues(float value, SpawnQuantity toChange);
 

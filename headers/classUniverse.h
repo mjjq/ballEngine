@@ -37,7 +37,7 @@ class BallUniverse
 
     float sampledt = 5*dt;
     float timeToNextSample = sampledt;
-    bool enable_trajectories;
+    bool enable_trajectories = false;
     int currentPlayer = -1;
     sf::Vector2f playerInput{0, 0};
 
