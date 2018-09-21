@@ -3,7 +3,7 @@
 
 #include "classScene.h"
 #include "classGameScene.h"
-#include "classMenuScene.h"
+#include "classMainMenuScene.h"
 #include "classPauseMenuScene.h"
 #include "classUIContainer.h"
 #include "classUIWindow.h"
@@ -29,7 +29,7 @@ class SceneManager
     sf::ContextSettings settings;
 
     GameScene game{window, targetFTime, currentFrameTime, currentFPS};
-    MenuScene menu{window};
+    MainMenuScene menu{window};
     PauseMenuScene pauseMenu{window};
     Scene *currScene = &menu;
 

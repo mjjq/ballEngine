@@ -37,16 +37,6 @@ void MenuScene::events(sf::Event &event)
 
 void MenuScene::load()
 {
-    adjustViewSize(window.getSize());
-
-    buttonFuncMap = {
-        {"newGame", [&]{requestScene(SceneEnum::SCENE_GAME);}},
-        {"options", [&]{}},
-        {"exit", [&]{window.close();}}
-    };
-
-    loadUI("./json/menusceneUI.json", container);
-    loadKeybinds("./json/keybinds.json", "MenuScene");
 
 }
 
@@ -62,9 +52,6 @@ void MenuScene::redraw(sf::RenderWindow &_window)
 
 void MenuScene::update(sf::RenderWindow &_window)
 {
-    if(!mouseOnUIWhenClicked.first)
-    {
-    }
     if(clickedWindowToDrag)
         container.dragWindow(_window);
 
