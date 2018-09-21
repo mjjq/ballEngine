@@ -2,7 +2,7 @@
 #define CLASS_SCENEMAN_H
 
 #include "classScene.h"
-#include "classGameScene.h"
+#include "classSandboxScene.h"
 #include "classMainMenuScene.h"
 #include "classPauseMenuScene.h"
 #include "classUIContainer.h"
@@ -28,7 +28,7 @@ class SceneManager
     sf::View GUIView = window.getDefaultView();
     sf::ContextSettings settings;
 
-    GameScene game{window, targetFTime, currentFrameTime, currentFPS};
+    SandboxScene game{window, targetFTime, currentFrameTime, currentFPS};
     MainMenuScene menu{window};
     PauseMenuScene pauseMenu{window};
     Scene *currScene = &menu;

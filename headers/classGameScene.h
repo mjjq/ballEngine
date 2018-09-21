@@ -8,6 +8,7 @@
 
 class GameScene : public Scene
 {
+protected:
     enum SpawnQuantity
     {
         SQ_MASS,
@@ -75,8 +76,8 @@ class GameScene : public Scene
 public:
     GameScene(sf::RenderWindow &_window, sf::Time &_targetFTime,
               sf::Time &_currentFTime, float &_currentFPS);
-    void update(sf::RenderWindow &window);
-    void load();
+    virtual void update(sf::RenderWindow &window);
+    virtual void load();
     void events(sf::Event &event);
     void redraw(sf::RenderWindow &window);
     void unload();
