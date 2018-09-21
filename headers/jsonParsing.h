@@ -5,10 +5,9 @@
 #include "structs.h"
 #include "../extern/json.hpp"
 
-using json = nlohmann::json;
-
 namespace beParser
 {
+using json = nlohmann::json;
 
 bool checkBallJson(json &j, BallSpawnVals &sVals);
 bool checkBallGridJson(json &j, BallGridSpawnVals &sVals);

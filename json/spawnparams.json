@@ -29,10 +29,10 @@
  "Ballgrid" : [
  {
     "radius" : 10,
-    "mass" : 10,
+    "mass" : 1,
     "position" : [0, 0],
     "velocity" : [0, 0],
-    "dimensions" : [3, 2],
+    "dimensions" : [10, 10],
     "spacing" : 5
  }
  ],

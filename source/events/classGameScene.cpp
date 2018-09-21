@@ -17,7 +17,6 @@
 #include <numeric>
 #include <fstream>
 #include <map>
-#include <boost/variant.hpp>
 #include "../../extern/json.hpp"
 
 #include "../../headers/classGameScene.h"
@@ -97,9 +96,6 @@ void GameScene::zoomToMouse(float zoomFactor)
     {
         currentZoom *= zoomFactor;
         worldView.zoom(zoomFactor);
-        sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-        sf::Vector2f mousePos = window.mapPixelToCoords(viewPos);
-        worldView.setCenter(mousePos);
         window.setView(worldView);
     }
 }
@@ -153,30 +149,26 @@ sf::Vector2f GameScene::getEffectiveZoom(int worldSizeX, int worldSizeY)
 
     @return Void.
 */
-void GameScene::checkForViewPan(sf::Vector2i initialPos,
-    sf::Vector2f originalView, int worldSizeX, int worldSizeY, bool keyBool)
+void GameScene::checkForViewPan(sf::Vector2i initialPos)
 {
-    if(keyBool==true)
-    {
-        window.setMouseCursorVisible(false);
+    window.setMouseCursorVisible(false);
 
-        sf::Vector2f effectiveZoom = getEffectiveZoom(worldSizeX, worldSizeY);
-        sf::Vector2i viewPos = sf::Mouse::getPosition(window);
-        sf::Vector2f relPos = static_cast<sf::Vector2f>(initialPos - viewPos);
+    sf::Vector2f effectiveZoom = getEffectiveZoom(wSize.x, wSize.y);
+    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+    sf::Vector2f relPos = static_cast<sf::Vector2f>(initialPos - viewPos);
 
-        if(effectiveZoom.y > effectiveZoom.x)
-            relPos *= effectiveZoom.y;
-        else
-            relPos *= effectiveZoom.x;
-
-
-        worldView.setCenter(relPos + originalView);
-
-        window.setView(worldView);
-    }
+    if(effectiveZoom.y > effectiveZoom.x)
+        relPos *= effectiveZoom.y;
     else
-        window.setMouseCursorVisible(true);
+        relPos *= effectiveZoom.x;
+
+
+    worldView.move(relPos);// + originalView);
+
+    window.setView(worldView);
 }
+
+
 
 
 /**
@@ -188,24 +180,21 @@ void GameScene::checkForViewPan(sf::Vector2i initialPos,
 
     @return Void.
 */
-void GameScene::focusOnBall(int ballIndex, bool keyBool)
+void GameScene::focusOnBall(int ballIndex)
 {
-    if(keyBool==true)
+    sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
+    if(!std::isnan(relPos.x) && !std::isnan(relPos.y))
     {
-        sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
-        if(!std::isnan(relPos.x) && !std::isnan(relPos.y))
-        {
-            worldView.setCenter(relPos);
-            window.setView(worldView);
-        }
+        worldView.setCenter(relPos);
+        window.setView(worldView);
     }
 }
 
 void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
 {
     using json = nlohmann::json;
-    std::ifstream input("./json/spawnparams.json");
-    if(json::accept(input))
+    std::ifstream initInput("./json/spawnparams.json");
+    if(json::accept(initInput))
     {
         std::ifstream input("./json/spawnparams.json");
         json j;
@@ -323,6 +312,7 @@ void GameScene::mouseWheelZoom(bool keyPress, float delta)
         else
             zoomToMouse(1.03);
     }
+    canZoom = false;
 }
 
 /**
@@ -374,7 +364,7 @@ void GameScene::mouseViewEvents(sf::Event &event)
     else if(event.type == sf::Event::MouseWheelScrolled)
     {
         float delta = event.mouseWheelScroll.delta;
-        mouseWheelZoom(sf::Keyboard::isKeyPressed(sf::Keyboard::Space), delta);
+        mouseWheelZoom(canZoom, delta);
     }
     else if(event.type == sf::Event::MouseButtonReleased)
     {
@@ -440,135 +430,6 @@ void GameScene::mouseWorldEvents(sf::Event &event)
     }
 }
 
-/**
-    Function which handles general key based events under some combination of
-    primary key presses e.g. ctrl, alt, shift.
-
-    @param &newLayerKeys Vector of isKeyPressed boolean.
-    @param &event The event case to process.
-
-    @return Void.
-*/
-void GameScene::newLayerEvent(std::vector<bool> &newLayerKeys, sf::Event &event)
-{
-    if(newLayerKeys[0]&&(!newLayerKeys[1]))
-    {
-        if(event.key.code == sf::Keyboard::C)
-            ballSim.toggleCollisions();
-        else if(event.key.code == sf::Keyboard::F)
-            ballSim.toggleForces();
-        else if(event.key.code == sf::Keyboard::K)
-            ballSim.changeBallColour();
-        else if(event.key.code == sf::Keyboard::R)
-            spawnRadius -= 1;
-        else if(event.key.code == sf::Keyboard::M)
-            spawnMass -= 1;
-        else if(event.key.code == sf::Keyboard::Comma)
-            ballSim.decSimStep(1);
-        else if(event.key.code == sf::Keyboard::Period)
-            ballSim.incSimStep(1);
-        else if(event.key.code == sf::Keyboard::Z)
-            ballSim.removeBall(-1);
-    }
-    else if(newLayerKeys[2])
-    {
-        //if(event.key.code == sf::Keyboard::Return)
-        //    toggleFullScreen();
-        if(event.key.code == sf::Keyboard::Z)
-            ballSim.removeRect(-1);
-    }
-}
-
-
-/**
-    Function which handles general key based events. Events are processed provided
-    there are no key primary keys held. If these keys are held, the newLayerEvent
-    events are processed instead.
-
-    @param &event The event case to process.
-
-    @return Void.
-*/
-void GameScene::keyEvents(sf::Event &event)
-{
-    std::vector<bool> newLayerKeys = {sf::Keyboard::isKeyPressed(sf::Keyboard::LControl),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LShift),
-                                       sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)};
-    bool newLayerPressed = false;
-    if(std::find(newLayerKeys.begin(), newLayerKeys.end(), true) != newLayerKeys.end())
-        newLayerPressed = true;
-
-    if(event.type == sf::Event::EventType::KeyPressed)
-    {
-        if(!newLayerPressed)
-        {
-            //if(event.key.code == sf::Keyboard::PageUp)
-                //limitFramerate(60);
-            //else if(event.key.code == sf::Keyboard::PageDown)
-                //limitFramerate(400);
-            //else if(event.key.code == sf::Keyboard::Home)
-            //    limitFramerate(5);
-            if(event.key.code == sf::Keyboard::Comma)
-                ballSim.decSimStep(0.1);
-            else if(event.key.code == sf::Keyboard::Period)
-                ballSim.incSimStep(0.1);
-            else if(event.key.code == sf::Keyboard::Delete)
-                ballSim.clearSimulation();
-            else if(event.key.code == sf::Keyboard::Dash)
-                zoomToMouse(2.0f);
-            else if(event.key.code == sf::Keyboard::Equal)
-                zoomToMouse(0.5f);
-            else if(event.key.code == sf::Keyboard::Num0)
-                resetView();
-            else if(event.key.code == sf::Keyboard::P)
-                ballSim.toggleSimPause();
-            else if(event.key.code == sf::Keyboard::Space)
-            {
-                recentViewCoords = worldView.getCenter();
-                mousePosOnPan = sf::Mouse::getPosition(window);
-            }
-            else if(event.key.code == sf::Keyboard::M)
-                spawnMass += 1;
-            else if(event.key.code == sf::Keyboard::R)
-                spawnRadius += 1;
-            else if(event.key.code == sf::Keyboard::Num1)
-                ballSim.setPlayer(0);
-            else if(event.key.code == sf::Keyboard::Num2)
-                ballSim.setPlayer(1);
-            else if(event.key.code == sf::Keyboard::Escape)
-                togglePause();
-        }
-
-        newLayerEvent(newLayerKeys, event);
-    }
-}
-
-
-/**
-    Function which handles player key held cases.
-
-    @param player The ball index which the player controls.
-
-    @return Void.
-*/
-void GameScene::playerKeysDown(int player)
-{
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F))
-        focusOnBall(0, sf::Keyboard::isKeyPressed(sf::Keyboard::F));
-
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        ballSim.playerInFunc(0);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        ballSim.playerInFunc(180);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        ballSim.playerInFunc(270);
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        ballSim.playerInFunc(90);
-
-
-}
-
 
 /**
     Function which handles events on window resize.
@@ -584,32 +445,7 @@ void GameScene::resizeEvents(sf::Event &event)
 }
 
 
-/**
-    Increases the rendering timestep.
 
-    @param delta The amount to increase the rendering timestep by.
-
-    @return Void.
-*/
-void GameScene::incTimeStep(sf::Time delta)
-{
-    if(delta>sf::milliseconds(0))
-        timestep+=delta;
-}
-
-
-/**
-    Decreases the rendering timestep.
-
-    @param delta The amount to decrease the rendering timestep by.
-
-    @return Void.
-*/
-void GameScene::decTimeStep(sf::Time delta)
-{
-    if(delta>sf::milliseconds(0) && timestep>delta)
-        timestep-=delta;
-}
 
 
 void GameScene::setSpawnValues(float value,
@@ -655,45 +491,73 @@ void GameScene::load()
 {
     if(!isLoaded)
     {
-    isLoaded = true;
-    wSize = ballSim.getWorldSize();
-    changeBoundaryRect(wSize);
-    resetView();
-    adjustViewSize(window.getSize());
+        isLoaded = true;
+        wSize = ballSim.getWorldSize();
+        changeBoundaryRect(wSize);
+        resetView();
+        adjustViewSize(window.getSize());
 
-    buttonFuncMap = {
-        {"incMass",     [&]{spawnMass+=1;}},
-        {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
-        {"incRad",      [&]{spawnRadius+=1;}},
-        {"decRad",      [&]{if(spawnRadius>1){spawnRadius-=1;}}},
-        {"rstRad",      [&]{spawnRadius=10;}},
-        {"rstMass",     [&]{spawnMass=1;}},
-        {"setStar",     [&]{spawnRadius=50;spawnMass=10000;}},
-        {"setPlanet",   [&]{spawnRadius=10;spawnMass=1;}},
-        {"setAstrd",    [&]{spawnRadius=3;spawnMass=0.01;}},
-        {"tglTrj",      [&]{ballSim.toggleTrajectories();}},
-        {"tglPTraj",    [&]{ballSim.togglePlayerTraj();}},
-        {"tglIntMthd",  [&]{ballSim.toggleRK4();}}
-    };
-    sliderFuncMap = {
-        {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
-        {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
-    };
-    textVarMap = {
-        {"numBalls",    [&]{return ballSim.getNumOfBalls();}},
-        {"timeStep",    [&]{return ballSim.getTimeStep();}},
-        {"spawnMass",   [&]{return std::to_string(spawnMass);}},
-        {"spawnRad",    [&]{return std::to_string(spawnRadius);}},
-        {"forceEnld",   [&]{return ballSim.getForcesEnabled();}},
-        {"collsEnld",   [&]{return ballSim.getCollisionsEnabled();}},
-        {"totalKE",     [&]{return ballSim.getTotalKE();}},
-        {"totalMom",    [&]{return ballSim.getTotalMomentum();}},
-        {"totalEngy",   [&]{return ballSim.getTotalEnergy();}},
-        {"intMthd",     [&]{return ballSim.getUseRK4();}},
-        {"currFPS",     [&]{return std::to_string(currentFPS);}}
-    };
+        buttonFuncMap = {
+            {"incMass",     [&]{spawnMass+=1;}},
+            {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
+            {"incRad",      [&]{spawnRadius+=1;}},
+            {"decRad",      [&]{if(spawnRadius>1){spawnRadius-=1;}}},
+            {"rstRad",      [&]{spawnRadius=10;}},
+            {"rstMass",     [&]{spawnMass=1;}},
+            {"setStar",     [&]{spawnRadius=50;spawnMass=10000;}},
+            {"setPlanet",   [&]{spawnRadius=10;spawnMass=1;}},
+            {"setAstrd",    [&]{spawnRadius=3;spawnMass=0.01;}},
+            {"tglTrj",      [&]{ballSim.toggleTrajectories();}},
+            {"tglPTraj",    [&]{ballSim.togglePlayerTraj();}},
+            {"tglIntMthd",  [&]{ballSim.toggleRK4();}},
+            {"clearSim",    [&]{ballSim.clearSimulation();}},
+            {"decSimStep",  [&]{ballSim.decSimStep(0.1);}},
+            {"incSimStep",  [&]{ballSim.incSimStep(0.1);}},
+            {"zmToMse",     [&]{zoomToMouse(2.0f);}},
+            {"zmFromMse",   [&]{zoomToMouse(0.5f);}},
+            {"rstView",     [&]{resetView();}},
+            {"tglSimPse",   [&]{ballSim.toggleSimPause();}},
+            {"viewPan",     [&]{
+                checkForViewPan(mousePosOnPan);
+                canZoom = true;
+                    }},
+            {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
+            {"setPlyr1",    [&]{ballSim.setPlayer(1);}},
+            {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
+            {"pauseGme",    [&]{togglePause();}},
+            {"tglForces",   [&]{ballSim.toggleForces();}},
+            {"tglCols",     [&]{ballSim.toggleCollisions();}},
+            {"chgBColour",  [&]{ballSim.changeBallColour();}},
+            {"undoBall",    [&]{ballSim.removeBall(-1);}},
+            {"undoRect",    [&]{ballSim.removeRect(-1);}},
+            {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});}},
+            {"mvPlrRgt",    [&]{ballSim.playerInFunc({-1,0});}},
+            {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});}},
+            {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});}},
+        };
 
-    loadUI("./json/gamesceneUI.json", container);
+        sliderFuncMap = {
+            {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
+            {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
+        };
+
+        textVarMap = {
+            {"numBalls",    [&]{return ballSim.getNumOfBalls();}},
+            {"timeStep",    [&]{return ballSim.getTimeStep();}},
+            {"spawnMass",   [&]{return std::to_string(spawnMass);}},
+            {"spawnRad",    [&]{return std::to_string(spawnRadius);}},
+            {"forceEnld",   [&]{return ballSim.getForcesEnabled();}},
+            {"collsEnld",   [&]{return ballSim.getCollisionsEnabled();}},
+            {"totalKE",     [&]{return ballSim.getTotalKE();}},
+            {"totalMom",    [&]{return ballSim.getTotalMomentum();}},
+            {"totalEngy",   [&]{return ballSim.getTotalEnergy();}},
+            {"intMthd",     [&]{return ballSim.getUseRK4();}},
+            {"currFPS",     [&]{return std::to_string(currentFPS);}}
+        };
+
+        loadUI("./json/gamesceneUI.json", container);
+        loadKeybinds("./json/keybinds.json", "GameScene");
+
     }
 }
 
@@ -702,6 +566,7 @@ void GameScene::unload()
     isLoaded = false;
     container.destroyAllWindows();
     ballSim.clearSimulation();
+
 }
 
 void GameScene::redraw(sf::RenderWindow &_window)
@@ -724,8 +589,11 @@ void GameScene::update(sf::RenderWindow &_window)
     if(clickedWindowToDrag)
         container.dragWindow(_window);
 
-    checkForViewPan(mousePosOnPan,recentViewCoords, wSize.x, wSize.y, sf::Keyboard::isKeyPressed(sf::Keyboard::Space));
-    playerKeysDown(0);
+    window.setMouseCursorVisible(true);
+
+    exePressedKeys();
+
+    mousePosOnPan = sf::Mouse::getPosition(window);
 
     ballSim.universeLoop(currentFrameTime, timestep);
 
@@ -734,8 +602,8 @@ void GameScene::update(sf::RenderWindow &_window)
 
 GameScene::GameScene(sf::RenderWindow &_window, sf::Time &_targetFTime,
                      sf::Time &_currentFTime, float &_currentFPS) : window{_window},
-                     timestep{_targetFTime}, currentFrameTime{_currentFTime},
-                     currentFPS{_currentFPS}
+                     currentFrameTime{_currentFTime}, currentFPS{_currentFPS},
+                     timestep{_targetFTime}
 {
 
 }

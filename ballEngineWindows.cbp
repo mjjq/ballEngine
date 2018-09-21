@@ -55,8 +55,6 @@
 			<Add option="-Wfloat-equal" />
 			<Add option="-Wunreachable-code" />
 			<Add option="-Wmissing-include-dirs" />
-			<Add option="-Wswitch-enum" />
-			<Add option="-Wswitch-default" />
 			<Add option="-pedantic-errors" />
 			<Add option="-pedantic" />
 			<Add option="-Wall" />
@@ -67,15 +65,16 @@
 		<Linker>
 			<Add directory="C:/Program Files/CodeBlocks/SFML-2.4.2/lib" />
 		</Linker>
+		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classBall.h" />
 		<Unit filename="headers/classGameScene.h" />
+		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classMenuScene.h" />
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classScene.h" />
 		<Unit filename="headers/classSceneManager.h" />
 		<Unit filename="headers/classTextElement.h" />
-		<Unit filename="headers/classTextElementBase.h" />
 		<Unit filename="headers/classUIButton.h" />
 		<Unit filename="headers/classUIContainer.h" />
 		<Unit filename="headers/classUIGroup.h" />
@@ -85,6 +84,7 @@
 		<Unit filename="headers/collisionDetection.h" />
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
+		<Unit filename="headers/jsonParsing.h" />
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
@@ -94,14 +94,15 @@
 		<Unit filename="source/UI/classUIGroup.cpp" />
 		<Unit filename="source/UI/classUISlider.cpp" />
 		<Unit filename="source/UI/classUITextElement.cpp" />
-		<Unit filename="source/UI/classUITextElementBase.cpp" />
 		<Unit filename="source/UI/classUIWindow.cpp" />
 		<Unit filename="source/events/classGameScene.cpp" />
+		<Unit filename="source/events/classKeyBinds.cpp" />
 		<Unit filename="source/events/classMenuScene.cpp" />
 		<Unit filename="source/events/classPauseMenuScene.cpp" />
 		<Unit filename="source/events/classScene.cpp" />
 		<Unit filename="source/events/classSceneManager.cpp" />
 		<Unit filename="source/miscellaneous/class2DMatrix.cpp" />
+		<Unit filename="source/miscellaneous/jsonParsing.cpp" />
 		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />
 		<Unit filename="source/miscellaneous/stringConversion.cpp" />
 		<Unit filename="source/miscellaneous/structs.cpp" />
