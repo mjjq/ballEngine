@@ -25,7 +25,9 @@ void SurvivalScene::spawnRandomBalls(int nOBalls,
         float relativePosX = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
         float relativePosY = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
         float velocityX = ( (std::rand()-RAND_MAX/2.0f)/RAND_MAX )*maxSpeed;
-        float plusMinusOne = (std::rand()-RAND_MAX/2.0f)/std::abs(std::rand()-RAND_MAX/2.0f);
+        float plusMinusOne = 1.0f;
+        if(std::rand()-RAND_MAX/2.0f < 0)
+            plusMinusOne = -1.0f;
         float velocityY = plusMinusOne*sqrt(maxSpeed*maxSpeed - velocityX*velocityX);
 
         sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
@@ -140,7 +142,7 @@ void SurvivalScene::load()
         container.setWindowIsVisible(2, false);
         container.setWindowIsVisible(3, false);
 
-        spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 5.0f, 3.0f);
+        spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 5.0f, 2.0f);
         //spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {3,0});
         ballSim.setPlayer(0);
         ballSim.toggleCollisions();

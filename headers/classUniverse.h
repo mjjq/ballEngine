@@ -109,7 +109,7 @@ public:
     void togglePlayerTraj();
     sf::Vector2f getBallPosition(unsigned int i);
     void pushBall(float force, float relDirection, int i);
-    void pushBall(float force, sf::Vector2f &resVector, int ballArg);
+    void pushBall(sf::Vector2f &resVector, int ballArg);
     void pushPlayer(float force, float relDirection);
     void setPlayer(unsigned int playerIndex);
     void splitBalls(int ballIndex, float relDirection, float speed);
