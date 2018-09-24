@@ -2,7 +2,7 @@
     "Windows" : [  
     {
         "position" : [0.5, 0.85],
-        "posoffset" : [0, 0],
+        "posoffset" : [-100, 0],
         "dimensions" : [250, 260],
         "draggable" : false,
         "fixedtowindow" : true,
@@ -14,7 +14,43 @@
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
             "text" : "Press to start: ",
-            "variable" : "timer"
+            "variable" : "startGme"
+        }
+        ]
+    },
+    {
+        "position" : [0.5, 0.85],
+        "posoffset" : [-100, 0],
+        "dimensions" : [250, 260],
+        "draggable" : false,
+        "fixedtowindow" : true,
+	"colour" : [0,0,0,0],
+
+        "TextElements" : [
+        {
+            "position" : [0, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Get ready! ",
+            "variable" : "cdtimer"
+        }
+        ]
+    },
+    {
+        "position" : [0.1, 0.1],
+        "posoffset" : [0, 0],
+        "dimensions" : [250, 260],
+        "draggable" : false,
+        "fixedtowindow" : true,
+	"colour" : [0,0,0,0],
+
+        "TextElements" : [
+        {
+            "position" : [0, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Score: ",
+            "variable" : "uptimer"
         }
         ]
     }

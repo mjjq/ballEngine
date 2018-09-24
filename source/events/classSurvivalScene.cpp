@@ -11,6 +11,16 @@ SurvivalScene::SurvivalScene(sf::RenderWindow &_window,
 
 void SurvivalScene::mouseWorldEvents(sf::Event &event) {}
 
+void SurvivalScene::startGame()
+{
+    if(startTheGame == false)
+    {
+        startTheGame = true;
+        container.setWindowIsVisible(0, false);
+        container.setWindowIsVisible(1, true);
+    }
+}
+
 void SurvivalScene::load()
 {
     if(!isLoaded)
@@ -64,7 +74,7 @@ void SurvivalScene::load()
             {"mvPlrRgt",    [&]{ballSim.playerInFunc({-1,0});}},
             {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});}},
             {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});}},
-            {"startGme",    [&]{startTheGame = true;}},
+            {"startGme",    [&]{startGame();}},
         };
 
         sliderFuncMap = {
@@ -72,11 +82,16 @@ void SurvivalScene::load()
 
         textVarMap = {
             {"currFPS",     [&]{return std::to_string(currentFPS);}},
-            {"timer",       [&]{return std::to_string(countDownTimer.asSeconds());}}
+            {"cdtimer",     [&]{return std::to_string(1+countDownTimer.asMilliseconds()/1000);}},
+            {"uptimer",     [&]{return std::to_string(upTimer.asMilliseconds());}},
+            //{"playSpd",     [&]{return std::to_string(ballSim.getSpeed(playerBallIndex))}
         };
 
         loadKeybinds("./json/keybinds.json", "SurvivalScene");
         loadUI("./json/survivalsceneUI.json", container);
+
+        container.setWindowIsVisible(1, false);
+        container.setWindowIsVisible(2, false);
 
         spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {2,0});
         ballSim.setPlayer(0);
@@ -103,9 +118,16 @@ void SurvivalScene::update(sf::RenderWindow &_window)
         {
             ballSim.universeLoop(currentFrameTime, targetFrameTime);
 
-            timeToNextSpawn -= currentFrameTime;
+            upTimer += currentFrameTime;
         }
         else
+        {
             countDownTimer -= currentFrameTime;
+            if(countDownTimer.asSeconds() <= 0.0f)
+            {
+                container.setWindowIsVisible(1, false);
+                container.setWindowIsVisible(2, true);
+            }
+        }
     }
 }

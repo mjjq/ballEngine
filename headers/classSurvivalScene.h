@@ -6,9 +6,12 @@
 class SurvivalScene : public GameScene
 {
     bool startTheGame = false;
-    sf::Time countDownTimer = sf::seconds(3.0f);
+    sf::Time countDownTimer;
+    sf::Time upTimer = sf::seconds(0.0f);
 
     void mouseWorldEvents(sf::Event &event);
+
+    void startGame();
 public:
     SurvivalScene(sf::RenderWindow &_window,
                  sf::Time &_targetFTime,
