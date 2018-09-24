@@ -56,6 +56,7 @@ void MenuScene::update(sf::RenderWindow &_window)
         container.dragWindow(_window);
 
     exePressedKeys();
+    window.setMouseCursorVisible(true);
 }
 
 MenuScene::MenuScene(sf::RenderWindow &_window) : Scene(_window)
