@@ -16,6 +16,12 @@ void SurvivalScene::load()
     if(!isLoaded)
     {
         isLoaded = true;
+
+        ballSim = BallUniverse{2000, 2000, 1.0f, false, false};
+
+        startTheGame = false;
+        countDownTimer = sf::seconds(3.0f);
+
         wSize = ballSim.getWorldSize();
         changeBoundaryRect(wSize);
         resetCamera();
@@ -65,11 +71,12 @@ void SurvivalScene::load()
         };
 
         textVarMap = {
-            {"currFPS",     [&]{return std::to_string(currentFPS);}}
+            {"currFPS",     [&]{return std::to_string(currentFPS);}},
+            {"timer",       [&]{return std::to_string(countDownTimer.asSeconds());}}
         };
 
-        loadUI("./json/SurvivalSceneUI.json", container);
         loadKeybinds("./json/keybinds.json", "SurvivalScene");
+        loadUI("./json/survivalsceneUI.json", container);
 
         spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {2,0});
         ballSim.setPlayer(0);

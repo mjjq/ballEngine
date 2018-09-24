@@ -23,7 +23,7 @@
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
             "text" : "New Survival",
-            "function" : "newSurvival"
+            "function" : "newSvival"
         },
         {
             "position" : [20, 110],

@@ -1,0 +1,22 @@
+{
+    "Windows" : [  
+    {
+        "position" : [0.5, 0.85],
+        "posoffset" : [0, 0],
+        "dimensions" : [250, 260],
+        "draggable" : false,
+        "fixedtowindow" : true,
+	"colour" : [0,0,0,0],
+
+        "TextElements" : [
+        {
+            "position" : [0, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Press to start: ",
+            "variable" : "timer"
+        }
+        ]
+    }
+    ]
+}

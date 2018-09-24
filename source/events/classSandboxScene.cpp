@@ -14,6 +14,9 @@ void SandboxScene::load()
     if(!isLoaded)
     {
         isLoaded = true;
+
+        ballSim = BallUniverse{2000,2000,1.0f,false,false};
+
         wSize = ballSim.getWorldSize();
         changeBoundaryRect(wSize);
         resetCamera();
