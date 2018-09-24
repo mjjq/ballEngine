@@ -6,12 +6,24 @@
 class SurvivalScene : public GameScene
 {
     bool startTheGame = false;
+    bool gameOver = false;
+
     sf::Time countDownTimer;
     sf::Time upTimer = sf::seconds(0.0f);
 
     void mouseWorldEvents(sf::Event &event);
 
+    void spawnRandomBalls(int nOBalls,
+                          sf::Vector2f position,
+                          float boundingRadius,
+                          float spawnRadius,
+                          float spawnMass,
+                          float maxSpeed);
+
     void startGame();
+    void endGame();
+    void restartGame();
+
 public:
     SurvivalScene(sf::RenderWindow &_window,
                  sf::Time &_targetFTime,

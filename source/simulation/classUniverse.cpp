@@ -854,6 +854,22 @@ std::string BallUniverse::getUseRK4()
     return to_string(intEnum);
 }
 
+std::string BallUniverse::getBallSpeed(int index)
+{
+    if(index < ballArray.size() && index >= 0)
+        return std::to_string(ballArray.at(index).getSpeed());
+
+    return "ballArray index out of range";
+}
+
+int BallUniverse::getNumTimesColld(int index)
+{
+    if(index < ballArray.size() && index >= 0)
+        return ballArray.at(index).getNumCollTimes();
+
+    return -1;
+}
+
 void BallUniverse::pushBall(float force, float relDirection, int i)
 {
     if(ballArray.size()>0 && currentPlayer >= 0)

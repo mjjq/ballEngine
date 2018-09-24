@@ -201,6 +201,9 @@ void Collisions::ballCollision(Ball &firstBall, Ball &secondBall)
 
     firstBall.setVelocity(v1 - rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
     secondBall.setVelocity(v2 + rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
+
+    firstBall.incTimesCollided();
+    secondBall.incTimesCollided();
 }
 
 //void Collisions::ballCollision(Ball &ball, )

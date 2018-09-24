@@ -3,6 +3,9 @@
 #include "classUIWindow.h"
 #include "structs.h"
 #include "../extern/json.hpp"
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
 
 class UIContainer
 {

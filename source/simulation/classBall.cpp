@@ -202,7 +202,7 @@ void Ball::addSolvedVelocity(sf::Vector2f &cStep, sf::Vector2f &nStep)
 */
 void Ball::setToCollided()
 {
-    collidedThisFrame = true;
+    //collidedThisFrame = true;
 }
 
 /**
@@ -212,7 +212,7 @@ void Ball::setToCollided()
 */
 void Ball::resetToCollided()
 {
-    collidedThisFrame = false;
+    //collidedThisFrame = false;
 }
 
 
@@ -223,7 +223,7 @@ void Ball::resetToCollided()
 */
 bool Ball::getHasCollided()
 {
-    return collidedThisFrame;
+    //return collidedThisFrame;
 }
 
 /**
@@ -361,4 +361,14 @@ bool Ball::getIsPlayer()
 void Ball::setIsPlayer(bool value)
 {
     isPlayer = value;
+}
+
+void Ball::incTimesCollided()
+{
+    ++numDynColls;
+}
+
+int Ball::getNumCollTimes()
+{
+    return numDynColls;
 }

@@ -30,7 +30,8 @@
 		"mvPlrRgt"       : ["D"],
 		"mvPlrLft"       : ["A"],
 		"pauseGme" 	 : ["Escape"],
-		"startGme"	 : ["Space"]
+		"startGme"	 : ["Space"],
+		"restart"	 : ["R"]
 	},
 	"PauseScene" : {
 		"resume"         : ["Escape"]	

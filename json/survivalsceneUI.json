@@ -51,6 +51,51 @@
             "fontsize" : 16,
             "text" : "Score: ",
             "variable" : "uptimer"
+        },
+        {
+            "position" : [0, 20],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Your speed: ",
+            "variable" : "playSpd"
+        }
+        ]
+    },
+    {
+        "position" : [0.5, 0.5],
+        "posoffset" : [-150, 0],
+        "dimensions" : [300, 180],
+        "draggable" : false,
+        "fixedtowindow" : true,
+
+        "TextElements" : [
+        {
+            "position" : [50, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 32,
+            "text" : "GAME OVER!",
+            "variable" : ""
+        },
+	{
+            "position" : [15, 60],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 22,
+            "text" : "Your Score: ",
+            "variable" : "uptimer"
+        },
+        {
+            "position" : [15, 90],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 22,
+            "text" : "Your Speed: ",
+            "variable" : "playSpd"
+        },
+	{
+            "position" : [15, 130],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 22,
+            "text" : "Press to restart: ",
+            "variable" : "restart"
         }
         ]
     }

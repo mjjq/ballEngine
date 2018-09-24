@@ -100,6 +100,8 @@ public:
     std::string getTimeStep();
     std::string getTotalMomentum();
     std::string getUseRK4();
+    std::string getBallSpeed(int index);
+    int getNumTimesColld(int index);
 
     void sampleAllPositions();
     void drawSampledPositions(sf::RenderWindow &window);

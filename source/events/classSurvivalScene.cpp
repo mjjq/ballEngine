@@ -11,6 +11,30 @@ SurvivalScene::SurvivalScene(sf::RenderWindow &_window,
 
 void SurvivalScene::mouseWorldEvents(sf::Event &event) {}
 
+void SurvivalScene::spawnRandomBalls(int nOBalls,
+                          sf::Vector2f position,
+                          float boundingRadius,
+                          float spawnRadius,
+                          float spawnMass,
+                          float maxSpeed)
+{
+    std::srand(2112);
+
+    for(int i=0; i<nOBalls; ++i)
+    {
+        float relativePosX = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
+        float relativePosY = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
+        float velocityX = ( (std::rand()-RAND_MAX/2.0f)/RAND_MAX )*maxSpeed;
+        float plusMinusOne = (std::rand()-RAND_MAX/2.0f)/std::abs(std::rand()-RAND_MAX/2.0f);
+        float velocityY = plusMinusOne*sqrt(maxSpeed*maxSpeed - velocityX*velocityX);
+
+        sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
+        sf::Vector2f newVelocity = {velocityX, velocityY};
+
+        ballSim.spawnNewBall(newPos, newVelocity, spawnRadius, spawnMass);
+    }
+}
+
 void SurvivalScene::startGame()
 {
     if(startTheGame == false)
@@ -18,6 +42,25 @@ void SurvivalScene::startGame()
         startTheGame = true;
         container.setWindowIsVisible(0, false);
         container.setWindowIsVisible(1, true);
+    }
+}
+
+void SurvivalScene::endGame()
+{
+    if(gameOver == false)
+    {
+        gameOver = true;
+        //container.setWindowIsVisible(2, false);
+        container.setWindowIsVisible(3, true);
+    }
+}
+
+void SurvivalScene::restartGame()
+{
+    if(gameOver == true)
+    {
+        unload();
+        load();
     }
 }
 
@@ -30,7 +73,9 @@ void SurvivalScene::load()
         ballSim = BallUniverse{2000, 2000, 1.0f, false, false};
 
         startTheGame = false;
+        gameOver = false;
         countDownTimer = sf::seconds(3.0f);
+        upTimer = sf::seconds(0.0f);
 
         wSize = ballSim.getWorldSize();
         changeBoundaryRect(wSize);
@@ -75,6 +120,7 @@ void SurvivalScene::load()
             {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});}},
             {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});}},
             {"startGme",    [&]{startGame();}},
+            {"restart",     [&]{restartGame();}}
         };
 
         sliderFuncMap = {
@@ -84,7 +130,7 @@ void SurvivalScene::load()
             {"currFPS",     [&]{return std::to_string(currentFPS);}},
             {"cdtimer",     [&]{return std::to_string(1+countDownTimer.asMilliseconds()/1000);}},
             {"uptimer",     [&]{return std::to_string(upTimer.asMilliseconds());}},
-            //{"playSpd",     [&]{return std::to_string(ballSim.getSpeed(playerBallIndex))}
+            {"playSpd",     [&]{return ballSim.getBallSpeed(playerBallIndex);}}
         };
 
         loadKeybinds("./json/keybinds.json", "SurvivalScene");
@@ -92,8 +138,10 @@ void SurvivalScene::load()
 
         container.setWindowIsVisible(1, false);
         container.setWindowIsVisible(2, false);
+        container.setWindowIsVisible(3, false);
 
-        spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {2,0});
+        spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 5.0f, 3.0f);
+        //spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {3,0});
         ballSim.setPlayer(0);
         ballSim.toggleCollisions();
         ballSim.toggleTrajectories();
@@ -112,13 +160,16 @@ void SurvivalScene::update(sf::RenderWindow &_window)
 
     mousePosOnPan = sf::Mouse::getPosition(window);
 
-    if(startTheGame)
+    if(startTheGame && !gameOver)
     {
         if(countDownTimer.asSeconds() <= 0.0f)
         {
             ballSim.universeLoop(currentFrameTime, targetFrameTime);
 
             upTimer += currentFrameTime;
+
+            if(ballSim.getNumTimesColld(playerBallIndex) > 0)
+                endGame();
         }
         else
         {
@@ -129,5 +180,8 @@ void SurvivalScene::update(sf::RenderWindow &_window)
                 container.setWindowIsVisible(2, true);
             }
         }
+    }
+    else if(gameOver)
+    {
     }
 }
