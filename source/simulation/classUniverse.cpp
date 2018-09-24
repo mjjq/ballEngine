@@ -854,7 +854,7 @@ std::string BallUniverse::getUseRK4()
     return to_string(intEnum);
 }
 
-std::string BallUniverse::getBallSpeed(int index)
+std::string BallUniverse::getBallSpeed(unsigned int index)
 {
     if(index < ballArray.size() && index >= 0)
         return std::to_string(ballArray.at(index).getSpeed());
@@ -862,7 +862,7 @@ std::string BallUniverse::getBallSpeed(int index)
     return "ballArray index out of range";
 }
 
-int BallUniverse::getNumTimesColld(int index)
+int BallUniverse::getNumTimesColld(unsigned int index)
 {
     if(index < ballArray.size() && index >= 0)
         return ballArray.at(index).getNumCollTimes();

@@ -5,19 +5,24 @@
 
 class SurvivalScene : public GameScene
 {
-    bool startTheGame = false;
-    bool gameOver = false;
+    struct GameLogic
+    {
+        bool startTheGame = false;
+        bool gameOver = false;
+        bool allowPlayerMovement = false;
 
-    sf::Time countDownTimer;
-    sf::Time upTimer = sf::seconds(0.0f);
+        sf::Time countDownTimer = sf::seconds(3.0f);
+        sf::Time upTimer = sf::seconds(0.0f);
+    };
+    GameLogic gameLogic;
 
     void mouseWorldEvents(sf::Event &event);
 
     void spawnRandomBalls(int nOBalls,
                           sf::Vector2f position,
                           float boundingRadius,
-                          float spawnRadius,
-                          float spawnMass,
+                          float ballRadius,
+                          float ballMass,
                           float maxSpeed);
 
     void startGame();

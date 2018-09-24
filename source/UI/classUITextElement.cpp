@@ -9,30 +9,19 @@
 #include "../../headers/classTextElement.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
-#include "../../headers/integrators.h"
 
 
 void UITextElement::updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition)
 {
-    //std::cout << variable << " : " << displayVariable << "\n";
-        //if(variable!=nullptr)
-        {
-            //using namespace std;
-            //std::cout << variable << " : " << displayVariable << "\n";
-            std::string varText = variable();
-            std::string strDispVariable = initialText + " " + varText;
-            //std::cout << displayVariable << "\n";
-            setString(strDispVariable);
-        }
-        if(fixedToWindow)
-        {
-            setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(origPosition+parentPosition)));
+        std::string varText = variable();
+        std::string strDispVariable = initialText + varText;
 
-        }
+        setString(strDispVariable);
+
+        if(fixedToWindow)
+            setPosition(window.mapPixelToCoords(static_cast<sf::Vector2i>(origPosition+parentPosition)));
         else
-        {
             setPosition((origPosition+parentPosition));
-        }
 }
 
 

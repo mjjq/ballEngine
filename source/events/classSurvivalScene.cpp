@@ -14,11 +14,11 @@ void SurvivalScene::mouseWorldEvents(sf::Event &event) {}
 void SurvivalScene::spawnRandomBalls(int nOBalls,
                           sf::Vector2f position,
                           float boundingRadius,
-                          float spawnRadius,
-                          float spawnMass,
+                          float ballRadius,
+                          float ballMass,
                           float maxSpeed)
 {
-    std::srand(2112);
+    std::srand(2322);
 
     for(int i=0; i<nOBalls; ++i)
     {
@@ -33,15 +33,15 @@ void SurvivalScene::spawnRandomBalls(int nOBalls,
         sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
         sf::Vector2f newVelocity = {velocityX, velocityY};
 
-        ballSim.spawnNewBall(newPos, newVelocity, spawnRadius, spawnMass);
+        ballSim.spawnNewBall(newPos, newVelocity, ballRadius, ballMass);
     }
 }
 
 void SurvivalScene::startGame()
 {
-    if(startTheGame == false)
+    if(gameLogic.startTheGame == false)
     {
-        startTheGame = true;
+        gameLogic.startTheGame = true;
         container.setWindowIsVisible(0, false);
         container.setWindowIsVisible(1, true);
     }
@@ -49,9 +49,10 @@ void SurvivalScene::startGame()
 
 void SurvivalScene::endGame()
 {
-    if(gameOver == false)
+    if(gameLogic.gameOver == false)
     {
-        gameOver = true;
+        gameLogic.gameOver = true;
+        gameLogic.allowPlayerMovement = false;
         //container.setWindowIsVisible(2, false);
         container.setWindowIsVisible(3, true);
     }
@@ -59,7 +60,7 @@ void SurvivalScene::endGame()
 
 void SurvivalScene::restartGame()
 {
-    if(gameOver == true)
+    if(gameLogic.gameOver == true)
     {
         unload();
         load();
@@ -74,10 +75,7 @@ void SurvivalScene::load()
 
         ballSim = BallUniverse{2000, 2000, 1.0f, false, false};
 
-        startTheGame = false;
-        gameOver = false;
-        countDownTimer = sf::seconds(3.0f);
-        upTimer = sf::seconds(0.0f);
+        gameLogic = GameLogic{};
 
         wSize = ballSim.getWorldSize();
         changeBoundaryRect(wSize);
@@ -118,9 +116,9 @@ void SurvivalScene::load()
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
             {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});}},
-            {"mvPlrRgt",    [&]{ballSim.playerInFunc({-1,0});}},
+            {"mvPlrRgt",    [&]{if(gameLogic.allowPlayerMovement)ballSim.playerInFunc({-0.2,0});}},
             {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});}},
-            {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});}},
+            {"mvPlrLft",    [&]{if(gameLogic.allowPlayerMovement)ballSim.playerInFunc({0.2,0});}},
             {"startGme",    [&]{startGame();}},
             {"restart",     [&]{restartGame();}}
         };
@@ -130,8 +128,8 @@ void SurvivalScene::load()
 
         textVarMap = {
             {"currFPS",     [&]{return std::to_string(currentFPS);}},
-            {"cdtimer",     [&]{return std::to_string(1+countDownTimer.asMilliseconds()/1000);}},
-            {"uptimer",     [&]{return std::to_string(upTimer.asMilliseconds());}},
+            {"cdtimer",     [&]{return std::to_string(1+gameLogic.countDownTimer.asMilliseconds()/1000);}},
+            {"uptimer",     [&]{return std::to_string(gameLogic.upTimer.asMilliseconds());}},
             {"playSpd",     [&]{return ballSim.getBallSpeed(playerBallIndex);}}
         };
 
@@ -142,7 +140,8 @@ void SurvivalScene::load()
         container.setWindowIsVisible(2, false);
         container.setWindowIsVisible(3, false);
 
-        spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 5.0f, 2.0f);
+        ballSim.spawnNewBall(sf::Vector2f{wSize.x/2.0f, wSize.y/1.2f}, {0.0f, 2.0f}, 10.0f, 2.0f);
+        spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 2.0f, 2.0f);
         //spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {3,0});
         ballSim.setPlayer(0);
         ballSim.toggleCollisions();
@@ -162,28 +161,29 @@ void SurvivalScene::update(sf::RenderWindow &_window)
 
     mousePosOnPan = sf::Mouse::getPosition(window);
 
-    if(startTheGame && !gameOver)
+    if(gameLogic.startTheGame && !gameLogic.gameOver)
     {
-        if(countDownTimer.asSeconds() <= 0.0f)
+        if(gameLogic.countDownTimer.asSeconds() <= 0.0f)
         {
             ballSim.universeLoop(currentFrameTime, targetFrameTime);
 
-            upTimer += currentFrameTime;
+            gameLogic.upTimer += currentFrameTime;
 
             if(ballSim.getNumTimesColld(playerBallIndex) > 0)
                 endGame();
         }
         else
         {
-            countDownTimer -= currentFrameTime;
-            if(countDownTimer.asSeconds() <= 0.0f)
+            gameLogic.countDownTimer -= currentFrameTime;
+            if(gameLogic.countDownTimer.asSeconds() <= 0.0f)
             {
+                gameLogic.allowPlayerMovement = true;
                 container.setWindowIsVisible(1, false);
                 container.setWindowIsVisible(2, true);
             }
         }
     }
-    else if(gameOver)
+    else if(gameLogic.gameOver)
     {
     }
 }
