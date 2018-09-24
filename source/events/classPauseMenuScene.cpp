@@ -28,7 +28,7 @@ void PauseMenuScene::load()
     adjustViewSize(window.getSize());
 
     buttonFuncMap = {
-        {"resume", [&]{requestScene(SceneEnum::SCENE_GAME);}},
+        {"resume", [&]{requestScene(prevScene);}},
         {"options", [&]{}},
         {"exit", [&]{window.close();}},
         {"mainMenu", [&]{requestScene(SceneEnum::SCENE_MENU);}}

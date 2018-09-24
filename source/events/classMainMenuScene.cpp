@@ -28,8 +28,8 @@ void MainMenuScene::load()
     adjustViewSize(window.getSize());
 
     buttonFuncMap = {
-        {"newSandbox",  [&]{requestScene(SceneEnum::SCENE_GAME);}},
-        //{"newSvival",   [&]{requestScene(SceneEnum::SCENE_SURVIVAL);}},
+        {"newSandbox",  [&]{requestScene(SceneEnum::SCENE_SANDBOX);}},
+        {"newSvival",   [&]{requestScene(SceneEnum::SCENE_SURVIVAL);}},
         {"options",     [&]{}},
         {"exit",        [&]{window.close();}}
     };
