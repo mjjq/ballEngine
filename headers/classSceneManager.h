@@ -31,7 +31,7 @@ class SceneManager
     sf::ContextSettings settings;
 
     SandboxScene sandbox{window, targetFTime, currentFrameTime, currentFPS};
-    //SurvivalScene survival{window, targetFTime, currentFrameTime, currentFPS};
+    SurvivalScene survival{window, targetFTime, currentFrameTime, currentFPS};
     MainMenuScene menu{window};
     PauseMenuScene pauseMenu{window};
     Scene *currScene = &menu;

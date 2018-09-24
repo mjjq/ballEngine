@@ -184,11 +184,11 @@ void SceneManager::loadNextScene(SceneEnum nextScene)
             currScene = &sandbox;
             gameScene = currScene;
             break;
-        /*case(SceneEnum::SCENE_SURVIVAL):
+        case(SceneEnum::SCENE_SURVIVAL):
             currScene->unload();
             currScene = &survival;
             gameScene = currScene;
-            break;*/
+            break;
         case(SceneEnum::SCENE_MENU):
             currScene->unload();
             currScene = &menu;
