@@ -80,7 +80,7 @@ public:
     virtual void load();
     void events(sf::Event &event);
     void redraw(sf::RenderWindow &window);
-    void unload();
+    virtual void unload();
 };
 
 
