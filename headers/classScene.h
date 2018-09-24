@@ -3,21 +3,17 @@
 
 #include "classUIContainer.h"
 #include "classKeyBinds.h"
+#include "sceneEnums.h"
 #include <fstream>
-
-enum class SceneEnum
-{
-    SCENE_MENU,
-    SCENE_GAME,
-    SCENE_PAUSEMENU,
-    LAST
-};
 
 class Scene
 {
     SceneEnum nextScene = SceneEnum::LAST;
 
 protected:
+    SceneEnum prevScene = SceneEnum::LAST;
+
+    StringStringMap stringKeyBinds;
     StringFuncMap buttonFuncMap = {};
     std::map<std::string, std::pair<std::function<void(float)>, float*> > sliderFuncMap = {};
     std::map<std::string, std::function<std::string()> > textVarMap = {};
@@ -45,6 +41,7 @@ public:
 
     void requestScene(SceneEnum scEnum);
     SceneEnum pollNextScene();
+    void setPrevScene(SceneEnum scEnum);
 
     virtual void update(sf::RenderWindow &window);
     virtual void redraw(sf::RenderWindow &window);

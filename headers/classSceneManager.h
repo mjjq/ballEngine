@@ -8,6 +8,7 @@
 #include "classPauseMenuScene.h"
 #include "classUIContainer.h"
 #include "classUIWindow.h"
+#include "sceneEnums.h"
 
 class SceneManager
 {
@@ -30,10 +31,11 @@ class SceneManager
     sf::ContextSettings settings;
 
     SandboxScene sandbox{window, targetFTime, currentFrameTime, currentFPS};
-    SurvivalScene game{window, targetFTime, currentFrameTime, currentFPS};
+    //SurvivalScene survival{window, targetFTime, currentFrameTime, currentFPS};
     MainMenuScene menu{window};
     PauseMenuScene pauseMenu{window};
     Scene *currScene = &menu;
+    Scene *gameScene = nullptr;
 
     SceneEnum thisSceneEnum = SceneEnum::LAST;
     SceneEnum nextSceneEnum = SceneEnum::LAST;

@@ -9,6 +9,11 @@ void Scene::requestScene(SceneEnum scEnum)
     pressedKeyStack.clear();
 }
 
+void Scene::setPrevScene(SceneEnum scEnum)
+{
+    prevScene = scEnum;
+}
+
 SceneEnum Scene::pollNextScene()
 {
     return nextScene;
@@ -45,7 +50,12 @@ void Scene::loadUI(std::string filePath, UIContainer &container)
 
 void Scene::loadKeybinds(std::string filePath, std::string sceneType)
 {
-    KeyBinds::loadKeybinds(filePath, sceneType, buttonFuncMap, keyBinds);
+    KeyBinds::loadKeybinds(filePath, sceneType, buttonFuncMap, keyBinds , stringKeyBinds);
+
+    for(auto &value : stringKeyBinds)
+    {
+        textVarMap.insert( {value.first, [&]{return value.second;}} );
+    }
 }
 
 void Scene::load()
