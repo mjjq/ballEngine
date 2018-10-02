@@ -82,42 +82,42 @@
             "position" : [5, 0],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "No. Balls:",
+            "text" : "No. Balls: ",
             "variable" : "numBalls"
         },
         {
             "position" : [5, 30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Spawn Mass:",
+            "text" : "Spawn Mass: ",
             "variable" : "spawnMass"
         },
         {
             "position" : [5, 70],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Spawn Radius:",
+            "text" : "Spawn Radius: ",
             "variable" : "spawnRad"
         },
         {
             "position" : [5, 150],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Time Step:",
+            "text" : "Time Step: ",
             "variable" : "timeStep"
         },
         {
             "position" : [5, 110],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Forces Enabled:",
+            "text" : "Forces Enabled: ",
             "variable" : "forceEnld"
         },
         {
             "position" : [5, 130],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Collisions Enabled:",
+            "text" : "Collisions Enabled: ",
             "variable" : "collsEnld"
         }
         ]
@@ -195,21 +195,21 @@
             "position" : [5, 0],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Total KE:",
+            "text" : "Total KE: ",
             "variable" : "totalKE"
         },
         {
             "position" : [5, 20],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Total Energy:",
+            "text" : "Total Energy: ",
             "variable" : "totalEngy"
         },
         {
             "position" : [5, 60],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Int Method:",
+            "text" : "Int Method: ",
             "variable" : "intMthd"
         }
         ]
@@ -227,7 +227,7 @@
             "position" : [0, 0],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "FPS:",
+            "text" : "FPS: ",
             "variable" : "currFPS"
         }
         ]
