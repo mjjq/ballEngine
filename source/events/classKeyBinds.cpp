@@ -354,7 +354,7 @@ void KeyBinds::exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
             {
                 _keyBinds[tempStack]();
                 functionFound = true;
-                if(!isFuncContinuous)
+                if(!isFuncContinuous && _pressedKeyStack.size()>0)
                     _pressedKeyStack.pop_back();
             }
             else
@@ -372,8 +372,8 @@ void KeyBinds::exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
                 {
                     _keyBinds[{_pressedKeyStack.at(i)}]();
                     functionFound = true;
-                    if(!isFuncContinuous)
-                        _pressedKeyStack.clear();
+                    if(!isFuncContinuous && _pressedKeyStack.size()>0)
+                        _pressedKeyStack.erase(_pressedKeyStack.begin() + i);
                 }
             }
             tempStack.pop_back();
