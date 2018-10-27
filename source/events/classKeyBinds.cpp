@@ -101,9 +101,12 @@ StringKeyMap KeyBinds::keyMap = {
     MAP(F10),
     MAP(F11),
     MAP(F12),
-    MAP(F13),
-    MAP(F14),
-    MAP(F15),
+    //MAP(F13),
+    //MAP(F14),
+    //MAP(F15),
+    { "LMB", sf::Keyboard::F13 },
+    { "MMB", sf::Keyboard::F14 },
+    { "RMB", sf::Keyboard::F15 },
     MAP(Pause)
 };
 
@@ -206,9 +209,12 @@ KeyStringMap KeyBinds::invKeyMap = {
     INVMAP(F10),
     INVMAP(F11),
     INVMAP(F12),
-    INVMAP(F13),
-    INVMAP(F14),
-    INVMAP(F15),
+    { sf::Keyboard::F13, "LMB" },
+    { sf::Keyboard::F14, "MMB" },
+    { sf::Keyboard::F15, "RMB" },
+    //INVMAP(F13),
+    //INVMAP(F14),
+    //INVMAP(F15),
     INVMAP(Pause)
 };
 
@@ -326,16 +332,64 @@ std::string KeyBinds::to_string(sf::Keyboard::Key &key)
 
     @return Void.
 */
-void KeyBinds::keyEvents(sf::Event &event, std::vector<sf::Keyboard::Key > &_pressedKeyStack)
+void KeyBinds::keyEvents(sf::Event &event,
+                         std::vector<sf::Keyboard::Key > &_pressedKeyStack,
+                         std::vector<sf::Keyboard::Key > &_releasedKeyStack)
 {
     if(event.type == sf::Event::EventType::KeyPressed)
         _pressedKeyStack.push_back(event.key.code);
+
+    else if(event.type == sf::Event::EventType::MouseButtonPressed)
+    {
+        switch(event.key.code)
+        {
+            case(sf::Mouse::Left):
+                _pressedKeyStack.push_back(keyMap["LMB"]);
+                break;
+            case(sf::Mouse::Middle):
+                _pressedKeyStack.push_back(keyMap["MMB"]);
+                break;
+            case(sf::Mouse::Right):
+                _pressedKeyStack.push_back(keyMap["RMB"]);
+                break;
+            default:
+                break;
+        }
+    }
 
     else if(event.type == sf::Event::EventType::KeyReleased)
     {
         _pressedKeyStack.erase(std::remove(_pressedKeyStack.begin(),
                                           _pressedKeyStack.end(), event.key.code),
                               _pressedKeyStack.end());
+        _releasedKeyStack.push_back(event.key.code);
+    }
+
+    else if(event.type == sf::Event::EventType::MouseButtonReleased)
+    {
+        switch(event.key.code)
+        {
+            case(sf::Mouse::Left):
+                _pressedKeyStack.erase(std::remove(_pressedKeyStack.begin(),
+                                          _pressedKeyStack.end(), keyMap["LMB"]),
+                              _pressedKeyStack.end());
+                _releasedKeyStack.push_back(keyMap["LMB"]);
+                break;
+            case(sf::Mouse::Middle):
+                _pressedKeyStack.erase(std::remove(_pressedKeyStack.begin(),
+                                          _pressedKeyStack.end(), keyMap["MMB"]),
+                              _pressedKeyStack.end());
+                _releasedKeyStack.push_back(keyMap["MMB"]);
+                break;
+            case(sf::Mouse::Right):
+                _pressedKeyStack.erase(std::remove(_pressedKeyStack.begin(),
+                                          _pressedKeyStack.end(), keyMap["RMB"]),
+                              _pressedKeyStack.end());
+                _releasedKeyStack.push_back(keyMap["RMB"]);
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -379,4 +433,26 @@ void KeyBinds::exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
             tempStack.pop_back();
         }
     }
+}
+
+void KeyBinds::exeReleasedKey(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
+                               std::vector<sf::Keyboard::Key > &_releasedKey,
+                               KeyFuncMap &_releasedKeyBinds)
+{
+    if(_releasedKey.size()>0)
+    {
+        std::cout << "hello\n";
+        std::vector<sf::Keyboard::Key > tempStack = _pressedKeyStack;
+        tempStack.push_back(_releasedKey.at(0));
+
+        if(_releasedKeyBinds.find(tempStack) != _releasedKeyBinds.end())
+        {
+            _releasedKeyBinds[tempStack]();
+        }
+        else if(_releasedKeyBinds.find({_releasedKey}) != _releasedKeyBinds.end())
+        {
+            _releasedKeyBinds[{_releasedKey}]();
+        }
+    }
+    _releasedKey.clear();
 }

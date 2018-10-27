@@ -51,6 +51,7 @@ void Scene::loadUI(std::string filePath, UIContainer &container)
 void Scene::loadKeybinds(std::string filePath, std::string sceneType)
 {
     KeyBinds::loadKeybinds(filePath, sceneType, buttonFuncMap, keyBinds , stringKeyBinds);
+    KeyBinds::loadKeybinds(filePath, sceneType, buttonReleaseMap, releasedKeyBinds , relStrKeyBinds);
 
     for(auto &value : stringKeyBinds)
     {

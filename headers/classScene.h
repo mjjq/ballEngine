@@ -14,12 +14,16 @@ protected:
     SceneEnum prevScene = SceneEnum::LAST;
 
     StringStringMap stringKeyBinds;
+    StringStringMap relStrKeyBinds;
     StringFuncMap buttonFuncMap = {};
+    StringFuncMap buttonReleaseMap = {};
     std::map<std::string, std::pair<std::function<void(float)>, float*> > sliderFuncMap = {};
     std::map<std::string, std::function<std::string()> > textVarMap = {};
 
     KeyFuncMap keyBinds = {};
+    KeyFuncMap releasedKeyBinds = {};
     std::vector<sf::Keyboard::Key > pressedKeyStack = {};
+    std::vector<sf::Keyboard::Key > releasedKeyStack = {};
 
     sf::RenderWindow &window;
     sf::View worldView = window.getDefaultView();
@@ -27,6 +31,7 @@ protected:
 
     UIContainer container{true};
     std::pair<bool,int> mouseOnUIWhenClicked{false, -1};
+    bool mouseOnUI = false;
     bool clickedWindowToDrag = false;
 
     virtual void resetUIClick();

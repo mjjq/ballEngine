@@ -59,11 +59,75 @@ void SandboxScene::load()
             {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});
                                 KeyBinds::isFuncContinuous = true;}},
             {"mvPlrRgt",    [&]{ballSim.playerInFunc({-1,0});
-                                KeyBinds::isFuncContinuous = true;}},
+                                KeyBinds::isFuncContinuous = true;}
+                                },
             {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});
-                                KeyBinds::isFuncContinuous = true;}},
+                                KeyBinds::isFuncContinuous = true;}
+                                },
             {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});
-                                KeyBinds::isFuncContinuous = true;}},
+                                KeyBinds::isFuncContinuous = true;}
+                                },
+            {"spwnSingle",  [&]{
+                if(!mouseOnUIWhenClicked.first){
+                    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+                    mousePosOnClick = static_cast<sf::Vector2i>
+                    (window.mapPixelToCoords(viewPos));
+                    drawLine = true;
+                }
+                }
+            },
+            {"spwnJson",  [&]{
+                if(!mouseOnUIWhenClicked.first){
+                    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+                    mousePosOnClick = static_cast<sf::Vector2i>
+                    (window.mapPixelToCoords(viewPos));
+                    drawLine = true;
+                }
+                }
+            },
+            {"spwnSys",  [&]{
+                if(!mouseOnUIWhenClicked.first){
+                    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+                    mousePosOnClick = static_cast<sf::Vector2i>
+                    (window.mapPixelToCoords(viewPos));
+                    drawLine = true;
+                }
+                }
+            },
+        };
+        buttonReleaseMap = {
+            {"spwnSingle",  [&]{
+                if(drawLine == true){
+                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);
+                    ballSim.spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),
+                                         velocity,
+                                         spawnRadius,
+                                         spawnMass);
+                    drawLine = false;
+                }
+            }
+            },
+
+            {"spwnJson",  [&]{
+                if(drawLine == true){
+                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);
+                    spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+                    drawLine = false;
+                }
+            }
+            },
+
+            {"spwnSys",  [&]{
+                if(drawLine == true){
+                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);
+                    ballSim.createSPSys(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+                    drawLine = false;
+                }
+            }
+            },
         };
 
         sliderFuncMap = {
@@ -95,9 +159,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
 {
     if(!mouseOnUIWhenClicked.first)
     {
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Left));
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Middle));
-        checkMBPress(mousePosOnClick,sf::Mouse::isButtonPressed(sf::Mouse::Right));
+        checkMBPress(mousePosOnClick,drawLine);
     }
     if(clickedWindowToDrag)
         container.dragWindow(_window);
@@ -105,6 +167,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
     window.setMouseCursorVisible(true);
 
     KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
+    KeyBinds::exeReleasedKey(pressedKeyStack, releasedKeyStack, releasedKeyBinds);
 
     mousePosOnPan = sf::Mouse::getPosition(window);
 

@@ -363,7 +363,7 @@ void GameScene::mouseViewEvents(sf::Event &event)
 */
 void GameScene::mouseWorldEvents(sf::Event &event)
 {
-    if(event.type == sf::Event::MouseButtonPressed)
+    /*if(event.type == sf::Event::MouseButtonPressed)
     {
         sf::Vector2i viewPos = sf::Mouse::getPosition(window);
         mousePosOnClick = static_cast<sf::Vector2i>(window.mapPixelToCoords(viewPos));
@@ -375,9 +375,9 @@ void GameScene::mouseWorldEvents(sf::Event &event)
     {
         sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
         ballSim.spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),velocity,spawnRadius,spawnMass);
-    }
+    }*/
 
-    if(event.type == sf::Event::EventType::MouseButtonReleased
+    /*if(event.type == sf::Event::EventType::MouseButtonReleased
                     && event.mouseButton.button==sf::Mouse::Right
                     && !(timeToNextSpawn > sf::milliseconds(0)))
     {
@@ -391,7 +391,7 @@ void GameScene::mouseWorldEvents(sf::Event &event)
     {
         sf::Vector2f velocity = velocityFromMouse(mousePosOnClick, spawnVelFactor);
         spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
-    }
+    }*/
 }
 
 
@@ -428,7 +428,7 @@ void GameScene::events(sf::Event &event)
     else
         mouseUIEvents(event);
 
-    KeyBinds::keyEvents(event, pressedKeyStack);
+    KeyBinds::keyEvents(event, pressedKeyStack, releasedKeyStack);
     resizeEvents(event);
 }
 

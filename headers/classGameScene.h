@@ -21,6 +21,7 @@ protected:
     sf::Vector2i mousePosOnClick;
     sf::Vector2i mousePosOnPan;
     sf::Vector2i mousePosOnRelease;
+    bool drawLine = false;
 
     void resetCamera();
     void adjustViewSize(sf::Vector2u newSize);//, float zoom);

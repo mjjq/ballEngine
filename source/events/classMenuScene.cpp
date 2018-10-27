@@ -31,7 +31,7 @@ void MenuScene::events(sf::Event &event)
     if(mouseOnUIWhenClicked.first)
         mouseUIEvents(event);
 
-    KeyBinds::keyEvents(event, pressedKeyStack);
+    KeyBinds::keyEvents(event, pressedKeyStack, releasedKeyStack);
     resizeEvents(event);
 }
 

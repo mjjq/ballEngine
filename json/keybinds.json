@@ -24,7 +24,10 @@
 		"mvPlrFwd"       : ["W"],
 		"mvPlrRgt"       : ["D"],
 		"mvPlrBck"       : ["S"],
-		"mvPlrLft"       : ["A"]
+		"mvPlrLft"       : ["A"],
+		"spwnSingle"	: ["LMB"],
+		"spwnJson"	: ["MMB"],
+		"spwnSys"	: ["RMB"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"       : ["D"],

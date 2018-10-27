@@ -30,9 +30,15 @@ public:
                              KeyFuncMap &keyMap,
                              StringStringMap &stringMap);
     static std::string to_string(sf::Keyboard::Key &key);
-    static void keyEvents(sf::Event &event, std::vector<sf::Keyboard::Key > &_pressedKeyStack);
+
+    static void keyEvents(sf::Event &event,
+                         std::vector<sf::Keyboard::Key > &_pressedKeyStack,
+                         std::vector<sf::Keyboard::Key > &_releasedKeyStack);
     static void exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
                            KeyFuncMap &_keyBinds);
+    static void exeReleasedKey(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
+                               std::vector<sf::Keyboard::Key > &_releasedKey,
+                               KeyFuncMap &_releasedKeyBinds);
 };
 
 #endif // CLASS_KEYBINDS_H
