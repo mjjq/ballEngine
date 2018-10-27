@@ -56,8 +56,9 @@ public:
     virtual void adjustViewSize(sf::Vector2u newSize);
     virtual void events(sf::Event &event);
 
-    void keyEvents(sf::Event &event);
-    void exePressedKeys();
+    void keyEvents(sf::Event &event, std::vector<sf::Keyboard::Key > &_pressedKeyStack);
+    void exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
+                           KeyFuncMap &_keyBinds);
 };
 
 #endif // CLASS_SCENE_H

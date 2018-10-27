@@ -152,7 +152,7 @@ void SurvivalScene::load()
 
 void SurvivalScene::update(sf::RenderWindow &_window)
 {
-    exePressedKeys();
+    KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
 
     if(clickedWindowToDrag)
         container.dragWindow(_window);

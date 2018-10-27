@@ -313,3 +313,63 @@ std::string KeyBinds::to_string(sf::Keyboard::Key &key)
 {
     return invKeyMap[key];
 }
+
+
+/**
+    Function which handles general key based events. Events are processed provided
+    there are no key primary keys held. If these keys are held, the newLayerEvent
+    events are processed instead.
+
+    @param &event The event case to process.
+
+    @return Void.
+*/
+void KeyBinds::keyEvents(sf::Event &event, std::vector<sf::Keyboard::Key > &_pressedKeyStack)
+{
+    if(event.type == sf::Event::EventType::KeyPressed)
+        _pressedKeyStack.push_back(event.key.code);
+
+    else if(event.type == sf::Event::EventType::KeyReleased)
+    {
+        _pressedKeyStack.erase(std::remove(_pressedKeyStack.begin(),
+                                          _pressedKeyStack.end(), event.key.code),
+                              _pressedKeyStack.end());
+    }
+}
+
+void KeyBinds::exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
+                           KeyFuncMap &_keyBinds)
+{
+    std::vector<sf::Keyboard::Key > tempStack = _pressedKeyStack;
+    bool functionFound = false;
+    while(tempStack.size() > 0 && functionFound == false)
+    {
+        if(tempStack.size()>1)
+        {
+            if(_keyBinds.find(tempStack) != _keyBinds.end())
+            {
+                _keyBinds[tempStack]();
+                functionFound = true;
+                _pressedKeyStack.pop_back();
+            }
+            else
+            {
+                tempStack.pop_back();
+            }
+        }
+
+        else if(tempStack.size() == 1)
+        {
+            for(unsigned int i=0; i<_pressedKeyStack.size(); ++i)
+            {
+                if(_keyBinds.find({_pressedKeyStack.at(i)}) != _keyBinds.end())
+                {
+                    _keyBinds[{_pressedKeyStack.at(i)}]();
+                    functionFound = true;
+                    _pressedKeyStack.clear();
+                }
+            }
+            tempStack.pop_back();
+        }
+    }
+}

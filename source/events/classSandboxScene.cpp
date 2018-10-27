@@ -99,7 +99,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     window.setMouseCursorVisible(true);
 
-    exePressedKeys();
+    KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
 
     mousePosOnPan = sf::Mouse::getPosition(window);
 

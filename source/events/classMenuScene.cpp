@@ -31,7 +31,7 @@ void MenuScene::events(sf::Event &event)
     if(mouseOnUIWhenClicked.first)
         mouseUIEvents(event);
 
-    keyEvents(event);
+    KeyBinds::keyEvents(event, pressedKeyStack);
     resizeEvents(event);
 }
 
@@ -55,7 +55,7 @@ void MenuScene::update(sf::RenderWindow &_window)
     if(clickedWindowToDrag)
         container.dragWindow(_window);
 
-    exePressedKeys();
+    KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
     window.setMouseCursorVisible(true);
 }
 

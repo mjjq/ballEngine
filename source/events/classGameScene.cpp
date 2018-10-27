@@ -428,7 +428,7 @@ void GameScene::events(sf::Event &event)
     else
         mouseUIEvents(event);
 
-    keyEvents(event);
+    KeyBinds::keyEvents(event, pressedKeyStack);
     resizeEvents(event);
 }
 
