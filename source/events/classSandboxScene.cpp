@@ -45,6 +45,7 @@ void SandboxScene::load()
             {"viewPan",     [&]{
                 checkForViewPan(mousePosOnPan);
                 canZoom = true;
+                KeyBinds::isFuncContinuous = true;
                     }},
             {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
             {"setPlyr1",    [&]{ballSim.setPlayer(1);}},
@@ -55,10 +56,14 @@ void SandboxScene::load()
             {"chgBColour",  [&]{ballSim.changeBallColour();}},
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
-            {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});}},
-            {"mvPlrRgt",    [&]{ballSim.playerInFunc({-1,0});}},
-            {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});}},
-            {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});}},
+            {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});
+                                KeyBinds::isFuncContinuous = true;}},
+            {"mvPlrRgt",    [&]{ballSim.playerInFunc({-1,0});
+                                KeyBinds::isFuncContinuous = true;}},
+            {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});
+                                KeyBinds::isFuncContinuous = true;}},
+            {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});
+                                KeyBinds::isFuncContinuous = true;}},
         };
 
         sliderFuncMap = {

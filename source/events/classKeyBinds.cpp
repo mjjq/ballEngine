@@ -1,5 +1,7 @@
 #include "../../headers/classKeyBinds.h"
 
+bool KeyBinds::isFuncContinuous = false;
+
 #define MAP(x) { #x, sf::Keyboard:: x }
 StringKeyMap KeyBinds::keyMap = {
     MAP(A),
@@ -342,15 +344,18 @@ void KeyBinds::exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
 {
     std::vector<sf::Keyboard::Key > tempStack = _pressedKeyStack;
     bool functionFound = false;
+    isFuncContinuous = false;
     while(tempStack.size() > 0 && functionFound == false)
     {
+        isFuncContinuous = false;
         if(tempStack.size()>1)
         {
             if(_keyBinds.find(tempStack) != _keyBinds.end())
             {
                 _keyBinds[tempStack]();
                 functionFound = true;
-                _pressedKeyStack.pop_back();
+                if(!isFuncContinuous)
+                    _pressedKeyStack.pop_back();
             }
             else
             {
@@ -362,11 +367,13 @@ void KeyBinds::exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
         {
             for(unsigned int i=0; i<_pressedKeyStack.size(); ++i)
             {
+                isFuncContinuous = false;
                 if(_keyBinds.find({_pressedKeyStack.at(i)}) != _keyBinds.end())
                 {
                     _keyBinds[{_pressedKeyStack.at(i)}]();
                     functionFound = true;
-                    _pressedKeyStack.clear();
+                    if(!isFuncContinuous)
+                        _pressedKeyStack.clear();
                 }
             }
             tempStack.pop_back();

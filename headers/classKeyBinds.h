@@ -20,6 +20,7 @@ class KeyBinds
     static StringKeyMap keyMap;
     static KeyStringMap invKeyMap;
 public:
+    static bool isFuncContinuous;
     static KeyFuncMap createMapFromJSON(nlohmann::json &json, StringFuncMap &sfMap);
     static StringStringMap stringMapFromJSON(nlohmann::json &json,
                                              StringFuncMap &sfMap);
