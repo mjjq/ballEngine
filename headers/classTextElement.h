@@ -2,6 +2,7 @@
 #define CLASS_TXTEL_H
 
 #include <functional>
+#include <SFML/Graphics.hpp>
 
 class UITextElement : public sf::Text
 {

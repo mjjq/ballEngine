@@ -37,7 +37,7 @@ class BallUniverse
 
     float sampledt = 5*dt;
     float timeToNextSample = sampledt;
-    bool enable_trajectories;
+    bool enable_trajectories = false;
     int currentPlayer = -1;
     sf::Vector2f playerInput{0, 0};
 
@@ -100,6 +100,8 @@ public:
     std::string getTimeStep();
     std::string getTotalMomentum();
     std::string getUseRK4();
+    std::string getBallSpeed(unsigned int index);
+    int getNumTimesColld(unsigned int index);
 
     void sampleAllPositions();
     void drawSampledPositions(sf::RenderWindow &window);
@@ -107,7 +109,7 @@ public:
     void togglePlayerTraj();
     sf::Vector2f getBallPosition(unsigned int i);
     void pushBall(float force, float relDirection, int i);
-    void pushBall(float force, sf::Vector2f &resVector, int ballArg);
+    void pushBall(sf::Vector2f &resVector, int ballArg);
     void pushPlayer(float force, float relDirection);
     void setPlayer(unsigned int playerIndex);
     void splitBalls(int ballIndex, float relDirection, float speed);

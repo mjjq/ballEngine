@@ -1,5 +1,5 @@
 {
-	"GameScene" : {
+	"SandboxScene" : {
 		"pauseGme" 	 : ["Escape"],
 		"decSimStep" 	 : ["Comma"],
 		"incSimStep" 	 : ["Period"],
@@ -24,7 +24,17 @@
 		"mvPlrFwd"       : ["W"],
 		"mvPlrRgt"       : ["D"],
 		"mvPlrBck"       : ["S"],
-		"mvPlrLft"       : ["A"]
+		"mvPlrLft"       : ["A"],
+		"spwnSingle"	: ["LMB"],
+		"spwnJson"	: ["MMB"],
+		"spwnSys"	: ["RMB"]
+	},
+	"SurvivalScene" : {
+		"mvPlrRgt"       : ["D"],
+		"mvPlrLft"       : ["A"],
+		"pauseGme" 	 : ["Escape"],
+		"startGme"	 : ["Space"],
+		"restart"	 : ["R"]
 	},
 	"PauseScene" : {
 		"resume"         : ["Escape"]	

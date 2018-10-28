@@ -18,28 +18,28 @@
 #include <fstream>
 #include <map>
 
-#include "../../headers/classPauseMenuScene.h"
+#include "../../headers/classMainMenuScene.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
 
-void PauseMenuScene::load()
+void MainMenuScene::load()
 {
     adjustViewSize(window.getSize());
 
     buttonFuncMap = {
-        {"resume", [&]{requestScene(prevScene);}},
-        {"options", [&]{}},
-        {"exit", [&]{window.close();}},
-        {"mainMenu", [&]{requestScene(SceneEnum::SCENE_MENU);}}
+        {"newSandbox",  [&]{requestScene(SceneEnum::SCENE_SANDBOX);}},
+        {"newSvival",   [&]{requestScene(SceneEnum::SCENE_SURVIVAL);}},
+        {"options",     [&]{}},
+        {"exit",        [&]{window.close();}}
     };
 
-    loadUI("./json/pausemenusceneUI.json", container);
-    loadKeybinds("./json/keybinds.json", "PauseScene");
+    loadUI("./json/menusceneUI.json", container);
+    loadKeybinds("./json/keybinds.json", "MenuScene");
 
 }
 
-PauseMenuScene::PauseMenuScene(sf::RenderWindow &_window) : MenuScene(_window)
+MainMenuScene::MainMenuScene(sf::RenderWindow &_window) : MenuScene(_window)
 {
 
 }

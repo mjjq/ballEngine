@@ -15,7 +15,7 @@ class Ball : public sf::CircleShape
     float mass;
     float density;
     //float radius;
-    bool collidedThisFrame = false;
+    int numDynColls = 0;
 
     float lenJonesForce(float x, float x_0, float r, float m);
     float exptCollForce(float x, float x_0, float r, float m);
@@ -58,6 +58,8 @@ public:
     bool getIsPlayer();
     void setIsPlayer(bool value);
 
+    void incTimesCollided();
+    int getNumCollTimes();
 };
 
 #endif // CLASS_UNIVERSE_H

@@ -3,31 +3,51 @@
 
 #include "classUIContainer.h"
 #include "classKeyBinds.h"
+#include "sceneEnums.h"
 #include <fstream>
-
-enum class SceneEnum
-{
-    SCENE_MENU,
-    SCENE_GAME,
-    SCENE_PAUSEMENU,
-    LAST
-};
 
 class Scene
 {
     SceneEnum nextScene = SceneEnum::LAST;
 
 protected:
+    SceneEnum prevScene = SceneEnum::LAST;
+
+    StringStringMap stringKeyBinds;
+    StringStringMap relStrKeyBinds;
     StringFuncMap buttonFuncMap = {};
+    StringFuncMap buttonReleaseMap = {};
     std::map<std::string, std::pair<std::function<void(float)>, float*> > sliderFuncMap = {};
     std::map<std::string, std::function<std::string()> > textVarMap = {};
 
     KeyFuncMap keyBinds = {};
+    KeyFuncMap releasedKeyBinds = {};
     std::vector<sf::Keyboard::Key > pressedKeyStack = {};
+    std::vector<sf::Keyboard::Key > releasedKeyStack = {};
+
+    sf::RenderWindow &window;
+    sf::View worldView = window.getDefaultView();
+    sf::View GUIView = window.getDefaultView();
+
+    UIContainer container{true};
+    std::pair<bool,int> mouseOnUIWhenClicked{false, -1};
+    bool mouseOnUI = false;
+    bool clickedWindowToDrag = false;
+
+    virtual void resetUIClick();
+    virtual void clickOnUI();
+
+    virtual void mouseViewEvents(sf::Event &event);
+    virtual void mouseUIEvents(sf::Event &event);
+    virtual void resizeEvents(sf::Event &event);
 
 public:
+    Scene(sf::RenderWindow &_window);
+
     void requestScene(SceneEnum scEnum);
     SceneEnum pollNextScene();
+    void setPrevScene(SceneEnum scEnum);
+
     virtual void update(sf::RenderWindow &window);
     virtual void redraw(sf::RenderWindow &window);
     virtual void initBindings();
@@ -41,8 +61,9 @@ public:
     virtual void adjustViewSize(sf::Vector2u newSize);
     virtual void events(sf::Event &event);
 
-    void keyEvents(sf::Event &event);
-    void exePressedKeys();
+    void keyEvents(sf::Event &event, std::vector<sf::Keyboard::Key > &_pressedKeyStack);
+    void exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
+                           KeyFuncMap &_keyBinds);
 };
 
 #endif // CLASS_SCENE_H

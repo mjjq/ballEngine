@@ -426,7 +426,7 @@ float BallUniverse::physicsLoop()
         float dtR = dt;
         float epsilon = 1e-5;
 
-        pushBall(0.1f, playerInput, currentPlayer);
+        pushBall(playerInput, currentPlayer);
         playerInput = {0,0};
 
         for(unsigned int i=0; i<ballArray.size(); ++i)
@@ -484,7 +484,7 @@ float BallUniverse::physicsLoopAbsorb()
         float dtR = dt;
         float epsilon = 1e-5;
 
-        pushBall(0.1f, playerInput, currentPlayer);
+        pushBall(playerInput, currentPlayer);
 
         for(unsigned int i=0; i<ballArray.size(); ++i)
         {
@@ -854,6 +854,22 @@ std::string BallUniverse::getUseRK4()
     return to_string(intEnum);
 }
 
+std::string BallUniverse::getBallSpeed(unsigned int index)
+{
+    if(index < ballArray.size() && index >= 0)
+        return std::to_string(ballArray.at(index).getSpeed());
+
+    return "ballArray index out of range";
+}
+
+int BallUniverse::getNumTimesColld(unsigned int index)
+{
+    if(index < ballArray.size() && index >= 0)
+        return ballArray.at(index).getNumCollTimes();
+
+    return -1;
+}
+
 void BallUniverse::pushBall(float force, float relDirection, int i)
 {
     if(ballArray.size()>0 && currentPlayer >= 0)
@@ -868,7 +884,7 @@ void BallUniverse::pushBall(float force, float relDirection, int i)
     }
 }
 
-void BallUniverse::pushBall(float force, sf::Vector2f &resVector, int ballArg)
+void BallUniverse::pushBall(sf::Vector2f &resVector, int ballArg)
 {
     if(ballArray.size()>0 && currentPlayer >= 0)
     {
@@ -884,7 +900,7 @@ void BallUniverse::pushBall(float force, sf::Vector2f &resVector, int ballArg)
         if(sfVectorMath::square(resVector) > 1e-10)
         {
 
-            sf::Vector2f rotVec = sfVectorMath::rotate(force*sfVectorMath::norm(resVector), currVelDir);
+            sf::Vector2f rotVec = sfVectorMath::rotate(resVector, currVelDir);
 
             ballArray.at(ballArg).applyExternalImpulse(rotVec, dt);
         }

@@ -2,11 +2,13 @@
 #define CLASS_SCENEMAN_H
 
 #include "classScene.h"
-#include "classGameScene.h"
-#include "classMenuScene.h"
+#include "classSandboxScene.h"
+#include "classSurvivalScene.h"
+#include "classMainMenuScene.h"
 #include "classPauseMenuScene.h"
 #include "classUIContainer.h"
 #include "classUIWindow.h"
+#include "sceneEnums.h"
 
 class SceneManager
 {
@@ -28,10 +30,12 @@ class SceneManager
     sf::View GUIView = window.getDefaultView();
     sf::ContextSettings settings;
 
-    GameScene game{window, targetFTime, currentFrameTime, currentFPS};
-    MenuScene menu{window, currentFrameTime, currentFPS};
-    PauseMenuScene pauseMenu{window, currentFrameTime, currentFPS};
+    SandboxScene sandbox{window, targetFTime, currentFrameTime, currentFPS};
+    SurvivalScene survival{window, targetFTime, currentFrameTime, currentFPS};
+    MainMenuScene menu{window};
+    PauseMenuScene pauseMenu{window};
     Scene *currScene = &menu;
+    Scene *gameScene = nullptr;
 
     SceneEnum thisSceneEnum = SceneEnum::LAST;
     SceneEnum nextSceneEnum = SceneEnum::LAST;

@@ -176,18 +176,23 @@ void SceneManager::setAALevel(unsigned int level, Scene &_currScene)
 void SceneManager::loadNextScene(SceneEnum nextScene)
 {
     //std::cout << static_cast<int>(nextScene) << "\n";
-    thisSceneEnum = nextSceneEnum;
     currScene->requestScene(SceneEnum::LAST);
     switch(nextScene)
     {
-        case(SceneEnum::SCENE_GAME):
+        case(SceneEnum::SCENE_SANDBOX):
             currScene->unload();
-            currScene = &game;
+            currScene = &sandbox;
+            gameScene = currScene;
+            break;
+        case(SceneEnum::SCENE_SURVIVAL):
+            currScene->unload();
+            currScene = &survival;
+            gameScene = currScene;
             break;
         case(SceneEnum::SCENE_MENU):
             currScene->unload();
             currScene = &menu;
-            game.unload();
+            gameScene->unload();
             break;
         case(SceneEnum::SCENE_PAUSEMENU):
             currScene = &pauseMenu;
@@ -197,6 +202,8 @@ void SceneManager::loadNextScene(SceneEnum nextScene)
         default:
             break;
     }
+    currScene->setPrevScene(thisSceneEnum);
+    thisSceneEnum = nextSceneEnum;
     currScene->load();
     currScene->adjustViewSize(window.getSize());
 }
