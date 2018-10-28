@@ -3,13 +3,13 @@
     {
         "position" : [0.0, 0.15],
         "posoffset" : [0, 0],
-        "dimensions" : [250, 260],
+        "dimensions" : [250, 280],
         "draggable" : false,
         "fixedtowindow" : true,
 
         "Buttons" : [
         {
-            "position" : [15, 180],
+            "position" : [15, 200],
             "dimensions"  : [60, 30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -17,7 +17,7 @@
             "function" : "incMass"
         },
         {
-            "position" : [95,180],
+            "position" : [95,200],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -25,7 +25,7 @@
             "function" : "decMass"
         },
         {
-            "position" : [175,180],
+            "position" : [175,200],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -33,7 +33,7 @@
             "function" : "rstMass"
         },
         {
-            "position" : [15,220],
+            "position" : [15,240],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -41,7 +41,7 @@
             "function" : "incRad"
         },
         {
-            "position" : [95,220],
+            "position" : [95,240],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -49,7 +49,7 @@
             "function" : "decRad"
         },
         {
-            "position" : [175,220],
+            "position" : [175,240],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -100,7 +100,7 @@
             "variable" : "spawnRad"
         },
         {
-            "position" : [5, 150],
+            "position" : [5, 170],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
             "text" : "Time Step: ",
@@ -119,6 +119,13 @@
             "fontsize" : 16,
             "text" : "Collisions Enabled: ",
             "variable" : "collsEnld"
+        },
+		{
+            "position" : [5, 150],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Gravity Enabled: ",
+            "variable" : "gravEnld"
         }
         ]
     },

@@ -18,6 +18,7 @@
 		"focusPlr"	 : ["F"],
 		"tglCols"	 : ["LControl", "C"],
 		"tglForces"	 : ["LControl", "F"],
+		"tglGrav"	 : ["LControl", "G"],
 		"chgBColour" 	 : ["LControl", "K"],
 		"undoBall"   	 : ["LControl", "Z"],
 		"undoRect"   	 : ["LAlt", "Z"],

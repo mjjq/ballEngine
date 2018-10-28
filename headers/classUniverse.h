@@ -18,6 +18,8 @@ class BallUniverse
     int collider2 = 0;
     bool enable_forces;
     bool enable_collisions;
+    bool universalGravity = false;
+    sf::Vector2f uGravityDir{0, 1};
     float minBallSize = 0.001;
 
     float collAccumulator = 0.0f;
@@ -88,6 +90,7 @@ public:
     void toggleCollisions();
     void toggleForces();
     void toggleRK4();
+    void toggleUGravity();
     void clearSimulation();
     void changeBallColour();
 
@@ -95,6 +98,7 @@ public:
     std::string getNumOfBalls();
     std::string getCollisionsEnabled();
     std::string getForcesEnabled();
+    std::string getUGravityEnabled();
     std::string getTotalKE();
     std::string getTotalEnergy();
     std::string getTimeStep();
@@ -113,6 +117,7 @@ public:
     void pushPlayer(float force, float relDirection);
     void setPlayer(unsigned int playerIndex);
     void splitBalls(int ballIndex, float relDirection, float speed);
+    void applyUGravity();
     void playerInFunc(sf::Vector2f relVector);
 
 };

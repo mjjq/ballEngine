@@ -427,6 +427,10 @@ float BallUniverse::physicsLoop()
         float epsilon = 1e-5;
 
         pushBall(playerInput, currentPlayer);
+
+        if(universalGravity)
+            applyUGravity();
+
         playerInput = {0,0};
 
         for(unsigned int i=0; i<ballArray.size(); ++i)
@@ -769,6 +773,14 @@ void BallUniverse::toggleForces()
         enable_forces = true;
 }
 
+void BallUniverse::toggleUGravity()
+{
+    if(universalGravity)
+        universalGravity = false;
+    else
+        universalGravity = true;
+}
+
 void BallUniverse::toggleRK4()
 {
     int current = static_cast<int>(intEnum);
@@ -814,6 +826,11 @@ std::string BallUniverse::getNumOfBalls()
 std::string BallUniverse::getCollisionsEnabled()
 {
     return std::to_string(enable_collisions);
+}
+
+std::string BallUniverse::getUGravityEnabled()
+{
+    return std::to_string(universalGravity);
 }
 
 std::string BallUniverse::getForcesEnabled()
@@ -992,6 +1009,14 @@ void BallUniverse::splitBalls(int ballIndex, float relDirection, float speed)
                                 ballArray.at(ballIndex).getPosition();
             spawnNewBall(pos1, v2 + initialVelocity, r2, r2);
         }
+    }
+}
+
+void BallUniverse::applyUGravity()
+{
+    for(Ball &ball : ballArray)
+    {
+        ball.applyExternalImpulse(uGravityDir, dt);
     }
 }
 
