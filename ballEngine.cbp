@@ -55,6 +55,7 @@
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/jsonParsing.h" />
+		<Unit filename="headers/sceneEnums.h" />
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />

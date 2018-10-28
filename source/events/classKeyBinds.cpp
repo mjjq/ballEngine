@@ -441,7 +441,6 @@ void KeyBinds::exeReleasedKey(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
 {
     if(_releasedKey.size()>0)
     {
-        std::cout << "hello\n";
         std::vector<sf::Keyboard::Key > tempStack = _pressedKeyStack;
         tempStack.push_back(_releasedKey.at(0));
 
