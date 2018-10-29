@@ -39,8 +39,9 @@ public:
     float getDensity();
     //float getRadius();
     sf::Vector2f getVelocity();
+    sf::Vector2f getnStepVelocity();
     void setVelocity(sf::Vector2f vel);
-    void addSolvedVelocity(sf::Vector2f &cStep, sf::Vector2f &nStep);
+    void addSolvedVelocity(sf::Vector2f cStep, sf::Vector2f nStep);
     void setToCollided();
     void resetToCollided();
     bool getHasCollided();
@@ -54,6 +55,9 @@ public:
     bool getSamplePrevPosBool();
     void setSamplePrevPosBool(bool value);
     std::deque<sf::Vector2f>& getPreviousPositions();
+    sf::Vector2f getPreviousPosition();
+
+    void printAllVelocities();
 
     bool getIsPlayer();
     void setIsPlayer(bool value);

@@ -113,7 +113,10 @@ void Ball::applyExternalImpulse(sf::Vector2f force, float dt)
 */
 void Ball::updatePosition(float dt)
 {
+    //std::cout << dt << "\n";
+    //printAllVelocities();
     //sf::Vector2f currPos = getPosition();
+    pStepPosition = getPosition();
     setPosition(getPosition()+(cStepVelocity+cStepModVelocity)*dt);
     //std::cout << "Current: " << cStepVelocity << "\n";
     //std::cout << "Next:    " << nStepVelocity << "\n";
@@ -175,6 +178,18 @@ sf::Vector2f Ball::getVelocity()
     return cStepVelocity;
 }
 
+sf::Vector2f Ball::getnStepVelocity()
+{
+    return nStepVelocity;
+}
+
+void Ball::printAllVelocities()
+{
+    std::cout << "cStep: " << cStepVelocity << "\n";
+    std::cout << "cStepMod: " << cStepModVelocity << "\n";
+    std::cout << "nStep: " << nStepVelocity << "\n\n";
+}
+
 /**
     Set the current velocity of the ball.
 
@@ -188,9 +203,9 @@ void Ball::setVelocity(sf::Vector2f vel)
     nStepVelocity = vel;
 }
 
-void Ball::addSolvedVelocity(sf::Vector2f &cStep, sf::Vector2f &nStep)
+void Ball::addSolvedVelocity(sf::Vector2f cStep, sf::Vector2f nStep)
 {
-    cStepModVelocity += cStep;
+    cStepVelocity += cStep;
     nStepVelocity += nStep;
 }
 
@@ -334,6 +349,11 @@ void Ball::sampleCurrentPosition()
 std::deque<sf::Vector2f>& Ball::getPreviousPositions()
 {
     return previousPositions;
+}
+
+sf::Vector2f Ball::getPreviousPosition()
+{
+    return pStepPosition;
 }
 
 /**

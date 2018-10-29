@@ -104,6 +104,14 @@ void BallUniverse::updateAllObjects(bool _enableForces, float _dt)
                 if(&ball1 != &ball2)
                     updateFirstVelocity(intEnum, _dt, ball1, ball2);
 
+    if(universalGravity==true)
+        for(Ball &ball : ballArray)
+        {
+            std::pair<sf::Vector2f,sf::Vector2f> solution;
+            solution = integrators::verletMethod(_dt, uGravityDir);
+            ball.addSolvedVelocity(solution.first, solution.second);
+        }
+
     for(Ball &ball : ballArray)
         ball.updatePosition(_dt);
 }
@@ -348,79 +356,6 @@ void BallUniverse::removeRect(int index)
     }
 }
 
-/*float BallUniverse::physicsLoop()
-{
-        float dtR = dt;
-        float epsilon = 1e-5;
-
-        if(playerInput.first)
-            pushBall(0.1f, playerInput.second, currentPlayer);
-
-        for(unsigned int i=0; i<ballArray.size(); ++i)
-        {
-            ballArray.at(i).resetToCollided();
-
-            bool check = checkForBounce(ballArray.at(i));
-            if(check)
-                collTimeForBall(i);
-        }
-
-        if(enable_collisions==true)
-        {
-            if(hasCollided==false)
-                calcCollTimes();
-
-            else if(hasCollided==true)
-                hasCollided = false;
-
-            findShortestCollTime();
-        }
-
-        if(dt >= timeToNextColl && timeToNextColl >= epsilon)
-        {
-            dtR = timeToNextColl;
-
-            updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
-            colliderArray.addConstValue(-dtR);
-            staticCollArray.addConstValue(-dtR);
-
-            hasCollided = true;
-            if(collWithStatic)
-            {
-                for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
-                    for(unsigned int j=0; j<staticCollArray.getWidth(); ++j)
-                    {
-                        if(staticCollArray.getElementValue(j,i) <= epsilon)
-                        {
-                            //std::cout << "With static: " << i << " : " << j << "\n";
-                            Collisions::ballCollision(ballArray.at(i), AARectArray.at(j));
-                            collTimeForBall(i);
-                        }
-                    }
-            }
-            else
-                if(collider1 != collider2)
-                {
-                    for(unsigned int i=0; i<ballArray.size(); ++i)
-                        for(unsigned int j=i; j<ballArray.size(); ++j)
-                            if(colliderArray.getElementValue(j,i) <= epsilon)
-                            {
-                                Collisions::ballCollision(ballArray.at(i), ballArray.at(j));
-                                //ballAbsorption(ballArray.at(i), ballArray.at(j), dtR);
-                                collTimeForBall(i);
-                                collTimeForBall(j);
-                            }
-                }
-
-
-            timeToNextColl = 1e+15;
-        }
-        else
-            updateAllObjects(enable_forces, dt);
-
-        return dtR;
-}*/
-
 float BallUniverse::physicsLoop()
 {
         float dtR = dt;
@@ -428,15 +363,12 @@ float BallUniverse::physicsLoop()
 
         pushBall(playerInput, currentPlayer);
 
-        if(universalGravity)
-            applyUGravity();
-
         playerInput = {0,0};
 
         for(unsigned int i=0; i<ballArray.size(); ++i)
         {
             ballArray[i].resetToCollided();
-            if( checkForBounce(ballArray[i]) )
+            if( checkForBounce(ballArray[i]) && enable_collisions)
                 collTimeForBall(i);
         }
 

@@ -56,6 +56,7 @@ sfPair integrators::RK4Method2ndODE(sf::Vector2f xvec, sf::Vector2f thisVel, sf:
     return dv*dt;
 }*/
 
+
 sfPair integrators::verletMethod(sf::Vector2f &xSep, sf::Vector2f &thisVel, sf::Vector2f &otherVel, float &dt, float M, float G)
 {
     sf::Vector2f dv = dt*forces::newtonForce(xSep + 0.5f*dt*(thisVel - otherVel), M, G);
@@ -63,6 +64,32 @@ sfPair integrators::verletMethod(sf::Vector2f &xSep, sf::Vector2f &thisVel, sf::
 
     return std::make_pair(dx, dv);
 }
+
+//constant acceleration
+sfPair integrators::eulerMethod(float dt, sf::Vector2f g)
+{
+    return std::make_pair( sf::Vector2f{0,0}, dt*g );
+}
+
+sfPair integrators::semImpEulerMethod(float dt, sf::Vector2f g)
+{
+    return std::make_pair( dt*g, dt*g );
+}
+
+sfPair integrators::verletMethod(float dt, sf::Vector2f g)
+{
+    sf::Vector2f dv = dt*g;
+    sf::Vector2f dx = 0.5f*(dv);
+
+    return std::make_pair(dx, dv);
+}
+
+sfPair integrators::RK4Method2ndODE(float dt, sf::Vector2f g)
+{
+
+    return std::make_pair( sf::Vector2f{0,0}, dt*g );
+}
+
 
 std::string integrators::returnIntTypeStr(const Integrators &value)
 {

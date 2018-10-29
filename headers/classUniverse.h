@@ -19,7 +19,7 @@ class BallUniverse
     bool enable_forces;
     bool enable_collisions;
     bool universalGravity = false;
-    sf::Vector2f uGravityDir{0, 1};
+    sf::Vector2f uGravityDir{0, 0.2};
     float minBallSize = 0.001;
 
     float collAccumulator = 0.0f;

@@ -15,6 +15,10 @@ namespace Collisions
 
     void ballCollision(Ball &firstBall, Ball &secondBall);
     void ballCollision(Ball &ball, sf::RectangleShape &rect);
+
+    sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
+    sf::Vector2f calcPenetVector(Ball &ball1, Ball &ball2);
+
 }
 
 #endif // COLLDETECT_H
