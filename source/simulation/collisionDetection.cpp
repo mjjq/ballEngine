@@ -121,9 +121,9 @@ float Collisions::timeToCollision(Ball &firstBall, Ball &secondBall)
     float root1 = -(projVec + pow(discriminant,0.5))/relSpeed;
     float root2 = -(projVec - pow(discriminant,0.5))/relSpeed;
 
-    if(root1 < 0 & root2 < 0)
+    if(root1 < 0 && root2 < 0)
         return std::numeric_limits<float>::quiet_NaN();
-    else if(root1 < 0 || root2 < 0)
+    else if(!(root1 < 0) != !(root2 < 0))
         return 0.0f;
     return (root2<root1)?root2:root1;
 }
@@ -308,5 +308,5 @@ sf::Vector2f Collisions::calcPenetVector(Ball &ball1, Ball &ball2)
     float distance = sqrt( sfVectorMath::square(separationVec) );
     float penetDistance = -1.0f*std::abs( distance - (ball1.getRadius() + ball2.getRadius()) );
 
-    return (separationVec/distance)*(penetDistance -0.00f*(ball1.getRadius() + ball2.getRadius()));
+    return (separationVec/distance)*(penetDistance -0.01f*(ball1.getRadius() + ball2.getRadius()));
 }
