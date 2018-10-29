@@ -185,9 +185,9 @@ sf::Vector2f Ball::getnStepVelocity()
 
 void Ball::printAllVelocities()
 {
-    std::cout << "cStep: " << cStepVelocity << "\n";
-    std::cout << "cStepMod: " << cStepModVelocity << "\n";
-    std::cout << "nStep: " << nStepVelocity << "\n\n";
+    //std::cout << "cStep: " << cStepVelocity << "\n";
+    //std::cout << "cStepMod: " << cStepModVelocity << "\n";
+    //std::cout << "nStep: " << nStepVelocity << "\n\n";
 }
 
 /**
