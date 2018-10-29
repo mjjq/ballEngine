@@ -374,8 +374,11 @@ float BallUniverse::physicsLoop()
 
         if(enable_collisions==true)
         {
-            if(hasCollided==false)
+            if(hasCollided==false || collAccumulator <= 0.0f)
+            {
                 calcCollTimes();
+                collAccumulator = dt;
+            }
 
             else if(hasCollided==true)
             {
