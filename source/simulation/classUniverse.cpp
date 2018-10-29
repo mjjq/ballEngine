@@ -495,12 +495,19 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
     {
         accumulator += 120*dt*frameTime.asSeconds();//((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
         int limiting = 0;
-        int maxLimit = 12;
+        int maxLimit = 1000;
+        float dtR = dt;
         while(accumulator >= dt && limiting < maxLimit)
         {
-            accumulator -= physicsLoop();
+            thresholdTimer.restart();
+            //std::cout << "Before: " << limiting << "\n";
+            dtR = physicsLoop();
+            accumulator -= dtR;
+            //std::cout << "After: " << limiting << "\n";
+            //std::cout << "After: " << thresholdTimer.getElapsedTime().asSeconds() << "\n\n";
+
             sampleAllPositions();
-            if(maxLimit*thresholdTimer.restart().asSeconds() > frameLimit.asSeconds())
+            if(thresholdTimer.getElapsedTime().asSeconds() > frameLimit.asSeconds()*dtR)
                 ++limiting;
         }
         //playerInput.first = false;
@@ -508,10 +515,12 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
         calcTotalMomentum(ballArray);
         calcTotalGPE(ballArray);
         calcTotalEnergy();
-        if( (limiting = maxLimit) && (accumulator >= dt) )
+        if( (limiting == maxLimit) && (accumulator >= dt) )
         {
             accumulator = 0.0f;
             std::cout << "Limit\n";
+            if(frameTime.asSeconds() > 1.0f)
+                isPaused = true;
         }
     }
 }
