@@ -215,6 +215,7 @@ void Collisions::ballCollision(Ball &firstBall, Ball &secondBall)
 {
     using namespace sfVectorMath;
 
+    float coefRest = 0.9f;
     //sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
     sf::Vector2f rhat = norm(firstBall.getPosition() - secondBall.getPosition());
 
@@ -229,8 +230,8 @@ void Collisions::ballCollision(Ball &firstBall, Ball &secondBall)
     firstBall.setPosition(firstBall.getPosition() - penetVector1);
     secondBall.setPosition(secondBall.getPosition() + penetVector2);
 
-    firstBall.setVelocity(v1 - rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
-    secondBall.setVelocity(v2 + rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
+    firstBall.setVelocity(v1 - coefRest*rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
+    secondBall.setVelocity(v2 + coefRest*rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
 
     firstBall.incTimesCollided();
     secondBall.incTimesCollided();
@@ -244,7 +245,7 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
     sf::Vector2f r = ball.getPosition();
     sf::Vector2f v = ball.getVelocity();
 
-    float coefRest = 1.0f;
+    float coefRest = 0.7f;
     //std::cout << v << "\n";float penetDistance = distance - ball.getRadius();
     sf::Rect<float> rectBounds = rect.getGlobalBounds();
 
