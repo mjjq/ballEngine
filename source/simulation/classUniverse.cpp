@@ -969,9 +969,16 @@ void BallUniverse::playerInFunc(sf::Vector2f relVector)
     playerInput += relVector;
 }
 
-BallUniverse::BallUniverse(int _worldSizeX, int _worldSizeY, float _dt, bool _force, bool _collision) :
+BallUniverse::BallUniverse(int _worldSizeX,
+                           int _worldSizeY,
+                           float _dt,
+                           bool _force,
+                           bool _collision) :
 
-worldSizeX{_worldSizeX}, worldSizeY{_worldSizeY}, enable_forces{_force}, enable_collisions{_collision}, dt{_dt}
+worldSizeX{_worldSizeX},
+worldSizeY{_worldSizeY},
+enable_forces{_force},
+enable_collisions{_collision},
+dt{_dt}
 {
-
 }

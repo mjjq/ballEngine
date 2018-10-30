@@ -133,7 +133,6 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
 {
     sf::Vector2f v = ball.getVelocity();
     sf::Vector2f r = ball.getPosition();
-    sf::Vector2f rPrev = ball.getPreviousPosition();
     sf::Rect<float> AABB = origAARect.getGlobalBounds();
     AABB.left -= ball.getRadius();
     AABB.top -= ball.getRadius();
@@ -188,7 +187,7 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
     else
         if(tmin < 0.0f)
         {
-            if(AABB.contains(r.x, r.y) && !intersectCorner)
+            if(AABB.contains(r.x, r.y) || intersectCorner)
             {
                 return 0.0f;
             }
@@ -279,6 +278,7 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
         sf::Vector2f ballPos = ball.getPosition();
         Ball infMassBall(ball.getRadius(), 1e+15*ball.getMass(),
                         2.0f*sf::Vector2f{rectBounds.left, rectBounds.top}-ballPos, {0.0f, 0.0f});
+
         if(boolXMax && boolYMin)
             infMassBall.setPosition(2.0f*sf::Vector2f{rectBounds.left + rectBounds.width,
                                      rectBounds.top}-ballPos);
@@ -289,6 +289,8 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
             infMassBall.setPosition(2.0f*sf::Vector2f{rectBounds.left + rectBounds.width,
                                      rectBounds.top + rectBounds.height}-ballPos);
         Collisions::ballCollision(ball, infMassBall);
+
+        std::cout << &debugWindow << "\n";
     }
 }
 
@@ -308,5 +310,5 @@ sf::Vector2f Collisions::calcPenetVector(Ball &ball1, Ball &ball2)
     float distance = sqrt( sfVectorMath::square(separationVec) );
     float penetDistance = -1.0f*std::abs( distance - (ball1.getRadius() + ball2.getRadius()) );
 
-    return (separationVec/distance)*(penetDistance -0.01f*(ball1.getRadius() + ball2.getRadius()));
+    return (separationVec/distance)*(penetDistance -0.001f*(ball1.getRadius() + ball2.getRadius()));
 }

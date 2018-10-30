@@ -153,7 +153,6 @@ void SandboxScene::load()
 
         loadUI("./json/sandboxsceneUI.json", container);
         loadKeybinds("./json/keybinds.json", "SandboxScene");
-
     }
 }
 
