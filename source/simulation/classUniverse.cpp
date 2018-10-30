@@ -171,31 +171,6 @@ void BallUniverse::calcCollTimes()
         }
 }
 
-/*void BallUniverse::findShortestCollTime()
-{
-    std::tuple<int,int,float> collTupleDyn = colliderArray.getMatrixMin();
-    std::tuple<int,int,float> collTupleStat = staticCollArray.getMatrixMin();
-    //colliderArray.printMatrix(); std::cout << "\n";
-    //staticCollArray.printMatrix(); std::cout << "\n";
-    if(std::get<2>(collTupleDyn) < std::get<2>(collTupleStat))
-    {
-        //std::cout << "Dyn\n";
-        collWithStatic = false;
-        timeToNextColl = std::get<2>(collTupleDyn);
-        collider1 = std::get<0>(collTupleDyn);
-        collider2 = std::get<1>(collTupleDyn);
-    }
-    else
-    {
-        //std::cout << "stat\n";
-        collWithStatic = true;
-        timeToNextColl = std::get<2>(collTupleStat);
-        collider1 = std::get<0>(collTupleStat);
-        collider2 = std::get<1>(collTupleStat);
-    }
-    //std::cout << timeToNextColl << ": " << collider1 << " " << collider2 << "\n";
-}*/
-
 
 void BallUniverse::findShortestCollTime()
 {
@@ -393,6 +368,7 @@ float BallUniverse::physicsLoop()
 
         if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
         {
+            //std::cout << timeToNextColl << "\n";
             hasCollided = true;
             dtR = timeToNextColl;
             if(std::abs(dtR) > epsilon)

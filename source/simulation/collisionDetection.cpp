@@ -93,8 +93,11 @@ float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir
     std::cout << root1 << " root1\n";
     std::cout << root2 << " root2\n\n";*/
 
-    if(root1 < 0 || root2 < 0)
+    //std::cout << root1 << " : " << root2 << "\n\n";
+    if(root1 < 0 && root2 < 0)
         return std::numeric_limits<float>::quiet_NaN();
+    if(!(root1 < 0) != !(root2 < 0))
+        return 0.0f;
     return (root2<root1)?root2:root1;
 }
 
@@ -168,25 +171,25 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
 
     bool intersectCorner = false;
 
-    if(intPoint.x < origAABB.left && intPoint.y < origAABB.top)
+    if(intPoint.x <= origAABB.left && intPoint.y <= origAABB.top)
     {
         tmin = raySphereIntersect(r,v, {origAABB.left, origAABB.top}, ball.getRadius());
         intersectCorner = true;
     }
 
-    else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y < origAABB.top)
+    else if(intPoint.x >= origAABB.left + origAABB.width && intPoint.y <= origAABB.top)
     {
         tmin = raySphereIntersect(r,v, {origAABB.left+origAABB.width, origAABB.top}, ball.getRadius());
         intersectCorner = true;
     }
 
-    else if(intPoint.x < origAABB.left && intPoint.y > origAABB.top + origAABB.height)
+    else if(intPoint.x <= origAABB.left && intPoint.y >= origAABB.top + origAABB.height)
     {
         tmin = raySphereIntersect(r,v, {origAABB.left, origAABB.top+origAABB.height}, ball.getRadius());
         intersectCorner = true;
     }
 
-    else if(intPoint.x > origAABB.left + origAABB.width && intPoint.y > origAABB.top + origAABB.height)
+    else if(intPoint.x >= origAABB.left + origAABB.width && intPoint.y >= origAABB.top + origAABB.height)
     {
         tmin = raySphereIntersect(r,v, {origAABB.left+origAABB.width, origAABB.top+origAABB.height}, ball.getRadius());
         intersectCorner = true;
@@ -200,9 +203,10 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
                 return 0.0f;
             }
             else
+            {
                 return std::numeric_limits<float>::quiet_NaN();
+            }
         }
-
     return tmin;
 }
 
@@ -225,8 +229,8 @@ void Collisions::ballCollision(Ball &firstBall, Ball &secondBall)
     firstBall.setPosition(firstBall.getPosition() - penetVector1);
     secondBall.setPosition(secondBall.getPosition() + penetVector2);
 
-    firstBall.setVelocity(v1 - 0.9f*rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
-    secondBall.setVelocity(v2 + 0.9f*rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
+    firstBall.setVelocity(v1 - rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
+    secondBall.setVelocity(v2 + rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
 
     firstBall.incTimesCollided();
     secondBall.incTimesCollided();
@@ -240,7 +244,7 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
     sf::Vector2f r = ball.getPosition();
     sf::Vector2f v = ball.getVelocity();
 
-    float coefRest = 0.7f;
+    float coefRest = 1.0f;
     //std::cout << v << "\n";float penetDistance = distance - ball.getRadius();
     sf::Rect<float> rectBounds = rect.getGlobalBounds();
 
@@ -312,27 +316,10 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
         sf::Vector2f dv = -coefRest*2.0f*sfVectorMath::dot(contactNormal, ball.getVelocity())*contactNormal;
         ball.addSolvedVelocity(dv, dv);
 
-        sf::Vertex line[2];
+        /*sf::Vertex line[2];
         line[0].position = cornerPos;
         line[1].position = ballPos;
-        debugWindow->draw(line, 2, sf::Lines);
-        /*Ball infMassBall(ball.getRadius(), 1e+15*ball.getMass(),
-                        2.0f*sf::Vector2f{rectBounds.left, rectBounds.top}-ballPos, {0.0f, 0.0f});
-
-        if(boolXMax && boolYMin)
-            infMassBall.setPosition(2.0f*sf::Vector2f{rectBounds.left + rectBounds.width,
-                                     rectBounds.top}-ballPos);
-        else if(boolXMin && boolYMax)
-            infMassBall.setPosition(2.0f*sf::Vector2f{rectBounds.left,
-                                     rectBounds.top + rectBounds.height}-ballPos);
-        else if(boolXMax && boolYMax)
-            infMassBall.setPosition(2.0f*sf::Vector2f{rectBounds.left + rectBounds.width,
-                                     rectBounds.top + rectBounds.height}-ballPos);
-        Collisions::ballCollision(ball, infMassBall);
-
-        infMassBall.setFillColor(sf::Color::Red);
-        debugWindow->draw(infMassBall);*/
-
+        debugWindow->draw(line, 2, sf::Lines);*/
     }
 
 }
