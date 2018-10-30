@@ -9,6 +9,14 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
+sf::RenderWindow* Collisions::debugWindow = nullptr;
+void Collisions::setDebugWindow(sf::RenderWindow &window)
+{
+    debugWindow = &window;
+    std::cout << debugWindow << "\n";
+}
+
+
 float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
                                   sf::Vector2f rayDir,
                                   sf::Rect<float> &AABB,
@@ -195,7 +203,6 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
                 return std::numeric_limits<float>::quiet_NaN();
         }
 
-
     return tmin;
 }
 
@@ -276,7 +283,40 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
     else
     {
         sf::Vector2f ballPos = ball.getPosition();
-        Ball infMassBall(ball.getRadius(), 1e+15*ball.getMass(),
+        sf::Vector2f contactNormal = {0.0f, 0.0f};
+        sf::Vector2f cornerPos = {0.0f, 0.0f};
+        sf::Vector2f penetVector = {0.0f,0.0f};
+
+        if(boolXMin && boolYMin)
+        {
+            cornerPos = sf::Vector2f{rectBounds.left, rectBounds.top};
+        }
+        else if(boolXMax && boolYMin)
+        {
+            cornerPos = sf::Vector2f{rectBounds.left + rectBounds.width, rectBounds.top};
+        }
+        else if(boolXMin && boolYMax)
+        {
+            cornerPos = sf::Vector2f{rectBounds.left, rectBounds.top + rectBounds.height};
+
+        }
+        else if(boolXMax && boolYMax)
+        {
+            cornerPos = sf::Vector2f{rectBounds.left + rectBounds.width, rectBounds.top + rectBounds.height};
+        }
+
+        contactNormal = sfVectorMath::norm(ballPos - cornerPos);
+        penetVector = Collisions::calcPenetVector(cornerPos, contactNormal, ball);
+        ball.setPosition(ballPos - penetVector);
+
+        sf::Vector2f dv = -coefRest*2.0f*sfVectorMath::dot(contactNormal, ball.getVelocity())*contactNormal;
+        ball.addSolvedVelocity(dv, dv);
+
+        sf::Vertex line[2];
+        line[0].position = cornerPos;
+        line[1].position = ballPos;
+        debugWindow->draw(line, 2, sf::Lines);
+        /*Ball infMassBall(ball.getRadius(), 1e+15*ball.getMass(),
                         2.0f*sf::Vector2f{rectBounds.left, rectBounds.top}-ballPos, {0.0f, 0.0f});
 
         if(boolXMax && boolYMin)
@@ -290,8 +330,11 @@ void Collisions::ballCollision(Ball &ball, sf::RectangleShape &rect)
                                      rectBounds.top + rectBounds.height}-ballPos);
         Collisions::ballCollision(ball, infMassBall);
 
-        std::cout << &debugWindow << "\n";
+        infMassBall.setFillColor(sf::Color::Red);
+        debugWindow->draw(infMassBall);*/
+
     }
+
 }
 
 

@@ -80,9 +80,10 @@ sf::CircleShape(_radius), cStepVelocity{_initVel}, nStepPosition(_initPos), mass
     //nStepPosition = initPos;
     setOrigin(_radius,_radius);
     if(mass>0)
-        setFillColor(sf::Color::Green);
+        setFillColor(sf::Color{0,0,0,0});
     else
         setFillColor(sf::Color::Red);
+    setOutlineThickness(-1);
 
     density = _mass/(3.14159265359*_radius*_radius);
 }
