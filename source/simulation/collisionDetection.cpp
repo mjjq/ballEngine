@@ -44,11 +44,13 @@ std::function<float(PhysicsObject*,PhysicsObject*)>
     TCollFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
 REGISTER_TCOLL_FUNCTION(Ball, Ball, &Collisions::timeToCollBallBall)
 REGISTER_TCOLL_FUNCTION(Ball, AABB, &Collisions::timeToCollBallAABB)
+REGISTER_TCOLL_FUNCTION(AABB, AABB, &Collisions::timeToCollAABBAABB)
 
 std::function<void(PhysicsObject*,PhysicsObject*)>
     ResolveFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
 REGISTER_RESOLVE_FUNCTION(Ball, Ball, &Collisions::collisionBallBall)
 REGISTER_RESOLVE_FUNCTION(Ball, AABB, &Collisions::collisionBallAABB)
+REGISTER_RESOLVE_FUNCTION(AABB, AABB, &Collisions::collisionAABBAABB)
 
 
 float Collisions::timeToCollision(PhysicsObject* p1, PhysicsObject* p2)
@@ -278,6 +280,13 @@ float Collisions::timeToCollBallAABB(Ball* origBall, AABB* origAABB)
 }
 
 
+
+float Collisions::timeToCollAABBAABB(AABB* rect1, AABB* rect2)
+{
+    return std::numeric_limits<float>::quiet_NaN();
+}
+
+
 void Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
 {
     using namespace sfVectorMath;
@@ -396,6 +405,12 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
         line[1].position = ballPos;
         debugWindow->draw(line, 2, sf::Lines);*/
     }
+
+}
+
+
+void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
+{
 
 }
 
