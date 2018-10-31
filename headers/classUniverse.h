@@ -66,7 +66,7 @@ public:
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
-    void updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall);
+    void updateFirstVelocity(Integrators _integType, float _dt, DynamicObject* obj1, DynamicObject* obj2);
     void updateAllObjects(bool enableForces, float dt);
 
     void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
@@ -111,7 +111,7 @@ public:
     void drawSampledPositions(sf::RenderWindow &window);
     void toggleTrajectories();
     void togglePlayerTraj();
-    sf::Vector2f getBallPosition(unsigned int i);
+    sf::Vector2f getObjPosition(unsigned int i);
     void pushBall(float force, float relDirection, int i);
     void pushBall(sf::Vector2f &resVector, int ballArg);
     void pushPlayer(float force, float relDirection);

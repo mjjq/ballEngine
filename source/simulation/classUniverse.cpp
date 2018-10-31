@@ -58,19 +58,19 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
 
     @return Void.
 */
-void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, Ball &_firstBall, Ball &_secondBall)
+void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, DynamicObject* obj1, DynamicObject* obj2)
 {
-    sf::Vector2f relVec = _firstBall.getPosition() - _secondBall.getPosition();
+    sf::Vector2f relVec = obj1->getPosition() - obj2->getPosition();
     float r2 = sfVectorMath::square(relVec);
-    float totalR = _firstBall.getRadius()+_secondBall.getRadius();
+    float totalR = obj1->getMinSize()+obj2->getMinSize();
 
     if(r2 > totalR*totalR)
     {
         //nStepVelocity = {0,0};
         float G = 1;
-        float M = _secondBall.getMass();
-        sf::Vector2f firstVelocity = _firstBall.getVelocity();
-        sf::Vector2f secondVelocity = _secondBall.getVelocity();
+        float M = obj2->getMass();
+        sf::Vector2f firstVelocity = obj1->getVelocity();
+        sf::Vector2f secondVelocity = obj2->getVelocity();
         std::pair<sf::Vector2f,sf::Vector2f> solution;
         switch(_integType)
         {
@@ -90,7 +90,7 @@ void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, Ball &
             default:
                 break;
         }
-        _firstBall.addSolvedVelocity(solution.first, solution.second);
+        obj1->addSolvedVelocity(solution.first, solution.second);
         /*cStepModVelocity += solution.first;
         nStepVelocity += solution.second;*/
     }
@@ -99,11 +99,11 @@ void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, Ball &
 
 void BallUniverse::updateAllObjects(bool _enableForces, float _dt)
 {
-    /*if(_enableForces==true)
-        for(Ball &ball1 : dynamicObjects)
-            for(Ball &ball2 : dynamicObjects)
-                if(&ball1 != &ball2)
-                    updateFirstVelocity(intEnum, _dt, ball1, ball2);*/
+    if(_enableForces==true)
+        for(auto iter1 = dynamicObjects.begin(); iter1 != dynamicObjects.end(); ++iter1)
+            for(auto iter2 = dynamicObjects.begin(); iter2 != dynamicObjects.end(); ++iter2)
+                if(&iter1 != &iter2)
+                    updateFirstVelocity(intEnum, _dt, (*iter1).get(), (*iter2).get());
 
     if(universalGravity==true)
         for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); iter++)
@@ -504,11 +504,11 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
 
 void BallUniverse::sampleAllPositions()
 {
-    /*if(timeToNextSample - dt <= 0)
+    if(timeToNextSample - dt <= 0)
     {
-        for(Ball &ball : dynamicObjects)
-            if(ball.getSamplePrevPosBool())
-                ball.sampleNextPosition();
+        for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); ++iter)
+            if((**iter).getSamplePrevPosBool())
+                (**iter).sampleNextPosition();
 
         timeToNextSample = sampledt;
         //std::cout << timeToNextSample << "\n";
@@ -516,18 +516,18 @@ void BallUniverse::sampleAllPositions()
     else
         timeToNextSample -= dt;
 
-    for(Ball &ball : dynamicObjects)
-        if(ball.getSamplePrevPosBool())
-            ball.sampleCurrentPosition();*/
+    for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); ++iter)
+        if((**iter).getSamplePrevPosBool())
+            (**iter).sampleCurrentPosition();
 }
 
 void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer very CPU intensive
 {
-    /*for(Ball &ball : dynamicObjects)
+    for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); ++iter)
     {
-        if(ball.getSamplePrevPosBool())
+        if((**iter).getSamplePrevPosBool())
         {
-            std::deque<sf::Vector2f> previousPositions = ball.getPreviousPositions();
+            std::deque<sf::Vector2f> previousPositions = (**iter).getPreviousPositions();
             if(previousPositions.size() > 1)
             {
                 int colorGradient = previousPositions.size();
@@ -535,7 +535,7 @@ void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer ve
                 sf::Color color;
                 for(unsigned int j=0; j<previousPositions.size(); ++j)
                 {
-                    if(ball.getIsPlayer())
+                    if((**iter).getIsPlayer())
                         color = {255,255,0,static_cast<sf::Uint8>(255*j/colorGradient)};
                     else
                         color = {255,255,255,static_cast<sf::Uint8>(255*j/colorGradient)};
@@ -548,7 +548,7 @@ void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer ve
                 window.draw(lines);
             }
         }
-    }*/
+    }
 }
 
 void BallUniverse::calcTotalKE(std::vector<Ball> &_dynamicObjects)
@@ -774,12 +774,12 @@ std::string BallUniverse::getTotalMomentum()
     return to_string(totalMomentum);
 }
 
-sf::Vector2f BallUniverse::getBallPosition(unsigned int i)
+sf::Vector2f BallUniverse::getObjPosition(unsigned int i)
 {
-    /*if(dynamicObjects.size()>i && i>=0)
+    if(dynamicObjects.size()>i && i>=0)
         return dynamicObjects.at(i).get()->getPosition();
     return sf::Vector2f{std::numeric_limits<float>::quiet_NaN(),
-                        std::numeric_limits<float>::quiet_NaN()};*/
+                        std::numeric_limits<float>::quiet_NaN()};
 }
 
 std::string BallUniverse::getTimeStep()
@@ -794,39 +794,39 @@ std::string BallUniverse::getUseRK4()
 
 std::string BallUniverse::getBallSpeed(unsigned int index)
 {
-    /*if(index < dynamicObjects.size() && index >= 0)
-        return std::to_string(dynamicObjects.at(index).getSpeed());*/
+    if(index < dynamicObjects.size() && index >= 0)
+        return std::to_string(dynamicObjects.at(index).get()->getSpeed());
 
     return "dynamicObjects index out of range";
 }
 
 int BallUniverse::getNumTimesColld(unsigned int index)
 {
-    //if(index < dynamicObjects.size() && index >= 0)
-    //    return dynamicObjects.at(index).getNumCollTimes();
+    if(index < dynamicObjects.size() && index >= 0)
+        return dynamicObjects.at(index).get()->getNumCollTimes();
 
     return -1;
 }
 
 void BallUniverse::pushBall(float force, float relDirection, int i)
 {
-    /*if(dynamicObjects.size()>0 && currentPlayer >= 0)
+    if(dynamicObjects.size()>0 && currentPlayer >= 0)
     {
-        sf::Vector2f velocity = dynamicObjects.at(i).getVelocity();
+        sf::Vector2f velocity = dynamicObjects.at(i).get()->getVelocity();
         sf::Vector2f forceVec{0,0};
         if(sfVectorMath::dot(velocity, velocity) > 1e-10)
             forceVec = sfVectorMath::rotate(force*sfVectorMath::norm(velocity), relDirection);
         else
             forceVec = sfVectorMath::rotate({0,-force}, relDirection);
-        dynamicObjects.at(i).applyExternalImpulse(forceVec, dt);
-    }*/
+        dynamicObjects.at(i).get()->applyExternalImpulse(forceVec, dt);
+    }
 }
 
 void BallUniverse::pushBall(sf::Vector2f &resVector, int ballArg)
 {
-    /*if(dynamicObjects.size()>0 && currentPlayer >= 0)
+    if(dynamicObjects.size()>0 && currentPlayer >= 0)
     {
-        sf::Vector2f currVel = dynamicObjects.at(ballArg).getVelocity();
+        sf::Vector2f currVel = dynamicObjects.at(ballArg).get()->getVelocity();
         float currVelDir = 0;
         if(currVel.y < 0)
             currVelDir = 180;
@@ -840,9 +840,9 @@ void BallUniverse::pushBall(sf::Vector2f &resVector, int ballArg)
 
             sf::Vector2f rotVec = sfVectorMath::rotate(resVector, currVelDir);
 
-            dynamicObjects.at(ballArg).applyExternalImpulse(rotVec, dt);
+            dynamicObjects.at(ballArg).get()->applyExternalImpulse(rotVec, dt);
         }
-    }*/
+    }
 
 }
 
@@ -853,49 +853,49 @@ void BallUniverse::pushPlayer(float force, float relDirection)
 
 void BallUniverse::toggleTrajectories()
 {
-    /*if(enable_trajectories)
+    if(enable_trajectories)
     {
         enable_trajectories = false;
         for(int i=0; (unsigned)i<dynamicObjects.size(); ++i)
             if(i!=currentPlayer)
-                dynamicObjects.at(i).setSamplePrevPosBool(false);
+                dynamicObjects.at(i).get()->setSamplePrevPosBool(false);
     }
     else
     {
         enable_trajectories = true;
         for(int i=0; (unsigned)i<dynamicObjects.size(); ++i)
             if(i!=currentPlayer)
-                dynamicObjects.at(i).setSamplePrevPosBool(true);
-    }*/
+                dynamicObjects.at(i).get()->setSamplePrevPosBool(true);
+    }
 }
 
 void BallUniverse::setPlayer(unsigned int playerIndex)
 {
-    /*if(playerIndex < dynamicObjects.size() && playerIndex >= 0)
+    if(playerIndex < dynamicObjects.size() && playerIndex >= 0)
     {
         if(currentPlayer >=0)
         {
-            dynamicObjects.at(currentPlayer).setIsPlayer(false);
-            dynamicObjects.at(currentPlayer).setFillColor(sf::Color::Green);
+            dynamicObjects.at(currentPlayer).get()->setIsPlayer(false);
+            //dynamicObjects.at(currentPlayer).setFillColor(sf::Color::Green);
             //dynamicObjects.at(currentPlayer).setSamplePrevPosBool(enable_trajectories);
         }
-        dynamicObjects.at(playerIndex).setIsPlayer(true);
-        dynamicObjects.at(playerIndex).setFillColor(sf::Color::Red);
+        dynamicObjects.at(playerIndex).get()->setIsPlayer(true);
+        //dynamicObjects.at(playerIndex).setFillColor(sf::Color::Red);
         //dynamicObjects.at(currentPlayer).setSamplePrevPosBool(enable_trajectories);
         currentPlayer = playerIndex;
-    }*/
+    }
 }
 
 void BallUniverse::togglePlayerTraj()
 {
-    /*if(currentPlayer>=0)
+    if(currentPlayer>=0)
     {
-        Ball *currentBall = &dynamicObjects.at(currentPlayer);
-        if(currentBall->getSamplePrevPosBool())
-            currentBall->setSamplePrevPosBool(false);
+        DynamicObject *currentObj = dynamicObjects.at(currentPlayer).get();
+        if(currentObj->getSamplePrevPosBool())
+            currentObj->setSamplePrevPosBool(false);
         else
-            currentBall->setSamplePrevPosBool(true);
-    }*/
+            currentObj->setSamplePrevPosBool(true);
+    }
 }
 
 void BallUniverse::splitBalls(int ballIndex, float relDirection, float speed)

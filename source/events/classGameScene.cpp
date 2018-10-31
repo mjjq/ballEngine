@@ -182,7 +182,7 @@ void GameScene::checkForViewPan(sf::Vector2i initialPos)
 */
 void GameScene::focusOnBall(int ballIndex)
 {
-    sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
+    sf::Vector2f relPos = ballSim.getObjPosition(ballIndex);
     if(!std::isnan(relPos.x) && !std::isnan(relPos.y))
     {
         worldView.setCenter(relPos);
