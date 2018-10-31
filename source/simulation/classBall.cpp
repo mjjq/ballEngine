@@ -20,52 +20,6 @@
 #include "../../headers/stringConversion.h"
 
 /**
-    Returns change in velocity of a Lennard-Jones based force. This function
-    must be called twice; once for each orthogonal co-ordinate x and y.
-
-    @param x The current position of the particle/ball.
-    @param x_0 The current position of the other particle/ball to interact with.
-    @param r The distance between the current and other particle/ball.
-    @param m The mass of the particle/ball.
-
-    @return Infinitesimal change in velocity.
-*/
-float Ball::lenJonesForce(float x, float x_0, float r, float m)
-{
-    float energy = 0.0000001;
-    float r_0 = pow(2.0,1/6)*getRadius();
-    float dv = 24*energy*(2*pow(r_0,12)/pow(r,14) - pow(r_0,6)/pow(r,8))*(x-x_0)/m;
-    return dv;
-}
-
-float Ball::exptCollForce(float x, float x_0, float r, float m)
-{
-    //float energy = 0.0000001;
-    float r_0 = 0.998*getRadius();
-    float dv = (x-x_0)*pow(r-r_0,-19)/m;
-    return dv;
-}
-
-
-/**
-    Returns change in velocity of a gravitational force. This function must be
-    called twice; once for each orthogonal co-ordinate x and y.
-
-    @param x The current position of the particle/ball.
-    @param x_0 The current position of the other particle/ball to interact with.
-    @param r The distance between the current and other particle/ball.
-    @param G The gravitational constant.
-    @param M The mass of the OTHER particle/ball.
-
-    @return Infinitesimal change in velocity.
-*/
-float Ball::newtonForce(float x, float x_0, float r, float G, float M)
-{
-    float dv = -G*M*(x-x_0)/pow(r,3);
-    return dv;
-}
-
-/**
     Construct the ball.
 
     @param radius The radius of the ball.

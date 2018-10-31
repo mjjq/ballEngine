@@ -2,13 +2,13 @@
 #define CLASS_UNIVERSE_H
 #include "integrators.h"
 #include "collisionDetection.h"
-#include "classBall.h"
+#include "classDynamicObject.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 
 class BallUniverse
 {
-    std::vector<Ball> ballArray;
+    std::vector<std::unique_ptr<DynamicObject> > dynamicObjects;
     std::vector<sf::RectangleShape > AARectArray;
 
     int worldSizeX;

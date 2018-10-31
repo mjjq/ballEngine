@@ -3,8 +3,9 @@
 
 #include <deque>
 #include "integrators.h"
+#include "classDynamicObject.h"
 
-class Ball : public sf::CircleShape
+class Ball : public sf::CircleShape, public DynamicObject
 {
     sf::Vector2f cStepVelocity;
     sf::Vector2f nStepVelocity = cStepVelocity;
@@ -16,10 +17,6 @@ class Ball : public sf::CircleShape
     float density;
     //float radius;
     int numDynColls = 0;
-
-    float lenJonesForce(float x, float x_0, float r, float m);
-    float exptCollForce(float x, float x_0, float r, float m);
-    float newtonForce(float x, float x_0, float r, float G, float M);
 
     std::deque<sf::Vector2f> previousPositions;
     bool samplePreviousPositions = false;
