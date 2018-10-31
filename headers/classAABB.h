@@ -8,6 +8,7 @@
 class AABB : public PhysicsObject
 {
     sf::Vector2f size;
+    sf::Vector2f centreOfMass;
 
 public:
     AABB(sf::Vector2f _size, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
@@ -18,8 +19,8 @@ public:
     static const ObjectType MY_TYPE = ObjectType::AABB;
     ObjectType type() const override;
 
-    float getRadius();
     float getMinSize();
+    sf::Vector2f getCoM();
 
     void draw(sf::RenderWindow &_window);
 
