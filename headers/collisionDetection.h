@@ -12,14 +12,14 @@ public:
     static void setDebugWindow(sf::RenderWindow &window);
 
     static float rayAABBIntersect(sf::Vector2f rayStart, sf::Vector2f rayDir,
-                      AABB &newAABB, float tmin,
+                      sf::Rect<float > &rectAABB, float tmin,
                       float tmax, float epsilon = 1e-5);
     static float raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir,
                      sf::Vector2f sphereCentre, float sphereRadius);
 
     static float timeToCollision(PhysicsObject* p1, PhysicsObject* p2);
     static float timeToCollBallBall(Ball *firstBall, Ball *secondBall);
-    static float timeToCollBallAABB(Ball* ball, sf::RectangleShape &origAARect);
+    static float timeToCollBallAABB(Ball* origBall, AABB* origAABB);
 
     static void resolveCollision(PhysicsObject* p1, PhysicsObject* p2);
     static void collisionBallBall(Ball* firstBall, Ball* secondBall);

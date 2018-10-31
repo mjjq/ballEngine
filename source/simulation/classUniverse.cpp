@@ -40,7 +40,7 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
     {
         sf::Vector2f velocity = {0.0f,0.0f};
         std::unique_ptr<AABB > newRect = std::make_unique<AABB >(sf::Vector2f{width,height},
-                                                                 100.0f,
+                                                                 1000000000000.0f,
                                                                  position,
                                                                  sf::Vector2f{0.0f,0.0f});
         staticObjects.push_back(std::move(newRect));
@@ -167,12 +167,12 @@ void BallUniverse::calcCollTimes()
                     colliderArray.setElementValue(j,i, tColl);
 
             }
-    /*for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
+    for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
         for(unsigned int j=0; j<staticCollArray.getWidth(); ++j)
         {
-            float tColl = Collisions::timeToCollision(&dynamicObjects.at(i), staticObjects.at(j));
+            float tColl = Collisions::timeToCollision(dynamicObjects.at(i).get(), staticObjects.at(j).get());
             staticCollArray.setElementValue(j,i, tColl);
-        }*/
+        }
 }
 
 
@@ -227,11 +227,11 @@ void BallUniverse::collTimeForBall(unsigned int index)
             colliderArray.setElementValue(index, i, tColl);
         }
     }
-    /*for(unsigned int i=0; i<staticCollArray.getWidth(); ++i)
+    for(unsigned int i=0; i<staticCollArray.getWidth(); ++i)
     {
-        float tColl = Collisions::timeToCollision(dynamicObjects.at(index), staticObjects.at(i));
+        float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), staticObjects.at(i).get());
         staticCollArray.setElementValue(i, index, tColl);
-    }*/
+    }
 }
 
 
@@ -381,10 +381,11 @@ float BallUniverse::physicsLoop()
             colliderArray.addConstValue(-dtR);
             staticCollArray.addConstValue(-dtR);
 
-            //if(collWithStatic)
-            //    Collisions::ballCollision(dynamicObjects[collider2], staticObjects[collider1]);
+            if(collWithStatic)
+                Collisions::resolveCollision(dynamicObjects[collider2].get(), staticObjects[collider1].get());
 
-            if(collider1 != collider2)
+
+            else if(collider1 != collider2)
             {
                 Collisions::resolveCollision(dynamicObjects[collider1].get(), dynamicObjects[collider2].get());
             }
