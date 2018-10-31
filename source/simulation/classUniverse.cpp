@@ -58,7 +58,7 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
 
     @return Void.
 */
-void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, DynamicObject* obj1, DynamicObject* obj2)
+void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2)
 {
     sf::Vector2f relVec = obj1->getPosition() - obj2->getPosition();
     float r2 = sfVectorMath::square(relVec);
@@ -126,7 +126,7 @@ void BallUniverse::updateAllObjects(bool _enableForces, float _dt)
 
     @return Void.
 */
-bool BallUniverse::checkForBounce(DynamicObject* object)
+bool BallUniverse::checkForBounce(PhysicsObject* object)
 {
     sf::Vector2f shapePos = object->getPosition();
     float shapeRadius = 0.0f;
@@ -890,7 +890,7 @@ void BallUniverse::togglePlayerTraj()
 {
     if(currentPlayer>=0)
     {
-        DynamicObject *currentObj = dynamicObjects.at(currentPlayer).get();
+        PhysicsObject *currentObj = dynamicObjects.at(currentPlayer).get();
         if(currentObj->getSamplePrevPosBool())
             currentObj->setSamplePrevPosBool(false);
         else

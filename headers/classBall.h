@@ -3,9 +3,9 @@
 
 #include <deque>
 #include "integrators.h"
-#include "classDynamicObject.h"
+#include "classPhysicsObject.h"
 
-class Ball : public DynamicObject
+class Ball : public PhysicsObject
 {
 
     float radius;

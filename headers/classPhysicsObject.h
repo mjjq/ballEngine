@@ -1,5 +1,5 @@
-#ifndef CLASS_DYNOBJ_H
-#define CLASS_DYNOBJ_H
+#ifndef CLASS_PHYSOBJ_H
+#define CLASS_PHYSOBJ_H
 
 #include <deque>
 
@@ -10,7 +10,7 @@ enum class ObjectType
     _Count,
 };
 
-class DynamicObject
+class PhysicsObject
 {
 protected:
     sf::Vector2f position;
@@ -32,10 +32,10 @@ protected:
     bool isPlayer = false;
 
 public:
-    DynamicObject(sf::Vector2f _position,
+    PhysicsObject(sf::Vector2f _position,
                   sf::Vector2f _velocity,
                   float _mass);
-    ~DynamicObject();
+    ~PhysicsObject();
 
     virtual ObjectType type() const = 0;
     virtual void draw(sf::RenderWindow &_window) = 0;

@@ -9,7 +9,7 @@
 #include "../../headers/collisionDetection.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
-#include "../../headers/classDynamicObject.h"
+#include "../../headers/classPhysicsObject.h"
 
 
 #define CONCAT2(x,y) x##y
@@ -22,7 +22,7 @@
         assert(o1type <= o2type); \
         assert(!TCollFunctionTable[o1type][o2type]); \
         TCollFunctionTable[o1type][o2type] = \
-            [](DynamicObject* p1, DynamicObject* p2) { \
+            [](PhysicsObject* p1, PhysicsObject* p2) { \
                     return (*fn)(static_cast<o1*>(p1), static_cast<o2*>(p2)); \
             }; \
         return true; \
@@ -35,22 +35,22 @@
         assert(o1type <= o2type); \
         assert(!ResolveFunctionTable[o1type][o2type]); \
         ResolveFunctionTable[o1type][o2type] = \
-            [](DynamicObject* p1, DynamicObject* p2) { \
+            [](PhysicsObject* p1, PhysicsObject* p2) { \
                     (*fn)(static_cast<o1*>(p1), static_cast<o2*>(p2)); \
             }; \
         return true; \
     }();
 
-std::function<float(DynamicObject*,DynamicObject*)>
+std::function<float(PhysicsObject*,PhysicsObject*)>
     TCollFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
 REGISTER_TCOLL_FUNCTION(Ball, Ball, &Collisions::timeToCollBallBall)
 
-std::function<void(DynamicObject*,DynamicObject*)>
+std::function<void(PhysicsObject*,PhysicsObject*)>
     ResolveFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
 REGISTER_RESOLVE_FUNCTION(Ball, Ball, &Collisions::collisionBallBall)
 
 
-float Collisions::timeToCollision(DynamicObject* p1, DynamicObject* p2)
+float Collisions::timeToCollision(PhysicsObject* p1, PhysicsObject* p2)
 {
     int p1type = static_cast<int>(p1->type());
     int p2type = static_cast<int>(p2->type());
@@ -62,7 +62,7 @@ float Collisions::timeToCollision(DynamicObject* p1, DynamicObject* p2)
     return TCollFunctionTable[p1type][p2type](p1, p2);
 }
 
-void Collisions::resolveCollision(DynamicObject* p1, DynamicObject* p2)
+void Collisions::resolveCollision(PhysicsObject* p1, PhysicsObject* p2)
 {
     int p1type = static_cast<int>(p1->type());
     int p2type = static_cast<int>(p2->type());

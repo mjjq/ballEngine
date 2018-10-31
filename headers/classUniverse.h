@@ -2,13 +2,13 @@
 #define CLASS_UNIVERSE_H
 #include "integrators.h"
 #include "collisionDetection.h"
-#include "classDynamicObject.h"
+#include "classPhysicsObject.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 
 class BallUniverse
 {
-    std::vector<std::unique_ptr<DynamicObject> > dynamicObjects;
+    std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
     std::vector<sf::RectangleShape > AARectArray;
 
     int worldSizeX;
@@ -56,7 +56,7 @@ class BallUniverse
     void calcTotalGPE(std::vector<Ball> &ballArray);
     void calcTotalEnergy();
 
-    bool checkForBounce(DynamicObject* object);
+    bool checkForBounce(PhysicsObject* object);
 
     float physicsLoop();
     float physicsLoopAbsorb();
@@ -66,7 +66,7 @@ public:
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
-    void updateFirstVelocity(Integrators _integType, float _dt, DynamicObject* obj1, DynamicObject* obj2);
+    void updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2);
     void updateAllObjects(bool enableForces, float dt);
 
     void ballAbsorption(Ball &_firstBall, Ball &_secondBall);

@@ -28,7 +28,7 @@
     @param initVel The initial velocity of the ball.
 */
 Ball::Ball(float _radius, float _mass, sf::Vector2f _initPos, sf::Vector2f _initVel) :
-DynamicObject(_initPos, _initVel, _mass), radius{_radius}
+PhysicsObject(_initPos, _initVel, _mass), radius{_radius}
 {
     density = _mass/(3.14159265359*_radius*_radius);
 }

@@ -1,7 +1,7 @@
 #ifndef COLLDETECT_H
 #define COLLDETECT_H
 
-#include "classDynamicObject.h"
+#include "classPhysicsObject.h"
 #include "classBall.h"
 
 class Collisions
@@ -16,11 +16,11 @@ public:
     static float raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir,
                      sf::Vector2f sphereCentre, float sphereRadius);
 
-    static float timeToCollision(DynamicObject* p1, DynamicObject* p2);
+    static float timeToCollision(PhysicsObject* p1, PhysicsObject* p2);
     static float timeToCollBallBall(Ball *firstBall, Ball *secondBall);
     static float timeToCollBallAABB(Ball &ball, sf::RectangleShape &origAARect);
 
-    static void resolveCollision(DynamicObject* p1, DynamicObject* p2);
+    static void resolveCollision(PhysicsObject* p1, PhysicsObject* p2);
     static void collisionBallBall(Ball* firstBall, Ball* secondBall);
     static void ballCollision(Ball &ball, sf::RectangleShape &rect);
 

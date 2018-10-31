@@ -5,12 +5,12 @@
 #include <limits>
 #include <tuple>
 
-#include "../../headers/classDynamicObject.h"
+#include "../../headers/classPhysicsObject.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/integrators.h"
 #include "../../headers/stringConversion.h"
 
-DynamicObject::DynamicObject(sf::Vector2f _position,
+PhysicsObject::PhysicsObject(sf::Vector2f _position,
                   sf::Vector2f _velocity,
                   float _mass) : position{_position},
                   nStepPosition{_position},
@@ -18,12 +18,12 @@ DynamicObject::DynamicObject(sf::Vector2f _position,
                   mass{_mass}
                   {}
 
-DynamicObject::~DynamicObject() {}
+PhysicsObject::~PhysicsObject() {}
 
 
 
-sf::Vector2f DynamicObject::getPosition() {return position;}
-void DynamicObject::setPosition(sf::Vector2f newPosition) {position = newPosition;}
+sf::Vector2f PhysicsObject::getPosition() {return position;}
+void PhysicsObject::setPosition(sf::Vector2f newPosition) {position = newPosition;}
 
 /**
     Applies an external force in the chosen direction.
@@ -33,7 +33,7 @@ void DynamicObject::setPosition(sf::Vector2f newPosition) {position = newPositio
 */
 
 
-void DynamicObject::applyExternalImpulse(sf::Vector2f force, float dt)
+void PhysicsObject::applyExternalImpulse(sf::Vector2f force, float dt)
 {
     nStepVelocity += force*dt/getMass();
     //nStepVelocity = cStepVelocity;
@@ -47,7 +47,7 @@ void DynamicObject::applyExternalImpulse(sf::Vector2f force, float dt)
 
     @return Void.
 */
-void DynamicObject::updatePosition(float dt)
+void PhysicsObject::updatePosition(float dt)
 {
     //std::cout << dt << "\n";
     //printAllVelocities();
@@ -65,7 +65,7 @@ void DynamicObject::updatePosition(float dt)
 
     @return The mass of the ball.
 */
-float DynamicObject::getMass()
+float PhysicsObject::getMass()
 {
     return mass;
 }
@@ -77,7 +77,7 @@ float DynamicObject::getMass()
 
     @return Void.
 */
-void DynamicObject::setMass(float _mass)
+void PhysicsObject::setMass(float _mass)
 {
     mass = _mass;
 }
@@ -88,7 +88,7 @@ void DynamicObject::setMass(float _mass)
 
     @return The density of the ball.
 */
-float DynamicObject::getDensity()
+float PhysicsObject::getDensity()
 {
     return density;
 }
@@ -99,7 +99,7 @@ float DynamicObject::getDensity()
 
     @return The radius of the ball.
 */
-/*float DynamicObject::getRadius()
+/*float PhysicsObject::getRadius()
 {
     return radius;
 }*/
@@ -109,17 +109,17 @@ float DynamicObject::getDensity()
 
     @return The velocity vector of the ball.
 */
-sf::Vector2f DynamicObject::getVelocity()
+sf::Vector2f PhysicsObject::getVelocity()
 {
     return cStepVelocity;
 }
 
-sf::Vector2f DynamicObject::getnStepVelocity()
+sf::Vector2f PhysicsObject::getnStepVelocity()
 {
     return nStepVelocity;
 }
 
-void DynamicObject::printAllVelocities()
+void PhysicsObject::printAllVelocities()
 {
     //std::cout << "cStep: " << cStepVelocity << "\n";
     //std::cout << "cStepMod: " << cStepModVelocity << "\n";
@@ -133,13 +133,13 @@ void DynamicObject::printAllVelocities()
 
     @return Void.
 */
-void DynamicObject::setVelocity(sf::Vector2f vel)
+void PhysicsObject::setVelocity(sf::Vector2f vel)
 {
     cStepVelocity = vel;
     nStepVelocity = vel;
 }
 
-void DynamicObject::addSolvedVelocity(sf::Vector2f cStep, sf::Vector2f nStep)
+void PhysicsObject::addSolvedVelocity(sf::Vector2f cStep, sf::Vector2f nStep)
 {
     cStepVelocity += cStep;
     nStepVelocity += nStep;
@@ -152,7 +152,7 @@ void DynamicObject::addSolvedVelocity(sf::Vector2f cStep, sf::Vector2f nStep)
 
     @return The kinetic energy of the ball.
 */
-float DynamicObject::getKE()
+float PhysicsObject::getKE()
 {
     return 0.5*getMass()*sfVectorMath::dot(getVelocity(),getVelocity());
 }
@@ -164,7 +164,7 @@ float DynamicObject::getKE()
 
     @return The momentum vector of the ball.
 */
-sf::Vector2f DynamicObject::getMomentum()
+sf::Vector2f PhysicsObject::getMomentum()
 {
     return getMass()*cStepVelocity;
 }
@@ -177,7 +177,7 @@ sf::Vector2f DynamicObject::getMomentum()
 
     @return The current speed of the ball.
 */
-float DynamicObject::getSpeed()
+float PhysicsObject::getSpeed()
 {
     return pow(sfVectorMath::dot(getVelocity(),getVelocity()),0.5);
 }
@@ -193,7 +193,7 @@ float DynamicObject::getSpeed()
 
     @return Void.
 */
-void DynamicObject::sampleNextPosition()
+void PhysicsObject::sampleNextPosition()
 {
     unsigned int positionSize = 10;
     previousPositions.push_back(getPosition());
@@ -213,7 +213,7 @@ void DynamicObject::sampleNextPosition()
 
     @return Void.
 */
-void DynamicObject::sampleCurrentPosition()
+void PhysicsObject::sampleCurrentPosition()
 {
     if(previousPositions.size()>0)
         previousPositions.back() = getPosition();
@@ -225,12 +225,12 @@ void DynamicObject::sampleCurrentPosition()
 
     @return List of previous positions of the ball.
 */
-std::deque<sf::Vector2f>& DynamicObject::getPreviousPositions()
+std::deque<sf::Vector2f>& PhysicsObject::getPreviousPositions()
 {
     return previousPositions;
 }
 
-sf::Vector2f DynamicObject::getPreviousPosition()
+sf::Vector2f PhysicsObject::getPreviousPosition()
 {
     return pStepPosition;
 }
@@ -240,34 +240,34 @@ sf::Vector2f DynamicObject::getPreviousPosition()
 
     @return The state of whether the ball samples previous positions.
 */
-bool DynamicObject::getSamplePrevPosBool()
+bool PhysicsObject::getSamplePrevPosBool()
 {
     return samplePreviousPositions;
 }
 
-void DynamicObject::setSamplePrevPosBool(bool value)
+void PhysicsObject::setSamplePrevPosBool(bool value)
 {
     if(samplePreviousPositions!=value)
         previousPositions.clear();
     samplePreviousPositions = value;
 }
 
-bool DynamicObject::getIsPlayer()
+bool PhysicsObject::getIsPlayer()
 {
     return isPlayer;
 }
 
-void DynamicObject::setIsPlayer(bool value)
+void PhysicsObject::setIsPlayer(bool value)
 {
     isPlayer = value;
 }
 
-void DynamicObject::incTimesCollided()
+void PhysicsObject::incTimesCollided()
 {
     ++numDynColls;
 }
 
-int DynamicObject::getNumCollTimes()
+int PhysicsObject::getNumCollTimes()
 {
     return numDynColls;
 }
