@@ -28,7 +28,7 @@
     @param initVel The initial velocity of the ball.
 */
 Ball::Ball(float _radius, float _mass, sf::Vector2f _initPos, sf::Vector2f _initVel) :
-sf::CircleShape(_radius), cStepVelocity{_initVel}, nStepPosition(_initPos), mass(_mass)
+sf::CircleShape(_radius), DynamicObject(), cStepVelocity{_initVel}, nStepPosition(_initPos), mass(_mass)
 {
     setPosition(_initPos);
     //nStepPosition = initPos;
@@ -42,9 +42,14 @@ sf::CircleShape(_radius), cStepVelocity{_initVel}, nStepPosition(_initPos), mass
     density = _mass/(3.14159265359*_radius*_radius);
 }
 
+Ball::~Ball() {}
 
+ObjectType Ball::type() const { return MY_TYPE; }
 
-
+void Ball::draw(sf::RenderWindow &_window)
+{
+    _window.draw(*this);
+}
 
 /**
     Applies an external force in the chosen direction.

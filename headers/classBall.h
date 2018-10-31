@@ -24,8 +24,12 @@ class Ball : public sf::CircleShape, public DynamicObject
 
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
+    ~Ball();
 
+    static const ObjectType MY_TYPE = ObjectType::Ball;
+    ObjectType type() const override;// { return MY_TYPE };
 
+    void draw(sf::RenderWindow &_window);
     void applyExternalImpulse(sf::Vector2f force, float dt);
     void updatePosition(float dt);
     void sampleNextPosition();

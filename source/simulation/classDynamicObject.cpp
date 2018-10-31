@@ -10,6 +10,10 @@
 #include "../../headers/integrators.h"
 #include "../../headers/stringConversion.h"
 
+DynamicObject::~DynamicObject(){}
+
 void DynamicObject::addSolvedVelocity(sf::Vector2f cStep, sf::Vector2f nStep) {}
 
 void DynamicObject::updatePosition(float dt) {}
+
+//void DynamicObject::applyExternalImpulse(sf::Vector2f force, float dt) {}

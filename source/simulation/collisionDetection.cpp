@@ -4,10 +4,75 @@
 #include <thread>
 #include <limits>
 #include <tuple>
+#include <cassert>
 
 #include "../../headers/collisionDetection.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
+#include "../../headers/classDynamicObject.h"
+
+
+#define CONCAT2(x,y) x##y
+#define CONCAT(x,y) CONCAT2(x,y)
+
+#define REGISTER_TCOLL_FUNCTION(o1,o2,fn) \
+    const bool CONCAT(__reg_, __LINE__) = []() { \
+        int o1type = static_cast<int>(o1::MY_TYPE); \
+        int o2type = static_cast<int>(o2::MY_TYPE); \
+        assert(o1type <= o2type); \
+        assert(!TCollFunctionTable[o1type][o2type]); \
+        TCollFunctionTable[o1type][o2type] = \
+            [](DynamicObject* p1, DynamicObject* p2) { \
+                    return (*fn)(static_cast<o1*>(p1), static_cast<o2*>(p2)); \
+            }; \
+        return true; \
+    }();
+
+#define REGISTER_RESOLVE_FUNCTION(o1,o2,fn) \
+    const bool CONCAT(__reg_, __LINE__) = []() { \
+        int o1type = static_cast<int>(o1::MY_TYPE); \
+        int o2type = static_cast<int>(o2::MY_TYPE); \
+        assert(o1type <= o2type); \
+        assert(!ResolveFunctionTable[o1type][o2type]); \
+        ResolveFunctionTable[o1type][o2type] = \
+            [](DynamicObject* p1, DynamicObject* p2) { \
+                    (*fn)(static_cast<o1*>(p1), static_cast<o2*>(p2)); \
+            }; \
+        return true; \
+    }();
+
+std::function<float(DynamicObject*,DynamicObject*)>
+    TCollFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
+REGISTER_TCOLL_FUNCTION(Ball, Ball, &Collisions::timeToCollBallBall)
+
+std::function<void(DynamicObject*,DynamicObject*)>
+    ResolveFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
+REGISTER_RESOLVE_FUNCTION(Ball, Ball, &Collisions::collisionBallBall)
+
+
+float Collisions::timeToCollision(DynamicObject* p1, DynamicObject* p2)
+{
+    int p1type = static_cast<int>(p1->type());
+    int p2type = static_cast<int>(p2->type());
+    if(p1type > p2type) {
+        std::swap(p1type, p2type);
+        std::swap(p1, p2);
+    }
+    assert(TCollFunctionTable[p1type][p2type]);
+    return TCollFunctionTable[p1type][p2type](p1, p2);
+}
+
+void Collisions::resolveCollision(DynamicObject* p1, DynamicObject* p2)
+{
+    int p1type = static_cast<int>(p1->type());
+    int p2type = static_cast<int>(p2->type());
+    if(p1type > p2type) {
+        std::swap(p1type, p2type);
+        std::swap(p1, p2);
+    }
+    assert(ResolveFunctionTable[p1type][p2type]);
+    ResolveFunctionTable[p1type][p2type](p1, p2);
+}
 
 sf::RenderWindow* Collisions::debugWindow = nullptr;
 void Collisions::setDebugWindow(sf::RenderWindow &window)
@@ -102,6 +167,7 @@ float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir
 }
 
 
+
 /**
     Calculate the time to collision with another ball.
 
@@ -109,14 +175,14 @@ float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir
 
     @return Time to collision.
 */
-float Collisions::timeToCollision(Ball &firstBall, Ball &secondBall)
+float Collisions::timeToCollBallBall(Ball *firstBall, Ball *secondBall)
 {
     using namespace sfVectorMath;
 
-    sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
-    float radSum = firstBall.getRadius() + secondBall.getRadius();
+    sf::Vector2f relPos = firstBall->getPosition() - secondBall->getPosition();
+    float radSum = firstBall->getRadius() + secondBall->getRadius();
 
-    sf::Vector2f relVel = firstBall.getVelocity() - secondBall.getVelocity();
+    sf::Vector2f relVel = firstBall->getVelocity() - secondBall->getVelocity();
 
     float relSpeed = square(relVel);
     if(relSpeed < 1e-10)
@@ -140,7 +206,7 @@ float Collisions::timeToCollision(Ball &firstBall, Ball &secondBall)
 }
 
 
-float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
+float Collisions::timeToCollBallAABB(Ball &ball, sf::RectangleShape &origAARect)
 {
     sf::Vector2f v = ball.getVelocity();
     sf::Vector2f r = ball.getPosition();
@@ -211,30 +277,30 @@ float Collisions::timeToCollision(Ball &ball, sf::RectangleShape &origAARect)
 }
 
 
-void Collisions::ballCollision(Ball &firstBall, Ball &secondBall)
+void Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
 {
     using namespace sfVectorMath;
 
     float coefRest = 0.9f;
-    //sf::Vector2f relPos = firstBall.getPosition() - secondBall.getPosition();
-    sf::Vector2f rhat = norm(firstBall.getPosition() - secondBall.getPosition());
+    //sf::Vector2f relPos = firstBall->getPosition() - secondBall->getPosition();
+    sf::Vector2f rhat = norm(firstBall->getPosition() - secondBall->getPosition());
 
-    sf::Vector2f v1 = firstBall.getVelocity();
-    sf::Vector2f v2 = secondBall.getVelocity();
-    float m1 = firstBall.getMass();
-    float m2 = secondBall.getMass();
+    sf::Vector2f v1 = firstBall->getVelocity();
+    sf::Vector2f v2 = secondBall->getVelocity();
+    float m1 = firstBall->getMass();
+    float m2 = secondBall->getMass();
 
     sf::Vector2f penetVector = Collisions::calcPenetVector(firstBall, secondBall);
     sf::Vector2f penetVector1 = penetVector*m2/(m1+m2);
     sf::Vector2f penetVector2 = penetVector*m1/(m1+m2);
-    firstBall.setPosition(firstBall.getPosition() - penetVector1);
-    secondBall.setPosition(secondBall.getPosition() + penetVector2);
+    firstBall->setPosition(firstBall->getPosition() - penetVector1);
+    secondBall->setPosition(secondBall->getPosition() + penetVector2);
 
-    firstBall.setVelocity(v1 - coefRest*rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
-    secondBall.setVelocity(v2 + coefRest*rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
+    firstBall->setVelocity(v1 - coefRest*rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
+    secondBall->setVelocity(v2 + coefRest*rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
 
-    firstBall.incTimesCollided();
-    secondBall.incTimesCollided();
+    firstBall->incTimesCollided();
+    secondBall->incTimesCollided();
 }
 
 //void Collisions::ballCollision(Ball &ball, )
@@ -335,11 +401,11 @@ sf::Vector2f Collisions::calcPenetVector(sf::Vector2f rayStart, sf::Vector2f ray
     return rayNorm*(penetDistance-0.01f*ball.getRadius());
 }
 
-sf::Vector2f Collisions::calcPenetVector(Ball &ball1, Ball &ball2)
+sf::Vector2f Collisions::calcPenetVector(Ball* ball1, Ball* ball2)
 {
-    sf::Vector2f separationVec = ball1.getPosition() - ball2.getPosition();
+    sf::Vector2f separationVec = ball1->getPosition() - ball2->getPosition();
     float distance = sqrt( sfVectorMath::square(separationVec) );
-    float penetDistance = -1.0f*std::abs( distance - (ball1.getRadius() + ball2.getRadius()) );
+    float penetDistance = -1.0f*std::abs( distance - (ball1->getRadius() + ball2->getRadius()) );
 
-    return (separationVec/distance)*(penetDistance -0.001f*(ball1.getRadius() + ball2.getRadius()));
+    return (separationVec/distance)*(penetDistance -0.001f*(ball1->getRadius() + ball2->getRadius()));
 }
