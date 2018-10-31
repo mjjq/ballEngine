@@ -225,7 +225,7 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
         {
             AABBSpawnVals sVals;
             if(beParser::checkAABBJson(currJ, sVals))
-                ballSim.spawnNewRect(sVals.position + position,
+                ballSim.spawnStaticRect(sVals.position + position,
                                      sVals.dimensions.x,
                                      sVals.dimensions.y);
         }

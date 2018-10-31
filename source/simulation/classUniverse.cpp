@@ -31,7 +31,23 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
     }
 }
 
-void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height)
+void BallUniverse::spawnStaticBall(sf::Vector2f position, float radius)
+{
+    if(!(position.x - radius < 0 ||
+         position.y - radius < 0 ||
+         position.x + radius > worldSizeX ||
+         position.y + radius > worldSizeY))
+    {
+        std::unique_ptr<Ball > newBall = std::make_unique<Ball >(radius,1000000.0f,position,sf::Vector2f{0.0f,0.0f});
+        staticObjects.push_back(std::move(newBall));
+
+        staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        if(enable_collisions)
+            calcCollTimes();
+    }
+}
+
+void BallUniverse::spawnStaticRect(sf::Vector2f position, float width, float height)
 {
     if(!(position.x < 0 ||
        position.y < 0 ||
@@ -368,6 +384,7 @@ float BallUniverse::physicsLoop()
             }
 
             findShortestCollTime();
+
         }
 
         if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
@@ -478,6 +495,7 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
         int limiting = 0;
         int maxLimit = 1000;
         float dtR = dt;
+
         while(accumulator >= dt && limiting < maxLimit)
         {
             thresholdTimer.restart();
@@ -631,7 +649,8 @@ void BallUniverse::createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVe
     /*spawnNewBall({worldSizeX/2.0f, worldSizeY/2.0f}, {0,0}, 50, 1000);
     spawnNewBall({worldSizeX/2.0f + 200.0f, worldSizeY/2}, {5,0}, 50, 1000);
     spawnNewBall({worldSizeX/2 - 201, worldSizeY/2}, {-5,0}, 50, 1000);*/
-    spawnNewRect(centralPosition, 300.0f*initVelocity.x, 300.0f*initVelocity.y);
+    //spawnStaticRect(centralPosition, 300.0f*initVelocity.x, 300.0f*initVelocity.y);
+    spawnStaticBall(centralPosition, 100.0f);
     //std::cout << "Size: " << staticObjects.size() << "\n";
     //staticCollArray.printMatrix();
     //std::cout << "\n";
