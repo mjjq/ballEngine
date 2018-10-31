@@ -31,6 +31,32 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
     }
 }
 
+
+void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height, sf::Vector2f velocity, float mass)
+{
+    if(!(position.x < 0 ||
+       position.y < 0 ||
+       position.x + width > worldSizeX ||
+       position.y + height > worldSizeY))
+    {
+        std::unique_ptr<AABB > newRect = std::make_unique<AABB >(sf::Vector2f{width,height},
+                                                                 mass,
+                                                                 position,
+                                                                 velocity);
+        dynamicObjects.push_back(std::move(newRect));
+
+        numOfBalls++;
+        //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
+        //setPlayer(dynamicObjects.size()-1);
+        colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.printMatrix();
+        if(enable_collisions)
+            calcCollTimes();
+    }
+}
+
 void BallUniverse::spawnStaticBall(sf::Vector2f position, float radius)
 {
     if(!(position.x - radius < 0 ||
@@ -650,7 +676,7 @@ void BallUniverse::createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVe
     spawnNewBall({worldSizeX/2.0f + 200.0f, worldSizeY/2}, {5,0}, 50, 1000);
     spawnNewBall({worldSizeX/2 - 201, worldSizeY/2}, {-5,0}, 50, 1000);*/
     //spawnStaticRect(centralPosition, 300.0f*initVelocity.x, 300.0f*initVelocity.y);
-    spawnStaticBall(centralPosition, 100.0f);
+    spawnNewRect(centralPosition, 50.0f, 50.0f, initVelocity, 5.0f);
     //std::cout << "Size: " << staticObjects.size() << "\n";
     //staticCollArray.printMatrix();
     //std::cout << "\n";

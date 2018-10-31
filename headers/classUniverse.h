@@ -72,6 +72,7 @@ public:
 
     void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass=1);
+    void spawnNewRect(sf::Vector2f position, float width, float height, sf::Vector2f velocity, float mass);
     void spawnStaticRect(sf::Vector2f position, float width, float height);
     void spawnStaticBall(sf::Vector2f position, float radius);
     void removeBall(int index);
