@@ -38,9 +38,12 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
        position.x + width > worldSizeX ||
        position.y + height > worldSizeY))
     {
-        AARectArray.push_back(sf::RectangleShape({width, height}));
-        AARectArray.back().setPosition(position);
-        AARectArray.back().setFillColor(sf::Color::Blue);
+        sf::Vector2f velocity = {0.0f,0.0f};
+        std::unique_ptr<AABB > newRect = std::make_unique<AABB >(sf::Vector2f{width,height},
+                                                                 100.0f,
+                                                                 position,
+                                                                 sf::Vector2f{0.0f,0.0f});
+        staticObjects.push_back(std::move(newRect));
 
         staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(enable_collisions)
@@ -167,7 +170,7 @@ void BallUniverse::calcCollTimes()
     /*for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
         for(unsigned int j=0; j<staticCollArray.getWidth(); ++j)
         {
-            float tColl = Collisions::timeToCollision(&dynamicObjects.at(i), AARectArray.at(j));
+            float tColl = Collisions::timeToCollision(&dynamicObjects.at(i), staticObjects.at(j));
             staticCollArray.setElementValue(j,i, tColl);
         }*/
 }
@@ -226,7 +229,7 @@ void BallUniverse::collTimeForBall(unsigned int index)
     }
     /*for(unsigned int i=0; i<staticCollArray.getWidth(); ++i)
     {
-        float tColl = Collisions::timeToCollision(dynamicObjects.at(index), AARectArray.at(i));
+        float tColl = Collisions::timeToCollision(dynamicObjects.at(index), staticObjects.at(i));
         staticCollArray.setElementValue(i, index, tColl);
     }*/
 }
@@ -313,21 +316,21 @@ void BallUniverse::removeBall(int index)
 
 void BallUniverse::removeRect(int index)
 {
-    if(std::abs(index) < AARectArray.size())
+    if(std::abs(index) < staticObjects.size())
     {
         if(index >= 0)
-            AARectArray.erase(AARectArray.begin() + index);
+            staticObjects.erase(staticObjects.begin() + index);
         else if(index < 0)
-            AARectArray.erase(AARectArray.end() + index + 1);
+            staticObjects.erase(staticObjects.end() + index + 1);
 
         staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
 
         if(enable_collisions)
             calcCollTimes();
     }
-    else if(index == -1 && AARectArray.size() == 1)
+    else if(index == -1 && staticObjects.size() == 1)
     {
-        AARectArray.clear();
+        staticObjects.clear();
         staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
     }
 }
@@ -379,7 +382,7 @@ float BallUniverse::physicsLoop()
             staticCollArray.addConstValue(-dtR);
 
             //if(collWithStatic)
-            //    Collisions::ballCollision(dynamicObjects[collider2], AARectArray[collider1]);
+            //    Collisions::ballCollision(dynamicObjects[collider2], staticObjects[collider1]);
 
             if(collider1 != collider2)
             {
@@ -436,7 +439,7 @@ float BallUniverse::physicsLoop()
             staticCollArray.addConstValue(-dtR);
 
             if(collWithStatic)
-                Collisions::ballCollision(dynamicObjects[collider2], AARectArray[collider1]);
+                Collisions::ballCollision(dynamicObjects[collider2], staticObjects[collider1]);
 
             else if(collider1 != collider2)
             {
@@ -551,25 +554,25 @@ void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer ve
     }
 }
 
-void BallUniverse::calcTotalKE(std::vector<Ball> &_dynamicObjects)
+void BallUniverse::calcTotalKE(std::vector<PhysicsObject* > &_dynamicObjects)
 {
     totalKE = 0;
     float KE{0};
-    for(Ball &ball : _dynamicObjects)
-        KE += ball.getKE();
+    for(auto iter1 = _dynamicObjects.begin(); iter1 != _dynamicObjects.end(); ++iter1)
+        KE += (**iter1).getKE();
     totalKE = KE;
 }
 
-void BallUniverse::calcTotalGPE(std::vector<Ball> &_dynamicObjects)
+void BallUniverse::calcTotalGPE(std::vector<PhysicsObject* > &_dynamicObjects)
 {
     totalGPE = 0;
     if(_dynamicObjects.size()>1)
     {
         float GPE{0};
-        for(Ball &ball1 : _dynamicObjects)
-            for(Ball &ball2 : _dynamicObjects)
-                if(&ball1 != &ball2)
-                    GPE+=ball1.getGPE(ball2)/2;
+        for(auto iter1 = _dynamicObjects.begin(); iter1 != _dynamicObjects.end(); ++iter1)
+            for(auto iter2 = _dynamicObjects.begin(); iter2 != _dynamicObjects.end(); ++iter2)
+                if(&iter1 != &iter2)
+                    GPE+=(**iter1).getGPE(*iter2)/2.0f;
         totalGPE = GPE;
     }
 }
@@ -579,11 +582,11 @@ void BallUniverse::calcTotalEnergy()
     totalEnergy = totalKE + totalGPE;
 }
 
-void BallUniverse::calcTotalMomentum(std::vector<Ball> &_dynamicObjects)
+void BallUniverse::calcTotalMomentum(std::vector<PhysicsObject* > &_dynamicObjects)
 {
     sf::Vector2f momentum{0,0};
-    for(Ball &ball : _dynamicObjects)
-        momentum += ball.getMomentum();
+    for(auto iter1 = _dynamicObjects.begin(); iter1 != _dynamicObjects.end(); ++iter1)
+        momentum += (**iter1).getMomentum();
     totalMomentum = momentum;
 }
 
@@ -628,7 +631,7 @@ void BallUniverse::createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVe
     spawnNewBall({worldSizeX/2.0f + 200.0f, worldSizeY/2}, {5,0}, 50, 1000);
     spawnNewBall({worldSizeX/2 - 201, worldSizeY/2}, {-5,0}, 50, 1000);*/
     spawnNewRect(centralPosition, 300.0f*initVelocity.x, 300.0f*initVelocity.y);
-    //std::cout << "Size: " << AARectArray.size() << "\n";
+    //std::cout << "Size: " << staticObjects.size() << "\n";
     //staticCollArray.printMatrix();
     //std::cout << "\n";
 }
@@ -674,8 +677,8 @@ void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
     for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); ++iter)
         (**iter).draw(windowRef);
 
-    for(sf::RectangleShape &AARect : AARectArray)
-        windowRef.draw(AARect);
+    for(auto iter = staticObjects.begin(); iter != staticObjects.end(); ++iter)
+        (**iter).draw(windowRef);
 }
 
 void BallUniverse::toggleCollisions()
@@ -726,7 +729,7 @@ void BallUniverse::changeBallColour()
 void BallUniverse::clearSimulation()
 {
     dynamicObjects.clear();
-    AARectArray.clear();
+    staticObjects.clear();
     colliderArray.clearMatrix();
     staticCollArray.clearMatrix();
     numOfBalls = 0;

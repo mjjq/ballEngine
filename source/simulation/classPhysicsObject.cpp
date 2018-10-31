@@ -183,6 +183,39 @@ float PhysicsObject::getSpeed()
 }
 
 
+/**
+    Get the relative speed between this ball and another ball.
+
+    @param &otherBall The other ball to calculate relative speed to.
+
+    @return Relative speed between this ball and the other ball.
+*/
+float PhysicsObject::getRelSpeed(PhysicsObject* otherObj)
+{
+    sf::Vector2f relVelocity = getVelocity() - otherObj->getVelocity();
+    return pow(sfVectorMath::dot(relVelocity,relVelocity),0.5);
+}
+
+
+/**
+    Get the distance between this ball and another ball.
+
+    @param &otherBall The other ball to calculate distance to.
+
+    @return The distance between this ball and the other ball.
+*/
+float PhysicsObject::getDistance(PhysicsObject* otherObj)
+{
+    sf::Vector2f relPos = getPosition() - otherObj->getPosition();
+    return pow(sfVectorMath::dot(relPos,relPos),0.5);
+}
+
+
+
+float PhysicsObject::getGPE(PhysicsObject* otherObj)
+{
+    return -getMass()*otherObj->getMass()/getDistance(otherObj);
+}
 
 
 

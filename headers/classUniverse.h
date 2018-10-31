@@ -3,13 +3,14 @@
 #include "integrators.h"
 #include "collisionDetection.h"
 #include "classPhysicsObject.h"
+#include "classAABB.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 
 class BallUniverse
 {
     std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
-    std::vector<sf::RectangleShape > AARectArray;
+    std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
 
     int worldSizeX;
     int worldSizeY;
@@ -51,9 +52,9 @@ class BallUniverse
     float totalEnergy = 0;
     sf::Vector2f totalMomentum = sf::Vector2f{0,0};
 
-    void calcTotalKE(std::vector<Ball> &ballArray);
-    void calcTotalMomentum(std::vector<Ball> &ballArray);
-    void calcTotalGPE(std::vector<Ball> &ballArray);
+    void calcTotalKE(std::vector<PhysicsObject* > &_dynamicObjects);
+    void calcTotalMomentum(std::vector<PhysicsObject* > &_dynamicObjects);
+    void calcTotalGPE(std::vector<PhysicsObject* > &_dynamicObjects);
     void calcTotalEnergy();
 
     bool checkForBounce(PhysicsObject* object);

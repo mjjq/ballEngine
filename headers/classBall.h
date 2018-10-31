@@ -22,12 +22,6 @@ public:
 
     void draw(sf::RenderWindow &_window);
 
-    float getGPE(Ball &otherBall);
-
-    float getDistance(Ball &otherBall);
-
-    float getRelSpeed(Ball &otherBall);
-
 
 };
 

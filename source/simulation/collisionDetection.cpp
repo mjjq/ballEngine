@@ -9,7 +9,6 @@
 #include "../../headers/collisionDetection.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
-#include "../../headers/classPhysicsObject.h"
 
 
 #define CONCAT2(x,y) x##y
@@ -44,10 +43,12 @@
 std::function<float(PhysicsObject*,PhysicsObject*)>
     TCollFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
 REGISTER_TCOLL_FUNCTION(Ball, Ball, &Collisions::timeToCollBallBall)
+//REGISTER_TCOLL_FUNCTION(Ball, AABB, &Collisions::timeToCollBallAABB)
 
 std::function<void(PhysicsObject*,PhysicsObject*)>
     ResolveFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
 REGISTER_RESOLVE_FUNCTION(Ball, Ball, &Collisions::collisionBallBall)
+//REGISTER_RESOLVE_FUNCTION(Ball, AABB, &Collisions::collisionBallAABB)
 
 
 float Collisions::timeToCollision(PhysicsObject* p1, PhysicsObject* p2)
@@ -84,7 +85,7 @@ void Collisions::setDebugWindow(sf::RenderWindow &window)
 
 float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
                                   sf::Vector2f rayDir,
-                                  sf::Rect<float> &AABB,
+                                  AABB &newAABB,
                                   float tmin, float tmax, float epsilon)
 {
     sf::Vector2f r = rayStart;
@@ -96,17 +97,18 @@ float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
         //staticCollArray.printMatrix(); std::cout << "\n";
         return std::numeric_limits<float>::quiet_NaN();
     }*/
+    sf::Rect<float > rectAABB = newAABB.getGlobalBounds();
 
     if(std::abs(v.x) < epsilon)
     {
-        if(r.x < AABB.left || r.x > AABB.left + AABB.width)
+        if(r.x < rectAABB.left || r.x > rectAABB.left + rectAABB.width)
             return std::numeric_limits<float>::quiet_NaN();
     }
     else
     {
         float ood = 1.0f / v.x;
-        float t1 = (AABB.left - r.x) * ood;
-        float t2 = (AABB.left + AABB.width - r.x) * ood;
+        float t1 = (rectAABB.left - r.x) * ood;
+        float t2 = (rectAABB.left + rectAABB.width - r.x) * ood;
 
         if(t1>t2) std::swap(t1,t2);
         tmin = std::max(t1, tmin);
@@ -116,14 +118,14 @@ float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
 
     if(std::abs(v.y) < epsilon)
     {
-        if(r.y < AABB.top || r.y > AABB.top + AABB.height)
+        if(r.y < rectAABB.top || r.y > rectAABB.top + rectAABB.height)
             return std::numeric_limits<float>::quiet_NaN();
     }
     else
     {
         float ood = 1.0f / v.y;
-        float t1 = (AABB.top - r.y) * ood;
-        float t2 = (AABB.top + AABB.height - r.y) * ood;
+        float t1 = (rectAABB.top - r.y) * ood;
+        float t2 = (rectAABB.top + rectAABB.height - r.y) * ood;
 
         if(t1>t2) std::swap(t1,t2);
         tmin = std::max(t1, tmin);
@@ -206,22 +208,22 @@ float Collisions::timeToCollBallBall(Ball *firstBall, Ball *secondBall)
 }
 
 
-float Collisions::timeToCollBallAABB(Ball &ball, sf::RectangleShape &origAARect)
+float Collisions::timeToCollBallAABB(Ball* origBall, AABB* origAABB)
 {
-    sf::Vector2f v = ball.getVelocity();
-    sf::Vector2f r = ball.getPosition();
-    sf::Rect<float> AABB = origAARect.getGlobalBounds();
-    AABB.left -= ball.getRadius();
-    AABB.top -= ball.getRadius();
-    AABB.width += 2.0f*ball.getRadius();
-    AABB.height += 2.0f*ball.getRadius();
+    sf::Vector2f v = origBall->getVelocity();
+    sf::Vector2f r = origBall->getPosition();
+    AABB minkSumAABB = AABB();
+    minkSumAABB.left -= ball.getRadius();
+    minkSumAABB.top -= ball.getRadius();
+    minkSumAABB.width += 2.0f*ball.getRadius();
+    minkSumAABB.height += 2.0f*ball.getRadius();
     //std::cout << "MinkAABB: " << AABB << "\n";
 
     float epsilon = 1e-5;
     float tmin = -1.0f;
     float tmax = 10000.0f;
 
-    tmin = Collisions::rayAABBIntersect(r, v, AABB, tmin, tmax, epsilon);
+    tmin = Collisions::rayAABBIntersect(r, v, minkSumAABB, tmin, tmax, epsilon);
     if(std::isnan(tmin))
         return tmin;
 
@@ -264,7 +266,7 @@ float Collisions::timeToCollBallAABB(Ball &ball, sf::RectangleShape &origAARect)
     else
         if(tmin < 0.0f)
         {
-            if(AABB.contains(r.x, r.y) || intersectCorner)
+            if(minkSumAABB.contains(r.x, r.y) || intersectCorner)
             {
                 return 0.0f;
             }

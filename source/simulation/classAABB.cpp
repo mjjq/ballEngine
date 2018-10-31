@@ -1,5 +1,5 @@
 /**
-    @class classBall
+    @class classAABB
     Purpose: A class which represents a physical simulation ball. Contains
     functions for forces, updating velocity and position as well as basic
     collisions.
@@ -14,7 +14,7 @@
 #include <limits>
 #include <tuple>
 
-#include "../../headers/classBall.h"
+#include "../../headers/classAABB.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/integrators.h"
 #include "../../headers/stringConversion.h"
@@ -27,22 +27,22 @@
     @param initPos The initial position of the ball.
     @param initVel The initial velocity of the ball.
 */
-Ball::Ball(float _radius, float _mass, sf::Vector2f _initPos, sf::Vector2f _initVel) :
-PhysicsObject(_initPos, _initVel, _mass), radius{_radius}
+AABB::AABB(sf::Vector2f _size, float _mass, sf::Vector2f _initPos, sf::Vector2f _initVel) :
+PhysicsObject(_initPos, _initVel, _mass), size{_size}
 {
-    density = _mass/(3.14159265359*_radius*_radius);
+    density = _mass/(size.x*size.y);
 }
 
-Ball::~Ball() {}
+AABB::~AABB() {}
 
-ObjectType Ball::type() const { return MY_TYPE; }
+ObjectType AABB::type() const { return MY_TYPE; }
 
-void Ball::draw(sf::RenderWindow &_window)
+void AABB::draw(sf::RenderWindow &_window)
 {
-    sf::CircleShape drawable(radius);
+    sf::RectangleShape drawable;
+    drawable.setSize(size);
     drawable.setPosition(position);
     //nStepPosition = initPos;
-    drawable.setOrigin(radius,radius);
 
     drawable.setFillColor(sf::Color{44,44,44,255});
 
@@ -51,12 +51,13 @@ void Ball::draw(sf::RenderWindow &_window)
     //std::cout << drawable.getPosition() << "\n";
 }
 
-float Ball::getRadius()
+float AABB::getMinSize()
 {
-    return radius;
+    return ((size.x < size.y) ? size.x : size.y);
 }
 
-float Ball::getMinSize()
+sf::Rect<float > AABB::getGlobalBounds()
 {
-    return radius;
+    return sf::Rect<float >{position.x, position.y, size.x, size.y};
 }
+
