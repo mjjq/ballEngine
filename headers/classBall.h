@@ -5,7 +5,7 @@
 #include "integrators.h"
 #include "classDynamicObject.h"
 
-class Ball : public sf::CircleShape, public DynamicObject
+class Ball : public DynamicObject
 {
     sf::Vector2f cStepVelocity;
     sf::Vector2f nStepVelocity = cStepVelocity;
@@ -22,6 +22,9 @@ class Ball : public sf::CircleShape, public DynamicObject
     bool samplePreviousPositions = false;
     bool isPlayer = false;
 
+    float radius;
+    sf::Vector2f position;
+
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
     ~Ball();
@@ -29,6 +32,9 @@ public:
     static const ObjectType MY_TYPE = ObjectType::Ball;
     ObjectType type() const override;// { return MY_TYPE };
 
+    float getRadius();
+    sf::Vector2f getPosition();
+    void setPosition(sf::Vector2f newPosition);
     void draw(sf::RenderWindow &_window);
     void applyExternalImpulse(sf::Vector2f force, float dt);
     void updatePosition(float dt);

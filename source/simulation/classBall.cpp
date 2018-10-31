@@ -28,17 +28,9 @@
     @param initVel The initial velocity of the ball.
 */
 Ball::Ball(float _radius, float _mass, sf::Vector2f _initPos, sf::Vector2f _initVel) :
-sf::CircleShape(_radius), DynamicObject(), cStepVelocity{_initVel}, nStepPosition(_initPos), mass(_mass)
+DynamicObject(), radius{_radius}, position{_initPos},
+cStepVelocity{_initVel}, nStepPosition(_initPos), mass(_mass)
 {
-    setPosition(_initPos);
-    //nStepPosition = initPos;
-    setOrigin(_radius,_radius);
-    if(mass>0)
-        setFillColor(sf::Color{0,0,0,0});
-    else
-        setFillColor(sf::Color::Red);
-    setOutlineThickness(-1);
-
     density = _mass/(3.14159265359*_radius*_radius);
 }
 
@@ -48,8 +40,22 @@ ObjectType Ball::type() const { return MY_TYPE; }
 
 void Ball::draw(sf::RenderWindow &_window)
 {
-    _window.draw(*this);
+    sf::CircleShape drawable(radius);
+    drawable.setPosition(position);
+    //nStepPosition = initPos;
+    drawable.setOrigin(radius,radius);
+
+    drawable.setFillColor(sf::Color{44,44,44,255});
+
+    drawable.setOutlineThickness(-1);
+    _window.draw(drawable);
+    //std::cout << drawable.getPosition() << "\n";
 }
+
+float Ball::getRadius() {return radius;}
+
+sf::Vector2f Ball::getPosition() {return position;}
+void Ball::setPosition(sf::Vector2f newPosition) {position = newPosition;}
 
 /**
     Applies an external force in the chosen direction.

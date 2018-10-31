@@ -126,22 +126,22 @@ void BallUniverse::updateAllObjects(bool _enableForces, float _dt)
 
     @return Void.
 */
-bool BallUniverse::checkForBounce(Ball* ball)
+bool BallUniverse::checkForBounce(DynamicObject* object)
 {
-    sf::Vector2f shapePos = ball->getPosition();
-    float shapeRadius = ball->getRadius();
-    sf::Vector2f velocity = ball->getVelocity();
+    sf::Vector2f shapePos = object->getPosition();
+    float shapeRadius = 0.0f;
+    sf::Vector2f velocity = object->getVelocity();
 
     if(((shapePos.x+shapeRadius >= worldSizeX) && (velocity.x>=0))
     || ((shapePos.x-shapeRadius <= 0  && (velocity.x<=0))))
     {
-        ball->setVelocity({-velocity.x, velocity.y});
+        object->setVelocity({-velocity.x, velocity.y});
         return true;
     }
     else if(((shapePos.y+shapeRadius >= worldSizeY) && (velocity.y>=0))
     || ((shapePos.y-shapeRadius <= 0  && (velocity.y<=0))))
     {
-        ball->setVelocity({velocity.x, -velocity.y});
+        object->setVelocity({velocity.x, -velocity.y});
         return true;
     }
     return false;
@@ -157,7 +157,7 @@ void BallUniverse::calcCollTimes()
             {
                 /*if(dynamicObjects.at(i).getDistance(dynamicObjects.at(j)) < 0.99*(dynamicObjects.at(i).getRadius() + dynamicObjects.at(j).getRadius()))
                 {
-                     std::cout << "Overlapping balls " << i << " " << j << " at " << dynamicObjects.at(i).getPosition() << " \n";
+                     std::cout << "Overlapping balls " << i << " " << j << " at " << dynamicObjects.at(i).sf::CircleShape::getPosition() << " \n";
                      std::cout << colliderArray.getElementValue(i,j) << "\n";
                 }*/
                     float tColl = Collisions::timeToCollision(dynamicObjects.at(i).get(), dynamicObjects.at(j).get());
@@ -233,7 +233,7 @@ void BallUniverse::collTimeForBall(unsigned int index)
 
 
 
-void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall)
+/*void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall)
 {
     using namespace sfVectorMath;
 
@@ -280,8 +280,8 @@ void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall)
     }
 
 
-    //Collisions::ballCollision(_firstBall, _secondBall);
-}
+    Collisions::ballCollision(_firstBall, _secondBall);
+}*/
 
 void BallUniverse::removeBall(int index)
 {
@@ -344,8 +344,8 @@ float BallUniverse::physicsLoop()
         for(unsigned int i=0; i<dynamicObjects.size(); ++i)
         {
             //dynamicObjects[i].resetToCollided();
-            //if( checkForBounce(dynamicObjects[i].get()) && enable_collisions)
-            //    collTimeForBall(i);
+            if( checkForBounce(dynamicObjects[i].get()) && enable_collisions)
+                collTimeForBall(i);
         }
 
         if(enable_collisions==true)
@@ -716,7 +716,7 @@ void BallUniverse::changeBallColour()
 {
     /*for(Ball &ball : dynamicObjects)
     {
-        if(ball.getPosition().x > worldSizeX/2)
+        if(ball.sf::CircleShape::getPosition().x > worldSizeX/2)
             ball.setFillColor(sf::Color::Red);
         else
             ball.setFillColor(sf::Color::Green);
@@ -927,7 +927,7 @@ void BallUniverse::splitBalls(int ballIndex, float relDirection, float speed)
             dynamicObjects.at(ballIndex).setVelocity(v1 + initialVelocity);
 
             sf::Vector2f pos1 = sfVectorMath::rotate(1.01f*initialRadius*sfVectorMath::norm(initialVelocity), relDirection) +
-                                dynamicObjects.at(ballIndex).getPosition();
+                                dynamicObjects.at(ballIndex).sf::CircleShape::getPosition();
             spawnNewBall(pos1, v2 + initialVelocity, r2, r2);
         }
     }*/

@@ -56,7 +56,7 @@ class BallUniverse
     void calcTotalGPE(std::vector<Ball> &ballArray);
     void calcTotalEnergy();
 
-    bool checkForBounce(Ball* ball);
+    bool checkForBounce(DynamicObject* object);
 
     float physicsLoop();
     float physicsLoopAbsorb();

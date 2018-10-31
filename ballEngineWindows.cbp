@@ -68,6 +68,7 @@
 		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classBall.h" />
+		<Unit filename="headers/classDynamicObject.h" />
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classMainMenuScene.h" />
@@ -114,6 +115,7 @@
 		<Unit filename="source/miscellaneous/stringConversion.cpp" />
 		<Unit filename="source/miscellaneous/structs.cpp" />
 		<Unit filename="source/simulation/classBall.cpp" />
+		<Unit filename="source/simulation/classDynamicObject.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
 		<Unit filename="source/simulation/collisionDetection.cpp" />
 		<Unit filename="source/simulation/forces.cpp" />
