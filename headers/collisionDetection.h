@@ -29,6 +29,8 @@ public:
 
     static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
     static sf::Vector2f calcPenetVector(Ball* ball1, Ball* ball2);
+    static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, AABB &rect);
+
 
 
 
