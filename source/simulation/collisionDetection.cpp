@@ -296,9 +296,11 @@ float Collisions::timeToCollAABBAABB(AABB* rect1, AABB* rect2)
 
 
     sf::RectangleShape debug({minkSumAABB.width, minkSumAABB.height});
-    debug.setPosition(minkSumAABB.top, minkSumAABB.left);
-    debug.setOutlineThickness(-1);
+    debug.setPosition(minkSumAABB.left, minkSumAABB.top);
+    //debug.setOutlineThickness(-1);
     debugWindow->draw(debug);
+
+
     //std::cout << "MinkAABB: " << AABB << "\n";
 
     float epsilon = 1e-5;
@@ -309,12 +311,29 @@ float Collisions::timeToCollAABBAABB(AABB* rect1, AABB* rect2)
     if(std::isnan(tmin))
         return tmin;
 
+     sf::Vertex debugLine[] = {
+        sf::Vertex(r),
+        sf::Vertex(r+v*tmin)
+    };
+    debugLine[0].color = sf::Color::Red;
+    debugLine[1].color = sf::Color::Red;
+    debugWindow->draw(debugLine, 2, sf::Lines);
+
+    sf::CircleShape comCircle{20.0f};
+    comCircle.setOrigin(20.0f,20.0f);
+    comCircle.setPosition(rect1Bounds.left,
+                          rect1Bounds.top);
+    comCircle.setFillColor(sf::Color::Red);
+    debugWindow->draw(comCircle);
+
+
+            std::cout << tmin << "\n";
     if(tmin < 0.0f)
     {
-        if(minkSumAABB.contains(rect1->getCoM().x, rect1->getCoM().y))
+        if(minkSumAABB.contains(rect1Bounds.left,
+                                rect1Bounds.top))
         {
             return 0.0f;
-            std::cout << tmin << "\n";
         }
         else
         {
@@ -449,12 +468,12 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
 
 void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
 {
+
     sf::Vector2f r = rect1->getPosition();
     sf::Vector2f v = rect1->getVelocity() - rect2->getVelocity();
 
     float redMassRect1 = rect2->getMass()/(rect1->getMass() + rect2->getMass());
     float redMassRect2 = rect1->getMass()/(rect1->getMass() + rect2->getMass());
-    std::cout << redMassRect1 << " : " << redMassRect2 << "\n";
 
     float coefRest = 0.7f;
     //std::cout << v << "\n";float penetDistance = distance - ball.getRadius();
@@ -466,15 +485,25 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
     bool boolYMin = false;
     bool boolYMax = false;
 
-    if(rect1Bounds.left + rect1Bounds.width <= rect2Bounds.left)
+    /*if(rect1Bounds.left + rect1Bounds.width <= rect2Bounds.left)
         boolXMin = true;
     else if(rect1Bounds.left >= rect2Bounds.left + rect2Bounds.width)
         boolXMax = true;
     if(rect1Bounds.top + rect1Bounds.height <= rect2Bounds.top)
         boolYMin = true;
     else if(rect1Bounds.top >= rect2Bounds.top + rect2Bounds.height)
+        boolYMax = true;*/
+
+    if(rect1Bounds.left + rect1Bounds.width/2.0f <= rect2Bounds.left)
+        boolXMin = true;
+    else if(rect1Bounds.left >= rect2Bounds.left + rect2Bounds.width/2.0f)
+        boolXMax = true;
+    if(rect1Bounds.top + rect1Bounds.height/2.0f <= rect2Bounds.top)
+        boolYMin = true;
+    else if(rect1Bounds.top >= rect2Bounds.top + rect2Bounds.height/2.0f)
         boolYMax = true;
 
+    std::cout << boolXMin << boolXMax << boolYMin << boolYMax << "\n";
     sf::Vector2f contactNormal = {0.0f, 0.0f};
     sf::Vector2f contactLinePos = {0.0f, 0.0f};
     if((boolXMin || boolXMax) && !(boolYMin || boolYMax))
@@ -487,7 +516,8 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
         else if(boolXMax)
         {
             contactNormal = {1.0f, 0.0f};
-            contactLinePos = {rect2Bounds.left + rect2Bounds.width, rect2Bounds.top};
+            //contactLinePos = {rect2Bounds.left + rect2Bounds.width, rect2Bounds.top};
+            contactLinePos = {rect2Bounds.left, rect2Bounds.top};
         }
 
         rect1->addSolvedVelocity({-coefRest*redMassRect1*2.0f*v.x, 0.0f}, {-coefRest*redMassRect1*2.0f*v.x, 0.0f});
@@ -498,12 +528,14 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
         if(boolYMin)
         {
             contactNormal = {0.0f, -1.0f};
+            //contactLinePos = {rect2Bounds.left, rect2Bounds.top};
             contactLinePos = {rect2Bounds.left, rect2Bounds.top};
         }
         else if(boolYMax)
         {
             contactNormal = {0.0f, 1.0f};
-            contactLinePos = {rect2Bounds.left, rect2Bounds.top + rect2Bounds.height};
+            //contactLinePos = {rect2Bounds.left, rect2Bounds.top + rect2Bounds.height};
+            contactLinePos = {rect2Bounds.left, rect2Bounds.top};
         }
 
         rect1->addSolvedVelocity({0.0f, -coefRest*redMassRect1*2.0f*v.y}, {0.0f, -coefRest*redMassRect1*2.0f*v.y});
@@ -511,9 +543,10 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
     }
     if(sfVectorMath::square(contactNormal)>1e-15)
     {
+        std::cout << "contact\n";
         sf::Vector2f penetVector = Collisions::calcPenetVector(contactLinePos, contactNormal, *rect1);
-        //rect1->setPosition(rect1->getPosition() - redMassRect1*penetVector);
-        //rect2->setPosition(rect2->getPosition() + redMassRect2*penetVector);
+        rect1->setPosition(rect1->getPosition() - redMassRect1*penetVector);
+        rect2->setPosition(rect2->getPosition() + redMassRect2*penetVector);
     }
 }
 
@@ -529,21 +562,23 @@ sf::Vector2f Collisions::calcPenetVector(sf::Vector2f rayStart, sf::Vector2f ray
 
 sf::Vector2f Collisions::calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, AABB &rect)
 {
-    std::cout << "Penetrated\n";
     float distance = sfVectorMath::dot( (rect.getPosition() - rayStart), rayNorm );
     sf::Rect<float > rectBounds = rect.getGlobalBounds();
     float penetDistance = 0.0f;
     sf::Vector2f penetVector = {0.0f, 0.0f};
     float epsilon = 1e-15;
+
+
+    std::cout << distance << " Penetrated\n";
     if(std::abs(rayNorm.x) < epsilon && std::abs(rayNorm.y) > epsilon)
     {
         penetDistance = rectBounds.height - distance;
-        penetVector = rayNorm*(penetDistance - 0.0f*rectBounds.height);
+        penetVector = rayNorm*(penetDistance - 0.01f*rectBounds.height);
     }
     else
     {
         penetDistance = rectBounds.width - distance;
-        penetVector = rayNorm*(penetDistance - 0.0f*rectBounds.width);
+        penetVector = rayNorm*(penetDistance - 0.01f*rectBounds.width);
     }
 
     return penetVector;
