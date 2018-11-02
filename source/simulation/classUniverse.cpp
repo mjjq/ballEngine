@@ -104,7 +104,7 @@ void BallUniverse::spawnStaticRect(sf::Vector2f position, float width, float hei
 */
 void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2)
 {
-    sf::Vector2f relVec = obj1->getPosition() - obj2->getPosition();
+    sf::Vector2f relVec = obj1->getPosition() + obj1->getCoM() - (obj2->getPosition() + obj2->getCoM());
     float r2 = sfVectorMath::square(relVec);
     float totalR = obj1->getMinSize()+obj2->getMinSize();
 

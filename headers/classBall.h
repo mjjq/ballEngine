@@ -7,8 +7,8 @@
 
 class Ball : public PhysicsObject
 {
-
     float radius;
+    sf::Vector2f centreOfMass{0.0f, 0.0f};
 
 public:
     Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
@@ -19,6 +19,7 @@ public:
 
     float getRadius();
     float getMinSize();
+    sf::Vector2f getCoM();
 
     void draw(sf::RenderWindow &_window);
 

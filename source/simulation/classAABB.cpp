@@ -31,7 +31,7 @@ AABB::AABB(sf::Vector2f _size, float _mass, sf::Vector2f _initPos, sf::Vector2f 
 PhysicsObject(_initPos, _initVel, _mass), size{_size}
 {
     density = _mass/(size.x*size.y);
-    centreOfMass = {size.x/2.0f, size.y/2.0f};
+    centreOfMass = sf::Vector2f{size.x/2.0f, size.y/2.0f};
 }
 
 AABB::~AABB() {}
@@ -54,7 +54,7 @@ void AABB::draw(sf::RenderWindow &_window)
 
 float AABB::getMinSize()
 {
-    return ((size.x < size.y) ? size.x : size.y);
+    return ((size.x < size.y) ? size.x/2.0f : size.y/2.0f);
 }
 
 sf::Vector2f AABB::getCoM()

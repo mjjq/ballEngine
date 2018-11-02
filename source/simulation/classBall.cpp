@@ -60,3 +60,8 @@ float Ball::getMinSize()
 {
     return radius;
 }
+
+sf::Vector2f Ball::getCoM()
+{
+    return centreOfMass;
+}
