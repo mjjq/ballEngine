@@ -45,12 +45,14 @@ std::function<float(PhysicsObject*,PhysicsObject*)>
 REGISTER_TCOLL_FUNCTION(Ball, Ball, &Collisions::timeToCollBallBall)
 REGISTER_TCOLL_FUNCTION(Ball, AABB, &Collisions::timeToCollBallAABB)
 REGISTER_TCOLL_FUNCTION(AABB, AABB, &Collisions::timeToCollAABBAABB)
+REGISTER_TCOLL_FUNCTION(Ball, OBB,  &Collisions::timeToCollBallOBB)
 
 std::function<void(PhysicsObject*,PhysicsObject*)>
     ResolveFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
 REGISTER_RESOLVE_FUNCTION(Ball, Ball, &Collisions::collisionBallBall)
 REGISTER_RESOLVE_FUNCTION(Ball, AABB, &Collisions::collisionBallAABB)
 REGISTER_RESOLVE_FUNCTION(AABB, AABB, &Collisions::collisionAABBAABB)
+REGISTER_RESOLVE_FUNCTION(Ball, OBB,  &Collisions::collisionBallOBB)
 
 
 float Collisions::timeToCollision(PhysicsObject* p1, PhysicsObject* p2)
@@ -318,6 +320,40 @@ float Collisions::timeToCollAABBAABB(AABB* rect1, AABB* rect2)
     return tmin;
 }
 
+float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
+{
+    //AABB boundingBox = rect->getBoundingBox();
+    sf::Rect<float > boundingBox = rect->getBoundingBox();
+    AABB boundingAABB{{boundingBox.width, boundingBox.height}, 0.0f,
+                       {boundingBox.left, boundingBox.top},
+                       rect->getVelocity()};
+
+    sf::RectangleShape drawable{{boundingBox.width, boundingBox.height}};
+    drawable.setPosition(boundingBox.left, boundingBox.top);
+    debugWindow->draw(drawable);
+
+    float tmin = Collisions::timeToCollBallAABB(ball, &boundingAABB);
+
+    if(tmin < 1.0f)
+    {
+        sf::Rect<float > rectBounds = rect->getGlobalBounds();
+        AABB obbInFrame{{rectBounds.width, rectBounds.height}, 0.0f,
+                        {-rectBounds.width/2.0f, -rectBounds.height/2.0f},
+                        {0.0f, 0.0f}};
+        sf::Vector2f relVelocity = ball->getVelocity() - rect->getVelocity();
+        sf::Vector2f sepVector = ball->getPosition() - rect->getPosition();
+        relVelocity = sfVectorMath::rotate(relVelocity, -rect->getRotAngle());
+        sepVector = sfVectorMath::rotate(sepVector, -rect->getRotAngle());
+
+        Ball ballInFrame{ball->getRadius(), 0.0f, sepVector, relVelocity};
+
+        tmin = Collisions::timeToCollBallAABB(&ballInFrame, &obbInFrame);
+    }
+
+    std::cout << tmin << "\n";
+    return tmin;
+}
+
 
 void Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
 {
@@ -518,6 +554,42 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
         rect1->setPosition(rect1->getPosition() - redMassRect1*penetVector);
         rect2->setPosition(rect2->getPosition() + redMassRect2*penetVector);
     }
+}
+
+void Collisions::collisionBallOBB(Ball* ball, OBB* rect)
+{
+
+        float rotAngle = rect->getRotAngle();
+
+        /*
+        sf::Vector2f ballVelocity = sfVectorMath::rotate(ball->getVelocity(), -rotAngle);
+        sf::Vector2f rectVelocity = sfVectorMath::rotate(rect->getVelocity(), -rotAngle);
+        sf::Vector2f ballPosition = sfVectorMath::rotate(ball->getPosition(), -rotAngle);
+        sf::Vector2f rectPosition = sfVectorMath::rotate(rect->getPosition(), -rotAngle);
+        */
+
+        sf::Rect<float > rectBounds = rect->getGlobalBounds();
+        AABB obbInFrame{{rectBounds.width, rectBounds.height}, rect->getMass(),
+                        {-rectBounds.width/2.0f, -rectBounds.height/2.0f},
+                        {0.0f, 0.0f}};
+        sf::Vector2f relVelocity = ball->getVelocity() - rect->getVelocity();
+        sf::Vector2f sepVector = ball->getPosition() - rect->getPosition();
+        relVelocity = sfVectorMath::rotate(relVelocity, -rotAngle);
+        sepVector = sfVectorMath::rotate(sepVector, -rotAngle);
+
+        Ball ballInFrame{ball->getRadius(), ball->getMass(), sepVector, relVelocity};
+
+        Collisions::collisionBallAABB(&ballInFrame, &obbInFrame);
+
+        sf::Vector2f newBallVelocity = sfVectorMath::rotate(ballInFrame.getVelocity(), rotAngle);
+        sf::Vector2f newRectVelocity = sfVectorMath::rotate(obbInFrame.getVelocity(), rotAngle);
+        sf::Vector2f newBallPosition = sfVectorMath::rotate(ballInFrame.getPosition(), rotAngle);
+        sf::Vector2f newRectPosition = sfVectorMath::rotate(obbInFrame.getPosition(), rotAngle);
+
+        ball->setVelocity(newBallVelocity);
+        //ball->setPosition(ball->getPosition() + newBallPosition);
+        rect->setVelocity(newRectVelocity);
+        //rect->setPosition(rect->getPosition() + newRectPosition);
 }
 
 

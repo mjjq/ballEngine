@@ -7,6 +7,7 @@ enum class ObjectType
 {
     Ball,
     AABB,
+    OBB,
     _Count,
 };
 

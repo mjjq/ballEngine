@@ -39,11 +39,11 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
        position.x + width > worldSizeX ||
        position.y + height > worldSizeY))
     {
-        std::unique_ptr<AABB > newRect = std::make_unique<AABB >(sf::Vector2f{width,height},
+        std::unique_ptr<OBB > newRect = std::make_unique<OBB >(sf::Vector2f{width,height},
                                                                  mass,
-                                                                 sf::Vector2f{position.x - width/2.0f,
-                                                                  position.y - height/2.0f},
-                                                                 velocity);
+                                                                 sf::Vector2f{position.x,
+                                                                  position.y},
+                                                                 velocity, 23.0f, 0.0f);
         dynamicObjects.push_back(std::move(newRect));
 
         numOfBalls++;
