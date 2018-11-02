@@ -335,7 +335,7 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
     //AABB boundingBox = rect->getBoundingBox();
     sf::Rect<float > boundingBox = rect->getBoundingBox();
     AABB boundingAABB{{boundingBox.width, boundingBox.height}, 0.0f,
-                       {boundingBox.left, boundingBox.top},
+                      {boundingBox.left, boundingBox.top},
                        rect->getVelocity()};
 
     //sf::RectangleShape drawable{{boundingBox.width, boundingBox.height}};
@@ -344,14 +344,15 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
 
     float tmin = Collisions::timeToCollBallAABB(ball, &boundingAABB);
 
-    if(tmin < 1.0f || boundingBox.contains(ball->getPosition()))
+    if(tmin < 10.0f || boundingBox.contains(ball->getPosition()))
     {
         sf::Rect<float > rectBounds = rect->getGlobalBounds();
         float rotAngle = rect->getRotAngle();
 
         sf::Vector2f ballPos = sfVectorMath::rotate(ball->getPosition(), -rotAngle);
         sf::Vector2f ballVel = sfVectorMath::rotate(ball->getVelocity(), -rotAngle);
-        sf::Vector2f rectPos = sfVectorMath::rotate(rect->getPosition(), -rotAngle) - sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f};
+        sf::Vector2f rectPos = sfVectorMath::rotate(rect->getPosition(), -rotAngle) -
+                               sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f};
         sf::Vector2f rectVel = sfVectorMath::rotate(rect->getVelocity(), -rotAngle);
         //- sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f}
         AABB obbInFrame{{rectBounds.width, rectBounds.height}, 0.0f,
@@ -364,8 +365,8 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
 
         Ball ballInFrame{ball->getRadius(), 0.0f, ballPos, ballVel};
 
-        //ballInFrame.draw(*debugWindow);
-        //obbInFrame.draw(*debugWindow);
+        ballInFrame.draw(*debugWindow);
+        obbInFrame.draw(*debugWindow);
 
         tmin = Collisions::timeToCollBallAABB(&ballInFrame, &obbInFrame);
     }
