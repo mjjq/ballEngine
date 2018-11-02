@@ -427,8 +427,6 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
         sf::Vector2f dv = -coefRest*2.0f*sfVectorMath::dot(contactNormal, v)*contactNormal;
         origBall->addSolvedVelocity(redMassBall*dv, redMassBall*dv);
         origAABB->addSolvedVelocity(-redMassAABB*dv, -redMassAABB*dv);
-
-        std::cout << "collisions\n";
     }
 
     origBall->setPosition(rBall - redMassBall*penetVector);
