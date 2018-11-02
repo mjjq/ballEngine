@@ -41,7 +41,8 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
     {
         std::unique_ptr<AABB > newRect = std::make_unique<AABB >(sf::Vector2f{width,height},
                                                                  mass,
-                                                                 position,
+                                                                 sf::Vector2f{position.x - width/2.0f,
+                                                                  position.y - height/2.0f},
                                                                  velocity);
         dynamicObjects.push_back(std::move(newRect));
 
