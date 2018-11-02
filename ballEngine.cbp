@@ -40,6 +40,7 @@
 		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classMainMenuScene.h" />
 		<Unit filename="headers/classMenuScene.h" />
+		<Unit filename="headers/classOBB.h" />
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classPhysicsObject.h" />
 		<Unit filename="headers/classSandboxScene.h" />
@@ -88,6 +89,7 @@
 		<Unit filename="source/miscellaneous/structs.cpp" />
 		<Unit filename="source/simulation/classAABB.cpp" />
 		<Unit filename="source/simulation/classBall.cpp" />
+		<Unit filename="source/simulation/classOBB.cpp" />
 		<Unit filename="source/simulation/classPhysicsObject.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
 		<Unit filename="source/simulation/collisionDetection.cpp" />

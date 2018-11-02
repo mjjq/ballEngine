@@ -365,8 +365,8 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
 
         Ball ballInFrame{ball->getRadius(), 0.0f, ballPos, ballVel};
 
-        ballInFrame.draw(*debugWindow);
-        obbInFrame.draw(*debugWindow);
+        //ballInFrame.draw(*debugWindow);
+        //obbInFrame.draw(*debugWindow);
 
         tmin = Collisions::timeToCollBallAABB(&ballInFrame, &obbInFrame);
     }
