@@ -218,7 +218,6 @@ float Collisions::timeToCollBallAABB(Ball* origBall, AABB* origAABB)
     minkSumAABB.top -= origBall->getRadius();
     minkSumAABB.width += 2.0f*origBall->getRadius();
     minkSumAABB.height += 2.0f*origBall->getRadius();
-    //std::cout << "MinkAABB: " << AABB << "\n";
 
     float epsilon = 1e-5;
     float tmin = -1.0f;
@@ -230,9 +229,8 @@ float Collisions::timeToCollBallAABB(Ball* origBall, AABB* origAABB)
 
     sf::Vector2f intPoint = r+v*tmin;
     sf::Rect<float> origAABBRect = origAABB->getGlobalBounds();
-    //std::cout << "MinkAABB: " << AABB << "\n";
-    //std::cout << "origAABB" << origAABB << "\n";
-    //std::cout << r << "\n\n";
+
+
     if(origAABBRect.contains(r.x,r.y))
     {
         return std::numeric_limits<float>::quiet_NaN();
@@ -295,12 +293,6 @@ float Collisions::timeToCollAABBAABB(AABB* rect1, AABB* rect2)
     minkSumAABB.height += rect1Bounds.height;
 
 
-    sf::RectangleShape debug({minkSumAABB.width, minkSumAABB.height});
-    debug.setPosition(minkSumAABB.left, minkSumAABB.top);
-    //debug.setOutlineThickness(-1);
-    debugWindow->draw(debug);
-
-
     //std::cout << "MinkAABB: " << AABB << "\n";
 
     float epsilon = 1e-5;
@@ -310,21 +302,6 @@ float Collisions::timeToCollAABBAABB(AABB* rect1, AABB* rect2)
     tmin = Collisions::rayAABBIntersect(r, v, minkSumAABB, tmin, tmax, epsilon);
     if(std::isnan(tmin))
         return tmin;
-
-     sf::Vertex debugLine[] = {
-        sf::Vertex(r),
-        sf::Vertex(r+v*tmin)
-    };
-    debugLine[0].color = sf::Color::Red;
-    debugLine[1].color = sf::Color::Red;
-    debugWindow->draw(debugLine, 2, sf::Lines);
-
-    sf::CircleShape comCircle{20.0f};
-    comCircle.setOrigin(20.0f,20.0f);
-    comCircle.setPosition(rect1Bounds.left,
-                          rect1Bounds.top);
-    comCircle.setFillColor(sf::Color::Red);
-    debugWindow->draw(comCircle);
 
     if(tmin < 0.0f)
     {
@@ -375,7 +352,6 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
     //std::cout << "Collisions\n";
     sf::Vector2f rBall = origBall->getPosition();
     sf::Vector2f v = origBall->getVelocity() - origAABB->getVelocity();
-    sf::Vector2f rAABB = origAABB->getPosition();
 
     float redMassBall = origAABB->getMass()/(origAABB->getMass() + origBall->getMass());
     float redMassAABB = origBall->getMass()/(origAABB->getMass() + origBall->getMass());
@@ -425,6 +401,7 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
     else
     {
         sf::Vector2f ballPos = origBall->getPosition();
+        sf::Vector2f aabbPos = origAABB->getPosition();
         sf::Vector2f contactNormal = {0.0f, 0.0f};
         sf::Vector2f cornerPos = {0.0f, 0.0f};
         sf::Vector2f penetVector = {0.0f,0.0f};
@@ -449,16 +426,13 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
 
         contactNormal = sfVectorMath::norm(ballPos - cornerPos);
         penetVector = Collisions::calcPenetVector(cornerPos, contactNormal, *origBall);
-        origBall->setPosition(ballPos - penetVector);
+        penetVector += 0.01f*contactNormal;
+        origBall->setPosition(ballPos - redMassBall*penetVector);
+        origAABB->setPosition(aabbPos + redMassAABB*penetVector);
 
         sf::Vector2f dv = -coefRest*2.0f*sfVectorMath::dot(contactNormal, origBall->getVelocity())*contactNormal;
         origBall->addSolvedVelocity(redMassBall*dv, redMassBall*dv);
         origAABB->addSolvedVelocity(-redMassAABB*dv, -redMassAABB*dv);
-
-        /*sf::Vertex line[2];
-        line[0].position = cornerPos;
-        line[1].position = ballPos;
-        debugWindow->draw(line, 2, sf::Lines);*/
     }
 
 }
@@ -467,7 +441,6 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
 void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
 {
 
-    sf::Vector2f r = rect1->getPosition();
     sf::Vector2f v = rect1->getVelocity() - rect2->getVelocity();
 
     float redMassRect1 = rect2->getMass()/(rect1->getMass() + rect2->getMass());
@@ -483,15 +456,6 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
     bool boolYMin = false;
     bool boolYMax = false;
 
-    /*if(rect1Bounds.left + rect1Bounds.width <= rect2Bounds.left)
-        boolXMin = true;
-    else if(rect1Bounds.left >= rect2Bounds.left + rect2Bounds.width)
-        boolXMax = true;
-    if(rect1Bounds.top + rect1Bounds.height <= rect2Bounds.top)
-        boolYMin = true;
-    else if(rect1Bounds.top >= rect2Bounds.top + rect2Bounds.height)
-        boolYMax = true;*/
-
     sf::Vector2f rCent = {rect1Bounds.left + rect1Bounds.width/2.0f,
                          rect1Bounds.top  + rect1Bounds.height/2.0f};
     if(rCent.x <= rect2Bounds.left)
@@ -503,7 +467,7 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
     else if(rCent.y >= rect2Bounds.top + rect2Bounds.height)
         boolYMax = true;
 
-    std::cout << boolXMin << boolXMax << boolYMin << boolYMax << "\n";
+    //std::cout << boolXMin << boolXMax << boolYMin << boolYMax << "\n";
     sf::Vector2f contactNormal = {0.0f, 0.0f};
     sf::Vector2f contactLinePos = {0.0f, 0.0f};
     if((boolXMin || boolXMax) && !(boolYMin || boolYMax))
@@ -543,24 +507,20 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
     }
     else
     {
-        sf::Vector2f sepVector = Collisions::calcSepVector(*rect1, *rect2);
-        std::cout << "sepVector " << sepVector << "\n";
-        sf::Vector2f newVel{v.x*sepVector.x, v.y*sepVector.y};
+        contactNormal =  Collisions::calcContactNorm(*rect1, *rect2);
+
+        sf::Vector2f newVel{v.x*std::abs(contactNormal.x), v.y*std::abs(contactNormal.y)};
         rect1->addSolvedVelocity(-newVel*coefRest*redMassRect1*2.0f, -newVel*coefRest*redMassRect1*2.0f);
         rect2->addSolvedVelocity(newVel*coefRest*redMassRect2*2.0f, newVel*coefRest*redMassRect2*2.0f);
     }
+
     if(sfVectorMath::square(contactNormal)>1e-15)
     {
-        std::cout << "contact\n";
         sf::Vector2f penetVector = Collisions::calcPenetVector(*rect1, *rect2);
-            std::cout << penetVector << "\n";
-        //if(penetVector.x <= 0.0f && penetVector.y <= 0.0f)
-        {
-            std::cout << "penetration\n";
-            penetVector -= 0.1f*contactNormal;
-            rect1->setPosition(rect1->getPosition() - redMassRect1*penetVector);
-            rect2->setPosition(rect2->getPosition() + redMassRect2*penetVector);
-        }
+
+        penetVector -= 0.1f*contactNormal;
+        rect1->setPosition(rect1->getPosition() - redMassRect1*penetVector);
+        rect2->setPosition(rect2->getPosition() + redMassRect2*penetVector);
     }
 }
 
@@ -574,38 +534,6 @@ sf::Vector2f Collisions::calcPenetVector(sf::Vector2f rayStart, sf::Vector2f ray
     return rayNorm*(penetDistance-0.01f*ball.getRadius());
 }
 
-/*sf::Vector2f Collisions::calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, AABB &rect)
-{
-    float distance = sfVectorMath::dot( (rect.getPosition() - rayStart), rayNorm );
-    sf::Rect<float > rectBounds = rect.getGlobalBounds();
-    float penetDistance = 0.0f;
-    sf::Vector2f penetVector = {0.0f, 0.0f};
-    float epsilon = 1e-15;
-
-
-    if(std::abs(rayNorm.x) < epsilon && std::abs(rayNorm.y) > epsilon)
-    {
-        if(rayNorm.y > epsilon)
-            penetDistance = -distance;
-        else if(rayNorm.y < -epsilon)
-            penetDistance = rectBounds.height-distance;
-        penetVector = rayNorm*(penetDistance - 0.01f*rectBounds.height);
-    }
-    else
-    {
-        if(rayNorm.x > epsilon)
-            penetDistance = -distance;
-        else if(rayNorm.x < -epsilon)
-            penetDistance = rectBounds.width-distance;
-        penetDistance = rectBounds.width - distance;
-        penetVector = rayNorm*(penetDistance - 0.01f*rectBounds.width);
-    }
-    std::cout << penetDistance << " Penetrated\n";
-
-
-    return penetVector;
-}
-*/
 
 sf::Vector2f Collisions::calcPenetVector(AABB &rect1, AABB &rect2)
 {
@@ -643,7 +571,7 @@ sf::Vector2f Collisions::calcPenetVector(AABB &rect1, AABB &rect2)
 }
 
 
-sf::Vector2f Collisions::calcSepVector(AABB &rect1, AABB &rect2)
+sf::Vector2f Collisions::calcContactNorm(AABB &rect1, AABB &rect2)
 {
     sf::Rect<float > minkDiff = Collisions::minkowskiDiff(rect1, rect2);
 
@@ -656,22 +584,22 @@ sf::Vector2f Collisions::calcSepVector(AABB &rect1, AABB &rect2)
         if(std::abs(minkDiff.left) < minVal)
         {
             minVal = std::abs(minkDiff.left);
-            penetVector = {-1.0f, 0.0f};
+            penetVector = {1.0f, 0.0f};
         }
         if(std::abs(minkDiff.left + minkDiff.width) < minVal)
         {
             minVal = std::abs(minkDiff.left + minkDiff.width);
-            penetVector = {1.0f, 0.0f};
+            penetVector = {-1.0f, 0.0f};
         }
         if(std::abs(minkDiff.top) < minVal)
         {
             minVal = std::abs(minkDiff.top);
-            penetVector = {0.0f, -1.0f};
+            penetVector = {0.0f, 1.0f};
         }
         if(std::abs(minkDiff.top + minkDiff.height) < minVal)
         {
             minVal = std::abs(minkDiff.top + minkDiff.height);
-            penetVector = {0.0f, 1.0f};
+            penetVector = {0.0f, -1.0f};
         }
     }
 

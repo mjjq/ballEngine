@@ -80,7 +80,6 @@ void BallUniverse::spawnStaticRect(sf::Vector2f position, float width, float hei
        position.x + width > worldSizeX ||
        position.y + height > worldSizeY))
     {
-        sf::Vector2f velocity = {0.0f,0.0f};
         std::unique_ptr<AABB > newRect = std::make_unique<AABB >(sf::Vector2f{width,height},
                                                                  1000000000000.0f,
                                                                  position,

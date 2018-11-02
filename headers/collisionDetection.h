@@ -29,10 +29,9 @@ public:
 
     static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
     static sf::Vector2f calcPenetVector(Ball* ball1, Ball* ball2);
-    static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, AABB &rect);
     static sf::Vector2f calcPenetVector(AABB &rect1, AABB &rect2);
 
-    static sf::Vector2f calcSepVector(AABB &rect1, AABB &rect2);
+    static sf::Vector2f calcContactNorm(AABB &rect1, AABB &rect2);
 
     static sf::Rect<float > minkowskiDiff(AABB &rect1, AABB &rect2);
 
