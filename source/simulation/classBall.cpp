@@ -44,9 +44,9 @@ void Ball::draw(sf::RenderWindow &_window)
     //nStepPosition = initPos;
     drawable.setOrigin(radius,radius);
 
-    drawable.setFillColor(sf::Color{44,44,44,255});
+    drawable.setFillColor(sf::Color{180,180,180,255});
 
-    drawable.setOutlineThickness(-1);
+    //drawable.setOutlineThickness(-1);
     _window.draw(drawable);
     //std::cout << drawable.getPosition() << "\n";
 }

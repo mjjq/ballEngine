@@ -45,9 +45,9 @@ void AABB::draw(sf::RenderWindow &_window)
     drawable.setPosition(position);
     //nStepPosition = initPos;
 
-    drawable.setFillColor(sf::Color{44,44,44,100});
+    drawable.setFillColor(sf::Color{180,180,180,100});
 
-    drawable.setOutlineThickness(-1);
+    //drawable.setOutlineThickness(-1);
     _window.draw(drawable);
     //std::cout << drawable.getPosition() << "\n";
 }

@@ -77,6 +77,24 @@ void SandboxScene::load()
                 }
                 }
             },
+            {"spwnDAABB",  [&]{
+                if(!mouseOnUIWhenClicked.first){
+                    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+                    mousePosOnClick = static_cast<sf::Vector2i>
+                    (window.mapPixelToCoords(viewPos));
+                    drawLine = true;
+                }
+                }
+            },
+            {"spwnSCirc",  [&]{
+                if(!mouseOnUIWhenClicked.first){
+                    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+                    mousePosOnClick = static_cast<sf::Vector2i>
+                    (window.mapPixelToCoords(viewPos));
+                    drawLine = true;
+                }
+                }
+            },
             {"spwnJson",  [&]{
                 if(!mouseOnUIWhenClicked.first){
                     sf::Vector2i viewPos = sf::Mouse::getPosition(window);
@@ -104,6 +122,30 @@ void SandboxScene::load()
                     ballSim.spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),
                                          velocity,
                                          spawnRadius,
+                                         spawnMass);
+                    drawLine = false;
+                }
+            }
+            },
+
+            {"spwnSCirc",  [&]{
+                if(drawLine == true){
+                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);
+                    ballSim.spawnStaticBall(static_cast<sf::Vector2f>(mousePosOnClick),
+                                         300.0f*sqrt(velocity.x*velocity.x + velocity.y*velocity.y));
+                    drawLine = false;
+                }
+            }
+            },
+
+            {"spwnDAABB",  [&]{
+                if(drawLine == true){
+                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);
+                    ballSim.spawnNewRect(static_cast<sf::Vector2f>(mousePosOnClick),
+                                         spawnRadius*2.0f, spawnRadius*2.0f,
+                                         velocity,
                                          spawnMass);
                     drawLine = false;
                 }

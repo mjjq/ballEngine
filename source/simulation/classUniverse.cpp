@@ -674,8 +674,8 @@ void BallUniverse::createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVe
     /*spawnNewBall({worldSizeX/2.0f, worldSizeY/2.0f}, {0,0}, 50, 1000);
     spawnNewBall({worldSizeX/2.0f + 200.0f, worldSizeY/2}, {5,0}, 50, 1000);
     spawnNewBall({worldSizeX/2 - 201, worldSizeY/2}, {-5,0}, 50, 1000);*/
-    //spawnStaticRect(centralPosition, 300.0f*initVelocity.x, 300.0f*initVelocity.y);
-    spawnNewRect(centralPosition, 50.0f, 50.0f, initVelocity, 5.0f);
+    spawnStaticRect(centralPosition, 300.0f*initVelocity.x, 300.0f*initVelocity.y);
+    //spawnNewRect(centralPosition, 50.0f, 50.0f, initVelocity, 5.0f);
     //std::cout << "Size: " << staticObjects.size() << "\n";
     //staticCollArray.printMatrix();
     //std::cout << "\n";
