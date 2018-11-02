@@ -43,7 +43,7 @@ void BallUniverse::spawnNewRect(sf::Vector2f position, float width, float height
                                                                  mass,
                                                                  sf::Vector2f{position.x,
                                                                   position.y},
-                                                                 velocity, 23.0f, 0.0f);
+                                                                 velocity, 20.0f, 0.0f);
         dynamicObjects.push_back(std::move(newRect));
 
         numOfBalls++;
