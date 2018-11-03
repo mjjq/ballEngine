@@ -10,62 +10,6 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
-/*namespace sf
-{
-    struct Vector2f
-    {
-    public:
-        float x;
-        float y;
-    };
-
-    struct Vertex
-    {
-    public:
-        Vector2f position;
-    };
-
-    struct Line
-    {
-    public:
-        Vector2f position;
-        Vector2f direction;
-    };
-}
-
-namespace sfVectorMath
-{
-    float dot(sf::Vector2f v1, sf::Vector2f v2)
-    {
-        return v1.x*v2.x + v1.y*v2.y;
-    }
-}
-
-sf::Vector2f operator - (sf::Vector2f v1, sf::Vector2f v2)
-{
-    sf::Vector2f newVec = {v1.x - v2.x, v1.y - v2.y};
-    return newVec;
-}
-
-
-sf::Vector2f operator * (float scalar, sf::Vector2f v)
-{
-    sf::Vector2f newVec = {scalar*v.x, scalar*v.y};
-    return newVec;
-}
-
-sf::Vector2f operator + (sf::Vector2f v1, sf::Vector2f v2)
-{
-    sf::Vector2f newVec = {v1.x + v2.x, v1.y + v2.y};
-    return newVec;
-}
-
-sf::Vector2f operator - (sf::Vector2f v)
-{
-    sf::Vector2f newVec = {-v.x, -v.y};
-    return newVec;
-}*/
-
 std::vector<sf::Vector2f > Collisions::edgesOf(std::vector<sf::Vertex > &vertices)
 {
     std::vector<sf::Vector2f > edges;

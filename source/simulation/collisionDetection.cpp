@@ -35,7 +35,7 @@ REGISTER_TCOLL_FUNCTION(Ball, Ball, &Collisions::timeToCollBallBall)
 REGISTER_TCOLL_FUNCTION(Ball, AABB, &Collisions::timeToCollBallAABB)
 REGISTER_TCOLL_FUNCTION(AABB, AABB, &Collisions::timeToCollAABBAABB)
 REGISTER_TCOLL_FUNCTION(Ball, OBB,  &Collisions::timeToCollBallOBB)
-
+REGISTER_TCOLL_FUNCTION(OBB, OBB,   &Collisions::timeToCollOBBOBB)
 
 
 float Collisions::timeToCollision(PhysicsObject* p1, PhysicsObject* p2)
@@ -258,5 +258,53 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
     }
 
     std::cout << tmin << "\n";
+    return tmin;
+}
+
+
+float Collisions::timeToCollOBBOBB(OBB* rect1, OBB* rect2)
+{
+    sf::Rect<float > boundingBox = rect1->getBoundingBox();
+    AABB boundingAABB1{{boundingBox.width, boundingBox.height}, 0.0f,
+                      {boundingBox.left, boundingBox.top},
+                       rect1->getVelocity()};
+
+    //sf::RectangleShape drawable1{{boundingBox.width, boundingBox.height}};
+    //drawable1.setPosition(boundingBox.left, boundingBox.top);
+    //debugWindow->draw(drawable1);
+
+    boundingBox = rect2->getBoundingBox();
+    AABB boundingAABB2{{boundingBox.width, boundingBox.height}, 0.0f,
+                      {boundingBox.left, boundingBox.top},
+                       rect2->getVelocity()};
+
+    //sf::RectangleShape drawable2{{boundingBox.width, boundingBox.height}};
+    //drawable2.setPosition(boundingBox.left, boundingBox.top);
+    //debugWindow->draw(drawable2);
+
+    float tmin = Collisions::timeToCollAABBAABB(&boundingAABB1, &boundingAABB2);
+    if(tmin < 10.0f)
+    {
+        std::vector<sf::Vertex > rect1Vert = rect1->constructVerts();
+        std::vector<sf::Vertex > rect2Vert = rect2->constructVerts();
+
+        sf::VertexArray quad1(sf::LineStrip, 4);
+        for(int i=0; i<3; ++i)
+            quad1[i] = rect1Vert[i];
+
+        sf::VertexArray quad2(sf::LineStrip, 4);
+        for(int i=0; i<3; ++i)
+            quad2[i] = rect2Vert[i];
+
+        debugWindow->draw(quad1);
+        debugWindow->draw(quad2);
+
+        std::pair<bool, sf::Vector2f> result = Collisions::sepAxisTest(rect1Vert, rect2Vert);
+        if(!result.first)
+            return std::numeric_limits<float>::quiet_NaN();
+        else
+            return 0.0f;
+    }
+
     return tmin;
 }

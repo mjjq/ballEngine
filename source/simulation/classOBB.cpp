@@ -88,11 +88,30 @@ sf::Rect<float > OBB::getBoundingBox()
     for(unsigned int i=0; i<4; ++i)
     {
         obbVerts[i].position = sfVectorMath::rotate(obbVerts[i].position,
-                                                    rotAngle*180.0f/sfVectorMath::PI);
+                                                    rotAngle);
         obbVerts[i].position += position;
     }
 
     return obbVerts.getBounds();
+}
+
+std::vector<sf::Vertex > OBB::constructVerts()
+{
+    //make sure the vertices are counter-clockwise!
+    std::vector<sf::Vertex > obbVerts;
+    obbVerts.push_back(sf::Vertex(sf::Vector2f(-size.x/2.0f, -size.y/2.0f)));
+    obbVerts.push_back(sf::Vertex(sf::Vector2f(size.x/2.0f, -size.y/2.0f)));
+    obbVerts.push_back(sf::Vertex(sf::Vector2f(size.x/2.0f, size.y/2.0f)));
+    obbVerts.push_back(sf::Vertex(sf::Vector2f(-size.x/2.0f, size.y/2.0f)));
+
+    for(unsigned int i=0; i<4; ++i)
+    {
+        obbVerts[i].position = sfVectorMath::rotate(obbVerts[i].position,
+                                                    rotAngle);
+        obbVerts[i].position += position;
+    }
+
+    return obbVerts;
 }
 
 float OBB::getRotAngle()

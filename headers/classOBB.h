@@ -30,6 +30,7 @@ public:
     float getMinSize();
     sf::Vector2f getCoM();
     sf::Rect<float > getBoundingBox();
+    std::vector<sf::Vertex > constructVerts();
     float getRotAngle();
 
     void draw(sf::RenderWindow &_window);

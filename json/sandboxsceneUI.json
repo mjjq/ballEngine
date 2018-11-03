@@ -74,6 +74,14 @@
             "bsize" : [10, 20],
             "quanrange" : [4.0, 50],
             "function" : "changeRad"
+        },
+		{
+            "position" : [10, 130],
+            "scrnrange" : 210,
+            "lthickness" : 2,
+            "bsize" : [10, 20],
+            "quanrange" : [-180, 180],
+            "function" : "changeRot"
         }
         ],
 
@@ -98,6 +106,13 @@
             "fontsize" : 16,
             "text" : "Spawn Radius: ",
             "variable" : "spawnRad"
+        },
+		{
+            "position" : [5, 110],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Spawn Rotation: ",
+            "variable" : "spawnRot"
         },
         {
             "position" : [5, 170],

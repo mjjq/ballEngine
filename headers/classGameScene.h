@@ -13,6 +13,7 @@ protected:
     {
         SQ_MASS,
         SQ_RADIUS,
+        SQ_ROTATION,
         SQ_DENSITY,
     };
 
@@ -39,6 +40,7 @@ protected:
     int spawnVelFactor = 10;
     float spawnRadius = 10.0f;
     float spawnMass = 1.0f;
+    float spawnRotation = 0.0f;
 
 
     BallUniverse ballSim{2000, 2000, 1.0f, false, false};

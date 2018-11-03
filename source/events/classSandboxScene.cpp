@@ -146,7 +146,8 @@ void SandboxScene::load()
                     ballSim.spawnNewRect(static_cast<sf::Vector2f>(mousePosOnClick),
                                          spawnRadius*2.0f, spawnRadius*2.0f,
                                          velocity,
-                                         spawnMass);
+                                         spawnMass,
+                                         spawnRotation);
                     drawLine = false;
                 }
             }
@@ -166,7 +167,8 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    ballSim.createSPSys(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+                    ballSim.spawnStaticRect(static_cast<sf::Vector2f>(mousePosOnClick),
+                                            300.0f*velocity.x, 300.0f*velocity.y, spawnRotation);
                     drawLine = false;
                 }
             }
@@ -175,7 +177,8 @@ void SandboxScene::load()
 
         sliderFuncMap = {
             {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
-            {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}}
+            {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}},
+            {"changeRot",   {[&](float rotation){setSpawnValues(rotation, SQ_ROTATION);}, &spawnRotation}}
         };
 
         textVarMap = {
@@ -183,6 +186,7 @@ void SandboxScene::load()
             {"timeStep",    [&]{return ballSim.getTimeStep();}},
             {"spawnMass",   [&]{return std::to_string(spawnMass);}},
             {"spawnRad",    [&]{return std::to_string(spawnRadius);}},
+            {"spawnRot",    [&]{return std::to_string(spawnRotation);}},
             {"forceEnld",   [&]{return ballSim.getForcesEnabled();}},
             {"collsEnld",   [&]{return ballSim.getCollisionsEnabled();}},
             {"gravEnld",    [&]{return ballSim.getUGravityEnabled();}},

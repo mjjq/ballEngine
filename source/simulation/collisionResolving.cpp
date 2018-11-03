@@ -32,6 +32,8 @@ REGISTER_RESOLVE_FUNCTION(Ball, Ball, &Collisions::collisionBallBall)
 REGISTER_RESOLVE_FUNCTION(Ball, AABB, &Collisions::collisionBallAABB)
 REGISTER_RESOLVE_FUNCTION(AABB, AABB, &Collisions::collisionAABBAABB)
 REGISTER_RESOLVE_FUNCTION(Ball, OBB,  &Collisions::collisionBallOBB)
+REGISTER_RESOLVE_FUNCTION(OBB, OBB,   &Collisions::collisionOBBOBB)
+
 
 void Collisions::resolveCollision(PhysicsObject* p1, PhysicsObject* p2)
 {
@@ -283,4 +285,9 @@ void Collisions::collisionBallOBB(Ball* ball, OBB* rect)
         ball->setPosition(newBallPosition);
         rect->setVelocity(newRectVelocity);
         rect->setPosition(newRectPosition);
+}
+
+void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
+{
+
 }
