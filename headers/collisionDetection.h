@@ -38,7 +38,14 @@ public:
 
     static sf::Rect<float > minkowskiDiff(AABB &rect1, AABB &rect2);
 
-
+    static std::vector<sf::Vector2f > edgesOf(std::vector<sf::Vertex > &vertices);
+    static std::pair<bool, sf::Vector2f > isSeparatingAxis(sf::Vector2f &orthog,
+                                                            std::vector<sf::Vertex> &obj1,
+                                                            std::vector<sf::Vertex> &obj2);
+    static sf::Vector2f orthogonal(sf::Vector2f &v);
+    static sf::Vector2f getCentre(std::vector<sf::Vertex> &obj);
+    static std::pair<bool, sf::Vector2f> sepAxisTest(std::vector<sf::Vertex> &obj1,
+                                          std::vector<sf::Vertex> &obj2);
 
 };
 

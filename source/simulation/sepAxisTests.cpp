@@ -1,8 +1,16 @@
 #include <iostream>
-#include <vector>
+#include <SFML/Graphics.hpp>
+#include <cmath>
+#include <thread>
+#include <limits>
+#include <tuple>
+#include <cassert>
 
+#include "../../headers/collisionDetection.h"
+#include "../../headers/sfVectorMath.h"
+#include "../../headers/stringConversion.h"
 
-namespace sf
+/*namespace sf
 {
     struct Vector2f
     {
@@ -56,31 +64,30 @@ sf::Vector2f operator - (sf::Vector2f v)
 {
     sf::Vector2f newVec = {-v.x, -v.y};
     return newVec;
-}
+}*/
 
-std::vector<sf::Line > edges_of(std::vector<sf::Vertex > &vertices)
+std::vector<sf::Vector2f > Collisions::edgesOf(std::vector<sf::Vertex > &vertices)
 {
-    std::vector<sf::Line > edges;
+    std::vector<sf::Vector2f > edges;
 
     unsigned int num = vertices.size();
     for(unsigned int i=0; i<num; ++i)
     {
-        sf::Line newEdge;
-        newEdge.position = {0.0f, 0.0f};
-        newEdge.direction = vertices[(i+1)%num].position - vertices[i].position;
+        sf::Vector2f newEdge;
+        newEdge = vertices[(i+1)%num].position - vertices[i].position;
         edges.push_back(newEdge);
     }
 
     return edges;
 }
 
-sf::Vector2f orthogonal(sf::Vector2f &v)
+sf::Vector2f Collisions::orthogonal(sf::Vector2f &v)
 {
     //std::cout << -v.y << " " << v.x << "\n";
     return {v.y, -v.x};
 }
 
-std::pair<bool, sf::Vector2f > isSeparatingAxis(sf::Line &orthog,
+std::pair<bool, sf::Vector2f > Collisions::isSeparatingAxis(sf::Vector2f &orthog,
                                                 std::vector<sf::Vertex> &obj1,
                                                 std::vector<sf::Vertex> &obj2)
 {
@@ -91,7 +98,7 @@ std::pair<bool, sf::Vector2f > isSeparatingAxis(sf::Line &orthog,
 
     for(sf::Vertex &vert : obj1)
     {
-        float projection = sfVectorMath::dot(vert.position, orthog.direction);
+        float projection = sfVectorMath::dot(vert.position, orthog);
 
         min1 = std::min(min1, projection);
         max1 = std::max(max1, projection);
@@ -99,7 +106,7 @@ std::pair<bool, sf::Vector2f > isSeparatingAxis(sf::Line &orthog,
 
     for(sf::Vertex &vert : obj2)
     {
-        float projection = sfVectorMath::dot(vert.position, orthog.direction);
+        float projection = sfVectorMath::dot(vert.position, orthog);
 
         min2 = std::min(min2, projection);
         max2 = std::max(max2, projection);
@@ -108,9 +115,9 @@ std::pair<bool, sf::Vector2f > isSeparatingAxis(sf::Line &orthog,
     if(max1 >= min2 && max2 >= min1)
     {
         float d = std::min(max2 - min1, max1 - min2);
-        float dOSquared = d/sfVectorMath::dot(orthog.direction, orthog.direction) + 1e-10;
+        float dOSquared = d/sfVectorMath::dot(orthog, orthog) + 1e-10;
 
-        sf::Vector2f pv = dOSquared*orthog.direction;
+        sf::Vector2f pv = dOSquared*orthog;
 
         return std::make_pair(false, pv);
     }
@@ -121,7 +128,7 @@ std::pair<bool, sf::Vector2f > isSeparatingAxis(sf::Line &orthog,
     }
 }
 
-sf::Vector2f getCentre(std::vector<sf::Vertex> &obj)
+sf::Vector2f Collisions::getCentre(std::vector<sf::Vertex> &obj)
 {
     float numVerts = static_cast<float>(obj.size());
     sf::Vector2f average = {0.0f, 0.0f};
@@ -134,25 +141,23 @@ sf::Vector2f getCentre(std::vector<sf::Vertex> &obj)
     return (1.0f/numVerts) * average;
 }
 
-std::pair<bool, sf::Vector2f> sepAxisTest(std::vector<sf::Vertex> &obj1,
+std::pair<bool, sf::Vector2f> Collisions::sepAxisTest(std::vector<sf::Vertex> &obj1,
                                           std::vector<sf::Vertex> &obj2)
 {
-    std::vector<sf::Line > edges = edges_of(obj1);
-    std::vector<sf::Line > edges2 = edges_of(obj2);
+    std::vector<sf::Vector2f > edges = edgesOf(obj1);
+    std::vector<sf::Vector2f > edges2 = edgesOf(obj2);
     edges.insert(edges.end(), edges2.begin(), edges2.end());
 
 
-    std::vector<sf::Line > orthogonals;
-    for(sf::Line &edge : edges)
+    std::vector<sf::Vector2f > orthogonals;
+    for(sf::Vector2f &edge : edges)
     {
-        sf::Line orthog;
-        orthog.position = {0.0f, 0.0f};
-        orthog.direction = orthogonal(edge.direction);
+        sf::Vector2f orthog = orthogonal(edge);
         orthogonals.push_back(orthog);
     }
 
     std::vector<sf::Vector2f > pushVectors;
-    for(sf::Line &orthog : orthogonals)
+    for(sf::Vector2f &orthog : orthogonals)
     {
         std::pair<bool, sf::Vector2f> result = isSeparatingAxis(orthog, obj1, obj2);
         if(result.first)
@@ -175,26 +180,4 @@ std::pair<bool, sf::Vector2f> sepAxisTest(std::vector<sf::Vertex> &obj1,
         mpv = -mpv;
 
     return std::make_pair(true, mpv);
-}
-
-
-
-int main()
-{
-    std::vector<sf::Vertex > obj1;
-    obj1.push_back({{0.0f, 0.0f}});
-    obj1.push_back({{1.0f, 0.0f}});
-    obj1.push_back({{1.0f, 1.0f}});
-    obj1.push_back({{0.0f, 1.0f}});
-
-    std::vector<sf::Vertex > obj2;
-    obj2.push_back({{2.0f, 0.0f}});
-    obj2.push_back({{3.0f, 0.0f}});
-    obj2.push_back({{3.0f, 1.0f}});
-    obj2.push_back({{2.0f, 1.0f}});
-
-    std::pair<bool, sf::Vector2f> result = sepAxisTest(obj1, obj2);
-    std::cout << result.first << "\n";
-    std::cout << result.second.x << " " << result.second.y << "\n";
-    return 0;
 }
