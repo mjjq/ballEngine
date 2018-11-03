@@ -68,8 +68,9 @@ void Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
     firstBall->setPosition(firstBall->getPosition() - penetVector1);
     secondBall->setPosition(secondBall->getPosition() + penetVector2);
 
-    firstBall->setVelocity(v1 - coefRest*rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
-    secondBall->setVelocity(v2 + coefRest*rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
+    Collisions::applyImpulse(secondBall, firstBall, rhat);
+    //firstBall->setVelocity(v1 - coefRest*rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
+    //secondBall->setVelocity(v2 + coefRest*rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
 
     firstBall->incTimesCollided();
     secondBall->incTimesCollided();
@@ -328,7 +329,7 @@ void Collisions::applyImpulse(PhysicsObject *obj1, PhysicsObject *obj2, sf::Vect
     sf::Vector2f relVel = obj1->getVelocity() - obj2->getVelocity();
     float redMass = obj1->getMass()*obj2->getMass()/(obj1->getMass() + obj2->getMass());
     float coefRest = 0.7f;
-    float mu = 2.0f;
+    float mu = 0.3f;
 
     //std::cout << contactNorm << "\n";
     sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
@@ -351,7 +352,7 @@ void Collisions::applyImpulse(PhysicsObject *obj1, PhysicsObject *obj2, sf::Vect
         frictionImpulse = - j * contactTangent * mu;
     }
 
-    std::cout << contactNorm << "\n";
+    std::cout << frictionImpulse << "\n";
 
     obj1->addSolvedVelocity((impulse + frictionImpulse)/obj1->getMass(),
                              (impulse + frictionImpulse)/obj1->getMass());
