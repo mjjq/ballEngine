@@ -39,6 +39,8 @@ public:
     static sf::Vector2f calcContactNorm(AABB &rect1, AABB &rect2);
 
     static sf::Rect<float > minkowskiDiff(AABB &rect1, AABB &rect2);
+    static std::vector<sf::Vertex > minkowskiDiff(std::vector<sf::Vertex > &obj1,
+                                                  std::vector<sf::Vertex > &obj2);
 
     static std::vector<sf::Vector2f > edgesOf(std::vector<sf::Vertex > &vertices);
     static std::pair<bool, sf::Vector2f > isSeparatingAxis(sf::Vector2f &orthog,

@@ -289,5 +289,32 @@ void Collisions::collisionBallOBB(Ball* ball, OBB* rect)
 
 void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
 {
+    std::vector<sf::Vertex > rect1Vert = rect1->constructVerts();
+    std::vector<sf::Vertex > rect2Vert = rect2->constructVerts();
 
+    /*sf::VertexArray quad1(sf::TriangleStrip, 4);
+    for(int i=0; i<3; ++i)
+        quad1[i] = rect1Vert[i];
+
+    sf::VertexArray quad2(sf::LineStrip, 4);
+    for(int i=0; i<3; ++i)
+        quad2[i] = rect2Vert[i];
+
+    debugWindow->draw(quad1);
+    debugWindow->draw(quad2);*/
+
+    sf::Vector2f penetVector = Collisions::sepAxisTest(rect1Vert, rect2Vert).second;
+    sf::Vector2f rhat = sfVectorMath::norm(penetVector);
+    penetVector += 0.1f*rhat;
+    float redMass1 = rect2->getMass()/(rect1->getMass() + rect2->getMass());
+    float redMass2 = rect1->getMass()/(rect1->getMass() + rect2->getMass());
+    float coefRest = 0.7f;
+
+    rect1->setPosition(rect1->getPosition() - redMass1*penetVector);
+    rect2->setPosition(rect2->getPosition() + redMass2*penetVector);
+
+    sf::Vector2f resVel = 2.0f*coefRest*rhat*sfVectorMath::dot(rect1->getVelocity() - rect2->getVelocity(), rhat);
+
+    rect1->addSolvedVelocity(-resVel*redMass1, -resVel*redMass1);
+    rect2->addSolvedVelocity(resVel*redMass2, resVel*redMass2);
 }

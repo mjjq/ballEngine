@@ -29,3 +29,14 @@ sf::Rect<float > Collisions::minkowskiDiff(AABB &rect1, AABB &rect2)
     return result;
 }
 
+std::vector<sf::Vertex > Collisions::minkowskiDiff(std::vector<sf::Vertex > &obj1,
+                                                   std::vector<sf::Vertex > &obj2)
+{
+    std::vector<sf::Vertex > pureDifference;
+
+    for(sf::Vertex &vertObj1 : obj1)
+        for(sf::Vertex &vertObj2 : obj2)
+        {
+            pureDifference.push_back(sf::Vertex(sf::Vector2f(vertObj1.position - vertObj2.position)));
+        }
+}

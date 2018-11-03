@@ -224,9 +224,9 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
                       {boundingBox.left, boundingBox.top},
                        rect->getVelocity()};
 
-    //sf::RectangleShape drawable{{boundingBox.width, boundingBox.height}};
-    //drawable.setPosition(boundingBox.left, boundingBox.top);
-    //debugWindow->draw(drawable);
+    sf::RectangleShape drawable{{boundingBox.width, boundingBox.height}};
+    drawable.setPosition(boundingBox.left, boundingBox.top);
+    debugWindow->draw(drawable);
 
     float tmin = Collisions::timeToCollBallAABB(ball, &boundingAABB);
 
@@ -257,7 +257,6 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
         tmin = Collisions::timeToCollBallAABB(&ballInFrame, &obbInFrame);
     }
 
-    std::cout << tmin << "\n";
     return tmin;
 }
 
