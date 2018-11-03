@@ -29,10 +29,11 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-std=c++14" />
+					<Add option="-pg" />
 					<Add option="-DSFML_STATIC" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
+					<Add option="-pg -lgmon" />
 					<Add option="-static-libstdc++" />
 					<Add option="-static-libgcc" />
 					<Add option="-static" />
@@ -122,8 +123,13 @@
 		<Unit filename="source/simulation/classPhysicsObject.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
 		<Unit filename="source/simulation/collisionDetection.cpp" />
+		<Unit filename="source/simulation/collisionResolving.cpp" />
 		<Unit filename="source/simulation/forces.cpp" />
 		<Unit filename="source/simulation/integrators.cpp" />
+		<Unit filename="source/simulation/minkowskiMath.cpp" />
+		<Unit filename="source/simulation/penetrationTests.cpp" />
+		<Unit filename="source/simulation/rayObjectsTests.cpp" />
+		<Unit filename="source/simulation/sepAxisTests.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

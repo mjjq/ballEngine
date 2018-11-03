@@ -51,6 +51,10 @@ public:
     static std::pair<bool, sf::Vector2f> sepAxisTest(std::vector<sf::Vertex> &obj1,
                                           std::vector<sf::Vertex> &obj2);
 
+    static void applyImpulse(PhysicsObject *obj1,
+                             PhysicsObject *obj2,
+                             sf::Vector2f contactNorm);
+
 };
 
 #endif // COLLDETECT_H

@@ -106,32 +106,37 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
         boolYMax = true;
 
     sf::Vector2f penetVector = {0.0f, 0.0f};
+    sf::Vector2f contactNormal = {0.0f, 0.0f};
+    sf::Vector2f cornerPos = {0.0f, 0.0f};
 
     if((boolXMin || boolXMax) && !(boolYMin || boolYMax))
     {
         if(boolXMin)
-            penetVector = Collisions::calcPenetVector({rectBounds.left, rectBounds.top}, {-1.0f, 0.0f}, *origBall);
+        {
+            cornerPos = {rectBounds.left, rectBounds.top};
+            contactNormal = {-1.0f, 0.0f};
+        }
         else if(boolXMax)
-            penetVector = Collisions::calcPenetVector({rectBounds.left+rectBounds.width, rectBounds.top}, {1.0f, 0.0f}, *origBall);
-
-        origBall->addSolvedVelocity({-coefRest*redMassBall*2.0f*v.x, 0.0f}, {-coefRest*redMassBall*2.0f*v.x, 0.0f});
-        origAABB->addSolvedVelocity({coefRest*redMassAABB*2.0f*v.x, 0.0f}, {coefRest*redMassAABB*2.0f*v.x, 0.0f});
+        {
+            cornerPos = {rectBounds.left+rectBounds.width, rectBounds.top};
+            contactNormal = {1.0f, 0.0f};
+        }
     }
     else if(!(boolXMin || boolXMax) && (boolYMin || boolYMax))
     {
         if(boolYMin)
-            penetVector = Collisions::calcPenetVector({rectBounds.left, rectBounds.top}, {0.0f, -1.0f}, *origBall);
+        {
+            cornerPos = {rectBounds.left, rectBounds.top};
+            contactNormal = {0.0f, -1.0f};
+        }
         else if(boolYMax)
-            penetVector = Collisions::calcPenetVector({rectBounds.left, rectBounds.top+rectBounds.height}, {0.0f, 1.0f}, *origBall);
-
-        origBall->addSolvedVelocity({0.0f, -coefRest*redMassBall*2.0f*v.y}, {0.0f, -coefRest*redMassBall*2.0f*v.y});
-        origAABB->addSolvedVelocity({0.0f, coefRest*redMassAABB*2.0f*v.y}, {0.0f, coefRest*redMassAABB*2.0f*v.y});
+        {
+            cornerPos = {rectBounds.left, rectBounds.top+rectBounds.height};
+            contactNormal = {0.0f, 1.0f};
+        }
     }
     else
     {
-        sf::Vector2f contactNormal = {0.0f, 0.0f};
-        sf::Vector2f cornerPos = {0.0f, 0.0f};
-
         if(boolXMin && boolYMin)
         {
             cornerPos = sf::Vector2f{rectBounds.left, rectBounds.top};
@@ -151,16 +156,14 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
         }
 
         contactNormal = sfVectorMath::norm(rBall - cornerPos);
-        penetVector = Collisions::calcPenetVector(cornerPos, contactNormal, *origBall);
-        //penetVector += 0.01f*contactNormal;
-
-        sf::Vector2f dv = -coefRest*2.0f*sfVectorMath::dot(contactNormal, v)*contactNormal;
-        origBall->addSolvedVelocity(redMassBall*dv, redMassBall*dv);
-        origAABB->addSolvedVelocity(-redMassAABB*dv, -redMassAABB*dv);
     }
+
+    penetVector = Collisions::calcPenetVector(cornerPos, contactNormal, *origBall);
 
     origBall->setPosition(rBall - redMassBall*penetVector);
     origAABB->setPosition(rAABB + redMassAABB*penetVector);
+
+    Collisions::applyImpulse(origAABB, origBall, contactNormal);
 }
 
 
@@ -303,18 +306,55 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
     debugWindow->draw(quad1);
     debugWindow->draw(quad2);*/
 
+    sf::Vector2f relVel = rect1->getVelocity() - rect2->getVelocity();
+
     sf::Vector2f penetVector = Collisions::sepAxisTest(rect1Vert, rect2Vert).second;
-    sf::Vector2f rhat = sfVectorMath::norm(penetVector);
-    penetVector += 0.1f*rhat;
-    float redMass1 = rect2->getMass()/(rect1->getMass() + rect2->getMass());
-    float redMass2 = rect1->getMass()/(rect1->getMass() + rect2->getMass());
+    sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
+    sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
+    if(sfVectorMath::square(contactTangent) > 0.0f)
+        contactTangent = sfVectorMath::norm(contactTangent);
+
+    float redMass = rect1->getMass()*rect2->getMass()/(rect1->getMass() + rect2->getMass());
+    penetVector += 0.1f*contactNorm;
+
+    rect1->setPosition(rect1->getPosition() - redMass*penetVector/rect1->getMass());
+    rect2->setPosition(rect2->getPosition() + redMass*penetVector/rect2->getMass());
+
+    Collisions::applyImpulse(rect1, rect2, contactNorm);
+}
+
+void Collisions::applyImpulse(PhysicsObject *obj1, PhysicsObject *obj2, sf::Vector2f contactNorm)
+{
+    sf::Vector2f relVel = obj1->getVelocity() - obj2->getVelocity();
+    float redMass = obj1->getMass()*obj2->getMass()/(obj1->getMass() + obj2->getMass());
     float coefRest = 0.7f;
+    float mu = 2.0f;
 
-    rect1->setPosition(rect1->getPosition() - redMass1*penetVector);
-    rect2->setPosition(rect2->getPosition() + redMass2*penetVector);
+    //std::cout << contactNorm << "\n";
+    sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
+    if(sfVectorMath::square(contactTangent) > 0.0f)
+        contactTangent = sfVectorMath::norm(contactTangent);
 
-    sf::Vector2f resVel = 2.0f*coefRest*rhat*sfVectorMath::dot(rect1->getVelocity() - rect2->getVelocity(), rhat);
+    float j = (1+coefRest)*redMass*sfVectorMath::dot(relVel, contactNorm);
+    float jt = redMass*sfVectorMath::dot(relVel, contactTangent);
 
-    rect1->addSolvedVelocity(-resVel*redMass1, -resVel*redMass1);
-    rect2->addSolvedVelocity(resVel*redMass2, resVel*redMass2);
+    sf::Vector2f impulse = -j*contactNorm;
+    sf::Vector2f frictionImpulse;
+
+    if(std::abs(jt) < j*mu)
+    {
+        frictionImpulse = - jt * contactTangent;
+        std::cout << "static\n";
+    }
+    else
+    {
+        frictionImpulse = - j * contactTangent * mu;
+    }
+
+    std::cout << contactNorm << "\n";
+
+    obj1->addSolvedVelocity((impulse + frictionImpulse)/obj1->getMass(),
+                             (impulse + frictionImpulse)/obj1->getMass());
+    obj2->addSolvedVelocity(-(impulse + frictionImpulse)/obj2->getMass(),
+                             -(impulse + frictionImpulse)/obj2->getMass());
 }
