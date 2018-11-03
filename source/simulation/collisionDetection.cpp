@@ -224,9 +224,9 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
                       {boundingBox.left, boundingBox.top},
                        rect->getVelocity()};
 
-    sf::RectangleShape drawable{{boundingBox.width, boundingBox.height}};
-    drawable.setPosition(boundingBox.left, boundingBox.top);
-    debugWindow->draw(drawable);
+    //sf::RectangleShape drawable{{boundingBox.width, boundingBox.height}};
+    //drawable.setPosition(boundingBox.left, boundingBox.top);
+    //debugWindow->draw(drawable);
 
     float tmin = Collisions::timeToCollBallAABB(ball, &boundingAABB);
 
@@ -287,7 +287,7 @@ float Collisions::timeToCollOBBOBB(OBB* rect1, OBB* rect2)
         std::vector<sf::Vertex > rect1Vert = rect1->constructVerts();
         std::vector<sf::Vertex > rect2Vert = rect2->constructVerts();
 
-        sf::VertexArray quad1(sf::LineStrip, 4);
+        /*sf::VertexArray quad1(sf::LineStrip, 4);
         for(int i=0; i<3; ++i)
             quad1[i] = rect1Vert[i];
 
@@ -296,7 +296,7 @@ float Collisions::timeToCollOBBOBB(OBB* rect1, OBB* rect2)
             quad2[i] = rect2Vert[i];
 
         debugWindow->draw(quad1);
-        debugWindow->draw(quad2);
+        debugWindow->draw(quad2);*/
 
         std::pair<bool, sf::Vector2f> result = Collisions::sepAxisTest(rect1Vert, rect2Vert);
         if(!result.first)

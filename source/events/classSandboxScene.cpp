@@ -144,7 +144,7 @@ void SandboxScene::load()
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
                     ballSim.spawnNewRect(static_cast<sf::Vector2f>(mousePosOnClick),
-                                         spawnRadius*2.0f, spawnRadius*2.0f,
+                                         spawnRadius*2.0f, spawnRadius*4.0f,
                                          velocity,
                                          spawnMass,
                                          spawnRotation);
