@@ -318,15 +318,27 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
     float redMass = rect1->getMass()*rect2->getMass()/(rect1->getMass() + rect2->getMass());
     penetVector += 0.1f*contactNorm;
 
-    rect1->setPosition(rect1->getPosition() - redMass*penetVector/rect1->getMass());
-    rect2->setPosition(rect2->getPosition() + redMass*penetVector/rect2->getMass());
+    ClippedPoints cp = Collisions::getContactPoints(rect1Vert, rect2Vert, contactNorm);
+
+    std::cout << cp.size() << " size\n";
+    //sf::CircleShape circ1{2.0f};
+    //circ1.setPosition(*cp.begin());
+    //sf::CircleShape circ2{2.0f};
+    //circ2.setPosition(*cp.end());
+
+    //debugWindow->draw(circ1);
+    //debugWindow->draw(circ2);
+
+    rect1->setPosition(rect1->getPosition() + redMass*penetVector/rect1->getMass());
+    rect2->setPosition(rect2->getPosition() - redMass*penetVector/rect2->getMass());
+
 
     Collisions::applyImpulse(rect1, rect2, contactNorm);
 }
 
 void Collisions::applyImpulse(PhysicsObject *obj1, PhysicsObject *obj2, sf::Vector2f contactNorm)
 {
-    sf::Vector2f relVel = obj1->getVelocity() - obj2->getVelocity();
+    sf::Vector2f relVel = obj2->getVelocity() - obj1->getVelocity();
     float redMass = obj1->getMass()*obj2->getMass()/(obj1->getMass() + obj2->getMass());
     float coefRest = 0.7f;
     float mu = 0.3f;
@@ -339,20 +351,18 @@ void Collisions::applyImpulse(PhysicsObject *obj1, PhysicsObject *obj2, sf::Vect
     float j = (1+coefRest)*redMass*sfVectorMath::dot(relVel, contactNorm);
     float jt = redMass*sfVectorMath::dot(relVel, contactTangent);
 
-    sf::Vector2f impulse = -j*contactNorm;
+    sf::Vector2f impulse = j*contactNorm;
     sf::Vector2f frictionImpulse;
 
     if(std::abs(jt) < j*mu)
     {
-        frictionImpulse = - jt * contactTangent;
-        std::cout << "static\n";
+        frictionImpulse = jt * contactTangent;
     }
     else
     {
         frictionImpulse = - j * contactTangent * mu;
     }
 
-    std::cout << frictionImpulse << "\n";
 
     obj1->addSolvedVelocity((impulse + frictionImpulse)/obj1->getMass(),
                              (impulse + frictionImpulse)/obj1->getMass());

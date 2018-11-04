@@ -6,6 +6,17 @@
 #include "classAABB.h"
 #include "classOBB.h"
 
+//typedef std::pair<sf::Vector2f, sf::Vector2f> Edge;
+struct Edge
+{
+    sf::Vector2f v1;
+    sf::Vector2f v2;
+    sf::Vector2f dir;
+    sf::Vector2f max;
+};
+
+typedef std::vector<sf::Vector2f > ClippedPoints;
+
 class Collisions
 {
     static sf::RenderWindow* debugWindow;
@@ -54,6 +65,18 @@ public:
     static void applyImpulse(PhysicsObject *obj1,
                              PhysicsObject *obj2,
                              sf::Vector2f contactNorm);
+
+
+    static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
+                                                       std::vector<sf::Vertex > &obj2,
+                                                       sf::Vector2f contactNormal);
+    static Edge getBestEdge(std::vector<sf::Vertex > &obj,
+                     sf::Vector2f normal);
+
+    static ClippedPoints clip(sf::Vector2f v1,
+                               sf::Vector2f v2,
+                               sf::Vector2f normal,
+                               float o);
 
 };
 

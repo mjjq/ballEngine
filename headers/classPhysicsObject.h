@@ -22,8 +22,14 @@ protected:
     sf::Vector2f nStepVelocity = cStepVelocity;
     sf::Vector2f cStepModVelocity = {0,0};
 
+    float rotAngle = 0.0f;
+    float rotRate = 0.0f;
+
     float mass;
     float density;
+    sf::Vector2f centreOfMass;
+
+    float momentInertia;
 
     float dampingFactor = 1;
     int numDynColls = 0;
@@ -60,6 +66,7 @@ public:
     void setPosition(sf::Vector2f newPosition);
     void updatePosition(float dt);
     void addSolvedVelocity(sf::Vector2f cStep, sf::Vector2f nStep);
+    void addRotRate(float _rotRate);
     void setVelocity(sf::Vector2f vel);
     void setMass(float _mass);
     void applyExternalImpulse(sf::Vector2f force, float dt);

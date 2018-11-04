@@ -31,6 +31,9 @@ Ball::Ball(float _radius, float _mass, sf::Vector2f _initPos, sf::Vector2f _init
 PhysicsObject(_initPos, _initVel, _mass), radius{_radius}
 {
     density = _mass/(3.14159265359*_radius*_radius);
+    centreOfMass = {0.0f, 0.0f};
+
+    momentInertia = 0.5*_mass*_radius*_radius;
 }
 
 Ball::~Ball() {}

@@ -27,7 +27,6 @@ std::vector<sf::Vector2f > Collisions::edgesOf(std::vector<sf::Vertex > &vertice
 
 sf::Vector2f Collisions::orthogonal(sf::Vector2f &v)
 {
-    //std::cout << -v.y << " " << v.x << "\n";
     return {v.y, -v.x};
 }
 
@@ -120,7 +119,7 @@ std::pair<bool, sf::Vector2f> Collisions::sepAxisTest(std::vector<sf::Vertex> &o
 
     sf::Vector2f d = getCentre(obj1) - getCentre(obj2);
 
-    if(sfVectorMath::dot(d, mpv) > 0)
+    if(sfVectorMath::dot(d, mpv) < 0)
         mpv = -mpv;
 
     return std::make_pair(true, mpv);

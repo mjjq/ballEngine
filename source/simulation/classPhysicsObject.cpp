@@ -54,6 +54,7 @@ void PhysicsObject::updatePosition(float dt)
     //sf::Vector2f currPos = getPosition();
     pStepPosition = getPosition();
     setPosition(getPosition()+(cStepVelocity+cStepModVelocity)*dt);
+    rotAngle += rotRate*dt;
     //std::cout << "Current: " << cStepVelocity << "\n";
     //std::cout << "Next:    " << nStepVelocity << "\n";
     cStepVelocity = nStepVelocity;
@@ -145,6 +146,11 @@ void PhysicsObject::addSolvedVelocity(sf::Vector2f cStep, sf::Vector2f nStep)
     nStepVelocity += nStep;
 }
 
+
+void PhysicsObject::addRotRate(float _rotRate)
+{
+    rotRate += _rotRate;
+}
 
 
 /**

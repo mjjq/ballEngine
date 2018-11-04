@@ -39,4 +39,6 @@ std::vector<sf::Vertex > Collisions::minkowskiDiff(std::vector<sf::Vertex > &obj
         {
             pureDifference.push_back(sf::Vertex(sf::Vector2f(vertObj1.position - vertObj2.position)));
         }
+
+    return pureDifference;
 }

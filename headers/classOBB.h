@@ -8,10 +8,6 @@
 class OBB : public PhysicsObject
 {
     sf::Vector2f size;
-    sf::Vector2f centreOfMass;
-
-    float rotAngle;
-    float rotRate;
 
 public:
     OBB(sf::Vector2f _size,

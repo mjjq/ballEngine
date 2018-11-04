@@ -34,9 +34,7 @@ OBB::OBB(sf::Vector2f _size,
          float _rotation,
          float _rotRate) :
 PhysicsObject(_initPos, _initVel, _mass),
-         size{_size},
-         rotAngle{_rotation},
-         rotRate{_rotRate}
+         size{_size}
 {
     if(size.x < 0.0f)
         size.x = -size.x;
@@ -44,6 +42,11 @@ PhysicsObject(_initPos, _initVel, _mass),
         size.y = -size.y;
     density = _mass/(size.x*size.y);
     centreOfMass = sf::Vector2f{size.x/2.0f, size.y/2.0f};
+
+    rotAngle = _rotation;
+    rotRate = _rotRate;
+
+    momentInertia = _mass*(sfVectorMath::square(size))/12.0f;
 }
 
 OBB::~OBB() {}
