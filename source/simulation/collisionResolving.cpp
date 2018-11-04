@@ -68,7 +68,7 @@ void Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
     firstBall->setPosition(firstBall->getPosition() - penetVector1);
     secondBall->setPosition(secondBall->getPosition() + penetVector2);
 
-    Collisions::applyImpulse(secondBall, firstBall, rhat);
+    Collisions::applyImpulse(firstBall, secondBall, rhat);
     //firstBall->setVelocity(v1 - coefRest*rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
     //secondBall->setVelocity(v2 + coefRest*rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
 
@@ -164,7 +164,7 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
     origBall->setPosition(rBall - redMassBall*penetVector);
     origAABB->setPosition(rAABB + redMassAABB*penetVector);
 
-    Collisions::applyImpulse(origAABB, origBall, contactNormal);
+    Collisions::applyImpulse(origBall, origAABB, contactNormal);
 }
 
 
@@ -307,20 +307,14 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
     debugWindow->draw(quad1);
     debugWindow->draw(quad2);*/
 
-    sf::Vector2f relVel = rect1->getVelocity() - rect2->getVelocity();
-
     sf::Vector2f penetVector = Collisions::sepAxisTest(rect1Vert, rect2Vert).second;
     sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
-    sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
-    if(sfVectorMath::square(contactTangent) > 0.0f)
-        contactTangent = sfVectorMath::norm(contactTangent);
 
     float redMass = rect1->getMass()*rect2->getMass()/(rect1->getMass() + rect2->getMass());
     penetVector += 0.1f*contactNorm;
 
     ClippedPoints cp = Collisions::getContactPoints(rect1Vert, rect2Vert, contactNorm);
 
-    std::cout << cp.size() << " size\n";
     //sf::CircleShape circ1{2.0f};
     //circ1.setPosition(*cp.begin());
     //sf::CircleShape circ2{2.0f};
@@ -333,7 +327,7 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
     rect2->setPosition(rect2->getPosition() - redMass*penetVector/rect2->getMass());
 
 
-    Collisions::applyImpulse(rect1, rect2, contactNorm);
+    //Collisions::applyImpulse(rect1, rect2, contactNorm);
 }
 
 void Collisions::applyImpulse(PhysicsObject *obj1, PhysicsObject *obj2, sf::Vector2f contactNorm)
@@ -360,7 +354,8 @@ void Collisions::applyImpulse(PhysicsObject *obj1, PhysicsObject *obj2, sf::Vect
     }
     else
     {
-        frictionImpulse = - j * contactTangent * mu;
+        frictionImpulse = j * contactTangent * mu;
+        //std::cout << frictionImpulse << "\n";
     }
 
 

@@ -14,13 +14,27 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
                                                         std::vector<sf::Vertex > &obj2,
                                                         sf::Vector2f contactNormal)
 {
-    Edge edge1 = Collisions::getBestEdge(obj1, contactNormal);
-    Edge edge2 = Collisions::getBestEdge(obj2, -contactNormal);
+    //contactNormal = -contactNormal;
+    Edge edge1 = Collisions::getBestEdge(obj1, -contactNormal);
+    Edge edge2 = Collisions::getBestEdge(obj2, contactNormal);
+
+    //std::cout << contactNormal << "\n";
+
+    sf::Vertex line1[] = {
+        sf::Vertex(edge1.v1),
+        sf::Vertex(edge1.v2)
+    };
+    sf::Vertex line2[] = {
+        sf::Vertex(edge2.v1),
+        sf::Vertex(edge2.v2)
+    };
+    debugWindow->draw(line1, 2, sf::Lines);
+    debugWindow->draw(line2, 2, sf::Lines);
 
     bool flip = false;
     Edge refEdge;
     Edge incEdge;
-    if(std::abs(sfVectorMath::dot(edge1.dir, contactNormal)) <=
+    /*if(std::abs(sfVectorMath::dot(edge1.dir, contactNormal)) <=
        std::abs(sfVectorMath::dot(edge2.dir, contactNormal)))
     {
         refEdge = edge1;
@@ -32,9 +46,17 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
         incEdge = edge1;
 
         flip = true;
-    }
+    }*/
+
+    refEdge = edge2;
+    incEdge = edge1;
+    flip = true;
+    //std::cout << refEdge.v1 << " v1\n";
+   // std::cout << refEdge.v2 << " v2\n";
+
 
     sf::Vector2f refDir = sfVectorMath::norm(refEdge.dir);
+    //std::cout << refDir <<" diredtion\n";
 
     float o1 = sfVectorMath::dot(refDir, refEdge.v1);
 
@@ -42,29 +64,67 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
     if(cp.size() < 2)
         return ClippedPoints{};
 
+        //std::cout << refDir << " refdir\n\n";
     float o2 = sfVectorMath::dot(refDir, refEdge.v2);
     cp = clip(cp[0], cp[1], -refDir, -o2);
+
+
 
     if(cp.size() < 2)
         return ClippedPoints{};
 
-    sf::Vector2f refNorm = Collisions::orthogonal(refNorm);
+    sf::Vector2f refNorm = Collisions::orthogonal(refDir, -1.0f);
+
 
     if(flip) refNorm = -refNorm;
 
-    float max = sfVectorMath::dot(refNorm, refEdge.max);
+    /*std::cout << refNorm << "\n";
+    std::cout << refEdge.v1 << "\n";*/
 
-    if(sfVectorMath::dot(refNorm, *cp.begin()) - max < 0.0f)
-        cp.erase(cp.begin());
-    if(sfVectorMath::dot(refNorm, *cp.end()) - max < 0.0f)
-        cp.erase(cp.end());
+    float maxD = sfVectorMath::dot(refNorm, refEdge.max);
 
-    return cp;
+    /*std::cout << maxD << " maxD\n";
+    std::cout << cp[0] << " " << cp[1] << "\n";*/
+
+    ClippedPoints cpFinal;
+
+    if(sfVectorMath::dot(refNorm, cp[0]) - maxD <= 0.0f)
+    {
+        cpFinal.push_back(cp[0]);
+        //std::cout << "cp0 true\n";
+    }
+    if(sfVectorMath::dot(refNorm, cp[1]) - maxD <= 0.0f)
+    {
+        cpFinal.push_back(cp[1]);
+        //std::cout << "cp1 true\n";
+    }
+
+    //std::cout << cpFinal[0] << " " << cpFinal[1] << "\n";
+    //std::cout << cp.size() << "\n";
+if(cpFinal.size() >= 1)
+    {
+    sf::CircleShape circ1{2.5f};
+    circ1.setPosition(cpFinal[0]);
+    circ1.setOrigin({1.25f, 1.25f});
+    if(cpFinal.size() >= 2)
+    {
+    sf::CircleShape circ2{2.5f};
+    circ2.setOrigin({1.25f, 1.25f});
+    circ2.setPosition(cpFinal[1]);
+
+    debugWindow->draw(circ2);
+    }
+    debugWindow->draw(circ1);
+
+    }
+
+    return cpFinal;
 }
 
 
 Edge Collisions::getBestEdge(std::vector<sf::Vertex > &obj, sf::Vector2f normal)
 {
+
     int index = 0;
     float max = -1e+15;
 
@@ -79,19 +139,45 @@ Edge Collisions::getBestEdge(std::vector<sf::Vertex > &obj, sf::Vector2f normal)
       }
     }
 
-    sf::Vector2f v = obj[index].position;
-    sf::Vector2f v1 = obj[index+1].position;
-    sf::Vector2f v0 = obj[index-1].position;
+    //std::cout << obj[0].position << "\n";
+    //std::cout << "normal " << normal << "\n\n";
+    sf::Vector2f v = obj[index%c].position;
+    sf::Vector2f v1 = obj[(index+1)%c].position;
+    sf::Vector2f v0;
+    if(index == 0)
+        v0 = obj[c-1].position;
+    else
+        v0 = obj[index-1].position;
 
     sf::Vector2f l = sfVectorMath::norm(v - v1);
     sf::Vector2f r = sfVectorMath::norm(v - v0);
 
+    /*(std::cout << normal << " " << index << "\n";
+    std::cout << obj[index].position << "\n";
+    std::cout << "l: " << l << "\n";
+    std::cout << "r: " << r << "\n\n";*/
+    /*sf::CircleShape circ1{2.5f};
+    circ1.setPosition(v);
+    circ1.setOrigin({1.25f, 1.25f});
+    circ1.setFillColor(sf::Color::Red);
+    sf::CircleShape circ2{2.5f};
+    circ2.setPosition(v1);
+    circ2.setOrigin({1.25f, 1.25f});
+    circ2.setFillColor(sf::Color::Green);
+    sf::CircleShape circ3{2.5f};
+    circ3.setPosition(v0);
+    circ3.setOrigin({1.25f, 1.25f});
+    debugWindow->draw(circ1);
+    debugWindow->draw(circ2);
+    debugWindow->draw(circ3);*/
+
+
     if(sfVectorMath::dot(r, normal) <= sfVectorMath::dot(l, normal))
     {
-        return Edge{v, v0, v0-v, v0};
+        return Edge{v0, v, v-v0, v};
     }
     else
-        return Edge{v, v1, v-v1, v};
+        return Edge{v, v1, v1-v, v};
 
 }
 
@@ -109,6 +195,10 @@ ClippedPoints Collisions::clip(sf::Vector2f v1,
     if(d1 >= 0.0f) cp.push_back(v1);
     if(d2 >= 0.0f) cp.push_back(v2);
 
+    //std::cout << d1 << " " << d2 << "\n";
+    //std::cout << v1 << " " << v2 << "\n";
+    //std::cout << normal << " " << o << "\n\n";
+
     if(d1*d2 < 0.0f)
     {
         sf::Vector2f e = v2 - v1;
@@ -117,7 +207,9 @@ ClippedPoints Collisions::clip(sf::Vector2f v1,
         e = u*e;
         e += v1;
         cp.push_back(e);
+       // std::cout << cp[0] << " " << cp[1] << "\n\n";
     }
 
+    //std::cout << cp.size() << "newsize\n";
     return cp;
 }

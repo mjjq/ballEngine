@@ -57,7 +57,7 @@ public:
     static std::pair<bool, sf::Vector2f > isSeparatingAxis(sf::Vector2f &orthog,
                                                             std::vector<sf::Vertex> &obj1,
                                                             std::vector<sf::Vertex> &obj2);
-    static sf::Vector2f orthogonal(sf::Vector2f &v);
+    static sf::Vector2f orthogonal(sf::Vector2f v, float scalar);
     static sf::Vector2f getCentre(std::vector<sf::Vertex> &obj);
     static std::pair<bool, sf::Vector2f> sepAxisTest(std::vector<sf::Vertex> &obj1,
                                           std::vector<sf::Vertex> &obj2);

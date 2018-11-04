@@ -25,9 +25,9 @@ std::vector<sf::Vector2f > Collisions::edgesOf(std::vector<sf::Vertex > &vertice
     return edges;
 }
 
-sf::Vector2f Collisions::orthogonal(sf::Vector2f &v)
+sf::Vector2f Collisions::orthogonal(sf::Vector2f v, float scalar)
 {
-    return {v.y, -v.x};
+    return {v.y*scalar, -v.x*scalar};
 }
 
 std::pair<bool, sf::Vector2f > Collisions::isSeparatingAxis(sf::Vector2f &orthog,
@@ -95,7 +95,7 @@ std::pair<bool, sf::Vector2f> Collisions::sepAxisTest(std::vector<sf::Vertex> &o
     std::vector<sf::Vector2f > orthogonals;
     for(sf::Vector2f &edge : edges)
     {
-        sf::Vector2f orthog = orthogonal(edge);
+        sf::Vector2f orthog = orthogonal(edge, 1.0f);
         orthogonals.push_back(orthog);
     }
 
