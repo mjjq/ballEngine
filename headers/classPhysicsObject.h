@@ -89,6 +89,7 @@ public:
     sf::Vector2f getCoM();
     float getMomentInertia();
     float getRotRate();
+    void setRotRate(float _rotRate);
 };
 
 #endif // CLASS_DYNOBJ_H

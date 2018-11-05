@@ -327,3 +327,8 @@ float PhysicsObject::getRotRate()
 {
     return rotRate;
 }
+
+void PhysicsObject::setRotRate(float _rotRate)
+{
+    rotRate = _rotRate;
+}
