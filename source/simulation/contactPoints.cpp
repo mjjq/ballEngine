@@ -150,6 +150,11 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
 
     ClippedPoints cp = Collisions::getIntPoint(obj2, refEdge);
 
+    if(cp.size() < 2)
+    {
+        return cp;
+    }
+
     cp = clip(cp[0], cp[1], refDir, o1);
 
 
@@ -205,7 +210,7 @@ ClippedPoints Collisions::getIntPoint(Ball &ball, Edge &edge)
     debugWindow->draw(circ1);*/
 
 
-    if(discriminant < 0.0f)
+    if(discriminant < 1e-5)
     {
         //std::cout << "single sol\n";
         float t = -B/(2*A);
@@ -215,8 +220,10 @@ ClippedPoints Collisions::getIntPoint(Ball &ball, Edge &edge)
         return cp;
     }
 
-    float t0 = (-B + 1.01*sqrt(discriminant))/(2*A);
-    float t1 = (-B - 1.01*sqrt(discriminant))/(2*A);
+    float t0 = (-B + 1.00f*sqrt(discriminant))/(2*A);
+    float t1 = (-B - 1.00f*sqrt(discriminant))/(2*A);
+
+
 
     sf::Vector2f cp0 = edge.v1 + edge.dir * t0;
     sf::Vector2f cp1 = edge.v1 + edge.dir * t1;
