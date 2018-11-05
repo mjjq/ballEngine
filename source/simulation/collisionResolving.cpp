@@ -361,7 +361,7 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
     {
         sf::Vector2f rA = collPoint - obj1->getCoM();
         sf::Vector2f rB = collPoint - obj2->getCoM();
-        relVel += Collisions::orthogonal(rA, obj1->getRotRate()) -
+        relVel -= Collisions::orthogonal(rA, obj1->getRotRate()) -
                     Collisions::orthogonal(rB, obj2->getRotRate());
     }
     relVel = relVel/static_cast<float>(collisionPoints.size());
@@ -437,6 +437,7 @@ std::cout << relVel << "rel\n";
     {
         frictionImpulse = -j * contactTangent * mu;
 
+        std::cout << sfVectorMath::cross(resVectorA, contactTangent) << "rescrosstan\n";
         dwA = -sfVectorMath::cross(resVectorA, contactTangent) * j / IA;
         dwB = -sfVectorMath::cross(resVectorB, contactTangent) * j / IB;
 
@@ -444,8 +445,8 @@ std::cout << relVel << "rel\n";
 
     std::cout << frictionImpulse << "fric impulse\n";
     std::cout << impulse << "impulse\n";
-    //dwA += sfVectorMath::cross(resVectorA, contactNorm) * j / IA;
-    //dwB += sfVectorMath::cross(resVectorB, contactNorm) * j / IB;
+    dwA += sfVectorMath::cross(resVectorA, contactNorm) * j / IA;
+    dwB += sfVectorMath::cross(resVectorB, contactNorm) * j / IB;
 
 sf::CircleShape circ1{2.5f};
     circ1.setPosition(obj1->getCoM());
