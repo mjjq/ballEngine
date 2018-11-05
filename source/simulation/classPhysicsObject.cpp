@@ -54,7 +54,7 @@ void PhysicsObject::updatePosition(float dt)
     //sf::Vector2f currPos = getPosition();
     pStepPosition = getPosition();
     setPosition(getPosition()+(cStepVelocity+cStepModVelocity)*dt);
-    rotAngle += rotRate*dt;
+    rotAngle += rotRate*dt*180/sfVectorMath::PI;
     //std::cout << "Current: " << cStepVelocity << "\n";
     //std::cout << "Next:    " << nStepVelocity << "\n";
     cStepVelocity = nStepVelocity;
@@ -309,4 +309,20 @@ void PhysicsObject::incTimesCollided()
 int PhysicsObject::getNumCollTimes()
 {
     return numDynColls;
+}
+
+
+sf::Vector2f PhysicsObject::getCoM()
+{
+    return position + centreOfMass;
+}
+
+float PhysicsObject::getMomentInertia()
+{
+    return momentInertia;
+}
+
+float PhysicsObject::getRotRate()
+{
+    return rotRate;
 }

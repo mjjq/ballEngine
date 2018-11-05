@@ -48,7 +48,6 @@ public:
     virtual void draw(sf::RenderWindow &_window) = 0;
 
     virtual float getMinSize() = 0;
-    virtual sf::Vector2f getCoM() = 0;
 
     sf::Vector2f getPosition();
     sf::Vector2f getVelocity();
@@ -87,6 +86,9 @@ public:
     void incTimesCollided();
     int getNumCollTimes();
 
+    sf::Vector2f getCoM();
+    float getMomentInertia();
+    float getRotRate();
 };
 
 #endif // CLASS_DYNOBJ_H

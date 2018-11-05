@@ -33,6 +33,8 @@ PhysicsObject(_initPos, _initVel, _mass), radius{_radius}
     density = _mass/(3.14159265359*_radius*_radius);
     centreOfMass = {0.0f, 0.0f};
 
+    //rotRate = 0.1f;
+
     momentInertia = 0.5*_mass*_radius*_radius;
 }
 
@@ -49,8 +51,13 @@ void Ball::draw(sf::RenderWindow &_window)
 
     drawable.setFillColor(sf::Color{180,180,180,255});
 
+    sf::Vertex line[] = {
+        sf::Vertex{position},
+        sf::Vertex{position + sfVectorMath::rotate(sf::Vector2f{0.0f, radius}, rotAngle)}
+    };
     //drawable.setOutlineThickness(-1);
     _window.draw(drawable);
+    _window.draw(line, 2, sf::Lines);
     //std::cout << drawable.getPosition() << "\n";
 }
 
@@ -62,9 +69,4 @@ float Ball::getRadius()
 float Ball::getMinSize()
 {
     return radius;
-}
-
-sf::Vector2f Ball::getCoM()
-{
-    return centreOfMass;
 }

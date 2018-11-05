@@ -41,7 +41,7 @@ PhysicsObject(_initPos, _initVel, _mass),
     if(size.y < 0.0f)
         size.y = -size.y;
     density = _mass/(size.x*size.y);
-    centreOfMass = sf::Vector2f{size.x/2.0f, size.y/2.0f};
+    centreOfMass = {0.0f, 0.0f}; //sf::Vector2f{size.x/2.0f, size.y/2.0f};
 
     rotAngle = _rotation;
     rotRate = _rotRate;
@@ -73,10 +73,6 @@ float OBB::getMinSize()
     return ((size.x < size.y) ? size.x/2.0f : size.y/2.0f);
 }
 
-sf::Vector2f OBB::getCoM()
-{
-    return centreOfMass;
-}
 
 sf::Rect<float > OBB::getGlobalBounds()
 {

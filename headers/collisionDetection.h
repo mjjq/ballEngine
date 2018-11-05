@@ -64,7 +64,8 @@ public:
 
     static void applyImpulse(PhysicsObject *obj1,
                              PhysicsObject *obj2,
-                             sf::Vector2f contactNorm);
+                             sf::Vector2f contactNorm,
+                             ClippedPoints &collisionPoints);
 
 
     static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
