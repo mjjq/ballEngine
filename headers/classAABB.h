@@ -20,10 +20,11 @@ public:
     ObjectType type() const override;
 
     float getMinSize();
-    sf::Vector2f getCoM();
+    //sf::Vector2f getCoM();
 
     void draw(sf::RenderWindow &_window);
 
+    std::vector<sf::Vertex > constructVerts();
 
 };
 

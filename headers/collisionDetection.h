@@ -71,6 +71,9 @@ public:
     static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
                                                        std::vector<sf::Vertex > &obj2,
                                                        sf::Vector2f contactNormal);
+    static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
+                                                        Ball &obj2,
+                                                        sf::Vector2f contactNormal);
     static Edge getBestEdge(std::vector<sf::Vertex > &obj,
                      sf::Vector2f normal);
 
@@ -79,6 +82,7 @@ public:
                                sf::Vector2f normal,
                                float o);
 
+    static ClippedPoints getIntPoint(Ball &ball, Edge &edge);
 };
 
 #endif // COLLDETECT_H

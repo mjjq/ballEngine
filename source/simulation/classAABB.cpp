@@ -32,6 +32,8 @@ PhysicsObject(_initPos, _initVel, _mass), size{_size}
 {
     density = _mass/(size.x*size.y);
     centreOfMass = sf::Vector2f{size.x/2.0f, size.y/2.0f};
+
+    momentInertia = _mass*(sfVectorMath::square(size))/12.0f;
 }
 
 AABB::~AABB() {}
@@ -57,13 +59,29 @@ float AABB::getMinSize()
     return ((size.x < size.y) ? size.x/2.0f : size.y/2.0f);
 }
 
-sf::Vector2f AABB::getCoM()
+/*sf::Vector2f AABB::getCoM()
 {
     return centreOfMass;
-}
+}*/
 
 sf::Rect<float > AABB::getGlobalBounds()
 {
     return sf::Rect<float >{position.x, position.y, size.x, size.y};
 }
 
+
+std::vector<sf::Vertex > AABB::constructVerts()
+{
+    std::vector<sf::Vertex > obbVerts;
+    obbVerts.push_back(sf::Vertex(sf::Vector2f(-size.x/2.0f, -size.y/2.0f)));
+    obbVerts.push_back(sf::Vertex(sf::Vector2f(size.x/2.0f, -size.y/2.0f)));
+    obbVerts.push_back(sf::Vertex(sf::Vector2f(size.x/2.0f, size.y/2.0f)));
+    obbVerts.push_back(sf::Vertex(sf::Vector2f(-size.x/2.0f, size.y/2.0f)));
+
+    for(unsigned int i=0; i<4; ++i)
+    {
+        obbVerts[i].position += position + centreOfMass;
+    }
+
+    return obbVerts;
+}

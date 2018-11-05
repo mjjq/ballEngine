@@ -167,10 +167,16 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
 
     penetVector = Collisions::calcPenetVector(cornerPos, contactNormal, *origBall);
 
+
+    std::vector<sf::Vertex > rect1Vert = origAABB->constructVerts();
+    ClippedPoints cp = Collisions::getContactPoints(rect1Vert, *origBall, contactNormal);
+
+    //std::cout << cp.size() << "\n";
     origBall->setPosition(rBall - redMassBall*penetVector);
     origAABB->setPosition(rAABB + redMassAABB*penetVector);
 
-    //Collisions::applyImpulse(origBall, origAABB, contactNormal);
+    if(cp.size() > 0)
+        Collisions::applyImpulse(origBall, origAABB, contactNormal, cp);
 }
 
 
@@ -282,6 +288,7 @@ void Collisions::collisionBallOBB(Ball* ball, OBB* rect)
         sepVector = sfVectorMath::rotate(sepVector, -rotAngle);
 
         Ball ballInFrame{ball->getRadius(), ball->getMass(), ballPosition, ballVelocity};
+        ballInFrame.addRotRate(ball->getRotRate());
 
         Collisions::collisionBallAABB(&ballInFrame, &obbInFrame);
 
@@ -295,6 +302,10 @@ void Collisions::collisionBallOBB(Ball* ball, OBB* rect)
         ball->setPosition(newBallPosition);
         rect->setVelocity(newRectVelocity);
         rect->setPosition(newRectPosition);
+
+        ball->addRotRate(ballInFrame.getRotRate());
+        rect->addRotRate(obbInFrame.getRotRate());
+        //std::cout << ball->getRotRate() << "rotRate\n";
 }
 
 void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
@@ -346,15 +357,18 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
     {
         sf::Vector2f rA = collPoint - obj1->getCoM();
         sf::Vector2f rB = collPoint - obj2->getCoM();
+
         relVel += Collisions::orthogonal(rA, obj1->getRotRate()) -
                     Collisions::orthogonal(rB, obj2->getRotRate());
+
+        std::cout << relVel << " relvel\n";
+        std::cout << obj1->getRotRate() << "rotrate\n";
     }
     relVel = relVel/static_cast<float>(collisionPoints.size());
 
-    float coefRest = 0.2f;
+    float coefRest = 0.8f;
     float mu = 0.3f;
 
-    //std::cout << contactNorm << "\n";
     sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
     if(sfVectorMath::square(contactTangent) > 0.0f)
         contactTangent = sfVectorMath::norm(contactTangent);
@@ -379,14 +393,14 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
 
         float denom = (1.0f/obj1->getMass() + 1.0f/obj2->getMass() + cTermA + cTermB);
 
-        j += (1+coefRest)*sfVectorMath::dot(relVel, contactNorm)/denom;
+        j += -(1+coefRest)*sfVectorMath::dot(relVel, contactNorm)/denom;
 
         cTermA = pow( sfVectorMath::cross(rA, contactTangent), 2 )/IA;
         cTermB = pow( sfVectorMath::cross(rB, contactTangent), 2 )/IB;
 
         denom = (1.0f/obj1->getMass() + 1.0f/obj2->getMass() + cTermA + cTermB);
 
-        jt += sfVectorMath::dot(relVel, contactTangent)/denom;
+        jt += -sfVectorMath::dot(relVel, contactTangent)/denom;
 
     }
     j = j/collisionPoints.size();
@@ -394,9 +408,7 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
     resVectorA = resVectorA/static_cast<float>(collisionPoints.size());
     resVectorB = resVectorB/static_cast<float>(collisionPoints.size());
 
-    //std::cout << resVectorA << "\n";
-
-    sf::Vector2f impulse = j*contactNorm;
+    sf::Vector2f impulse = -j*contactNorm;
     sf::Vector2f frictionImpulse;
 
     float dwA = 0.0f;
@@ -404,26 +416,28 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
 
     if(std::abs(jt) < j*mu)
     {
-        frictionImpulse = jt * contactTangent;
+        frictionImpulse = -jt * contactTangent;
 
         dwA = sfVectorMath::cross(resVectorA, contactTangent) * jt / IA;
         dwB = sfVectorMath::cross(resVectorB, contactTangent) * jt / IB;
     }
     else
     {
-        frictionImpulse = j * contactTangent * mu;
+        frictionImpulse = -j * contactTangent * mu;
 
         dwA = sfVectorMath::cross(resVectorA, contactTangent) * j / IA;
         dwB = sfVectorMath::cross(resVectorB, contactTangent) * j / IB;
-        std::cout << frictionImpulse << "dynamic\n";
+        //std::cout << frictionImpulse << "dynamic\n";
     }
 
     dwA += sfVectorMath::cross(resVectorA, contactNorm) * j / IA;
     dwB += sfVectorMath::cross(resVectorB, contactNorm) * j / IB;
 
-sf::CircleShape circ1{2.5f};
+    std::cout << contactTangent << "\n";
+
+sf::CircleShape circ1{50.0f};
     circ1.setPosition(obj1->getCoM());
-    circ1.setOrigin({1.25f, 1.25f});
+    circ1.setOrigin({50.0f, 50.0f});
     circ1.setFillColor(sf::Color::Red);
     debugWindow->draw(circ1);
 
@@ -432,8 +446,12 @@ sf::CircleShape circ1{2.5f};
     obj2->addSolvedVelocity(-(impulse + frictionImpulse)/obj2->getMass(),
                              -(impulse + frictionImpulse)/obj2->getMass());
 
-    std::cout << contactNorm << "\n";
+    //std::cout << contactNorm << "\n";
     //std::cout << obj1->getMomentInertia() << "\n";
+
+    std::cout << dwA << " " << dwB << "\n\n";
     obj1->addRotRate(dwA);
+    //std::cout << obj1->getPosition() << "pos\n";
+    //std::cout << obj1->getRotRate() << " newrate\n";
     obj2->addRotRate(-dwB);
 }
