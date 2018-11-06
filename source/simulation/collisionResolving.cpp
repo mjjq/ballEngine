@@ -568,9 +568,9 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
         obj1->setRotRate(0.0f);
         obj2->setRotRate(0.0f);
     }*/
-    std::cout << impulse << " impulse\n";
-    std::cout << obj1->getVelocity() << " vel\n";
-    std::cout << collisionPoints.size() << " cp\n\n";
+    //std::cout << impulse << " impulse\n";
+    //std::cout << obj1->getVelocity() << " vel\n";
+    //std::cout << collisionPoints.size() << " cp\n\n";
 
 sf::CircleShape circ1{2.5f};
     circ1.setPosition(obj1->getCoM());
