@@ -136,11 +136,11 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
     };
     debugWindow->draw(line1, 2, sf::Lines);
 
-    bool flip = false;
+    //bool flip = false;
     Edge refEdge;
 
     refEdge = edge1;
-    flip = true;
+    //flip = true;
     //std::cout << refEdge.v1 << " v1\n";
    // std::cout << refEdge.v2 << " v2\n";
 
