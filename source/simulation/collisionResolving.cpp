@@ -33,6 +33,9 @@ REGISTER_RESOLVE_FUNCTION(Ball, AABB, &Collisions::collisionBallAABB)
 REGISTER_RESOLVE_FUNCTION(AABB, AABB, &Collisions::collisionAABBAABB)
 REGISTER_RESOLVE_FUNCTION(Ball, OBB,  &Collisions::collisionBallOBB)
 REGISTER_RESOLVE_FUNCTION(OBB, OBB,   &Collisions::collisionOBBOBB)
+REGISTER_RESOLVE_FUNCTION(OBB, Polygon,  &Collisions::collisionOBBPoly)
+REGISTER_RESOLVE_FUNCTION(Ball, Polygon,   &Collisions::collisionBallPoly)
+REGISTER_RESOLVE_FUNCTION(Polygon, Polygon,   &Collisions::collisionPolyPoly)
 
 
 void Collisions::resolveCollision(PhysicsObject* p1, PhysicsObject* p2)
@@ -82,8 +85,6 @@ void Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
     firstBall->setPosition(firstBall->getPosition() - penetVector1);
     secondBall->setPosition(secondBall->getPosition() + penetVector2);
 }
-
-//void Collisions::ballCollision(Ball &ball, )
 
 void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
 {
@@ -181,7 +182,6 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
     origAABB->setPosition(rAABB + redMassAABB*penetVector);
 
 }
-
 
 void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
 {
@@ -351,6 +351,23 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
 
 }
 
+void Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
+{
+
+}
+
+void Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
+{
+
+}
+
+void Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly2)
+{
+
+}
+
+
+
 std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball *origBall, AABB *origAABB)
 {
     //std::cout << "Collisions\n";
@@ -434,6 +451,8 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball *origBal
 
     return std::make_pair(contactNormal, cornerPos);
 }
+
+
 
 void Collisions::applyImpulse(PhysicsObject *obj1,
                               PhysicsObject *obj2,

@@ -113,6 +113,15 @@ void SandboxScene::load()
                 }
                 }
             },
+            {"spwnDPoly",  [&]{
+                if(!mouseOnUIWhenClicked.first){
+                    sf::Vector2i viewPos = sf::Mouse::getPosition(window);
+                    mousePosOnClick = static_cast<sf::Vector2i>
+                    (window.mapPixelToCoords(viewPos));
+                    drawLine = true;
+                }
+                }
+            },
         };
         buttonReleaseMap = {
             {"spwnSingle",  [&]{
@@ -169,6 +178,27 @@ void SandboxScene::load()
                                                               spawnVelFactor);
                     ballSim.spawnStaticRect(static_cast<sf::Vector2f>(mousePosOnClick),
                                             300.0f*velocity.x, 300.0f*velocity.y, spawnRotation);
+                    drawLine = false;
+                }
+            }
+            },
+
+            {"spwnDPoly",  [&]{
+                if(drawLine == true){
+                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);
+                    std::vector<sf::Vertex > verts = {
+                        sf::Vertex{{-10.0f, -10.0f}},
+                        sf::Vertex{{10.0f, -10.0f}},
+                        sf::Vertex{{10.0f, 10.0f}},
+                        sf::Vertex{{-10.0f, 10.0f}},
+                        sf::Vertex{{-15.0f, 0.0f}}
+                    };
+                    ballSim.spawnNewPoly(verts,
+                                         static_cast<sf::Vector2f>(mousePosOnClick),
+                                         velocity,
+                                         spawnMass,
+                                         spawnRotation);
                     drawLine = false;
                 }
             }

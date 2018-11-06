@@ -36,6 +36,10 @@ REGISTER_TCOLL_FUNCTION(Ball, AABB, &Collisions::timeToCollBallAABB)
 REGISTER_TCOLL_FUNCTION(AABB, AABB, &Collisions::timeToCollAABBAABB)
 REGISTER_TCOLL_FUNCTION(Ball, OBB,  &Collisions::timeToCollBallOBB)
 REGISTER_TCOLL_FUNCTION(OBB, OBB,   &Collisions::timeToCollOBBOBB)
+REGISTER_TCOLL_FUNCTION(OBB, Polygon, &Collisions::timeToCollOBBPoly)
+REGISTER_TCOLL_FUNCTION(Ball, Polygon, &Collisions::timeToCollBallPoly)
+REGISTER_TCOLL_FUNCTION(Polygon, Polygon, &Collisions::timeToCollPolyPoly)
+
 
 
 float Collisions::timeToCollision(PhysicsObject* p1, PhysicsObject* p2)
@@ -306,4 +310,19 @@ float Collisions::timeToCollOBBOBB(OBB* rect1, OBB* rect2)
     }
 
     return tmin;
+}
+
+float Collisions::timeToCollOBBPoly(OBB* rect, Polygon* poly)
+{
+    return std::numeric_limits<float>::quiet_NaN();
+}
+
+float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
+{
+    return std::numeric_limits<float>::quiet_NaN();
+}
+
+float Collisions::timeToCollPolyPoly(Polygon* poly1, Polygon *poly2)
+{
+    return std::numeric_limits<float>::quiet_NaN();
 }

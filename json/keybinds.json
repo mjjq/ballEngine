@@ -29,6 +29,7 @@
 		"spwnSingle"	: ["LMB"],
 		"spwnSCirc"	: ["RMB"],
 		"spwnDAABB"	: ["LControl", "LMB"],
+		"spwnDPoly"	: ["LShift", "LMB"],
 		"spwnJson"	: ["MMB"],
 		"spwnSys"	: ["LControl", "RMB"]
 	},

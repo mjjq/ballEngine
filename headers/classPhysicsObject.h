@@ -8,6 +8,7 @@ enum class ObjectType
     Ball,
     AABB,
     OBB,
+    Polygon,
     _Count,
 };
 

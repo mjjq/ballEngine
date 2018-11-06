@@ -4,6 +4,7 @@
 #include "collisionDetection.h"
 #include "classPhysicsObject.h"
 #include "classAABB.h"
+#include "classPolygon.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 
@@ -80,6 +81,11 @@ public:
                       float rotation);
     void spawnStaticRect(sf::Vector2f position, float width, float height, float rotation);
     void spawnStaticBall(sf::Vector2f position, float radius);
+    void spawnNewPoly(std::vector<sf::Vertex> &vertices,
+                                sf::Vector2f position,
+                                sf::Vector2f velocity,
+                                float mass,
+                                float rotation);
     void removeBall(int index);
     void removeRect(int index);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,

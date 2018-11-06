@@ -101,6 +101,39 @@ void BallUniverse::spawnStaticRect(sf::Vector2f position, float width, float hei
 }
 
 
+void BallUniverse::spawnNewPoly(std::vector<sf::Vertex> &vertices,
+                                sf::Vector2f position,
+                                sf::Vector2f velocity,
+                                float mass,
+                                float rotation)
+{
+    if(!(position.x < 0 ||
+       position.y < 0 ||
+       position.x> worldSizeX ||
+       position.y> worldSizeY))
+    {
+        std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(vertices,
+                                                     mass,
+                                                     position,
+                                                     velocity,
+                                                     rotation,
+                                                     0.0f);
+        dynamicObjects.push_back(std::move(newPoly));
+
+        numOfBalls++;
+        //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
+        //setPlayer(dynamicObjects.size()-1);
+        colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.printMatrix();
+        if(enable_collisions)
+            calcCollTimes();
+    }
+}
+
+
+
 //void resetAndCheckBounce(std::vector<Ball>)
 /**
     Updates the velocity of the current ball by calculating forces on the ball.
