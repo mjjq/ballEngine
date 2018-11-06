@@ -83,6 +83,8 @@ public:
                                float o);
 
     static ClippedPoints getIntPoint(Ball &ball, Edge &edge);
+
+    static std::pair<sf::Vector2f, sf::Vector2f> getContactNormal(Ball *origBall, AABB *origAABB);
 };
 
 #endif // COLLDETECT_H
