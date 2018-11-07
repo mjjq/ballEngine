@@ -7,10 +7,10 @@
 
 class Polygon : public PhysicsObject
 {
-    std::vector<sf::Vertex > vertices;
+    std::vector<sf::Vertex > vertices = {};
     sf::Rect<float> boundingOBB;
-    sf::Vector2f centrePosition;
-    sf::Vector2f size;
+    sf::Vector2f centrePosition = {0.0f, 0.0f};
+    sf::Vector2f size = {0.0f, 0.0f};
 
     void genBoundingOBB();
 

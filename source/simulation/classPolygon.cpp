@@ -36,11 +36,12 @@ Polygon::Polygon(std::vector<sf::Vertex> _vertices,
 PhysicsObject(_initPos, _initVel, _mass),
          vertices{_vertices}
 {
+    centrePosition = sf::Vector2f{0.0f, 0.0f};
     for(sf::Vertex &vert : vertices)
     {
         centrePosition += vert.position;
     }
-    centrePosition = centrePosition/static_cast<float>(vertices.size());
+    centrePosition = centrePosition/static_cast<float>(_vertices.size());
     for(sf::Vertex &vert : vertices)
     {
         vert.position = vert.position - centrePosition;
@@ -52,12 +53,12 @@ PhysicsObject(_initPos, _initVel, _mass),
     {
         momentInertia += sfVectorMath::square(vert.position - centreOfMass);
     }
-    momentInertia = momentInertia*mass;
-
-    genBoundingOBB();
+    momentInertia = momentInertia*_mass/_vertices.size();
 
     rotAngle = _rotation;
     rotRate = _rotRate;
+
+    genBoundingOBB();
 }
 
 Polygon::~Polygon() {}
@@ -76,8 +77,10 @@ void Polygon::draw(sf::RenderWindow &_window)
         polygon.setPoint(i, vertPos);
         //temp.push_back(sf::Vertex(vertPos));
     }
-    polygon.setOutlineThickness(-3);
+    polygon.setOutlineThickness(-2);
+    polygon.setOutlineColor(sf::Color::Red);
     polygon.setFillColor({80,80,80,80});
+
 
     //_window.draw(temp.data(), numVerts, sf::Lines);
     _window.draw(polygon);
@@ -98,13 +101,15 @@ sf::Rect<float > Polygon::getBoundingBox()
 {
     sf::VertexArray PolygonVerts(sf::Points, 4);
 
-    PolygonVerts[0].position = sf::Vector2f(-size.x/2.0f, -size.y/2.0f);
-    PolygonVerts[1].position = sf::Vector2f(size.x/2.0f, -size.y/2.0f);
-    PolygonVerts[2].position = sf::Vector2f(-size.x/2.0f, size.y/2.0f);
-    PolygonVerts[3].position = sf::Vector2f(size.x/2.0f, size.y/2.0f);
+    PolygonVerts[0].position = sf::Vector2f(boundingOBB.left, boundingOBB.top);
+    PolygonVerts[1].position = sf::Vector2f(boundingOBB.left + boundingOBB.width, boundingOBB.top);
+    PolygonVerts[2].position = sf::Vector2f(boundingOBB.left + boundingOBB.width, boundingOBB.top + boundingOBB.height);
+    PolygonVerts[3].position = sf::Vector2f(boundingOBB.left, boundingOBB.top + boundingOBB.height);
+    //PolygonVerts[3].position = sf::Vector2f(size.x/2.0f, size.y/2.0f);
 
     for(unsigned int i=0; i<4; ++i)
     {
+        //PolygonVerts[i].position += centrePosition;
         PolygonVerts[i].position = sfVectorMath::rotate(PolygonVerts[i].position,
                                                     rotAngle);
         PolygonVerts[i].position += position;
@@ -115,7 +120,14 @@ sf::Rect<float > Polygon::getBoundingBox()
 
 std::vector<sf::Vertex > Polygon::constructVerts()
 {
-    return vertices;
+    std::vector<sf::Vertex > tFormedVerts;
+    for(sf::Vertex &vert : vertices)
+    {
+        sf::Vector2f newPos = sfVectorMath::rotate(vert.position, rotAngle);
+        newPos += position;
+        tFormedVerts.push_back(sf::Vertex(newPos));
+    }
+    return tFormedVerts;
 }
 
 float Polygon::getRotAngle()
@@ -125,19 +137,19 @@ float Polygon::getRotAngle()
 
 void Polygon::genBoundingOBB()
 {
-    float minX = -1e+20;
+    float minX = 1e+20;
     float maxX = -minX;
     float minY = minX;
     float maxY = -minX;
     for(sf::Vertex &vert : vertices)
     {
-        if(vert.position.x > minX)
+        if(vert.position.x < minX)
             minX = vert.position.x;
-        if(vert.position.x < maxX)
+        if(vert.position.x > maxX)
             maxX = vert.position.x;
-        if(vert.position.y > minY)
+        if(vert.position.y < minY)
             minY = vert.position.y;
-        if(vert.position.y < maxY)
+        if(vert.position.y > maxY)
             maxY = vert.position.y;
     }
 

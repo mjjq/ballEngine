@@ -188,11 +188,12 @@ void SandboxScene::load()
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
                     std::vector<sf::Vertex > verts = {
-                        sf::Vertex{{-10.0f, -10.0f}},
+                        sf::Vertex{{-10.0f, -35.0f}},
                         sf::Vertex{{10.0f, -10.0f}},
                         sf::Vertex{{10.0f, 10.0f}},
                         sf::Vertex{{-10.0f, 10.0f}},
-                        sf::Vertex{{-15.0f, 0.0f}}
+                        sf::Vertex{{-30.0f, 0.0f}},
+                        sf::Vertex{{-30.0f, -10.0f}}
                     };
                     ballSim.spawnNewPoly(verts,
                                          static_cast<sf::Vector2f>(mousePosOnClick),

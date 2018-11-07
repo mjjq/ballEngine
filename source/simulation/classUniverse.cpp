@@ -117,7 +117,7 @@ void BallUniverse::spawnNewPoly(std::vector<sf::Vertex> &vertices,
                                                      position,
                                                      velocity,
                                                      rotation,
-                                                     0.0f);
+                                                     0.00f);
         dynamicObjects.push_back(std::move(newPoly));
 
         numOfBalls++;

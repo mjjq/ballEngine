@@ -353,7 +353,41 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
 
 void Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
 {
+    std::vector<sf::Vertex > rectVert = rect->constructVerts();
+    std::vector<sf::Vertex > polyVert = poly->constructVerts();
 
+    /*sf::VertexArray quad1(sf::TriangleStrip, 4);
+    for(int i=0; i<3; ++i)
+        quad1[i] = rect1Vert[i];
+
+    sf::VertexArray quad2(sf::LineStrip, 4);
+    for(int i=0; i<3; ++i)
+        quad2[i] = rect2Vert[i];
+
+    debugWindow->draw(quad1);
+    debugWindow->draw(quad2);*/
+
+    sf::Vector2f penetVector = Collisions::sepAxisTest(rectVert, polyVert).second;
+    sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
+
+    float redMass = rect->getMass()*poly->getMass()/(rect->getMass() + poly->getMass());
+    penetVector += 0.1f*contactNorm;
+
+    ClippedPoints cp = Collisions::getContactPoints(rectVert, polyVert, contactNorm);
+
+    //sf::CircleShape circ1{2.0f};
+    //circ1.setPosition(*cp.begin());
+    //sf::CircleShape circ2{2.0f};
+    //circ2.setPosition(*cp.end());
+
+    //debugWindow->draw(circ1);
+    //debugWindow->draw(circ2);
+    if(cp.size()>0)
+        Collisions::applyImpulse(rect, poly, contactNorm, cp);
+
+    //std::cout << contactNorm << "norm\n";
+    rect->setPosition(rect->getPosition() + redMass*penetVector/rect->getMass());
+    poly->setPosition(poly->getPosition() - redMass*penetVector/poly->getMass());
 }
 
 void Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
@@ -363,7 +397,41 @@ void Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
 
 void Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly2)
 {
+    std::vector<sf::Vertex > poly1Vert = poly1->constructVerts();
+    std::vector<sf::Vertex > poly2Vert = poly2->constructVerts();
 
+    /*sf::VertexArray quad1(sf::TriangleStrip, 4);
+    for(int i=0; i<3; ++i)
+        quad1[i] = rect1Vert[i];
+
+    sf::VertexArray quad2(sf::LineStrip, 4);
+    for(int i=0; i<3; ++i)
+        quad2[i] = rect2Vert[i];
+
+    debugWindow->draw(quad1);
+    debugWindow->draw(quad2);*/
+
+    sf::Vector2f penetVector = Collisions::sepAxisTest(poly1Vert, poly2Vert).second;
+    sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
+
+    float redMass = poly1->getMass()*poly2->getMass()/(poly1->getMass() + poly2->getMass());
+    penetVector += 0.1f*contactNorm;
+
+    ClippedPoints cp = Collisions::getContactPoints(poly1Vert, poly2Vert, contactNorm);
+
+    //sf::CircleShape circ1{2.0f};
+    //circ1.setPosition(*cp.begin());
+    //sf::CircleShape circ2{2.0f};
+    //circ2.setPosition(*cp.end());
+
+    //debugWindow->draw(circ1);
+    //debugWindow->draw(circ2);
+    if(cp.size()>0)
+        Collisions::applyImpulse(poly1, poly2, contactNorm, cp);
+
+    //std::cout << contactNorm << "norm\n";
+    poly1->setPosition(poly1->getPosition() + redMass*penetVector/poly1->getMass());
+    poly2->setPosition(poly2->getPosition() - redMass*penetVector/poly2->getMass());
 }
 
 
@@ -568,15 +636,19 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
     //std::cout << frictionImpulse << "fric impulse\n";
     //    std::cout << impulse << "impulse\n";
     //std::cout << collisionPoints.size() << " cp\n";
-    /*if(std::isnan(impulse.x) >= std::numeric_limits<float>::quiet_NaN())
+    /*if(std::isnan(impulse.x))
     {
         std::cout << frictionImpulse << "fric impulse\n";
         std::cout << impulse << "impulse\n";
         std::cout << relVel << "rel\n";
         std::cout << collisionPoints.size() << " cp\n";
         std::cout << contactNorm << " n\n";
-        std::cout << contactTangent << " t\n";
-    }*/
+        std::cout << contactTangent << " t\n\n";
+        std::cout << denom << "denom\n";
+
+
+    }
+std::cout << IA << " " << IB << "inertia\n\n";*/
 
     dwA += sfVectorMath::cross(resVectorA, contactNorm) * j / IA;
     dwB += sfVectorMath::cross(resVectorB, contactNorm) * j / IB;
@@ -602,7 +674,7 @@ sf::CircleShape circ1{2.5f};
     obj2->addSolvedVelocity(-(impulse + frictionImpulse)/obj2->getMass(),
                              -(impulse + frictionImpulse)/obj2->getMass());
 
-    //std::cout << dwA << " " << dwB << "\n\n";
+
     //std::cout << obj1->getMomentInertia() << "\n";
     //if(std::abs(dwA) > 1e-4)
         obj1->addRotRate(dwA);

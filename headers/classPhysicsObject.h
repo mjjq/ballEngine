@@ -26,11 +26,11 @@ protected:
     float rotAngle = 0.0f;
     float rotRate = 0.0f;
 
-    float mass;
-    float density;
-    sf::Vector2f centreOfMass;
+    float mass = 0.0f;
+    float density = 0.0f;
+    sf::Vector2f centreOfMass = {0.0f, 0.0f};
 
-    float momentInertia;
+    float momentInertia = 0.0f;
 
     float dampingFactor = 1;
     int numDynColls = 0;

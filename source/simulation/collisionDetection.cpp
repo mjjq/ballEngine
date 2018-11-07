@@ -314,7 +314,57 @@ float Collisions::timeToCollOBBOBB(OBB* rect1, OBB* rect2)
 
 float Collisions::timeToCollOBBPoly(OBB* rect, Polygon* poly)
 {
-    return std::numeric_limits<float>::quiet_NaN();
+    sf::Rect<float > boundingBox = rect->getBoundingBox();
+    AABB boundingAABB1{{boundingBox.width, boundingBox.height}, 0.0f,
+                      {boundingBox.left, boundingBox.top},
+                       rect->getVelocity()};
+
+    //sf::RectangleShape drawable1{{boundingBox.width, boundingBox.height}};
+    //drawable1.setPosition(boundingBox.left, boundingBox.top);
+    //debugWindow->draw(drawable1);
+    /*sf::Vertex verts[] = {
+        sf::Vertex{{boundingBox.left, boundingBox.top}},
+        sf::Vertex{{boundingBox.left, boundingBox.top + boundingBox.height}},
+        sf::Vertex{{boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height}},
+        sf::Vertex{{boundingBox.left + boundingBox.width, boundingBox.top}}
+    };
+    debugWindow->draw(verts, 4, sf::Lines);*/
+
+    boundingBox = poly->getBoundingBox();
+    AABB boundingAABB2{{boundingBox.width, boundingBox.height}, 0.0f,
+                      {boundingBox.left, boundingBox.top},
+                       poly->getVelocity()};
+
+    //sf::RectangleShape drawable2{{boundingBox.width, boundingBox.height}};
+    //drawable2.setPosition(boundingBox.left, boundingBox.top);
+    //debugWindow->draw(drawable2);
+
+    float tmin = Collisions::timeToCollAABBAABB(&boundingAABB1, &boundingAABB2);
+    if(tmin < 10.0f)
+    {
+        std::vector<sf::Vertex > rectVert = rect->constructVerts();
+        std::vector<sf::Vertex > polyVert = poly->constructVerts();
+
+        /*sf::VertexArray quad1(sf::LineStrip, 4);
+        for(int i=0; i<3; ++i)
+            quad1[i] = rect1Vert[i];
+
+        sf::VertexArray quad2(sf::LineStrip, 4);
+        for(int i=0; i<3; ++i)
+            quad2[i] = rect2Vert[i];
+
+        debugWindow->draw(quad1);
+        debugWindow->draw(quad2);*/
+
+        std::pair<bool, sf::Vector2f> result = Collisions::sepAxisTest(rectVert, polyVert);
+
+        if(!result.first)
+            return std::numeric_limits<float>::quiet_NaN();
+        else
+            return 0.0f;
+    }
+
+    return tmin;
 }
 
 float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
@@ -324,5 +374,55 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
 
 float Collisions::timeToCollPolyPoly(Polygon* poly1, Polygon *poly2)
 {
-    return std::numeric_limits<float>::quiet_NaN();
+    sf::Rect<float > boundingBox = poly1->getBoundingBox();
+    AABB boundingAABB1{{boundingBox.width, boundingBox.height}, 0.0f,
+                      {boundingBox.left, boundingBox.top},
+                       poly1->getVelocity()};
+
+    //sf::RectangleShape drawable1{{boundingBox.width, boundingBox.height}};
+    //drawable1.setPosition(boundingBox.left, boundingBox.top);
+    //debugWindow->draw(drawable1);
+    /*sf::Vertex verts[] = {
+        sf::Vertex{{boundingBox.left, boundingBox.top}},
+        sf::Vertex{{boundingBox.left, boundingBox.top + boundingBox.height}},
+        sf::Vertex{{boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height}},
+        sf::Vertex{{boundingBox.left + boundingBox.width, boundingBox.top}}
+    };
+    debugWindow->draw(verts, 4, sf::Lines);*/
+
+    boundingBox = poly2->getBoundingBox();
+    AABB boundingAABB2{{boundingBox.width, boundingBox.height}, 0.0f,
+                      {boundingBox.left, boundingBox.top},
+                       poly2->getVelocity()};
+
+    //sf::RectangleShape drawable2{{boundingBox.width, boundingBox.height}};
+    //drawable2.setPosition(boundingBox.left, boundingBox.top);
+    //debugWindow->draw(drawable2);
+
+    float tmin = Collisions::timeToCollAABBAABB(&boundingAABB1, &boundingAABB2);
+    if(tmin < 10.0f)
+    {
+        std::vector<sf::Vertex > poly1Vert = poly1->constructVerts();
+        std::vector<sf::Vertex > poly2Vert = poly2->constructVerts();
+
+        /*sf::VertexArray quad1(sf::LineStrip, 4);
+        for(int i=0; i<3; ++i)
+            quad1[i] = rect1Vert[i];
+
+        sf::VertexArray quad2(sf::LineStrip, 4);
+        for(int i=0; i<3; ++i)
+            quad2[i] = rect2Vert[i];
+
+        debugWindow->draw(quad1);
+        debugWindow->draw(quad2);*/
+
+        std::pair<bool, sf::Vector2f> result = Collisions::sepAxisTest(poly1Vert, poly2Vert);
+
+        if(!result.first)
+            return std::numeric_limits<float>::quiet_NaN();
+        else
+            return 0.0f;
+    }
+
+    return tmin;
 }
