@@ -541,8 +541,11 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
     //std::cout << collisionPoints.size() << " cp\n";
 
 
+
     float coefRest = 0.5f;
     float mu = 0.3f;
+    if(sfVectorMath::square(relVel) < 5.0f)
+        coefRest = 0.0f;
     //std::cout << contactNorm << "\n";
     sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
     if(sfVectorMath::square(contactTangent) > 0.0f)
