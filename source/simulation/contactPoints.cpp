@@ -313,7 +313,6 @@ Edge Collisions::getBestEdge(std::vector<sf::Vertex > &obj, sf::Vector2f normal)
 
 }
 
-
 ClippedPoints Collisions::clip(sf::Vector2f v1,
                                sf::Vector2f v2,
                                sf::Vector2f normal,
@@ -344,4 +343,21 @@ ClippedPoints Collisions::clip(sf::Vector2f v1,
 
     //std::cout << cp.size() << "newsize\n";
     return cp;
+}
+
+
+int Collisions::getClosestVertex(std::vector<sf::Vertex > &poly, sf::Vertex &intPoint)
+{
+    float minR = 1e+15f;
+    int result = 0;
+    for(int i=0; i<poly.size(); ++i)
+    {
+        if(sfVectorMath::square(poly[i].position - intPoint.position) < minR)
+        {
+            minR = sfVectorMath::square(poly[i].position - intPoint.position);
+            result = i;
+        }
+    }
+
+    return result;
 }

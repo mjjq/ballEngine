@@ -369,8 +369,10 @@ float Collisions::timeToCollOBBPoly(OBB* rect, Polygon* poly)
 
 float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
 {
+    std::vector<sf::Vertex > origPoly = poly->constructVerts();
     std::vector<sf::Vertex > minkSum = poly->constructLocalVerts();
     std::vector<sf::Vector2f > edgeTotals = poly->getLocalEdgeTotals();
+
     for(unsigned int i=0; i<minkSum.size(); ++i)
     {
         sf::Vector2f delta = ball->getRadius() * edgeTotals[i];
@@ -380,10 +382,40 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
     }
     debugWindow->draw(minkSum.data(), minkSum.size(), sf::Points);
 
-    float t = Collisions::rayPolyIntersect(ball->getPosition(), ball->getVelocity(),
+    float t = Collisions::rayPolyIntersect(ball->getPosition(), ball->getVelocity()-poly->getVelocity(),
                                            minkSum, -1e+15f, 1e+15f, 1e-15f);
 
-    //std::cout << t << "\n";
+    sf::Vertex intPoint{{ball->getPosition() + t*(ball->getVelocity()-poly->getVelocity())}};
+
+    //std::cout << intPoint.position << "\n";
+    //minkSum.push_back(intPoint);
+    debugWindow->draw(minkSum.data(), minkSum.size(), sf::Points);
+    int vertexColl = Collisions::getClosestVertex(minkSum, intPoint);
+
+    float minkSegLength = pow(ball->getRadius(), 2) *
+            sfVectorMath::square(edgeTotals[vertexColl])*
+            (1 - 1.0f/sfVectorMath::square(edgeTotals[vertexColl]) );
+
+
+    if(sfVectorMath::square(intPoint.position - minkSum[vertexColl].position) < minkSegLength)
+    {
+        //std::cout << minkSegLength << "\n";
+        //std::cout << "corner\n";
+        t = Collisions::raySphereIntersect(ball->getPosition(),
+                                           ball->getVelocity()-poly->getVelocity(),
+                                           origPoly[vertexColl].position,
+                                           ball->getRadius());
+        //std::cout << t << "\n";
+    }
+
+    sf::CircleShape circ1{2.0f};
+    circ1.setPosition(origPoly[vertexColl].position);
+    std::cout << origPoly[vertexColl].position << "\n";
+    debugWindow->draw(circ1);
+
+    //std::cout << vertexColl << "\n";
+    //if(minkSum[i].position - )
+
     if(t<0.0f)
         return 0.0f;
 

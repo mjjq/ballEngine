@@ -82,9 +82,9 @@ float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir
     float root1 = -(b + pow(discriminant,0.5f))/(2.0f*a);
     float root2 = -(b - pow(discriminant,0.5f))/(2.0f*a);
 
-    /*std::cout << rayDir << "\n";
+    std::cout << rayDir << "\n";
     std::cout << root1 << " root1\n";
-    std::cout << root2 << " root2\n\n";*/
+    std::cout << root2 << " root2\n\n";
 
     //std::cout << root1 << " : " << root2 << "\n\n";
     if(root1 < 0 && root2 < 0)
