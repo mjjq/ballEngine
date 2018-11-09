@@ -93,3 +93,76 @@ float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir
         return 0.0f;
     return (root2<root1)?root2:root1;
 }
+
+float Collisions::rayPolyIntersect(sf::Vector2f rayStart,
+                                  sf::Vector2f rayDir,
+                                  std::vector<sf::Vertex > &poly,
+                                  float tmin, float tmax, float epsilon)
+{
+    sf::Vector2f r = rayStart;
+    sf::Vector2f v = rayDir;
+
+    std::vector<Edge > potentialEdges;
+
+    for(unsigned int i=0; i<poly.size(); ++i)
+    {
+        //std::cout << i << "\n";
+        sf::Vector2f v0 = poly[i].position;
+        sf::Vector2f v1 = poly[(i+1)%poly.size()].position;
+        Edge polyEdge{v0, v1, v1-v0, v1};
+        sf::Vector2f edgeNorm = Collisions::orthogonal(v1-v0, 1.0f);
+
+        if(sfVectorMath::dot(rayDir, edgeNorm) < 0.0f)
+        {
+            //std::cout << polyEdge.dir << " v1:" << polyEdge.v1 << " i:" << i << "\n";
+            potentialEdges.push_back(polyEdge);
+        }
+
+
+    }
+
+    std::vector<float> edgeCollTimes;
+
+    for(Edge &temp : potentialEdges)
+    {
+        float tColl = Collisions::rayEdgeIntersect(rayStart,
+                                                   rayDir,
+                                                   temp);
+        edgeCollTimes.push_back(tColl);
+    }
+
+    bool movingAway = true;
+
+    for(float &time : edgeCollTimes)
+    {
+        //std::cout << time << "\n";
+        if(!std::isnan(time) && time < tmax)
+            tmax = time;
+        if(!std::isnan(time) && time > 0.0f)
+            movingAway = false;
+        //std::cout << tmax << "\n";
+    }
+    if(movingAway)
+        return std::numeric_limits<float>::quiet_NaN();
+
+    return tmax;
+
+}
+
+float Collisions::rayEdgeIntersect(sf::Vector2f rayStart,
+                                  sf::Vector2f rayDir,
+                                  Edge &edge1)
+{
+    sf::Vector2f r0 = rayStart;
+    sf::Vector2f r1 = edge1.v1;
+    sf::Vector2f d0 = rayDir;
+    sf::Vector2f d1 = edge1.dir;
+
+    float t1 = sfVectorMath::cross(r0-r1, d0)/
+               sfVectorMath::cross(d1,d0);
+    float t0 = sfVectorMath::dot(d0, d1*t1 + r1 - r0);
+
+    if(t1 >= 0.0f && t1 <= 1.0f)
+        return t0;
+    return std::numeric_limits<float>::quiet_NaN();
+}

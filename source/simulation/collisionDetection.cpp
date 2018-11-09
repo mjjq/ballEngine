@@ -369,7 +369,25 @@ float Collisions::timeToCollOBBPoly(OBB* rect, Polygon* poly)
 
 float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
 {
-    return std::numeric_limits<float>::quiet_NaN();
+    std::vector<sf::Vertex > minkSum = poly->constructLocalVerts();
+    std::vector<sf::Vector2f > edgeTotals = poly->getLocalEdgeTotals();
+    for(unsigned int i=0; i<minkSum.size(); ++i)
+    {
+        sf::Vector2f delta = ball->getRadius() * edgeTotals[i];
+        minkSum[i].position += delta;
+        minkSum[i].position = sfVectorMath::rotate(minkSum[i].position, poly->getRotAngle());
+        minkSum[i].position += poly->getPosition();
+    }
+    debugWindow->draw(minkSum.data(), minkSum.size(), sf::Points);
+
+    float t = Collisions::rayPolyIntersect(ball->getPosition(), ball->getVelocity(),
+                                           minkSum, -1e+15f, 1e+15f, 1e-15f);
+
+    //std::cout << t << "\n";
+    if(t<0.0f)
+        return 0.0f;
+
+    return t;
 }
 
 float Collisions::timeToCollPolyPoly(Polygon* poly1, Polygon *poly2)

@@ -58,6 +58,25 @@ PhysicsObject(_initPos, _initVel, _mass),
     rotAngle = _rotation;
     rotRate = _rotRate;
 
+    for(unsigned int i=0; i<vertices.size(); ++i)
+    {
+        sf::Vector2f edge = vertices[(i+1)%vertices.size()].position - vertices[i].position;
+        edgeNorms.push_back(sfVectorMath::norm(sfVectorMath::orthogonal(edge, 1.0f)));
+    }
+
+    sf::Vector2f norm1 = edgeNorms[0];
+    sf::Vector2f norm2 = edgeNorms[edgeNorms.size()-1];
+    float denom = sqrt(0.5f*(1+sfVectorMath::dot(norm1, norm2)));
+    edgeTotals.push_back(sfVectorMath::norm(norm1+norm2)/denom);
+
+    for(unsigned int i=1; i<edgeNorms.size(); ++i)
+    {
+        norm1 = edgeNorms[i-1];
+        norm2 = edgeNorms[i];
+        denom = sqrt(0.5f*(1+sfVectorMath::dot(norm1, norm2)));
+        edgeTotals.push_back(sfVectorMath::norm(norm1+norm2)/denom);
+    }
+
     genBoundingOBB();
 }
 
@@ -130,6 +149,11 @@ std::vector<sf::Vertex > Polygon::constructVerts()
     return tFormedVerts;
 }
 
+std::vector<sf::Vertex > Polygon::constructLocalVerts()
+{
+    return vertices;
+}
+
 float Polygon::getRotAngle()
 {
     return rotAngle;
@@ -157,4 +181,14 @@ void Polygon::genBoundingOBB()
     //boundingOBB.clear();
     boundingOBB = sf::Rect<float>(minX, minY, maxX-minX, maxY-minY);
 
+}
+
+std::vector<sf::Vector2f> Polygon::getLocalEdgeNorms()
+{
+    return edgeNorms;
+}
+
+std::vector<sf::Vector2f> Polygon::getLocalEdgeTotals()
+{
+    return edgeTotals;
 }

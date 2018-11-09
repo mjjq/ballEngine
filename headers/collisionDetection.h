@@ -29,6 +29,14 @@ public:
                       float tmax, float epsilon = 1e-5);
     static float raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir,
                      sf::Vector2f sphereCentre, float sphereRadius);
+    static float rayPolyIntersect(sf::Vector2f rayStart,
+                                  sf::Vector2f rayDir,
+                                  std::vector<sf::Vertex > &poly,
+                                  float tmin, float tmax, float epsilon);
+    static float rayEdgeIntersect(sf::Vector2f rayStart,
+                                  sf::Vector2f rayDir,
+                                  Edge &edge1);
+
 
     static float timeToCollision(PhysicsObject* p1, PhysicsObject* p2);
     static float timeToCollBallBall(Ball *firstBall, Ball *secondBall);

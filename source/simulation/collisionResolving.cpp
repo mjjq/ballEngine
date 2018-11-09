@@ -307,6 +307,7 @@ void Collisions::collisionBallOBB(Ball* ball, OBB* rect)
         float redMassRect = ball->getMass()/(ball->getMass() + rect->getMass());
         float redMassBall = rect->getMass()/(ball->getMass() + rect->getMass());
 
+        assert(!std::isnan(sfVectorMath::square(penetVector)));
         rect->setPosition(rect->getPosition() + redMassRect*penetVector);
         ball->setPosition(ball->getPosition() - redMassBall*penetVector);
 }
@@ -330,7 +331,7 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
     sf::Vector2f penetVector = Collisions::sepAxisTest(rect1Vert, rect2Vert).second;
     sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
 
-    float redMass = rect1->getMass()*rect2->getMass()/(rect1->getMass() + rect2->getMass());
+    float redMass = 1.0f/(1.0f/rect1->getMass() + 1.0f/rect2->getMass());
     penetVector += 0.1f*contactNorm;
 
     ClippedPoints cp = Collisions::getContactPoints(rect1Vert, rect2Vert, contactNorm);
@@ -347,7 +348,6 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
 
     rect1->setPosition(rect1->getPosition() + redMass*penetVector/rect1->getMass());
     rect2->setPosition(rect2->getPosition() - redMass*penetVector/rect2->getMass());
-
 
 }
 
@@ -370,7 +370,7 @@ void Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
     sf::Vector2f penetVector = Collisions::sepAxisTest(rectVert, polyVert).second;
     sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
 
-    float redMass = rect->getMass()*poly->getMass()/(rect->getMass() + poly->getMass());
+    float redMass = 1.0f/(1.0f/rect->getMass() + 1.0f/poly->getMass());
     penetVector += 0.1f*contactNorm;
 
     ClippedPoints cp = Collisions::getContactPoints(rectVert, polyVert, contactNorm);
@@ -414,7 +414,7 @@ void Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly2)
     sf::Vector2f penetVector = Collisions::sepAxisTest(poly1Vert, poly2Vert).second;
     sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
 
-    float redMass = poly1->getMass()*poly2->getMass()/(poly1->getMass() + poly2->getMass());
+    float redMass = 1.0f/(1.0f/poly1->getMass() + 1.0f/poly2->getMass());
     penetVector += 0.1f*contactNorm;
 
     ClippedPoints cp = Collisions::getContactPoints(poly1Vert, poly2Vert, contactNorm);
@@ -544,7 +544,7 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
 
     float coefRest = 0.5f;
     float mu = 0.3f;
-    if(sfVectorMath::square(relVel) < 5.0f)
+    if(sfVectorMath::dot(relVel, contactNorm) < 5.0f)
         coefRest = 0.0f;
     //std::cout << contactNorm << "\n";
     sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
@@ -648,10 +648,10 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
         std::cout << contactNorm << " n\n";
         std::cout << contactTangent << " t\n\n";
         std::cout << denom << "denom\n";
+std::cout << IA << " " << IB << "inertia\n\n";
 
 
-    }
-std::cout << IA << " " << IB << "inertia\n\n";*/
+    }*/
 
     dwA += sfVectorMath::cross(resVectorA, contactNorm) * j / IA;
     dwB += sfVectorMath::cross(resVectorB, contactNorm) * j / IB;

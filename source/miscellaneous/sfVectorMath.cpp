@@ -132,3 +132,8 @@ float sfVectorMath::cross(sf::Vector2f v1, sf::Vector2f v2)
 {
     return v1.x*v2.y - v1.y*v2.x;
 }
+
+sf::Vector2f sfVectorMath::orthogonal(sf::Vector2f v, float scalar)
+{
+    return {v.y*scalar, -v.x*scalar};
+}

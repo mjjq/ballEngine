@@ -8,6 +8,8 @@
 class Polygon : public PhysicsObject
 {
     std::vector<sf::Vertex > vertices = {};
+    std::vector<sf::Vector2f > edgeNorms = {};
+    std::vector<sf::Vector2f > edgeTotals = {};
     sf::Rect<float> boundingOBB;
     sf::Vector2f centrePosition = {0.0f, 0.0f};
     sf::Vector2f size = {0.0f, 0.0f};
@@ -32,10 +34,12 @@ public:
     sf::Vector2f getCoM();
     sf::Rect<float > getBoundingBox();
     std::vector<sf::Vertex > constructVerts();
+    std::vector<sf::Vertex > constructLocalVerts();
+    std::vector<sf::Vector2f> getLocalEdgeNorms();
+    std::vector<sf::Vector2f> getLocalEdgeTotals();
     float getRotAngle();
 
     void draw(sf::RenderWindow &_window);
-
 
 };
 

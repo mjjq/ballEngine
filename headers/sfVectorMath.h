@@ -14,6 +14,7 @@ namespace sfVectorMath
     void printVector(sf::Vector2i vec);
     float getAverage(std::vector<float> &vec);
     float cross(sf::Vector2f v1, sf::Vector2f v2);
+    sf::Vector2f orthogonal(sf::Vector2f v, float scalar);
 }
 
 #endif // SF_VECTOR_MATH_H
