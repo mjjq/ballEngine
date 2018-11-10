@@ -396,8 +396,9 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
             sfVectorMath::square(edgeTotals[vertexColl])*
             (1 - 1.0f/sfVectorMath::square(edgeTotals[vertexColl]) );
 
-
-    if(sfVectorMath::square(intPoint.position - minkSum[vertexColl].position) < minkSegLength)
+    //std::cout << t << " before\n";
+    if(sfVectorMath::square(intPoint.position - minkSum[vertexColl].position) < minkSegLength ||
+       sfVectorMath::square(ball->getPosition() - minkSum[vertexColl].position) < minkSegLength)
     {
         //std::cout << minkSegLength << "\n";
         //std::cout << "corner\n";
@@ -408,9 +409,11 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
         //std::cout << t << "\n";
     }
 
-    sf::CircleShape circ1{2.0f};
+    //std::cout << t << " after\n";
+    sf::CircleShape circ1{ball->getRadius()};
     circ1.setPosition(origPoly[vertexColl].position);
-    std::cout << origPoly[vertexColl].position << "\n";
+    circ1.setOrigin({ball->getRadius(), ball->getRadius()});
+    //std::cout << origPoly[vertexColl].position << "\n";
     debugWindow->draw(circ1);
 
     //std::cout << vertexColl << "\n";

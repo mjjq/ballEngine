@@ -82,9 +82,9 @@ float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir
     float root1 = -(b + pow(discriminant,0.5f))/(2.0f*a);
     float root2 = -(b - pow(discriminant,0.5f))/(2.0f*a);
 
-    std::cout << rayDir << "\n";
-    std::cout << root1 << " root1\n";
-    std::cout << root2 << " root2\n\n";
+    //std::cout << rayDir << "\n";
+    //std::cout << root1 << " root1\n";
+    //std::cout << root2 << " root2\n\n";
 
     //std::cout << root1 << " : " << root2 << "\n\n";
     if(root1 < 0 && root2 < 0)
@@ -110,9 +110,9 @@ float Collisions::rayPolyIntersect(sf::Vector2f rayStart,
         sf::Vector2f v0 = poly[i].position;
         sf::Vector2f v1 = poly[(i+1)%poly.size()].position;
         Edge polyEdge{v0, v1, v1-v0, v1};
-        sf::Vector2f edgeNorm = Collisions::orthogonal(v1-v0, 1.0f);
+        //sf::Vector2f edgeNorm = Collisions::orthogonal(v1-v0, 1.0f);
 
-        if(sfVectorMath::dot(rayDir, edgeNorm) < 0.0f)
+        //if(sfVectorMath::dot(rayDir, edgeNorm) < 0.0f)
         {
             //std::cout << polyEdge.dir << " v1:" << polyEdge.v1 << " i:" << i << "\n";
             potentialEdges.push_back(polyEdge);
@@ -143,7 +143,10 @@ float Collisions::rayPolyIntersect(sf::Vector2f rayStart,
         //std::cout << tmax << "\n";
     }
     if(movingAway)
+    {
         return std::numeric_limits<float>::quiet_NaN();
+        std::cout << "mov away\n";
+    }
 
     return tmax;
 
