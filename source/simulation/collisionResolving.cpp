@@ -400,7 +400,10 @@ void Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
     sf::Vector2f contactNorm = contact.first;
     sf::Vector2f cornerPos = contact.second;
     sf::Vector2f penetVector = Collisions::calcPenetVector(cornerPos, contactNorm, *ball);
-    std::cout << penetVector << "pen\n";
+
+    std::cout << sqrt(sfVectorMath::square(cornerPos - ball->getPosition())) << " cDist\n";
+    std::cout << ball->getPosition() << " ballPos\n";
+    std::cout << penetVector << " pen\n";
 
     //std::cout << contactNorm << " norm\n";
     //std::cout << penetVector << " pen\n";
@@ -556,10 +559,10 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball *origBal
 std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, Polygon* poly)
 {
     std::vector<sf::Vertex > verts = poly->constructVerts();
-    sf::Vector2f relPos = {0.0f, 0.0f};
-    sf::Vector2f relPos2 = {0.0f, 0.0f};
-    sf::Vector2f edgeNorm = {0.0f, 0.0f};
-    sf::Vector2f cornerPos = {0.0f, 0.0f};
+    sf::Vector2f relPos     = {0.0f, 0.0f};
+    sf::Vector2f relPos2    = {0.0f, 0.0f};
+    sf::Vector2f edgeNorm   = {0.0f, 0.0f};
+    sf::Vector2f cornerPos  = {0.0f, 0.0f};
 
     Edge bestEdge;
     float ballRad = ball->getRadius();
@@ -577,7 +580,7 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
 
         //std::cout << tanDist << "\n";
 
-        if(normDist <= distance && normDist >= 0.0f)
+        if(normDist <= distance && normDist >= ball->getRadius())
         {
 
             //std::cout << tanDist << " " << segDistSq << "\n";
@@ -589,16 +592,20 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
                 i+=1;
 
             }
-            else
+        }
+        else if(normDist <= distance && normDist >= 0.0f)
+        {
+            if(tanDist*tanDist > segDistSq)
             {
-                if(tanDist*tanDist > segDistSq)
-                    cornerPos = verts[(i+1)%verts.size()].position;
-                else
-                    cornerPos = verts[i].position;
-                relPos = ball->getPosition() - cornerPos;
-                edgeNorm = sfVectorMath::norm(relPos);
-                i+=1;
+                cornerPos = verts[(i+1)%verts.size()].position;
+                std::cout << "greater\n";
             }
+            else
+                cornerPos = verts[i].position;
+            relPos = ball->getPosition() - cornerPos;
+            edgeNorm = sfVectorMath::norm(relPos);
+            i+=1;
+            prevVertex = true;
         }
         //std::cout << edgeNorm << " " << i << " corner\n";
         //std::cout << cornerPos << " " << i << " corner\n\n";
@@ -633,11 +640,11 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
 
     float coefRest = 0.5f;
     float mu = 0.3f;
-    if(std::abs(sfVectorMath::dot(relVel, contactNorm)) < 5.0f)
-    {
-        coefRest = coefRest * pow(std::abs(sfVectorMath::dot(relVel, contactNorm)) / 5.0f, 1);
+    //if(std::abs(sfVectorMath::dot(relVel, contactNorm)) < 5.0f)
+    //{
+    //    coefRest = coefRest * pow(std::abs(sfVectorMath::dot(relVel, contactNorm)) / 5.0f, 1);
         //std::cout << coefRest << " coef\n";
-    }
+    //}
     //std::cout << contactNorm << "\n";
     sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
     if(sfVectorMath::square(contactTangent) > 0.0f)

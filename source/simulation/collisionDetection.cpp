@@ -380,7 +380,7 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
         minkSum[i].position = sfVectorMath::rotate(minkSum[i].position, poly->getRotAngle());
         minkSum[i].position += poly->getPosition();
     }
-    debugWindow->draw(minkSum.data(), minkSum.size(), sf::LineStrip);
+    //debugWindow->draw(minkSum.data(), minkSum.size(), sf::LineStrip);
 
     float t = Collisions::rayPolyIntersect(ball->getPosition(), ball->getVelocity()-poly->getVelocity(),
                                            minkSum, -1e+15f, 1e+15f, 1e-15f);
@@ -408,6 +408,8 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
                                            ball->getVelocity()-poly->getVelocity(),
                                            origPoly[vertexColl].position,
                                            ball->getRadius());
+        if(t<0.0f)
+            return std::numeric_limits<float>::quiet_NaN();
 
     }
         std::cout << t << "\n";
