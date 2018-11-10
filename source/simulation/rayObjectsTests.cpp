@@ -163,7 +163,8 @@ float Collisions::rayEdgeIntersect(sf::Vector2f rayStart,
 
     float t1 = sfVectorMath::cross(r0-r1, d0)/
                sfVectorMath::cross(d1,d0);
-    float t0 = sfVectorMath::dot(d0, d1*t1 + r1 - r0);
+    float t0 = sfVectorMath::cross(r1-r0, d1)/
+               sfVectorMath::cross(d0,d1);
 
     if(t1 >= 0.0f && t1 <= 1.0f)
         return t0;

@@ -47,7 +47,7 @@ void Ball::draw(sf::RenderWindow &_window)
     //nStepPosition = initPos;
     drawable.setOrigin(radius,radius);
 
-    drawable.setFillColor(sf::Color{180,180,180,255});
+    drawable.setFillColor(sf::Color{180,180,180,100});
 
     sf::Vertex line[] = {
         sf::Vertex{position},

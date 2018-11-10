@@ -133,6 +133,30 @@ void BallUniverse::spawnNewPoly(std::vector<sf::Vertex> &vertices,
 }
 
 
+void BallUniverse::spawnStaticPoly(std::vector<sf::Vertex> &vertices,
+                                sf::Vector2f position,
+                                float rotation)
+{
+    if(!(position.x < 0 ||
+       position.y < 0 ||
+       position.x> worldSizeX ||
+       position.y> worldSizeY))
+    {
+        std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(vertices,
+                                                     1e+15f,
+                                                     position,
+                                                     sf::Vector2f{0.0f, 0.0f},
+                                                     rotation,
+                                                     0.00f);
+        staticObjects.push_back(std::move(newPoly));
+
+        staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        if(enable_collisions)
+            calcCollTimes();
+    }
+}
+
+
 
 //void resetAndCheckBounce(std::vector<Ball>)
 /**

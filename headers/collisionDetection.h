@@ -100,6 +100,7 @@ public:
     static ClippedPoints getIntPoint(Ball &ball, Edge &edge);
 
     static std::pair<sf::Vector2f, sf::Vector2f> getContactNormal(Ball *origBall, AABB *origAABB);
+    static std::pair<sf::Vector2f, sf::Vector2f> getContactNormal(Ball* ball, Polygon* poly);
 
     static int getClosestVertex(std::vector<sf::Vertex > &poly, sf::Vertex &intPoint);
 };

@@ -86,6 +86,10 @@ public:
                                 sf::Vector2f velocity,
                                 float mass,
                                 float rotation);
+    void spawnStaticPoly(std::vector<sf::Vertex> &vertices,
+                                sf::Vector2f position,
+                                float rotation);
+
     void removeBall(int index);
     void removeRect(int index);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,

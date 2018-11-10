@@ -30,6 +30,7 @@
 		"spwnSCirc"	: ["RMB"],
 		"spwnDAABB"	: ["LControl", "LMB"],
 		"spwnDPoly"	: ["LShift", "LMB"],
+		"spwnSPoly"	: ["LShift", "RMB"],
 		"spwnJson"	: ["MMB"],
 		"spwnSys"	: ["LControl", "RMB"]
 	},
