@@ -43,6 +43,7 @@
 		<Unit filename="headers/classOBB.h" />
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classPhysicsObject.h" />
+		<Unit filename="headers/classPolygon.h" />
 		<Unit filename="headers/classSandboxScene.h" />
 		<Unit filename="headers/classScene.h" />
 		<Unit filename="headers/classSceneManager.h" />
@@ -91,6 +92,7 @@
 		<Unit filename="source/simulation/classBall.cpp" />
 		<Unit filename="source/simulation/classOBB.cpp" />
 		<Unit filename="source/simulation/classPhysicsObject.cpp" />
+		<Unit filename="source/simulation/classPolygon.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
 		<Unit filename="source/simulation/collisionDetection.cpp" />
 		<Unit filename="source/simulation/collisionResolving.cpp" />
