@@ -562,7 +562,9 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
     sf::Vector2f relPos     = {0.0f, 0.0f};
     sf::Vector2f relPos2    = {0.0f, 0.0f};
     sf::Vector2f edgeNorm   = {0.0f, 0.0f};
+    sf::Vector2f edgeNormVert  = {0.0f, 0.0f};
     sf::Vector2f cornerPos  = {0.0f, 0.0f};
+    sf::Vector2f cornerPosVert  = {0.0f, 0.0f};
 
     Edge bestEdge;
     float ballRad = ball->getRadius();
@@ -588,7 +590,7 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
 
         theVertex = i;
 
-        if(normDist <= distance && normDist >= 0.0f)
+        if(std::abs(normDist) <= distance && normDist >= 0.0f)
         {
             if(tanDist >= 0.0f && tanDist*tanDist <= segDistSq)
             {
@@ -598,11 +600,11 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
                 touchCorner = false;
 
             }
-            else if(vertDistSq <= minVertDistSq && touchCorner)
+            else if(vertDistSq <= minVertDistSq)
             {
                 minVertDistSq = vertDistSq;
-                cornerPos = verts[i].position;
-                edgeNorm = sfVectorMath::norm(ball->getPosition() -
+                cornerPosVert = verts[i].position;
+                edgeNormVert = sfVectorMath::norm(ball->getPosition() -
                                           cornerPos);
             }
         }
@@ -610,7 +612,11 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
     }
 
     std::cout << theVertex << " theVert\n";
-    return std::make_pair(sfVectorMath::norm(edgeNorm), cornerPos);
+    std::cout << touchCorner << "tc\n";
+    if(!touchCorner)
+        return std::make_pair(sfVectorMath::norm(edgeNorm), cornerPos);
+
+    return std::make_pair(sfVectorMath::norm(edgeNormVert), cornerPosVert);
 }
 
 
