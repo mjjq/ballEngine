@@ -373,55 +373,62 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
     std::vector<sf::Vertex > minkSum = poly->constructLocalVerts();
     std::vector<sf::Vector2f > edgeTotals = poly->getLocalEdgeTotals();
 
+    float ballRad = ball->getRadius();
+
     for(unsigned int i=0; i<minkSum.size(); ++i)
     {
-        sf::Vector2f delta = ball->getRadius() * edgeTotals[i];
+        sf::Vector2f delta = ball->getRadius() * edgeTotals.at(i);
         minkSum[i].position += delta;
         minkSum[i].position = sfVectorMath::rotate(minkSum[i].position, poly->getRotAngle());
         minkSum[i].position += poly->getPosition();
-    }
-    //debugWindow->draw(minkSum.data(), minkSum.size(), sf::LineStrip);
 
-    float t = Collisions::rayPolyIntersect(ball->getPosition(), ball->getVelocity()-poly->getVelocity(),
+        sf::Vector2f relPos = ball->getPosition() - origPoly[i].position;
+
+        if(sfVectorMath::square(relPos) < ballRad*ballRad)
+            return 0.0f;
+    }
+
+    sf::Vector2f centreRelPos = ball->getPosition() - poly->getPosition();
+    sf::Vector2f ballVel = ball->getVelocity() + sfVectorMath::orthogonal(centreRelPos, poly->getRotRate());
+    float t = Collisions::rayPolyIntersect(ball->getPosition(), ballVel-poly->getVelocity(),
                                            minkSum, -1e+15f, 1e+15f, 1e-15f);
 
-    sf::Vertex intPoint{{ball->getPosition() + t*(ball->getVelocity()-poly->getVelocity())}};
 
-    //std::cout << intPoint.position << "\n";
-    //minkSum.push_back(intPoint);
-    //debugWindow->draw(minkSum.data(), minkSum.size(), sf::Points);
+    sf::Vertex intPoint{{ball->getPosition() + t*(ballVel-poly->getVelocity())}};
+
+    std::vector<sf::Vertex > showIntVector;
+    showIntVector.push_back({ball->getPosition()});
+    showIntVector.push_back(intPoint);
+    //debugWindow->draw(showIntVector.data(), showIntVector.size(), sf::LineStrip);
 
     sf::Vertex ballPos = {ball->getPosition()};
-    int vertexColl = Collisions::getClosestVertex(minkSum, intPoint);
+
+    int vertexColl = 0;
+    if(!std::isnan(t) && t>=0.0f)
+        vertexColl = Collisions::getClosestVertex(origPoly, intPoint);
+    else
+        vertexColl = Collisions::getClosestVertex(origPoly, ballPos);
+
+    /*sf::CircleShape circ1{ballRad};
+    circ1.setOrigin({ballRad, ballRad});
+    circ1.setPosition(origPoly[vertexColl].position);
+    debugWindow->draw(circ1);*/
+
 
     float minkSegLength = pow(ball->getRadius(), 2) *
-            sfVectorMath::square(edgeTotals[vertexColl])*
-            (1 - 1.0f/sfVectorMath::square(edgeTotals[vertexColl]) );
+            (sfVectorMath::square(edgeTotals[vertexColl]) - 1.0f );
 
-    //std::cout << t << " before\n";
     if(sfVectorMath::square(intPoint.position - minkSum[vertexColl].position) < minkSegLength ||
        sfVectorMath::square(ball->getPosition() - minkSum[vertexColl].position) < minkSegLength)
     {
-        //std::cout << minkSegLength << "\n";
-        //std::cout << "corner\n";
         t = Collisions::raySphereIntersect(ball->getPosition(),
-                                           ball->getVelocity()-poly->getVelocity(),
+                                           ballVel-poly->getVelocity(),
                                            origPoly[vertexColl].position,
                                            ball->getRadius());
         if(t<0.0f)
             return std::numeric_limits<float>::quiet_NaN();
-
     }
-        std::cout << t << "\n";
-    //std::cout << t << " after\n";
-    //sf::CircleShape circ1{ball->getRadius()};
-    //circ1.setPosition(origPoly[vertexColl].position);
-    //circ1.setOrigin({ball->getRadius(), ball->getRadius()});
-    //std::cout << origPoly[vertexColl].position << "\n";
-    //debugWindow->draw(circ1);
 
-    //std::cout << vertexColl << "\n";
-    //if(minkSum[i].position - )
 
     if(t<0.0f)
         return 0.0f;
