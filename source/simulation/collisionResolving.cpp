@@ -405,7 +405,7 @@ void Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
     std::cout << ball->getPosition() << " ballPos\n";
     std::cout << penetVector << " pen\n";
 
-    //std::cout << contactNorm << " norm\n";
+    std::cout << contactNorm << " norm\n";
     //std::cout << penetVector << " pen\n";
 
     sf::Vector2f contactPoint = ball->getPosition() - contactNorm*ball->getRadius();
@@ -570,6 +570,10 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
     float distance = 1e+15;
     float minVertDistSq = 1e+15;
 
+    bool touchCorner = true;
+
+    int theVertex = 0;
+
     for(unsigned int i=0; i<verts.size(); ++i)
     {
         sf::Vector2f tangent = verts[(i+1)%verts.size()].position - verts[i].position;
@@ -582,28 +586,30 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
         float tanDist = sfVectorMath::dot(relPos, sfVectorMath::norm(tangent));
         float segDistSq = sfVectorMath::square(tangent);
 
-        if(normDist <= distance && normDist >= ball->getRadius())
+        theVertex = i;
+
+        if(normDist <= distance && normDist >= 0.0f)
         {
             if(tanDist >= 0.0f && tanDist*tanDist <= segDistSq)
             {
                 distance = normDist;
                 edgeNorm = norm;
                 cornerPos = verts[i].position;
-                i+=1;
+                touchCorner = false;
 
             }
-        }
-        else if(normDist <= distance && normDist >= 0.0f &&
-                vertDistSq <= minVertDistSq)
-        {
-            minVertDistSq = vertDistSq;
-            cornerPos = verts[i].position;
-            edgeNorm = sfVectorMath::norm(ball->getPosition() -
+            else if(vertDistSq <= minVertDistSq && touchCorner)
+            {
+                minVertDistSq = vertDistSq;
+                cornerPos = verts[i].position;
+                edgeNorm = sfVectorMath::norm(ball->getPosition() -
                                           cornerPos);
+            }
         }
 
     }
 
+    std::cout << theVertex << " theVert\n";
     return std::make_pair(sfVectorMath::norm(edgeNorm), cornerPos);
 }
 
