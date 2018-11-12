@@ -80,6 +80,7 @@ public:
     static void applyImpulse(PhysicsObject *obj1,
                              PhysicsObject *obj2,
                              sf::Vector2f contactNorm,
+                             sf::Vector2f penetVector,
                              ClippedPoints &collisionPoints);
 
 
