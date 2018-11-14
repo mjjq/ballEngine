@@ -606,9 +606,36 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
         pwm.i1 = obj1->getMomentInertia();
         pwm.i2 = obj2->getMomentInertia();
 
-        std::vector<float > lambda{0.0f};
+        std::vector<float > lambda;
         std::vector<CStructs::Constraint > j;
-        j.push_back(Constraints::makeContactConstraint(*obj1, *obj2, collisionPoints[0], contactNorm, penetVector));
+
+        for(sf::Vector2f &collPoint : collisionPoints)
+        {
+            sf::Vector2f relVel = obj1->getVelocity() - obj2->getVelocity();
+
+            sf::Vector2f rA = collPoint - obj1->getCoM();
+            sf::Vector2f rB = collPoint - obj2->getCoM();
+            relVel += Collisions::orthogonal(rA, obj1->getRotRate()) -
+                        Collisions::orthogonal(rB, obj2->getRotRate());
+
+            //relVel = -relVel;
+            sf::Vector2f tangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
+            if(sfVectorMath::square(tangent) > 0.0f)
+                tangent = sfVectorMath::norm(tangent);
+
+            j.push_back(Constraints::makeContactConstraint(*obj1,
+                                                           *obj2,
+                                                           collPoint,
+                                                           contactNorm, penetVector));
+
+            j.push_back(Constraints::makeFrictionConstraint(*obj1,
+                                                            *obj2,
+                                                            collPoint,
+                                                            tangent));
+            lambda.push_back(0.0f);
+            lambda.push_back(0.0f);
+        }
+        //std::cout << j.size() << "\n";
 
         Constraints::solveConstraints(pwv, j, pwm, lambda);
 

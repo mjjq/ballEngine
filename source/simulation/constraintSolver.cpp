@@ -46,7 +46,7 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
     sf::Vector2f relVel = p2.getVelocity() - p1.getVelocity();
     c.bias = 0.5f * sfVectorMath::dot(relVel, normal);
 
-    float baumGarte = sfVectorMath::dot(penetVector, normal);
+    //float baumGarte = sfVectorMath::dot(penetVector, normal);
     //if(baumGarte < 0.0f)
     //    c.bias += 0.1f * baumGarte;
     //std::cout << normal << "\n";
@@ -61,6 +61,7 @@ CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
                                                          sf::Vector2f tangent)
 {
     CStructs::Constraint c;
+    tangent = -tangent;
 
     c.c1 = -tangent;
     c.cw1 = -sfVectorMath::cross(contactPoint - p1.getPosition(), tangent);
@@ -68,6 +69,10 @@ CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
     c.cw2 = sfVectorMath::cross(contactPoint - p2.getPosition(), tangent);
     c.lambdaMin = -1.0f*2.0f*9.8f;
     c.lambdaMax = -c.lambdaMin;
+    c.bias = 0.0f;
+
+    //std::cout << c.cw1 << "\n";
+    //std::cout << c.cw2 << "\n\n";
 
     return c;
 }
@@ -84,17 +89,18 @@ void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
     {
         d.push_back(getDenom(j[i], pwm));
     }
-    for(int i=0; i<5; ++i)
+    for(int c=0; c<10; ++c)
     {
         for(int i=0; i<d.size(); ++i)
         {
             float dlambda =  - (multiply(j[i], returnVel) + j[i].bias)/d[i];
-//                std::cout << dlambda << " lamb\n";
+
             float l0 = lambda[i];
             lambda[i] = std::max(j[i].lambdaMin, std::min(l0 + dlambda,
                                                           j[i].lambdaMax));
             dlambda = lambda[i] - l0;
             //if(dlambda > 0.0f)
+
             returnVel.v1 = returnVel.v1 + dlambda * j[i].c1 / pwm.m1;
             returnVel.v2 = returnVel.v2 + dlambda * j[i].c2 / pwm.m2;
             returnVel.w1 = returnVel.w1 + dlambda * j[i].cw1 / pwm.i1;
