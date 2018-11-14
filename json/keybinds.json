@@ -27,8 +27,12 @@
 		"mvPlrBck"       : ["S"],
 		"mvPlrLft"       : ["A"],
 		"spwnSingle"	: ["LMB"],
+		"spwnSCirc"	: ["RMB"],
+		"spwnDAABB"	: ["LControl", "LMB"],
+		"spwnDPoly"	: ["LShift", "LMB"],
+		"spwnSPoly"	: ["LShift", "RMB"],
 		"spwnJson"	: ["MMB"],
-		"spwnSys"	: ["RMB"]
+		"spwnSys"	: ["LControl", "RMB"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"       : ["D"],

@@ -2,14 +2,16 @@
 #define CLASS_UNIVERSE_H
 #include "integrators.h"
 #include "collisionDetection.h"
-#include "classBall.h"
+#include "classPhysicsObject.h"
+#include "classAABB.h"
+#include "classPolygon.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 
 class BallUniverse
 {
-    std::vector<Ball> ballArray;
-    std::vector<sf::RectangleShape > AARectArray;
+    std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
+    std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
 
     int worldSizeX;
     int worldSizeY;
@@ -51,12 +53,12 @@ class BallUniverse
     float totalEnergy = 0;
     sf::Vector2f totalMomentum = sf::Vector2f{0,0};
 
-    void calcTotalKE(std::vector<Ball> &ballArray);
-    void calcTotalMomentum(std::vector<Ball> &ballArray);
-    void calcTotalGPE(std::vector<Ball> &ballArray);
+    void calcTotalKE(std::vector<PhysicsObject* > &_dynamicObjects);
+    void calcTotalMomentum(std::vector<PhysicsObject* > &_dynamicObjects);
+    void calcTotalGPE(std::vector<PhysicsObject* > &_dynamicObjects);
     void calcTotalEnergy();
 
-    bool checkForBounce(Ball &ball);
+    bool checkForBounce(PhysicsObject* object);
 
     float physicsLoop();
     float physicsLoopAbsorb();
@@ -66,12 +68,28 @@ public:
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
-    void updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall);
+    void updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2);
     void updateAllObjects(bool enableForces, float dt);
 
     void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
     void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass=1);
-    void spawnNewRect(sf::Vector2f position, float width, float height);
+    void spawnNewRect(sf::Vector2f position,
+                      float width,
+                      float height,
+                      sf::Vector2f velocity,
+                      float mass,
+                      float rotation);
+    void spawnStaticRect(sf::Vector2f position, float width, float height, float rotation);
+    void spawnStaticBall(sf::Vector2f position, float radius);
+    void spawnNewPoly(std::vector<sf::Vertex> &vertices,
+                                sf::Vector2f position,
+                                sf::Vector2f velocity,
+                                float mass,
+                                float rotation);
+    void spawnStaticPoly(std::vector<sf::Vertex> &vertices,
+                                sf::Vector2f position,
+                                float rotation);
+
     void removeBall(int index);
     void removeRect(int index);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
@@ -111,7 +129,7 @@ public:
     void drawSampledPositions(sf::RenderWindow &window);
     void toggleTrajectories();
     void togglePlayerTraj();
-    sf::Vector2f getBallPosition(unsigned int i);
+    sf::Vector2f getObjPosition(unsigned int i);
     void pushBall(float force, float relDirection, int i);
     void pushBall(sf::Vector2f &resVector, int ballArg);
     void pushPlayer(float force, float relDirection);

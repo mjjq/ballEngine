@@ -182,7 +182,7 @@ void GameScene::checkForViewPan(sf::Vector2i initialPos)
 */
 void GameScene::focusOnBall(int ballIndex)
 {
-    sf::Vector2f relPos = ballSim.getBallPosition(ballIndex);
+    sf::Vector2f relPos = ballSim.getObjPosition(ballIndex);
     if(!std::isnan(relPos.x) && !std::isnan(relPos.y))
     {
         worldView.setCenter(relPos);
@@ -221,13 +221,23 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
                                        sVals.mass,
                                        sVals.radius);
         }
-        for(json &currJ : j["AABB"])
+        for(json &currJ : j["statAABB"])
+        {
+            AABBSpawnVals sVals;
+            if(beParser::checkAABBJson(currJ, sVals))
+                ballSim.spawnStaticRect(sVals.position + position,
+                                     sVals.dimensions.x,
+                                     sVals.dimensions.y, 0.0f);
+        }
+        for(json &currJ : j["dynAABB"])
         {
             AABBSpawnVals sVals;
             if(beParser::checkAABBJson(currJ, sVals))
                 ballSim.spawnNewRect(sVals.position + position,
                                      sVals.dimensions.x,
-                                     sVals.dimensions.y);
+                                     sVals.dimensions.y,
+                                     {velocity},
+                                     5.0f, 0.0f);
         }
     }
 }
@@ -383,6 +393,9 @@ void GameScene::setSpawnValues(float value,
         case(SQ_RADIUS):
             spawnRadius = value;
             //spawnMass = density*value;
+            break;
+        case(SQ_ROTATION):
+            spawnRotation = value;
             break;
         case(SQ_DENSITY):
             break;

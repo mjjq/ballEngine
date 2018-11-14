@@ -67,12 +67,16 @@
 		</Linker>
 		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/class2DMatrix.h" />
+		<Unit filename="headers/classAABB.h" />
 		<Unit filename="headers/classBall.h" />
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classMainMenuScene.h" />
 		<Unit filename="headers/classMenuScene.h" />
+		<Unit filename="headers/classOBB.h" />
 		<Unit filename="headers/classPauseMenuScene.h" />
+		<Unit filename="headers/classPhysicsObject.h" />
+		<Unit filename="headers/classPolygon.h" />
 		<Unit filename="headers/classSandboxScene.h" />
 		<Unit filename="headers/classScene.h" />
 		<Unit filename="headers/classSceneManager.h" />
@@ -113,11 +117,21 @@
 		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />
 		<Unit filename="source/miscellaneous/stringConversion.cpp" />
 		<Unit filename="source/miscellaneous/structs.cpp" />
+		<Unit filename="source/simulation/classAABB.cpp" />
 		<Unit filename="source/simulation/classBall.cpp" />
+		<Unit filename="source/simulation/classOBB.cpp" />
+		<Unit filename="source/simulation/classPhysicsObject.cpp" />
+		<Unit filename="source/simulation/classPolygon.cpp" />
 		<Unit filename="source/simulation/classUniverse.cpp" />
 		<Unit filename="source/simulation/collisionDetection.cpp" />
+		<Unit filename="source/simulation/collisionResolving.cpp" />
+		<Unit filename="source/simulation/contactPoints.cpp" />
 		<Unit filename="source/simulation/forces.cpp" />
 		<Unit filename="source/simulation/integrators.cpp" />
+		<Unit filename="source/simulation/minkowskiMath.cpp" />
+		<Unit filename="source/simulation/penetrationTests.cpp" />
+		<Unit filename="source/simulation/rayObjectsTests.cpp" />
+		<Unit filename="source/simulation/sepAxisTests.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
