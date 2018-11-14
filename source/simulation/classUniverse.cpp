@@ -489,12 +489,17 @@ float BallUniverse::physicsLoop()
             staticCollArray.addConstValue(-dtR);
 
             if(collWithStatic)
+            {
                 Collisions::resolveCollision(dynamicObjects[collider2].get(), staticObjects[collider1].get());
+                //dynamicObjects[collider2].get()->updatePosition(dt);
+            }
 
 
             else if(collider1 != collider2)
             {
                 Collisions::resolveCollision(dynamicObjects[collider1].get(), dynamicObjects[collider2].get());
+                //dynamicObjects[collider1].get()->updatePosition(dt);
+                //dynamicObjects[collider2].get()->updatePosition(dt);
             }
 
             timeToNextColl = 1e+15;

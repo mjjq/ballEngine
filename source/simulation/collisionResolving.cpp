@@ -9,6 +9,7 @@
 #include "../../headers/collisionDetection.h"
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
+#include "../../headers/constraintSolver.h"
 
 #define CONCAT2(x,y) x##y
 #define CONCAT(x,y) CONCAT2(x,y)
@@ -591,165 +592,31 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
 {
     if(collisionPoints.size() > 0)
     {
-        sf::Vector2f relVel = obj1->getVelocity() - obj2->getVelocity();
-        for(sf::Vector2f &collPoint : collisionPoints)
-        {
-            sf::Vector2f rA = collPoint - obj1->getCoM();
-            sf::Vector2f rB = collPoint - obj2->getCoM();
-            relVel -= Collisions::orthogonal(rA, obj1->getRotRate()) -
-                        Collisions::orthogonal(rB, obj2->getRotRate());
-        }
-        //relVel = relVel/static_cast<float>(collisionPoints.size());
+        //std::cout << obj1->getPosition() << " p1\n";
+        //std::cout << obj2->getPosition() << " p2\n";
+        CStructs::PairWiseVel pwv;
+        pwv.v1 = obj1->getVelocity();
+        pwv.v2 = obj2->getVelocity();
+        pwv.w1 = obj1->getRotRate();
+        pwv.w2 = obj2->getRotRate();
 
-        //std::cout << relVel << "rel\n";
-        //std::cout << collisionPoints.size() << " cp\n";
+        CStructs::PairWiseMass pwm;
+        pwm.m1 = obj1->getMass();
+        pwm.m2 = obj2->getMass();
+        pwm.i1 = obj1->getMomentInertia();
+        pwm.i2 = obj2->getMomentInertia();
 
+        std::vector<float > lambda{0.0f};
+        std::vector<CStructs::Constraint > j;
+        j.push_back(Constraints::makeContactConstraint(*obj1, *obj2, collisionPoints[0], contactNorm, penetVector));
 
+        Constraints::solveConstraints(pwv, j, pwm, lambda);
 
-        float coefRest = 0.5f;
-        float mu = 0.3f;
-        if(std::abs(sfVectorMath::dot(relVel, contactNorm)) < 5.0f)
-        {
-            coefRest = coefRest * pow(std::abs(sfVectorMath::dot(relVel, contactNorm)) / 5.0f, 1);
-            //std::cout << coefRest << " coef\n";
-        }
-        //std::cout << contactNorm << "\n";
-        sf::Vector2f contactTangent = relVel - sfVectorMath::dot(relVel, contactNorm)*contactNorm;
-        if(sfVectorMath::square(contactTangent) > 0.0f)
-            contactTangent = sfVectorMath::norm(contactTangent);
+        obj1->setVelocity(pwv.v1);
+        obj1->setRotRate(pwv.w1);
+        obj2->setVelocity(pwv.v2);
+        obj2->setRotRate(pwv.w2);
 
-
-
-        //std::cout << contactNorm << " n\n";
-        //std::cout << contactTangent << " t\n";
-
-        float j = 0.0f;
-        float jt = 0.0f;
-
-        sf::Vector2f resVectorA = sf::Vector2f{0.0f, 0.0f};
-        sf::Vector2f resVectorB = sf::Vector2f{0.0f, 0.0f};
-
-        float IA = obj1->getMomentInertia();
-        float IB = obj2->getMomentInertia();
-
-        for(unsigned int i=0; i<collisionPoints.size(); ++i)
-        {
-            sf::Vector2f rA = collisionPoints[i] - obj1->getCoM();
-
-            sf::Vector2f rB = collisionPoints[i] - obj2->getCoM();
-
-            resVectorA += rA;
-            resVectorB += rB;
-            /*float cTermA = pow( sfVectorMath::cross(rA, contactNorm), 2 )/IA;
-            float cTermB = pow( sfVectorMath::cross(rB, contactNorm), 2 )/IB;
-
-            float denom = (1.0f/obj1->getMass() + 1.0f/obj2->getMass() + cTermA + cTermB);
-
-            j -= (1.0f+coefRest)*sfVectorMath::dot(relVel, contactNorm)/denom;
-
-            cTermA = pow( sfVectorMath::cross(rA, contactTangent), 2 )/IA;
-            cTermB = pow( sfVectorMath::cross(rB, contactTangent), 2 )/IB;
-
-            denom = (1.0f/obj1->getMass() + 1.0f/obj2->getMass() + cTermA + cTermB);
-
-            jt -= sfVectorMath::dot(relVel, contactTangent)/denom;*/
-
-        }
-        //resVectorA = resVectorA/static_cast<float>(collisionPoints.size());
-        //resVectorB = resVectorB/static_cast<float>(collisionPoints.size());
-
-        float cTermA = pow( sfVectorMath::cross(resVectorA, contactNorm), 2 )/IA;
-        float cTermB = pow( sfVectorMath::cross(resVectorB, contactNorm), 2 )/IB;
-
-        float denom = (1.0f/obj1->getMass() + 1.0f/obj2->getMass() + cTermA + cTermB);
-
-        j -= (1.0f+coefRest)*sfVectorMath::dot(relVel, contactNorm)/denom;
-
-        cTermA = pow( sfVectorMath::cross(resVectorA, contactTangent), 2 )/IA;
-        cTermB = pow( sfVectorMath::cross(resVectorB, contactTangent), 2 )/IB;
-
-        denom = (1.0f/obj1->getMass() + 1.0f/obj2->getMass() + cTermA + cTermB);
-
-        jt -= sfVectorMath::dot(relVel, contactTangent)/denom;
-
-        //j = j/static_cast<float>(collisionPoints.size());
-        //jt = jt/static_cast<float>(collisionPoints.size());
-
-        //std::cout << obj1->getCoM() << "CoM\n";
-        //std::cout << collisionPoints[0] << "cp\n";
-        //std::cout << resVectorA << "resA\n";
-
-        sf::Vector2f impulse = j*contactNorm;
-        sf::Vector2f frictionImpulse;
-
-        float dwA = 0.0f;
-        float dwB = 0.0f;
-
-        if(std::abs(jt) < j*mu)
-        {
-            frictionImpulse = jt * contactTangent;
-
-            dwA = sfVectorMath::cross(resVectorA, contactTangent) * jt / IA;
-            dwB = sfVectorMath::cross(resVectorB, contactTangent) * jt / IB;
-        }
-        else
-        {
-            frictionImpulse = -j * contactTangent * mu;
-
-            //std::cout << sfVectorMath::cross(resVectorA, contactTangent) << "rescrosstan\n";
-            dwA = -sfVectorMath::cross(resVectorA, contactTangent) * j * mu/ IA;
-            dwB = -sfVectorMath::cross(resVectorB, contactTangent) * j * mu/ IB;
-
-        }
-
-
-        //std::cout << frictionImpulse << "fric impulse\n";
-        //    std::cout << impulse << "impulse\n";
-        //std::cout << collisionPoints.size() << " cp\n";
-        /*if(std::isnan(impulse.x))
-        {
-            std::cout << frictionImpulse << "fric impulse\n";
-            std::cout << impulse << "impulse\n";
-            std::cout << relVel << "rel\n";
-            std::cout << collisionPoints.size() << " cp\n";
-            std::cout << contactNorm << " n\n";
-            std::cout << contactTangent << " t\n\n";
-            std::cout << denom << "denom\n";
-    std::cout << IA << " " << IB << "inertia\n\n";
-
-
-        }*/
-
-        dwA += sfVectorMath::cross(resVectorA, contactNorm) * j / IA;
-        dwB += sfVectorMath::cross(resVectorB, contactNorm) * j / IB;
-
-        /*if(std::abs(sfVectorMath::dot(relVel, contactNorm)) < 1.0f)
-        {
-            std::cout << "slow\n";
-            obj1->setRotRate(0.0f);
-            obj2->setRotRate(0.0f);
-        }*/
-        //std::cout << impulse << " impulse\n";
-        //std::cout << obj1->getVelocity() << " vel\n";
-        //std::cout << collisionPoints.size() << " cp\n\n";
-
-        sf::CircleShape circ1{2.5f};
-        circ1.setPosition(obj1->getCoM());
-        circ1.setOrigin({1.25f, 1.25f});
-        circ1.setFillColor(sf::Color::Red);
-        debugWindow->draw(circ1);
-
-        obj1->addSolvedVelocity((impulse + frictionImpulse)/obj1->getMass(),
-                                 (impulse + frictionImpulse)/obj1->getMass());
-        obj2->addSolvedVelocity(-(impulse + frictionImpulse)/obj2->getMass(),
-                                 -(impulse + frictionImpulse)/obj2->getMass());
-
-
-        //std::cout << obj1->getMomentInertia() << "\n";
-        //if(std::abs(dwA) > 1e-4)
-            obj1->addRotRate(dwA);
-        //if(std::abs(dwB) > 1e-4)
-            obj2->addRotRate(-dwB);
     }
     else
         std::cout << "noCPs\n";

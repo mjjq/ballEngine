@@ -13,7 +13,7 @@
 sf::Vector2f Collisions::calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball)
 {
     float distance = sfVectorMath::dot( (ball.getPosition() - rayStart), rayNorm );
-    float penetDistance = -1.0f*std::abs(distance - ball.getRadius());
+    float penetDistance = distance - ball.getRadius();
     //if(penetDistance >= 0.0f)
     //    return sf::Vector2f{0.0f,0.0f};
     return rayNorm*(penetDistance-0.01f);
