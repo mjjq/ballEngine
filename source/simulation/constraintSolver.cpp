@@ -30,7 +30,8 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
                                                         PhysicsObject &p2,
                                                          sf::Vector2f contactPoint,
                                                          sf::Vector2f normal,
-                                                         sf::Vector2f penetVector)
+                                                         sf::Vector2f penetVector,
+                                                         sf::Vector2f relVel)
 {
     CStructs::Constraint c;
     normal = -normal;
@@ -43,7 +44,6 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
     c.lambdaMin = 0.0f;
     c.lambdaMax = 1e+15;
 
-    sf::Vector2f relVel = p2.getVelocity() - p1.getVelocity();
     c.bias = 0.5f * sfVectorMath::dot(relVel, normal);
 
     //float baumGarte = sfVectorMath::dot(penetVector, normal);

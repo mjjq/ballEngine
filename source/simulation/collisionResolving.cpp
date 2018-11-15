@@ -611,11 +611,11 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
 
         for(sf::Vector2f &collPoint : collisionPoints)
         {
-            sf::Vector2f relVel = obj1->getVelocity() - obj2->getVelocity();
+            sf::Vector2f relVel = obj2->getVelocity() - obj1->getVelocity();
 
             sf::Vector2f rA = collPoint - obj1->getCoM();
             sf::Vector2f rB = collPoint - obj2->getCoM();
-            relVel += Collisions::orthogonal(rA, obj1->getRotRate()) -
+            relVel -= Collisions::orthogonal(rA, obj1->getRotRate()) -
                         Collisions::orthogonal(rB, obj2->getRotRate());
 
             //relVel = -relVel;
@@ -626,7 +626,8 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
             j.push_back(Constraints::makeContactConstraint(*obj1,
                                                            *obj2,
                                                            collPoint,
-                                                           contactNorm, penetVector));
+                                                           contactNorm,
+                                                           penetVector, relVel));
 
             j.push_back(Constraints::makeFrictionConstraint(*obj1,
                                                             *obj2,
