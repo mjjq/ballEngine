@@ -22,12 +22,12 @@
         assert(!ResolveFunctionTable[o1type][o2type]); \
         ResolveFunctionTable[o1type][o2type] = \
             [](PhysicsObject* p1, PhysicsObject* p2) { \
-                    (*fn)(static_cast<o1*>(p1), static_cast<o2*>(p2)); \
+                    return (*fn)(static_cast<o1*>(p1), static_cast<o2*>(p2)); \
             }; \
         return true; \
     }();
 
-std::function<void(PhysicsObject*,PhysicsObject*)>
+std::function<std::vector<Contact>(PhysicsObject*,PhysicsObject*)>
     ResolveFunctionTable[(int)(ObjectType::_Count)][(int)(ObjectType::_Count)];
 REGISTER_RESOLVE_FUNCTION(Ball, Ball, &Collisions::collisionBallBall)
 REGISTER_RESOLVE_FUNCTION(Ball, AABB, &Collisions::collisionBallAABB)
@@ -39,7 +39,7 @@ REGISTER_RESOLVE_FUNCTION(Ball, Polygon,   &Collisions::collisionBallPoly)
 REGISTER_RESOLVE_FUNCTION(Polygon, Polygon,   &Collisions::collisionPolyPoly)
 
 
-void Collisions::resolveCollision(PhysicsObject* p1, PhysicsObject* p2)
+std::vector<Contact> Collisions::resolveCollision(PhysicsObject* p1, PhysicsObject* p2)
 {
     int p1type = static_cast<int>(p1->type());
     int p2type = static_cast<int>(p2->type());
@@ -48,12 +48,17 @@ void Collisions::resolveCollision(PhysicsObject* p1, PhysicsObject* p2)
         std::swap(p1, p2);
     }
     assert(ResolveFunctionTable[p1type][p2type]);
-    ResolveFunctionTable[p1type][p2type](p1, p2);
+
+    std::vector<Contact> contResult;
+
+    contResult = ResolveFunctionTable[p1type][p2type](p1, p2);
+
+    return contResult;
 }
 
 
 
-void Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
+std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
 {
     using namespace sfVectorMath;
 
@@ -71,21 +76,26 @@ void Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
     sf::Vector2f penetVector2 = penetVector*m1/(m1+m2);
 
     ClippedPoints cp;
+    std::vector<Contact> contResult;
     cp.push_back(firstBall->getPosition() - rhat*firstBall->getRadius());
 
-    Collisions::applyImpulse(firstBall,
-                             secondBall,
-                             rhat,
-                             penetVector,
-                             cp);
-    //firstBall->setVelocity(v1 - coefRest*rhat*dot(v1-v2,rhat)*(2*m2)/(m1+m2));
-    //secondBall->setVelocity(v2 + coefRest*rhat*dot(v1-v2,rhat)*(2*m1)/(m1+m2));
+    float separation = sfVectorMath::dot(penetVector, rhat);
+    if(separation <= 0.0f)
+        for(int i=0; i<cp.size(); ++i)
+        {
+            Contact tempContact;
+            tempContact.normal = rhat;
+            tempContact.position = cp[i];
+            tempContact.rA = cp[i] - firstBall->getPosition();
+            tempContact.rB = cp[i] - secondBall->getPosition();
+            tempContact.separation = separation;
 
-    firstBall->incTimesCollided();
-    secondBall->incTimesCollided();
+            contResult.push_back(tempContact);
+        }
+    return contResult;
 }
 
-void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
+std::vector<Contact> Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
 {
     //std::cout << "Collisions\n";
     sf::Vector2f rBall = origBall->getPosition();
@@ -177,7 +187,7 @@ void Collisions::collisionBallAABB(Ball* origBall, AABB* origAABB)
 
 }
 
-void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
+std::vector<Contact> Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
 {
 
     sf::Vector2f v = rect1->getVelocity() - rect2->getVelocity();
@@ -263,7 +273,7 @@ void Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
     }
 }
 
-void Collisions::collisionBallOBB(Ball* ball, OBB* rect)
+std::vector<Contact> Collisions::collisionBallOBB(Ball* ball, OBB* rect)
 {
 
         float rotAngle = rect->getRotAngle();
@@ -302,7 +312,7 @@ void Collisions::collisionBallOBB(Ball* ball, OBB* rect)
         Collisions::applyImpulse(ball, rect, contactNorm, penetVector, cp);
 }
 
-void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
+std::vector<Contact> Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
 {
     std::vector<sf::Vertex > rect1Vert = rect1->constructVerts();
     std::vector<sf::Vertex > rect2Vert = rect2->constructVerts();
@@ -338,7 +348,7 @@ void Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
 
 }
 
-void Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
+std::vector<Contact> Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
 {
     std::vector<sf::Vertex > rectVert = rect->constructVerts();
     std::vector<sf::Vertex > polyVert = poly->constructVerts();
@@ -372,32 +382,38 @@ void Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
         Collisions::applyImpulse(rect, poly, -contactNorm, -penetVector, cp);
 }
 
-void Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
+std::vector<Contact> Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
 {
     std::pair<sf::Vector2f, sf::Vector2f> contact = Collisions::getContactNormal(ball, poly);
 
-    sf::Vector2f contactNorm = contact.first;
+    sf::Vector2f contactNorm = -contact.first;
     sf::Vector2f cornerPos = contact.second;
     sf::Vector2f penetVector = Collisions::calcPenetVector(cornerPos, contactNorm, *ball);
     //std::cout << penetVector << " pen\n";
 
-    sf::Vector2f contactPoint = ball->getPosition() - contactNorm*ball->getRadius();
+    sf::Vector2f contactPoint = ball->getPosition() + contactNorm*ball->getRadius();
     ClippedPoints cp;
     cp.push_back(contactPoint);
 
+    std::vector<Contact> contResult;
 
-    sf::CircleShape circ1{2.5f};
-    circ1.setPosition(contactPoint);
-    circ1.setOrigin({2.5f, 2.5f});
-    //std::cout << origPoly[vertexColl].position << "\n";
-    debugWindow->draw(circ1);
+    float separation = sfVectorMath::dot(penetVector, contactNorm);
+    if(separation <= 0.0f)
+        for(int i=0; i<cp.size(); ++i)
+        {
+            Contact tempContact;
+            tempContact.normal = contactNorm;
+            tempContact.position = cp[i];
+            tempContact.rA = cp[i] - ball->getPosition();
+            tempContact.rB = cp[i] - poly->getPosition();
+            tempContact.separation = separation;
 
-    //if(cp.size() > 0)
-        Collisions::applyImpulse(ball, poly, -contactNorm, -penetVector, cp);
-
+            contResult.push_back(tempContact);
+        }
+    return contResult;
 }
 
-void Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly2)
+std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly2)
 {
     std::vector<sf::Vertex > poly1Vert = poly1->constructVerts();
     std::vector<sf::Vertex > poly2Vert = poly2->constructVerts();
@@ -412,24 +428,36 @@ void Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly2)
 
     debugWindow->draw(quad1);
     debugWindow->draw(quad2);*/
+    std::vector<Contact> contResult;
 
-    sf::Vector2f penetVector = Collisions::sepAxisTest(poly1Vert, poly2Vert).second;
-    sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
+    std::pair<bool, sf::Vector2f> sepAxis = Collisions::sepAxisTest(poly1Vert, poly2Vert);
 
-    float redMass = 1.0f/(1.0f/poly1->getMass() + 1.0f/poly2->getMass());
-    penetVector += 0.1f*contactNorm;
+    if(sepAxis.first)
+    {
+        sf::Vector2f penetVector = sepAxis.second;
+        sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
 
-    ClippedPoints cp = Collisions::getContactPoints(poly1Vert, poly2Vert, contactNorm);
+        //std::cout << contactNorm << " hello\n";
+        //float redMass = 1.0f/(1.0f/poly1->getMass() + 1.0f/poly2->getMass());
+        //penetVector += 0.1f*contactNorm;
 
-    //sf::CircleShape circ1{2.0f};
-    //circ1.setPosition(*cp.begin());
-    //sf::CircleShape circ2{2.0f};
-    //circ2.setPosition(*cp.end());
+        ClippedPoints cp = Collisions::getContactPoints(poly1Vert, poly2Vert, contactNorm);
 
-    //debugWindow->draw(circ1);
-    //debugWindow->draw(circ2);
+        float separation = sfVectorMath::dot(penetVector, -contactNorm);
 
-    Collisions::applyImpulse(poly1, poly2, contactNorm, penetVector, cp);
+        for(int i=0; i<cp.size(); ++i)
+        {
+            Contact tempContact;
+            tempContact.normal = -contactNorm;
+            tempContact.position = cp[i];
+            tempContact.rA = cp[i] - poly1->getPosition();
+            tempContact.rB = cp[i] - poly2->getPosition();
+            tempContact.separation = separation;
+
+            contResult.push_back(tempContact);
+        }
+    }
+    return contResult;
 }
 
 
@@ -639,11 +667,11 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
             lambda.push_back(0.0f);
         }
         //std::cout << j.size() << "\n";
-        std::cout << pwv.v1 << " b4\n";
+        //std::cout << pwv.v1 << " b4\n";
 
         Constraints::solveConstraints(pwv, j, pwm, lambda);
 
-        std::cout << pwv.v1 << " aft\n";
+        //std::cout << pwv.v1 << " aft\n";
 
         obj1->setVelocity(pwv.v1);
         obj1->setRotRate(pwv.w1);

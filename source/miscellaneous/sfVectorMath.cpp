@@ -71,7 +71,7 @@ sf::Vector2f sfVectorMath::norm(sf::Vector2i vec1)
 */
 sf::Vector2f sfVectorMath::norm(sf::Vector2f vec1)
 {
-    sf::Vector2f normVec = static_cast<sf::Vector2f>(vec1)/static_cast<float>(pow(dot(vec1,vec1),0.5));
+    sf::Vector2f normVec = static_cast<sf::Vector2f>(vec1)/sqrtf(dot(vec1,vec1));
     return normVec;
 }
 

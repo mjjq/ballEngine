@@ -9,6 +9,9 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
+typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
+typedef std::pair<ArbiterKey, Arbiter> ArbPair;
+typedef std::vector<std::unique_ptr<PhysicsObject> > PhysObjectArray;
 
 void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass)
 {
@@ -221,9 +224,6 @@ void BallUniverse::updateAllObjects(bool _enableForces, float _dt)
             solution = integrators::verletMethod(_dt, uGravityDir);
             (*iter)->addSolvedVelocity(solution.first, solution.second);
         }
-
-    for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); iter++)
-        (*iter)->updatePosition(_dt);
 }
 
 /**
@@ -418,6 +418,9 @@ void BallUniverse::removeBall(int index)
 
         staticCollArray.removeEndRow();
     }
+
+    arbiters.clear();
+    broadPhase();
 }
 
 void BallUniverse::removeRect(int index)
@@ -441,74 +444,99 @@ void BallUniverse::removeRect(int index)
     }
 }
 
+void BallUniverse::broadPhase()
+{
+    for(unsigned int i=0; i<dynamicObjects.size(); ++i)
+    {
+        PhysicsObject* obji = dynamicObjects[i].get();
+
+        for(unsigned int j=i+1; j<dynamicObjects.size(); ++j)
+        {
+            //std::cout << i << " " << j << "\n";
+            PhysicsObject* objj = dynamicObjects[j].get();
+
+            Arbiter newArb(obji, objj);
+            ArbiterKey key(obji, objj);
+
+            if(newArb.numContacts > 0)
+            {
+                ArbIter iter = arbiters.find(key);
+
+                if(iter == arbiters.end())
+                {
+                    arbiters.insert(ArbPair(key, newArb));
+                }
+                else
+                    iter->second.update();
+            }
+            else
+                arbiters.erase(key);
+        }
+    }
+
+    for(unsigned int i=0; i<dynamicObjects.size(); ++i)
+    {
+        PhysicsObject* obji = dynamicObjects[i].get();
+
+        for(unsigned int j=0; j<staticObjects.size(); ++j)
+        {
+            PhysicsObject* objj = staticObjects[j].get();
+
+            Arbiter newArb(obji, objj);
+            ArbiterKey key(obji, objj);
+
+            if(newArb.numContacts > 0)
+            {
+                ArbIter iter = arbiters.find(key);
+
+                if(iter == arbiters.end())
+                {
+                    arbiters.insert(ArbPair(key, newArb));
+                }
+                else
+                    iter->second.update();
+            }
+            else
+                arbiters.erase(key);
+        }
+    }
+}
+
 float BallUniverse::physicsLoop()
 {
-        float dtR = dt;
-        float epsilon = 1e-5;
+    float dtR = dt;
+    float epsilon = 1e-5;
 
-        pushBall(playerInput, currentPlayer);
+    pushBall(playerInput, currentPlayer);
 
-        playerInput = {0,0};
+    playerInput = {0,0};
 
-        for(unsigned int i=0; i<dynamicObjects.size(); ++i)
+    for(unsigned int i=0; i<dynamicObjects.size(); ++i)
+    {
+        //dynamicObjects[i].resetToCollided();
+        checkForBounce(dynamicObjects[i].get());
+        //if( checkForBounce(dynamicObjects[i].get()) && enable_collisions)
+            //collTimeForBall(i);
+    }
+
+    broadPhase();
+
+    updateAllObjects(enable_forces, dt);
+
+    for (int i = 0; i < 10; ++i)
+    {
+        for (ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
         {
-            //dynamicObjects[i].resetToCollided();
-            if( checkForBounce(dynamicObjects[i].get()) && enable_collisions)
-                collTimeForBall(i);
+            arb->second.ApplyImpulse();
         }
+    }
+    //std::cout << "hello\n";
+    //std::cout << arbiters.size() <<"\n";
 
-        if(enable_collisions==true)
-        {
-            if(hasCollided==false || collAccumulator <= 0.0f)
-            {
-                calcCollTimes();
-                collAccumulator = dt;
-            }
+    for(unsigned int i=0; i<dynamicObjects.size(); ++i)
+        dynamicObjects[i].get()->updatePosition(dt);
 
-            else if(hasCollided==true)
-            {
-                collTimeForBall(collider2);
-                if(!collWithStatic)
-                    collTimeForBall(collider1);
-                hasCollided = false;
-            }
-
-            findShortestCollTime();
-
-        }
-
-        if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
-        {
-            //std::cout << timeToNextColl << "\n";
-            hasCollided = true;
-            dtR = timeToNextColl;
-            if(std::abs(dtR) > epsilon)
-                updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
-
-            colliderArray.addConstValue(-dtR);
-            staticCollArray.addConstValue(-dtR);
-
-            if(collWithStatic)
-            {
-                Collisions::resolveCollision(dynamicObjects[collider2].get(), staticObjects[collider1].get());
-                //dynamicObjects[collider2].get()->updatePosition(dt);
-            }
-
-
-            else if(collider1 != collider2)
-            {
-                Collisions::resolveCollision(dynamicObjects[collider1].get(), dynamicObjects[collider2].get());
-                //dynamicObjects[collider1].get()->updatePosition(dt);
-                //dynamicObjects[collider2].get()->updatePosition(dt);
-            }
-
-            timeToNextColl = 1e+15;
-        }
-        else
-            updateAllObjects(enable_forces, dt);
-
-        collAccumulator -= dtR;
-        return dtR;
+    return dt;
 }
 
 /*float BallUniverse::physicsLoopAbsorb()
@@ -849,6 +877,7 @@ void BallUniverse::clearSimulation()
     staticCollArray.clearMatrix();
     numOfBalls = 0;
     currentPlayer = -1;
+    arbiters.clear();
 }
 
 const int& BallUniverse::getWorldSizeX()

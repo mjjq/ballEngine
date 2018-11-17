@@ -6,6 +6,7 @@
 #include "classAABB.h"
 #include "classOBB.h"
 #include "classPolygon.h"
+#include "classArbiter.h"
 
 //typedef std::pair<sf::Vector2f, sf::Vector2f> Edge;
 struct Edge
@@ -48,15 +49,15 @@ public:
     static float timeToCollBallPoly(Ball* ball, Polygon* poly);
     static float timeToCollPolyPoly(Polygon* poly1, Polygon *poly2);
 
-    static void resolveCollision(PhysicsObject* p1, PhysicsObject* p2);
-    static void collisionBallBall(Ball* firstBall, Ball* secondBall);
-    static void collisionBallAABB(Ball* origBall, AABB* origAABB);
-    static void collisionAABBAABB(AABB* rect1, AABB* rect2);
-    static void collisionBallOBB(Ball* ball, OBB* rect);
-    static void collisionOBBOBB(OBB* rect1, OBB* rect2);
-    static void collisionOBBPoly(OBB *rect, Polygon *poly);
-    static void collisionBallPoly(Ball *ball, Polygon *poly);
-    static void collisionPolyPoly(Polygon* poly1, Polygon *poly2);
+    static std::vector<Contact> resolveCollision(PhysicsObject* p1, PhysicsObject* p2);
+    static std::vector<Contact> collisionBallBall(Ball* firstBall, Ball* secondBall);
+    static std::vector<Contact> collisionBallAABB(Ball* origBall, AABB* origAABB);
+    static std::vector<Contact> collisionAABBAABB(AABB* rect1, AABB* rect2);
+    static std::vector<Contact> collisionBallOBB(Ball* ball, OBB* rect);
+    static std::vector<Contact> collisionOBBOBB(OBB* rect1, OBB* rect2);
+    static std::vector<Contact> collisionOBBPoly(OBB *rect, Polygon *poly);
+    static std::vector<Contact> collisionBallPoly(Ball *ball, Polygon *poly);
+    static std::vector<Contact> collisionPolyPoly(Polygon* poly1, Polygon *poly2);
 
     static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
     static sf::Vector2f calcPenetVector(Ball* ball1, Ball* ball2);

@@ -48,7 +48,7 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
 
     float baumGarte = sfVectorMath::dot(penetVector, normal);
 
-    c.bias += 0.05f * baumGarte;
+    c.bias += 0.1f * baumGarte;
     /*std::cout << normal << "norm\n";
     std::cout << penetVector << "pen\n";
     std::cout << baumGarte << " bgarte\n";
@@ -92,8 +92,8 @@ void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
     {
         d.push_back(getDenom(j[i], pwm));
     }
-    for(int c=0; c<10; ++c)
-    {
+    //for(int c=0; c<10; ++c)
+    //{
         for(int i=0; i<d.size(); ++i)
         {
             float dlambda =  - (multiply(j[i], returnVel) + j[i].bias)/d[i];
@@ -114,7 +114,7 @@ void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
             //std::cout << returnVel.v1 << " after\n";
         }
         //std::cout << "iter1\n\n";
-    }
+    //}
     //std::cout << "iter2\n\n";
     //std::cout << returnVel.v1 << " after\n\n";
     //std::cout << returnVel.v2 << " v2\n";

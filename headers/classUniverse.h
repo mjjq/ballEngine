@@ -7,11 +7,13 @@
 #include "classPolygon.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
+#include "classArbiter.h"
 
 class BallUniverse
 {
     std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
     std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
+    std::map<ArbiterKey, Arbiter> arbiters;
 
     int worldSizeX;
     int worldSizeY;
@@ -62,7 +64,7 @@ class BallUniverse
 
     float physicsLoop();
     float physicsLoopAbsorb();
-
+    void broadPhase();
 
 public:
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);

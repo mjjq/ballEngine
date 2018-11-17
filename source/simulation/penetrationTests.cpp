@@ -95,7 +95,7 @@ sf::Vector2f Collisions::calcContactNorm(AABB &rect1, AABB &rect2)
 sf::Vector2f Collisions::calcPenetVector(Ball* ball1, Ball* ball2)
 {
     sf::Vector2f separationVec = ball2->getPosition() - ball1->getPosition();
-    float distance = sqrt( sfVectorMath::square(separationVec) );
+    float distance = sqrtf( sfVectorMath::square(separationVec) );
     float penetDistance =  distance - (ball1->getRadius() + ball2->getRadius());
     //std::cout << penetDistance << " pd\n";
 
