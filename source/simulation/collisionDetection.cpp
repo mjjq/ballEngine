@@ -125,7 +125,7 @@ float Collisions::timeToCollBallAABB(Ball* origBall, AABB* origAABB)
 
     if(origAABBRect.contains(r.x,r.y))
     {
-        return std::numeric_limits<float>::quiet_NaN();
+        //return std::numeric_limits<float>::quiet_NaN();
     }
 
     bool intersectCorner = false;

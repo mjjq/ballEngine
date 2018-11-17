@@ -12,11 +12,11 @@
 
 sf::Vector2f Collisions::calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball)
 {
-    float distance = sfVectorMath::dot( (ball.getPosition() - rayStart), rayNorm );
+    float distance = sfVectorMath::dot( (rayStart - ball.getPosition()), rayNorm );
     float penetDistance = distance - ball.getRadius();
     //if(penetDistance >= 0.0f)
     //    return sf::Vector2f{0.0f,0.0f};
-    return rayNorm*(penetDistance-0.01f);
+    return rayNorm*(penetDistance);
 }
 
 
@@ -94,9 +94,10 @@ sf::Vector2f Collisions::calcContactNorm(AABB &rect1, AABB &rect2)
 
 sf::Vector2f Collisions::calcPenetVector(Ball* ball1, Ball* ball2)
 {
-    sf::Vector2f separationVec = ball1->getPosition() - ball2->getPosition();
+    sf::Vector2f separationVec = ball2->getPosition() - ball1->getPosition();
     float distance = sqrt( sfVectorMath::square(separationVec) );
-    float penetDistance = -1.0f*std::abs( distance - (ball1->getRadius() + ball2->getRadius()) );
+    float penetDistance =  distance - (ball1->getRadius() + ball2->getRadius());
+    //std::cout << penetDistance << " pd\n";
 
-    return (separationVec/distance)*(penetDistance -0.001f*(ball1->getRadius() + ball2->getRadius()));
+    return (separationVec/distance)*(penetDistance);
 }

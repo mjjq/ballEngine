@@ -34,7 +34,7 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
                                                          sf::Vector2f relVel)
 {
     CStructs::Constraint c;
-    normal = -normal;
+    normal = normal;
     penetVector = penetVector;
 
     c.c1 = -normal;
@@ -46,11 +46,13 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
 
     c.bias = 0.5f * sfVectorMath::dot(relVel, normal);
 
-    //float baumGarte = sfVectorMath::dot(penetVector, normal);
-    //if(baumGarte < 0.0f)
-    //    c.bias += 0.1f * baumGarte;
-    //std::cout << normal << "\n";
-    //std::cout << penetVector << "\n";
+    float baumGarte = sfVectorMath::dot(penetVector, normal);
+
+    c.bias += 0.05f * baumGarte;
+    /*std::cout << normal << "norm\n";
+    std::cout << penetVector << "pen\n";
+    std::cout << baumGarte << " bgarte\n";
+    std::cout << c.bias << " cbias\n";*/
 
     return c;
 }
@@ -61,7 +63,7 @@ CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
                                                          sf::Vector2f tangent)
 {
     CStructs::Constraint c;
-    tangent = -tangent;
+    tangent = tangent;
 
     c.c1 = -tangent;
     c.cw1 = -sfVectorMath::cross(contactPoint - p1.getPosition(), tangent);
@@ -84,6 +86,7 @@ void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
                                 std::vector<float> &lambda)
 {
     std::vector<float> d;
+    //std::cout << returnVel.v1 << " before\n";
 
     for(int i=0; i<j.size(); ++i)
     {
@@ -95,19 +98,25 @@ void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
         {
             float dlambda =  - (multiply(j[i], returnVel) + j[i].bias)/d[i];
 
+            //std::cout << dlambda << "dlamb\n";
+
             float l0 = lambda[i];
             lambda[i] = std::max(j[i].lambdaMin, std::min(l0 + dlambda,
                                                           j[i].lambdaMax));
             dlambda = lambda[i] - l0;
             //if(dlambda > 0.0f)
 
+            //std::cout << returnVel.v1 << " before\n";
             returnVel.v1 = returnVel.v1 + dlambda * j[i].c1 / pwm.m1;
             returnVel.v2 = returnVel.v2 + dlambda * j[i].c2 / pwm.m2;
             returnVel.w1 = returnVel.w1 + dlambda * j[i].cw1 / pwm.i1;
             returnVel.w2 = returnVel.w2 + dlambda * j[i].cw2 / pwm.i2;
+            //std::cout << returnVel.v1 << " after\n";
         }
+        //std::cout << "iter1\n\n";
     }
-    //std::cout << returnVel.v1 << " v1\n";
+    //std::cout << "iter2\n\n";
+    //std::cout << returnVel.v1 << " after\n\n";
     //std::cout << returnVel.v2 << " v2\n";
 
 }
