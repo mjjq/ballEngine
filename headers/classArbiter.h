@@ -2,12 +2,20 @@
 #define CLASS_ARBITER_H
 #include <SFML/Graphics.hpp>
 #include "classPhysicsObject.h"
+#include "constraintSolver.h"
 
 struct Contact
 {
 	sf::Vector2f position;
 	sf::Vector2f normal;
 	sf::Vector2f rA, rB;
+
+	std::vector<CStructs::Constraint > jacobian;
+	std::vector<float > biasVector;
+
+	float lambdaN = 0.0f;
+	float lambdaT = 0.0f;
+
 	float separation;
 };
 
@@ -28,6 +36,8 @@ struct Arbiter
 	PhysicsObject* obj1;
 	PhysicsObject* obj2;
 
+	CStructs::PairWiseVel pwv;
+    CStructs::PairWiseMass pwm;
 	// Combined friction
 	float friction;
 };

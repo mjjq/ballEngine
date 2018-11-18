@@ -458,6 +458,7 @@ void BallUniverse::broadPhase()
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);
 
+
             if(newArb.numContacts > 0)
             {
                 ArbIter iter = arbiters.find(key);
@@ -523,6 +524,11 @@ float BallUniverse::physicsLoop()
 
     updateAllObjects(enable_forces, dt);
 
+    for(ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
+    {
+        arb->second.PreStep(1.0f/dt);
+    }
+
     for (int i = 0; i < 10; ++i)
     {
         for (ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
@@ -534,7 +540,9 @@ float BallUniverse::physicsLoop()
     //std::cout << arbiters.size() <<"\n";
 
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
+    {
         dynamicObjects[i].get()->updatePosition(dt);
+    }
 
     return dt;
 }

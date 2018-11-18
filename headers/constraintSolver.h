@@ -1,5 +1,5 @@
 #ifndef CONSOLVER_H
-#define CONSOLVER _H
+#define CONSOLVER_H
 
 #include <SFML/Graphics.hpp>
 #include "classPhysicsObject.h"

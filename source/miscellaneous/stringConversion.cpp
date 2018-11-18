@@ -35,6 +35,7 @@ std::ostream &operator << ( std::ostream& outs, const sf::Rect<T> &rect)
     return outs << "[(" << rect.left << ", " << rect.top << "), (" << rect.width << ", " << rect.height << ")]";
 }
 
+
 template <typename T>
 std::ostream &operator << ( std::ostream& outs, const Integrators &intType)
 {
