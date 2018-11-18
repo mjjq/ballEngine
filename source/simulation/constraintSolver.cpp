@@ -44,7 +44,7 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
     c.lambdaMin = 0.0f;
     c.lambdaMax = 1e+15;
 
-    c.bias = 0.0f * sfVectorMath::dot(relVel, normal);
+    c.bias = -0.0f * sfVectorMath::dot(relVel, normal);
 
     float baumGarte = sfVectorMath::dot(penetVector, normal);
 
@@ -60,7 +60,8 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
 CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
                                                          PhysicsObject &p2,
                                                          sf::Vector2f contactPoint,
-                                                         sf::Vector2f tangent)
+                                                         sf::Vector2f tangent,
+                                                         float frictionLimit)
 {
     CStructs::Constraint c;
     tangent = tangent;
@@ -69,7 +70,7 @@ CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
     c.cw1 = -sfVectorMath::cross(contactPoint - p1.getPosition(), tangent);
     c.c2 = tangent;
     c.cw2 = sfVectorMath::cross(contactPoint - p2.getPosition(), tangent);
-    c.lambdaMin = -1.0f*2.0f*9.8f;
+    c.lambdaMin = -1.0f*frictionLimit;
     c.lambdaMax = -c.lambdaMin;
     c.bias = 0.0f;
 

@@ -116,7 +116,7 @@ void Arbiter::ApplyImpulse()
         jacobian = Constraints::makeFrictionConstraint(*obj1,
                                    *obj2,
                                    tempCont.position,
-                                   tangent);
+                                   tangent, tempCont.lambdaN);
 
         Constraints::solveConstraints(pwv, jacobian, pwm, tempCont.lambdaT);
     }

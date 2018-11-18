@@ -49,7 +49,8 @@ public:
     static CStructs::Constraint makeFrictionConstraint(PhysicsObject &p1,
                                                        PhysicsObject &p2,
                                                         sf::Vector2f contactPoint,
-                                                        sf::Vector2f tangent);
+                                                        sf::Vector2f tangent,
+                                                        float frictionLimit);
 
     static void solveConstraints(CStructs::PairWiseVel &returnVel,
                                 CStructs::Constraint &j,

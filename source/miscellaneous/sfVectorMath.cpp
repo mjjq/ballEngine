@@ -86,8 +86,8 @@ sf::Vector2f sfVectorMath::norm(sf::Vector2f vec1)
 */
 sf::Vector2f sfVectorMath::rotate(sf::Vector2f vec1, float angleDegree)
 {
-    float vec1xprime = cos(PI * angleDegree / 180)*vec1.x - sin(PI * angleDegree / 180)*vec1.y;
-    float vec1yprime = sin(PI * angleDegree / 180)*vec1.x + cos(PI * angleDegree / 180)*vec1.y;
+    float vec1xprime = cosf(PI * angleDegree / 180.0f)*vec1.x - sinf(PI * angleDegree / 180.0f)*vec1.y;
+    float vec1yprime = sinf(PI * angleDegree / 180.0f)*vec1.x + cosf(PI * angleDegree / 180.0f)*vec1.y;
 
     return sf::Vector2f{vec1xprime,vec1yprime};
 }
