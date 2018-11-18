@@ -21,6 +21,7 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
          position.y + radius > worldSizeY))
     {
         std::unique_ptr<Ball > newBall = std::make_unique<Ball >(radius,mass,position,velocity);
+        std::cout << newBall.get() << "\n";
         dynamicObjects.push_back(std::move(newBall));
         numOfBalls++;
         //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
@@ -121,6 +122,7 @@ void BallUniverse::spawnNewPoly(std::vector<sf::Vertex> &vertices,
                                                      velocity,
                                                      rotation,
                                                      0.0f);
+                                                     std::cout << newPoly.get() << " polygon\n";
         dynamicObjects.push_back(std::move(newPoly));
 
         numOfBalls++;
@@ -151,8 +153,8 @@ void BallUniverse::spawnStaticPoly(std::vector<sf::Vertex> &vertices,
                                                      sf::Vector2f{0.0f, 0.0f},
                                                      rotation,
                                                      0.00f);
+        std::cout << newPoly.get() << " polygon\n";
         staticObjects.push_back(std::move(newPoly));
-
         staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(enable_collisions)
             calcCollTimes();
@@ -442,6 +444,9 @@ void BallUniverse::removeRect(int index)
         staticObjects.clear();
         staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
     }
+
+    arbiters.clear();
+    broadPhase();
 }
 
 void BallUniverse::broadPhase()

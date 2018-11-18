@@ -43,15 +43,25 @@ std::vector<Contact> Collisions::resolveCollision(PhysicsObject* p1, PhysicsObje
 {
     int p1type = static_cast<int>(p1->type());
     int p2type = static_cast<int>(p2->type());
+    bool swapState = false;
     if(p1type > p2type) {
         std::swap(p1type, p2type);
         std::swap(p1, p2);
+        swapState = true;
     }
     assert(ResolveFunctionTable[p1type][p2type]);
 
     std::vector<Contact> contResult;
 
     contResult = ResolveFunctionTable[p1type][p2type](p1, p2);
+
+    if(swapState)
+    {
+        for(Contact &temp : contResult)
+        {
+            temp.normal = -temp.normal;
+        }
+    }
 
     return contResult;
 }
@@ -669,7 +679,7 @@ void Collisions::applyImpulse(PhysicsObject *obj1,
         //std::cout << j.size() << "\n";
         //std::cout << pwv.v1 << " b4\n";
 
-        Constraints::solveConstraints(pwv, j, pwm, lambda);
+        //Constraints::solveConstraints(pwv, j, pwm, lambda);
 
         //std::cout << pwv.v1 << " aft\n";
 

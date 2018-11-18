@@ -50,7 +50,7 @@ void Arbiter::PreStep(float inv_dt)
 {
 
 
-    for(Contact &tempCont : contacts)
+    /*for(Contact &tempCont : contacts)
     {
         tempCont.jacobian.clear();
 
@@ -62,7 +62,7 @@ void Arbiter::PreStep(float inv_dt)
 
 
         //tempCont.biasVector.push_back()
-    }
+    }*/
 
     pwv.v1 = obj1->getVelocity();
     pwv.v2 = obj2->getVelocity();
@@ -88,14 +88,37 @@ void Arbiter::ApplyImpulse()
 
         if(sfVectorMath::square(tangent) > 0.0f)
             tangent = sfVectorMath::norm(tangent);
+        else
+            tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);
 
-        //tempCont.jacobian[0].
+        CStructs::Constraint jacobian = (Constraints::makeContactConstraint(*obj1,
+                                   *obj2,
+                                   tempCont.position,
+                                   tempCont.normal,
+                                   tempCont.separation*tempCont.normal, relVel));
 
-        std::vector<float > lambda = {tempCont.lambdaN};
-         //std::cout << pwv.v1 << " " << obj1 << " " << obj2 << "b4\n";
-        Constraints::solveConstraints(pwv, tempCont.jacobian, pwm, lambda);
-        tempCont.lambdaN = lambda[0];
-        // std::cout << pwv.v1 << " " << obj1 << " " << obj2 << "aft\n\n";
+        Constraints::solveConstraints(pwv, jacobian, pwm, tempCont.lambdaN);
+
+
+
+        relVel = pwv.v2 - pwv.v1;
+
+        relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
+                    Collisions::orthogonal(tempCont.rB, pwv.w2);
+
+        tangent = relVel - sfVectorMath::dot(relVel, tempCont.normal)*tempCont.normal;
+
+        if(sfVectorMath::square(tangent) > 0.0f)
+            tangent = sfVectorMath::norm(tangent);
+        else
+            tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);
+
+        jacobian = Constraints::makeFrictionConstraint(*obj1,
+                                   *obj2,
+                                   tempCont.position,
+                                   tangent);
+
+        Constraints::solveConstraints(pwv, jacobian, pwm, tempCont.lambdaT);
     }
 
     obj1->setVelocity(pwv.v1);

@@ -81,44 +81,22 @@ CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
 
 
 void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
-                                std::vector<CStructs::Constraint> &j,
+                                CStructs::Constraint &j,
                                 CStructs::PairWiseMass &pwm,
-                                std::vector<float> &lambda)
+                                float &lambda)
 {
-    std::vector<float> d;
-    //std::cout << returnVel.v1 << " before\n";
+    float d = getDenom(j, pwm);
 
-    for(int i=0; i<j.size(); ++i)
-    {
-        d.push_back(getDenom(j[i], pwm));
-    }
-    //for(int c=0; c<10; ++c)
-    //{
-        for(int i=0; i<d.size(); ++i)
-        {
-            float dlambda =  - (multiply(j[i], returnVel) + j[i].bias)/d[i];
+    float dlambda =  - (multiply(j, returnVel) + j.bias)/d;
 
-            //std::cout << dlambda << "dlamb\n";
+    float l0 = lambda;
+    lambda = std::max(j.lambdaMin, std::min(l0 + dlambda,
+                                                  j.lambdaMax));
+    dlambda = lambda - l0;
 
-            float l0 = lambda[i];
-            lambda[i] = std::max(j[i].lambdaMin, std::min(l0 + dlambda,
-                                                          j[i].lambdaMax));
-            dlambda = lambda[i] - l0;
-            //if(dlambda > 0.0f)
-
-            //std::cout << returnVel.v1 << " before\n";
-            returnVel.v1 = returnVel.v1 + dlambda * j[i].c1 / pwm.m1;
-            returnVel.v2 = returnVel.v2 + dlambda * j[i].c2 / pwm.m2;
-            returnVel.w1 = returnVel.w1 + dlambda * j[i].cw1 / pwm.i1;
-            returnVel.w2 = returnVel.w2 + dlambda * j[i].cw2 / pwm.i2;
-
-            //std::cout << dlambda << " dlamb\n";
-            //std::cout << returnVel.v1 << " after\n";
-        }
-        //std::cout << "iter1\n\n";
-    //}
-    //std::cout << "iter2\n\n";
-    //std::cout << returnVel.v1 << " after\n\n";
-    //std::cout << returnVel.v2 << " v2\n";
+    returnVel.v1 = returnVel.v1 + dlambda * j.c1 / pwm.m1;
+    returnVel.v2 = returnVel.v2 + dlambda * j.c2 / pwm.m2;
+    returnVel.w1 = returnVel.w1 + dlambda * j.cw1 / pwm.i1;
+    returnVel.w2 = returnVel.w2 + dlambda * j.cw2 / pwm.i2;
 
 }

@@ -32,7 +32,6 @@ namespace CStructs
         float m2;
         float i2;
     };
-
 }
 
 class Constraints
@@ -53,9 +52,9 @@ public:
                                                         sf::Vector2f tangent);
 
     static void solveConstraints(CStructs::PairWiseVel &returnVel,
-                                std::vector<CStructs::Constraint> &j,
+                                CStructs::Constraint &j,
                                 CStructs::PairWiseMass &pwm,
-                                std::vector<float> &lambda);
+                                float &lambda);
 };
 
 
