@@ -461,20 +461,35 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
     if(sepAxis.first)
     {
         sf::Vector2f penetVector = sepAxis.second;
-        sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
+        sf::Vector2f contactNorm = -sfVectorMath::norm(penetVector);
 
+        std::cout << contactNorm << "\n";
         //std::cout << contactNorm << " hello\n";
         //float redMass = 1.0f/(1.0f/poly1->getMass() + 1.0f/poly2->getMass());
         //penetVector += 0.1f*contactNorm;
 
         ClippedPoints cp = Collisions::getContactPoints(poly1Vert, poly2Vert, contactNorm);
 
-        float separation = sfVectorMath::dot(penetVector, -contactNorm);
+        /*sf::CircleShape circ1{2.0f};
+        circ1.setPosition(*cp.begin());
+        sf::CircleShape circ2{2.0f};
+        circ2.setPosition(*cp.end());*/
+        sf::CircleShape circ3{5.0f};
+        circ3.setPosition(poly1->getPosition());
+
+        //debugWindow->draw(circ1);
+        //debugWindow->draw(circ2);
+        debugWindow->draw(circ3);
+
+        float separation = sfVectorMath::dot(penetVector, contactNorm);
+
+        std::cout << separation << "\n";
+        std::cout << cp.size() << "\n";
 
         for(int i=0; i<cp.size(); ++i)
         {
             Contact tempContact;
-            tempContact.normal = -contactNorm;
+            tempContact.normal = contactNorm;
             tempContact.position = cp[i];
             tempContact.rA = cp[i] - poly1->getPosition();
             tempContact.rB = cp[i] - poly2->getPosition();

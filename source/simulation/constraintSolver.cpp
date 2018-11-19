@@ -44,7 +44,7 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
     c.lambdaMin = 0.0f;
     c.lambdaMax = 1e+15;
 
-    c.bias = 0.0f * sfVectorMath::dot(relVel, normal);
+    c.bias = -0.0f * sfVectorMath::dot(relVel, normal);
 
     float baumGarte = sfVectorMath::dot(penetVector, normal);
 

@@ -15,26 +15,17 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
                                                         sf::Vector2f contactNormal)
 {
     //contactNormal = -contactNormal;
-    Edge edge1 = Collisions::getBestEdge(obj1, -contactNormal);
-    Edge edge2 = Collisions::getBestEdge(obj2, contactNormal);
+    Edge edge1 = Collisions::getBestEdge(obj1, contactNormal);
+    Edge edge2 = Collisions::getBestEdge(obj2, -contactNormal);
 
     //std::cout << contactNormal << "\n";
 
-    sf::Vertex line1[] = {
-        sf::Vertex(edge1.v1),
-        sf::Vertex(edge1.v2)
-    };
-    sf::Vertex line2[] = {
-        sf::Vertex(edge2.v1),
-        sf::Vertex(edge2.v2)
-    };
-    debugWindow->draw(line1, 2, sf::Lines);
-    debugWindow->draw(line2, 2, sf::Lines);
+
 
     bool flip = false;
     Edge refEdge;
     Edge incEdge;
-    /*if(std::abs(sfVectorMath::dot(edge1.dir, contactNormal)) <=
+    if(std::abs(sfVectorMath::dot(edge1.dir, contactNormal)) <=
        std::abs(sfVectorMath::dot(edge2.dir, contactNormal)))
     {
         refEdge = edge1;
@@ -45,14 +36,25 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
         refEdge = edge2;
         incEdge = edge1;
 
-        flip = true;
-    }*/
+        //flip = true;
+        std::cout << "flip\n";
+    }
 
-    refEdge = edge2;
-    incEdge = edge1;
-    flip = true;
+    //refEdge = edge1;
+    //incEdge = edge2;
+    //flip = true;
     //std::cout << refEdge.v1 << " v1\n";
    // std::cout << refEdge.v2 << " v2\n";
+   sf::Vertex line1[] = {
+        sf::Vertex(edge1.v1),
+        sf::Vertex(edge1.v2)
+    };
+    /*sf::Vertex line2[] = {
+        sf::Vertex(edge2.v1),
+        sf::Vertex(edge2.v2)
+    };*/
+    debugWindow->draw(line1, 2, sf::Lines);
+    //debugWindow->draw(line2, 2, sf::Lines);
 
 
     sf::Vector2f refDir = sfVectorMath::norm(refEdge.dir);
@@ -88,12 +90,12 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
 
     ClippedPoints cpFinal;
 
-    if(sfVectorMath::dot(refNorm, cp[0]) - maxD <= 0.0f)
+    if(sfVectorMath::dot(refNorm, cp[0]) - maxD > 0.0f)
     {
         cpFinal.push_back(cp[0]);
         //std::cout << "cp0 true\n";
     }
-    if(sfVectorMath::dot(refNorm, cp[1]) - maxD <= 0.0f)
+    if(sfVectorMath::dot(refNorm, cp[1]) - maxD > 0.0f)
     {
         cpFinal.push_back(cp[1]);
         //std::cout << "cp1 true\n";
