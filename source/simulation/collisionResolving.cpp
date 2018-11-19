@@ -87,7 +87,15 @@ std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* second
 
     ClippedPoints cp;
     std::vector<Contact> contResult;
-    cp.push_back(firstBall->getPosition() - rhat*firstBall->getRadius());
+    cp.push_back(firstBall->getPosition() + rhat*firstBall->getRadius());
+
+    sf::CircleShape circ1{2.0f};
+    circ1.setPosition(cp[0]);
+    //sf::CircleShape circ2{2.0f};
+    //circ2.setPosition(*cp.end());
+
+    debugWindow->draw(circ1);
+    //debugWindow->draw(circ2);
 
     float separation = sfVectorMath::dot(penetVector, rhat);
     if(separation <= 0.0f)
