@@ -35,6 +35,7 @@
 		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classAABB.h" />
+		<Unit filename="headers/classArbiter.h" />
 		<Unit filename="headers/classBall.h" />
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classKeyBinds.h" />
@@ -56,6 +57,7 @@
 		<Unit filename="headers/classUIWindow.h" />
 		<Unit filename="headers/classUniverse.h" />
 		<Unit filename="headers/collisionDetection.h" />
+		<Unit filename="headers/constraintSolver.h" />
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/jsonParsing.h" />
@@ -89,6 +91,7 @@
 		<Unit filename="source/miscellaneous/stringConversion.cpp" />
 		<Unit filename="source/miscellaneous/structs.cpp" />
 		<Unit filename="source/simulation/classAABB.cpp" />
+		<Unit filename="source/simulation/classArbiter.cpp" />
 		<Unit filename="source/simulation/classBall.cpp" />
 		<Unit filename="source/simulation/classOBB.cpp" />
 		<Unit filename="source/simulation/classPhysicsObject.cpp" />
@@ -96,6 +99,7 @@
 		<Unit filename="source/simulation/classUniverse.cpp" />
 		<Unit filename="source/simulation/collisionDetection.cpp" />
 		<Unit filename="source/simulation/collisionResolving.cpp" />
+		<Unit filename="source/simulation/constraintSolver.cpp" />
 		<Unit filename="source/simulation/contactPoints.cpp" />
 		<Unit filename="source/simulation/forces.cpp" />
 		<Unit filename="source/simulation/integrators.cpp" />
