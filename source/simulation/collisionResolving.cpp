@@ -405,6 +405,14 @@ std::vector<Contact> Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
     ClippedPoints cp;
     cp.push_back(contactPoint);
 
+    //sf::CircleShape circ1{2.0f};
+    //circ1.setPosition(contactPoint);
+    //sf::CircleShape circ2{2.0f};
+    //circ2.setPosition(*cp.end());
+
+    //debugWindow->draw(circ1);
+    //debugWindow->draw(circ2);
+
     std::vector<Contact> contResult;
 
     float separation = sfVectorMath::dot(penetVector, contactNorm);
@@ -589,32 +597,33 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
 
         theVertex = i;
 
-        if(vertDistSq < ballRad*ballRad)
+        /*if(vertDistSq < ballRad*ballRad)
         {
+            std::cout << "earlyexit\n";
             return std::make_pair(sfVectorMath::norm(relPos), verts[i].position);
-        }
+        }*/
 
-        if(std::abs(normDist) <= distance && normDist >= 0.0f)
+        if(std::abs(normDist) <= distance)// && normDist >= 0.0f)
         {
             if(tanDist >= 0.0f && tanDist*tanDist <= segDistSq)
             {
-                distance = normDist;
+                distance = std::abs(normDist);
                 edgeNorm = norm;
                 cornerPos = verts[i].position;
                 touchCorner = false;
 
             }
         }
-        if(vertDistSq <= minVertDistSq)
+        if(vertDistSq <= distance*distance)
         {
-            minVertDistSq = vertDistSq;
+            distance = sqrtf(vertDistSq);
             cornerPosVert = verts[i].position;
             edgeNormVert = sfVectorMath::norm(ball->getPosition() -
                                       cornerPosVert);
+            touchCorner = true;
         }
 
     }
-
     if(!touchCorner)
         return std::make_pair(sfVectorMath::norm(edgeNorm), cornerPos);
 
