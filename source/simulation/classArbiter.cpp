@@ -65,7 +65,7 @@ void Arbiter::PreStep(float inv_dt)
 
         float restitution = 0.0f * sfVectorMath::dot(relVel, tempCont.normal);
 
-        float baumGarte = tempCont.separation;
+        float baumGarte = tempCont.separation * inv_dt;
 
         tempCont.bias = 0.1f * baumGarte + restitution;
     }
@@ -81,18 +81,6 @@ void Arbiter::ApplyImpulse()
 
     for(Contact &tempCont : contacts)
     {
-        /*sf::Vector2f relVel = pwv.v2 - pwv.v1;
-
-        relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
-                    Collisions::orthogonal(tempCont.rB, pwv.w2);
-
-        sf::Vector2f tangent = relVel - sfVectorMath::dot(relVel, tempCont.normal)*tempCont.normal;
-
-        if(sfVectorMath::square(tangent) > 0.0f)
-            tangent = sfVectorMath::norm(tangent);
-        else
-            tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);*/
-
         CStructs::Constraint jacobian = (Constraints::makeContactConstraint(*obj1,
                                    *obj2,
                                    tempCont.position,
@@ -100,22 +88,6 @@ void Arbiter::ApplyImpulse()
                                    tempCont.bias));
 
         Constraints::solveConstraints(pwv, jacobian, pwm, tempCont.lambdaN);
-
-
-
-        /*sf::Vector2f relVel = pwv.v2 - pwv.v1;
-
-        relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
-                    Collisions::orthogonal(tempCont.rB, pwv.w2);
-
-        sf::Vector2f tangent = relVel - sfVectorMath::dot(relVel, tempCont.normal)*tempCont.normal;
-
-        if(sfVectorMath::square(tangent) > 0.0f)
-            tangent = sfVectorMath::norm(tangent);
-        else
-            tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);*/
-
-        //tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);
 
         jacobian = Constraints::makeFrictionConstraint(*obj1,
                                    *obj2,
