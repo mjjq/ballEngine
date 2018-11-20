@@ -49,25 +49,27 @@ void Arbiter::update()
 void Arbiter::PreStep(float inv_dt)
 {
 
-
-    /*for(Contact &tempCont : contacts)
-    {
-        tempCont.jacobian.clear();
-
-        tempCont.jacobian.push_back(Constraints::makeContactConstraint(*obj1,
-                                   *obj2,
-                                   tempCont.position,
-                                   tempCont.normal,
-                                   tempCont.separation*tempCont.normal*inv_dt, {0.0f, 0.0f}));
-
-
-        //tempCont.biasVector.push_back()
-    }*/
-
     pwv.v1 = obj1->getVelocity();
     pwv.v2 = obj2->getVelocity();
     pwv.w1 = obj1->getRotRate();
     pwv.w2 = obj2->getRotRate();
+
+    for(Contact &tempCont : contacts)
+    {
+        tempCont.tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);
+
+        sf::Vector2f relVel = pwv.v2 - pwv.v1;
+
+        relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
+                    Collisions::orthogonal(tempCont.rB, pwv.w2);
+
+        float restitution = 0.0f * sfVectorMath::dot(relVel, tempCont.normal);
+
+        float baumGarte = tempCont.separation;
+
+        tempCont.bias = 0.1f * baumGarte + restitution;
+    }
+
 }
 
 void Arbiter::ApplyImpulse()
@@ -79,7 +81,7 @@ void Arbiter::ApplyImpulse()
 
     for(Contact &tempCont : contacts)
     {
-        sf::Vector2f relVel = pwv.v2 - pwv.v1;
+        /*sf::Vector2f relVel = pwv.v2 - pwv.v1;
 
         relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
                     Collisions::orthogonal(tempCont.rB, pwv.w2);
@@ -89,34 +91,36 @@ void Arbiter::ApplyImpulse()
         if(sfVectorMath::square(tangent) > 0.0f)
             tangent = sfVectorMath::norm(tangent);
         else
-            tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);
+            tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);*/
 
         CStructs::Constraint jacobian = (Constraints::makeContactConstraint(*obj1,
                                    *obj2,
                                    tempCont.position,
                                    tempCont.normal,
-                                   tempCont.separation*tempCont.normal, relVel));
+                                   tempCont.bias));
 
         Constraints::solveConstraints(pwv, jacobian, pwm, tempCont.lambdaN);
 
 
 
-        relVel = pwv.v2 - pwv.v1;
+        /*sf::Vector2f relVel = pwv.v2 - pwv.v1;
 
         relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
                     Collisions::orthogonal(tempCont.rB, pwv.w2);
 
-        tangent = relVel - sfVectorMath::dot(relVel, tempCont.normal)*tempCont.normal;
+        sf::Vector2f tangent = relVel - sfVectorMath::dot(relVel, tempCont.normal)*tempCont.normal;
 
         if(sfVectorMath::square(tangent) > 0.0f)
             tangent = sfVectorMath::norm(tangent);
         else
-            tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);
+            tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);*/
+
+        //tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);
 
         jacobian = Constraints::makeFrictionConstraint(*obj1,
                                    *obj2,
                                    tempCont.position,
-                                   tangent, tempCont.lambdaN);
+                                   tempCont.tangent, tempCont.lambdaN);
 
         Constraints::solveConstraints(pwv, jacobian, pwm, tempCont.lambdaT);
     }

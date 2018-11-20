@@ -8,10 +8,13 @@ struct Contact
 {
 	sf::Vector2f position;
 	sf::Vector2f normal;
+	sf::Vector2f tangent;
 	sf::Vector2f rA, rB;
 
-	std::vector<CStructs::Constraint > jacobian;
-	std::vector<float > biasVector;
+	CStructs::Constraint jacobianN;
+	CStructs::Constraint jacobianF;
+
+	float bias;
 
 	float lambdaN = 0.0f;
 	float lambdaT = 0.0f;

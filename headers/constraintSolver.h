@@ -46,11 +46,21 @@ public:
                                                      sf::Vector2f normal,
                                                      sf::Vector2f penetVector,
                                                      sf::Vector2f relVel);
+
+    static CStructs::Constraint makeContactConstraint(PhysicsObject &p1,
+                                                        PhysicsObject &p2,
+                                                         sf::Vector2f contactPoint,
+                                                         sf::Vector2f normal,
+                                                         float bias);
+
+
     static CStructs::Constraint makeFrictionConstraint(PhysicsObject &p1,
                                                        PhysicsObject &p2,
                                                         sf::Vector2f contactPoint,
                                                         sf::Vector2f tangent,
                                                         float frictionLimit);
+
+
 
     static void solveConstraints(CStructs::PairWiseVel &returnVel,
                                 CStructs::Constraint &j,

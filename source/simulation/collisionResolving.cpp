@@ -463,7 +463,6 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
         sf::Vector2f penetVector = sepAxis.second;
         sf::Vector2f contactNorm = -sfVectorMath::norm(penetVector);
 
-        std::cout << contactNorm << "\n";
         //std::cout << contactNorm << " hello\n";
         //float redMass = 1.0f/(1.0f/poly1->getMass() + 1.0f/poly2->getMass());
         //penetVector += 0.1f*contactNorm;
@@ -482,9 +481,6 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
         debugWindow->draw(circ3);
 
         float separation = sfVectorMath::dot(penetVector, contactNorm);
-
-        std::cout << separation << "\n";
-        std::cout << cp.size() << "\n";
 
         for(int i=0; i<cp.size(); ++i)
         {

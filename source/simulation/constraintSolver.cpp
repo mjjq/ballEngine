@@ -57,6 +57,27 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
     return c;
 }
 
+
+CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
+                                                        PhysicsObject &p2,
+                                                         sf::Vector2f contactPoint,
+                                                         sf::Vector2f normal,
+                                                         float bias)
+{
+    CStructs::Constraint c;
+
+    c.c1 = -normal;
+    c.cw1 = -sfVectorMath::cross(contactPoint - p1.getPosition(), normal);
+    c.c2 = normal;
+    c.cw2 = sfVectorMath::cross(contactPoint - p2.getPosition(), normal);
+    c.lambdaMin = 0.0f;
+    c.lambdaMax = 1e+15;
+
+    c.bias = bias;
+
+    return c;
+}
+
 CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
                                                          PhysicsObject &p2,
                                                          sf::Vector2f contactPoint,

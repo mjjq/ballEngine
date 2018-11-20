@@ -37,7 +37,7 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
         incEdge = edge1;
 
         //flip = true;
-        std::cout << "flip\n";
+        //std::cout << "flip\n";
     }
 
     //refEdge = edge1;
