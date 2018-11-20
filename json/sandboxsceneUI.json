@@ -3,13 +3,13 @@
     {
         "position" : [0.0, 0.15],
         "posoffset" : [0, 0],
-        "dimensions" : [250, 280],
+        "dimensions" : [250, 330],
         "draggable" : false,
         "fixedtowindow" : true,
 
         "Buttons" : [
         {
-            "position" : [15, 200],
+            "position" : [15, 250],
             "dimensions"  : [60, 30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -17,7 +17,7 @@
             "function" : "incMass"
         },
         {
-            "position" : [95,200],
+            "position" : [95,250],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -25,7 +25,7 @@
             "function" : "decMass"
         },
         {
-            "position" : [175,200],
+            "position" : [175,250],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -33,7 +33,7 @@
             "function" : "rstMass"
         },
         {
-            "position" : [15,240],
+            "position" : [15,290],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -41,7 +41,7 @@
             "function" : "incRad"
         },
         {
-            "position" : [95,240],
+            "position" : [95,290],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -49,7 +49,7 @@
             "function" : "decRad"
         },
         {
-            "position" : [175,240],
+            "position" : [175,290],
             "dimensions" : [60,30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 12,
@@ -60,7 +60,7 @@
 
         "Sliders" : [
         {
-            "position" : [10, 50],
+            "position" : [10, 20],
             "scrnrange" : 210,
             "lthickness" : 2,
             "bsize" : [10, 20],
@@ -68,7 +68,7 @@
             "function" : "changeMass"
         },
         {
-            "position" : [10, 90],
+            "position" : [10, 60],
             "scrnrange" : 210,
             "lthickness" : 2,
             "bsize" : [10, 20],
@@ -76,77 +76,87 @@
             "function" : "changeRad"
         },
 		{
-            "position" : [10, 130],
+            "position" : [10, 100],
             "scrnrange" : 210,
             "lthickness" : 2,
             "bsize" : [10, 20],
             "quanrange" : [-180, 180],
             "function" : "changeRot"
+        },
+		{
+            "position" : [10, 140],
+            "scrnrange" : 210,
+            "lthickness" : 2,
+            "bsize" : [10, 20],
+            "quanrange" : [-1.0, 1.0],
+            "function" : "changeRR"
+        },
+		{
+            "position" : [10, 180],
+            "scrnrange" : 210,
+            "lthickness" : 2,
+            "bsize" : [10, 20],
+            "quanrange" : [0.0, 1.0],
+            "function" : "changeCR"
+        },
+		{
+            "position" : [10, 220],
+            "scrnrange" : 210,
+            "lthickness" : 2,
+            "bsize" : [10, 20],
+            "quanrange" : [0.0, 1.0],
+            "function" : "changeCF"
         }
         ],
-
-        "TextElements" : [
+		
+		"TextElements" : [
         {
             "position" : [5, 0],
-            "textfont" : "./fonts/cour.ttf",
-            "fontsize" : 16,
-            "text" : "No. Balls: ",
-            "variable" : "numBalls"
-        },
-        {
-            "position" : [5, 30],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
             "text" : "Spawn Mass: ",
             "variable" : "spawnMass"
         },
         {
-            "position" : [5, 70],
+            "position" : [5, 40],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
             "text" : "Spawn Radius: ",
             "variable" : "spawnRad"
         },
 		{
-            "position" : [5, 110],
+            "position" : [5, 80],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Spawn Rotation: ",
+            "text" : "Spawn R. Ang: ",
             "variable" : "spawnRot"
         },
-        {
-            "position" : [5, 170],
+		{
+            "position" : [5, 120],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Time Step: ",
-            "variable" : "timeStep"
-        },
-        {
-            "position" : [5, 110],
-            "textfont" : "./fonts/cour.ttf",
-            "fontsize" : 16,
-            "text" : "Forces Enabled: ",
-            "variable" : "forceEnld"
-        },
-        {
-            "position" : [5, 130],
-            "textfont" : "./fonts/cour.ttf",
-            "fontsize" : 16,
-            "text" : "Collisions Enabled: ",
-            "variable" : "collsEnld"
+            "text" : "Spawn R. Rate: ",
+            "variable" : "spawnRR"
         },
 		{
-            "position" : [5, 150],
+            "position" : [5, 160],
             "textfont" : "./fonts/cour.ttf",
             "fontsize" : 16,
-            "text" : "Gravity Enabled: ",
-            "variable" : "gravEnld"
+            "text" : "Spawn C. Rest: ",
+            "variable" : "spawnCR"
+        },
+		{
+            "position" : [5, 200],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Spawn C. Fric: ",
+            "variable" : "spawnCF"
         }
-        ]
+		]
     },
     {
         "position" : [0.0, 0.15],
-        "posoffset" : [0, 300],
+        "posoffset" : [0, 350],
         "dimensions" : [250, 50],
         "draggable" : false,
         "fixedtowindow" : true,
@@ -180,7 +190,7 @@
     },
     {
         "position" : [0.0, 0.15],
-        "posoffset" : [0, 390],
+        "posoffset" : [0, 450],
         "dimensions" : [250, 150],
         "draggable" : false,
         "fixedtowindow" : true,
@@ -253,6 +263,51 @@
             "variable" : "currFPS"
         }
         ]
-    }
+    },
+	{
+        "position" : [0.0, 0.15],
+        "posoffset" : [0, -120],
+        "dimensions" : [250, 105],
+        "draggable" : false,
+        "fixedtowindow" : true,
+		
+		"TextElements" : [
+		{
+            "position" : [5, 0],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "No. Dynamic Objects: ",
+            "variable" : "numBalls"
+        },
+        {
+            "position" : [5, 20],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Forces Enabled: ",
+            "variable" : "forceEnld"
+        },
+        {
+            "position" : [5, 40],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Collisions Enabled: ",
+            "variable" : "collsEnld"
+        },
+		{
+            "position" : [5, 60],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Gravity Enabled: ",
+            "variable" : "gravEnld"
+        },
+		{
+            "position" : [5, 80],
+            "textfont" : "./fonts/cour.ttf",
+            "fontsize" : 16,
+            "text" : "Time Step: ",
+            "variable" : "timeStep"
+        }
+        ]
+	}
     ]
 }

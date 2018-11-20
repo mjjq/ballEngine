@@ -16,7 +16,9 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   cStepVelocity{init._velocity},
                   mass{init._mass},
                   coefFriction{init._coefFric},
-                  coefRestitution{init._coefRest}
+                  coefRestitution{init._coefRest},
+                  rotAngle{init._rotation},
+                  rotRate{init._rotRate}
                   {}
 
 PhysicsObject::~PhysicsObject() {}

@@ -51,8 +51,8 @@ PhysicsObject(init),
     }
     momentInertia = momentInertia*init._mass/_vertices.size();
 
-    rotAngle = init._rotation;
-    rotRate = init._rotRate;
+    //rotAngle = init._rotation;
+    //rotRate = init._rotRate;
 
     for(unsigned int i=0; i<vertices.size(); ++i)
     {

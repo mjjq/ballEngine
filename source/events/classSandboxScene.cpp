@@ -141,10 +141,10 @@ void SandboxScene::load()
                                          velocity,
                                          {spawnRadius, 0.0f},
                                          spawnMass,
-                                         1.0f,
-                                         0.0f,
+                                         spawnCoefFriction,
+                                         spawnCoefRest,
                                          spawnRotation,
-                                         0.0f});
+                                         spawnRotRate});
                     drawLine = false;
                 }
             }
@@ -158,8 +158,8 @@ void SandboxScene::load()
                                             {0.0f, 0.0f},
                                             {300.0f*velocity.x, 300.0f*velocity.y},
                                             0.0f,
-                                            1.0f,
-                                            0.0f,
+                                            spawnCoefFriction,
+                                            spawnCoefRest,
                                             spawnRotation,
                                             0.0f,
                                             });
@@ -185,9 +185,10 @@ void SandboxScene::load()
                                          velocity,
                                          {0.0f, 0.0f},
                                          spawnMass,
-                                         1.0f, 0.0f,
+                                         spawnCoefFriction,
+                                         spawnCoefRest,
                                          spawnRotation,
-                                         0.0f});
+                                         spawnRotRate});
                     drawLine = false;
                 }
             }
@@ -223,8 +224,8 @@ void SandboxScene::load()
                                             {0.0f, 0.0f},
                                             {0.0f, 0.0f},
                                             0.0f,
-                                            1.0f,
-                                            0.0f,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
                                              spawnRotation,
                                              0.0f});
                     drawLine = false;
@@ -255,9 +256,10 @@ void SandboxScene::load()
                                          velocity,
                                          {0.0f, 0.0f},
                                          spawnMass,
-                                         1.0f, 0.0f,
+                                         spawnCoefFriction,
+                                         spawnCoefRest,
                                          spawnRotation,
-                                         0.0f});
+                                         spawnRotRate});
                     drawLine = false;
                 }
             }
@@ -289,9 +291,11 @@ void SandboxScene::load()
                                          {static_cast<sf::Vector2f>(mousePosOnClick),
                                             {0.0f, 0.0f},
                                             {0.0f, 0.0f},
-                                            0.0f,
-                                            1.0f, 0.0f,
-                                            spawnRotation, 0.0f});
+                                            spawnMass,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             spawnRotRate});
                     drawLine = false;
                 }
             }
@@ -301,7 +305,10 @@ void SandboxScene::load()
         sliderFuncMap = {
             {"changeMass",  {[&](float mass){setSpawnValues(mass,SQ_MASS);}, &spawnMass}},
             {"changeRad",   {[&](float radius){setSpawnValues(radius, SQ_RADIUS);}, &spawnRadius}},
-            {"changeRot",   {[&](float rotation){setSpawnValues(rotation, SQ_ROTATION);}, &spawnRotation}}
+            {"changeRot",   {[&](float rotation){setSpawnValues(rotation, SQ_ROTATION);}, &spawnRotation}},
+            {"changeRR",    {[&](float rotRate){setSpawnValues(rotRate, SQ_ROTRATE);}, &spawnRotRate}},
+            {"changeCR",    {[&](float coefRest){setSpawnValues(coefRest, SQ_CREST);}, &spawnCoefRest}},
+            {"changeCF",    {[&](float coefFric){setSpawnValues(coefFric, SQ_CFRICTION);}, &spawnCoefFriction}}
         };
 
         textVarMap = {
@@ -310,6 +317,9 @@ void SandboxScene::load()
             {"spawnMass",   [&]{return std::to_string(spawnMass);}},
             {"spawnRad",    [&]{return std::to_string(spawnRadius);}},
             {"spawnRot",    [&]{return std::to_string(spawnRotation);}},
+            {"spawnRR",     [&]{return std::to_string(spawnRotRate);}},
+            {"spawnCR",     [&]{return std::to_string(spawnCoefRest);}},
+            {"spawnCF",     [&]{return std::to_string(spawnCoefFriction);}},
             {"forceEnld",   [&]{return ballSim.getForcesEnabled();}},
             {"collsEnld",   [&]{return ballSim.getCollisionsEnabled();}},
             {"gravEnld",    [&]{return ballSim.getUGravityEnabled();}},

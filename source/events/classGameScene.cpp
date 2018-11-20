@@ -398,6 +398,15 @@ void GameScene::setSpawnValues(float value,
         case(SQ_ROTATION):
             spawnRotation = value;
             break;
+        case(SQ_ROTRATE):
+            spawnRotRate = value;
+            break;
+        case(SQ_CREST):
+            spawnCoefRest = value;
+            break;
+        case(SQ_CFRICTION) :
+            spawnCoefFriction = value;
+            break;
         case(SQ_DENSITY):
             break;
         default:
