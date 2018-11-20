@@ -10,12 +10,13 @@
 #include "../../headers/integrators.h"
 #include "../../headers/stringConversion.h"
 
-PhysicsObject::PhysicsObject(sf::Vector2f _position,
-                  sf::Vector2f _velocity,
-                  float _mass) : position{_position},
-                  nStepPosition{_position},
-                  cStepVelocity{_velocity},
-                  mass{_mass}
+PhysicsObject::PhysicsObject(ObjectProperties init) :
+                    position{init._position},
+                  nStepPosition{init._position},
+                  cStepVelocity{init._velocity},
+                  mass{init._mass},
+                  coefFriction{init._coefFric},
+                  coefRestitution{init._coefRest}
                   {}
 
 PhysicsObject::~PhysicsObject() {}
@@ -331,4 +332,14 @@ float PhysicsObject::getRotRate()
 void PhysicsObject::setRotRate(float _rotRate)
 {
     rotRate = _rotRate;
+}
+
+float PhysicsObject::getCoefRestitution()
+{
+    return coefRestitution;
+}
+
+float PhysicsObject::getCoefFriction()
+{
+    return coefFriction;
 }

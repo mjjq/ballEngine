@@ -12,8 +12,22 @@ enum class ObjectType
     _Count,
 };
 
+struct ObjectProperties
+{
+    sf::Vector2f _position;
+    sf::Vector2f _velocity;
+    sf::Vector2f _size;
+    float _mass = 1.0f;
+    float _coefFric = 0.0f;
+    float _coefRest = 0.0f;
+    float _rotation = 0.0f;
+    float _rotRate = 0.0f;
+};
+
 class PhysicsObject
 {
+    float coefRestitution = 0.0f;
+    float coefFriction = 1.0f;
 protected:
     sf::Vector2f position;
     sf::Vector2f nStepPosition = getPosition();
@@ -40,9 +54,7 @@ protected:
     bool isPlayer = false;
 
 public:
-    PhysicsObject(sf::Vector2f _position,
-                  sf::Vector2f _velocity,
-                  float _mass);
+    PhysicsObject(ObjectProperties init);
     ~PhysicsObject();
 
     virtual ObjectType type() const = 0;
@@ -91,6 +103,9 @@ public:
     float getMomentInertia();
     float getRotRate();
     void setRotRate(float _rotRate);
+
+    float getCoefRestitution();
+    float getCoefFriction();
 };
 
 #endif // CLASS_DYNOBJ_H

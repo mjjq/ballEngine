@@ -13,15 +13,17 @@ typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
 typedef std::pair<ArbiterKey, Arbiter> ArbPair;
 typedef std::vector<std::unique_ptr<PhysicsObject> > PhysObjectArray;
 
-void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass)
+void BallUniverse::spawnNewBall(ObjectProperties init)
 {
+    sf::Vector2f position = init._position;
+    float radius = sqrtf(sfVectorMath::square(init._size));
     if(!(position.x - radius < 0 ||
          position.y - radius < 0 ||
          position.x + radius > worldSizeX ||
          position.y + radius > worldSizeY))
     {
-        std::unique_ptr<Ball > newBall = std::make_unique<Ball >(radius,mass,position,velocity);
-        std::cout << newBall.get() << "\n";
+        std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
+
         dynamicObjects.push_back(std::move(newBall));
         numOfBalls++;
         //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
@@ -36,7 +38,7 @@ void BallUniverse::spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, fl
 }
 
 
-void BallUniverse::spawnNewRect(sf::Vector2f position,
+/*void BallUniverse::spawnNewRect(sf::Vector2f position,
                                 float width,
                                 float height,
                                 sf::Vector2f velocity,
@@ -65,17 +67,20 @@ void BallUniverse::spawnNewRect(sf::Vector2f position,
         if(enable_collisions)
             calcCollTimes();
     }
-}
+}*/
 
 
-void BallUniverse::spawnStaticBall(sf::Vector2f position, float radius)
+void BallUniverse::spawnStaticBall(ObjectProperties init)
 {
+    sf::Vector2f position = init._position;
+    float radius = sqrtf(sfVectorMath::square(init._size));
     if(!(position.x - radius < 0 ||
          position.y - radius < 0 ||
          position.x + radius > worldSizeX ||
          position.y + radius > worldSizeY))
     {
-        std::unique_ptr<Ball > newBall = std::make_unique<Ball >(radius,1000000.0f,position,sf::Vector2f{0.0f,0.0f});
+        init._mass = 1e+15;
+        std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
         staticObjects.push_back(std::move(newBall));
 
         staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
@@ -84,7 +89,7 @@ void BallUniverse::spawnStaticBall(sf::Vector2f position, float radius)
     }
 }
 
-void BallUniverse::spawnStaticRect(sf::Vector2f position, float width, float height, float rotation)
+/*void BallUniverse::spawnStaticRect(sf::Vector2f position, float width, float height, float rotation)
 {
     if(!(position.x < 0 ||
        position.y < 0 ||
@@ -102,27 +107,20 @@ void BallUniverse::spawnStaticRect(sf::Vector2f position, float width, float hei
         if(enable_collisions)
             calcCollTimes();
     }
-}
+}*/
 
 
 void BallUniverse::spawnNewPoly(std::vector<sf::Vertex> &vertices,
-                                sf::Vector2f position,
-                                sf::Vector2f velocity,
-                                float mass,
-                                float rotation)
+                                ObjectProperties init)
 {
+    sf::Vector2f position = init._position;
     if(!(position.x < 0 ||
        position.y < 0 ||
        position.x> worldSizeX ||
        position.y> worldSizeY))
     {
         std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(vertices,
-                                                     mass,
-                                                     position,
-                                                     velocity,
-                                                     rotation,
-                                                     0.0f);
-                                                     std::cout << newPoly.get() << " polygon\n";
+                                                     init);
         dynamicObjects.push_back(std::move(newPoly));
 
         numOfBalls++;
@@ -139,21 +137,18 @@ void BallUniverse::spawnNewPoly(std::vector<sf::Vertex> &vertices,
 
 
 void BallUniverse::spawnStaticPoly(std::vector<sf::Vertex> &vertices,
-                                sf::Vector2f position,
-                                float rotation)
+                                ObjectProperties init)
 {
+    sf::Vector2f position = init._position;
     if(!(position.x < 0 ||
        position.y < 0 ||
        position.x> worldSizeX ||
        position.y> worldSizeY))
     {
+        init._mass = 1e+15;
         std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(vertices,
-                                                     1e+15f,
-                                                     position,
-                                                     sf::Vector2f{0.0f, 0.0f},
-                                                     rotation,
-                                                     0.00f);
-        std::cout << newPoly.get() << " polygon\n";
+                                                     init);
+
         staticObjects.push_back(std::move(newPoly));
         staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(enable_collisions)
@@ -755,7 +750,14 @@ void BallUniverse::createBallGrid(int numWide, int numHigh, float spacing, sf::V
             for(int j=-numHigh/2; j<=numHigh/2; ++j)
             {
                 sf::Vector2f offsetPosition = {i*spacing,j*spacing};
-                spawnNewBall(centralPosition + offsetPosition, init_velocity, ballRadius, ballMass);
+                spawnNewBall({centralPosition + offsetPosition,
+                             init_velocity,
+                             {ballRadius, 0.0f},
+                             ballMass,
+                             0.0f,
+                             1.0f,
+                             0.0f,
+                             0.0f});
                 //std::cout << i << " " << j << "\n";
             }
     }
@@ -771,7 +773,7 @@ void BallUniverse::createAltBallGrid(int numWide, int numHigh, float spacing, sf
             for(int j=-numHigh/2; j<=numHigh/2; ++j)
             {
                 sf::Vector2f offsetPosition = {i*spacing,j*spacing};
-                spawnNewBall(centralPosition + offsetPosition, init_velocity, ballRadius, pow(-1,i)*ballMass);
+                //spawnNewBall(centralPosition + offsetPosition, init_velocity, ballRadius, pow(-1,i)*ballMass);
                 //std::cout << i << " " << j << "\n";
             }
     }

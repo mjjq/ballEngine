@@ -35,7 +35,14 @@ void SurvivalScene::spawnRandomBalls(int nOBalls,
         sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
         sf::Vector2f newVelocity = {velocityX, velocityY};
 
-        ballSim.spawnNewBall(newPos, newVelocity, ballRadius, ballMass);
+        ballSim.spawnNewBall({newPos,
+                             newVelocity,
+                             {ballRadius, 0.0f},
+                             ballMass,
+                             0.0f,
+                             1.0f,
+                             0.0f,
+                             0.0f});
     }
 }
 
@@ -146,7 +153,14 @@ void SurvivalScene::load()
         container.setWindowIsVisible(2, false);
         container.setWindowIsVisible(3, false);
 
-        ballSim.spawnNewBall(sf::Vector2f{wSize.x/2.0f, wSize.y/1.2f}, {0.0f, 2.0f}, 10.0f, 2.0f);
+        ballSim.spawnNewBall({sf::Vector2f{wSize.x/2.0f, wSize.y/1.2f},
+                             {0.0f, 2.0f},
+                             {10.0f, 0.0f},
+                             2.0f,
+                             1.0f,
+                             0.0f,
+                             0.0f,
+                             0.0f});
         spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 2.0f, 2.0f);
         //spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {3,0});
         ballSim.setPlayer(0);

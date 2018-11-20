@@ -10,7 +10,7 @@ class Ball : public PhysicsObject
     float radius;
 
 public:
-    Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
+    Ball(ObjectProperties init);
     ~Ball();
 
     static const ObjectType MY_TYPE = ObjectType::Ball;

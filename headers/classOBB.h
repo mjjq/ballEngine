@@ -10,12 +10,7 @@ class OBB : public PhysicsObject
     sf::Vector2f size;
 
 public:
-    OBB(sf::Vector2f _size,
-        float _mass,
-        sf::Vector2f _initPos,
-        sf::Vector2f _initVel,
-        float _rotation,
-        float _rotRate);
+    OBB(ObjectProperties init);
     ~OBB();
 
     sf::Rect<float> getGlobalBounds();

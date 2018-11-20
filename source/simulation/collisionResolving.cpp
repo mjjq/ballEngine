@@ -89,16 +89,17 @@ std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* second
     std::vector<Contact> contResult;
     cp.push_back(firstBall->getPosition() + rhat*firstBall->getRadius());
 
-    sf::CircleShape circ1{2.0f};
-    circ1.setPosition(cp[0]);
+    //sf::CircleShape circ1{2.0f};
+    //circ1.setPosition(cp[0]);
     //sf::CircleShape circ2{2.0f};
     //circ2.setPosition(*cp.end());
 
-    debugWindow->draw(circ1);
+    //debugWindow->draw(circ1);
     //debugWindow->draw(circ2);
 
     float separation = sfVectorMath::dot(penetVector, rhat);
     if(separation <= 0.0f)
+    {
         for(int i=0; i<cp.size(); ++i)
         {
             Contact tempContact;
@@ -110,6 +111,9 @@ std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* second
 
             contResult.push_back(tempContact);
         }
+        firstBall->incTimesCollided();
+        secondBall->incTimesCollided();
+    }
     return contResult;
 }
 
@@ -304,11 +308,18 @@ std::vector<Contact> Collisions::collisionBallOBB(Ball* ball, OBB* rect)
                                   - sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f};
 
 
-        AABB obbInFrame{{rectBounds.width, rectBounds.height}, rect->getMass(),
-                        rectPosition,
-                        rectVelocity};
+        AABB obbInFrame{{rectPosition,
+                        rectVelocity,
+                        {rectBounds.width, rectBounds.height},
+                        rect->getMass(), 0.0f, 0.0f, 0.0f, 0.0f
+                        }};
 
-        Ball ballInFrame{ball->getRadius(), ball->getMass(), ballPosition, ballVelocity};
+        Ball ballInFrame{{ballPosition,
+                        ballVelocity,
+                        {ball->getRadius(), 0.0f},
+                        rect->getMass(), 0.0f, 0.0f, 0.0f, 0.0f
+                        }};
+
         ballInFrame.addRotRate(ball->getRotRate());
         obbInFrame.addRotRate(rect->getRotRate());
 

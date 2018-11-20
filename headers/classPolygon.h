@@ -18,11 +18,7 @@ class Polygon : public PhysicsObject
 
 public:
     Polygon(std::vector<sf::Vertex > _vertices,
-        float _mass,
-        sf::Vector2f _initPos,
-        sf::Vector2f _initVel,
-        float _rotation,
-        float _rotRate);
+        ObjectProperties init);
     ~Polygon();
 
     sf::Rect<float> getGlobalBounds();

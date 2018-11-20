@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "../../headers/classArbiter.h"
 #include "../../headers/collisionDetection.h"
@@ -21,7 +22,9 @@ Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
 
         contacts = Collisions::resolveCollision(obj1, obj2);
         numContacts = contacts.size();
-        friction = 1.0f;
+        coefFriction = sqrtf(obj1->getCoefFriction() * obj2->getCoefFriction());
+        coefRestitution = std::max(obj1->getCoefRestitution(),
+                               obj2->getCoefRestitution());
 
         pwm.m1 = obj1->getMass();
         pwm.m2 = obj2->getMass();
@@ -63,7 +66,7 @@ void Arbiter::PreStep(float inv_dt)
         relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
                     Collisions::orthogonal(tempCont.rB, pwv.w2);
 
-        float restitution = 0.0f * sfVectorMath::dot(relVel, tempCont.normal);
+        float restitution = coefRestitution * sfVectorMath::dot(relVel, tempCont.normal);
 
         float baumGarte = tempCont.separation * inv_dt;
 
@@ -92,7 +95,7 @@ void Arbiter::ApplyImpulse()
         jacobian = Constraints::makeFrictionConstraint(*obj1,
                                    *obj2,
                                    tempCont.position,
-                                   tempCont.tangent, tempCont.lambdaN);
+                                   tempCont.tangent, coefFriction*tempCont.lambdaN);
 
         Constraints::solveConstraints(pwv, jacobian, pwm, tempCont.lambdaT);
     }

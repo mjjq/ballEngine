@@ -28,12 +28,8 @@
     @param initVel The initial velocity of the ball.
 */
 Polygon::Polygon(std::vector<sf::Vertex> _vertices,
-         float _mass,
-         sf::Vector2f _initPos,
-         sf::Vector2f _initVel,
-         float _rotation,
-         float _rotRate) :
-PhysicsObject(_initPos, _initVel, _mass),
+         ObjectProperties init) :
+PhysicsObject(init),
          vertices{_vertices}
 {
     centrePosition = sf::Vector2f{0.0f, 0.0f};
@@ -53,10 +49,10 @@ PhysicsObject(_initPos, _initVel, _mass),
     {
         momentInertia += sfVectorMath::square(vert.position - centreOfMass);
     }
-    momentInertia = momentInertia*_mass/_vertices.size();
+    momentInertia = momentInertia*init._mass/_vertices.size();
 
-    rotAngle = _rotation;
-    rotRate = _rotRate;
+    rotAngle = init._rotation;
+    rotRate = init._rotRate;
 
     for(unsigned int i=0; i<vertices.size(); ++i)
     {

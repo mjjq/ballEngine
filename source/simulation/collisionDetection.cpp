@@ -224,9 +224,11 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
 {
     //AABB boundingBox = rect->getBoundingBox();
     sf::Rect<float > boundingBox = rect->getBoundingBox();
-    AABB boundingAABB{{boundingBox.width, boundingBox.height}, 0.0f,
-                      {boundingBox.left, boundingBox.top},
-                       rect->getVelocity()};
+    AABB boundingAABB{{{boundingBox.left, boundingBox.top},
+                        rect->getVelocity(),
+                        {boundingBox.width, boundingBox.height},
+                        1.0f, 0.0f, 0.0f, 0.0f, 0.0f
+                       }};
 
     //sf::RectangleShape drawable{{boundingBox.width, boundingBox.height}};
     //drawable.setPosition(boundingBox.left, boundingBox.top);
@@ -245,15 +247,20 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
                                sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f};
         sf::Vector2f rectVel = sfVectorMath::rotate(rect->getVelocity(), -rotAngle);
         //- sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f}
-        AABB obbInFrame{{rectBounds.width, rectBounds.height}, 0.0f,
-                        rectPos,
-                        rectVel};
+        AABB obbInFrame{{rectPos,
+                        rectVel,
+                        {rectBounds.width, rectBounds.height},
+                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+                        }};
         sf::Vector2f relVelocity = ball->getVelocity() - rect->getVelocity();
         sf::Vector2f sepVector = ball->getPosition() - rect->getPosition();
         relVelocity = sfVectorMath::rotate(relVelocity, -rect->getRotAngle());
         sepVector = sfVectorMath::rotate(sepVector, -rect->getRotAngle());
 
-        Ball ballInFrame{ball->getRadius(), 0.0f, ballPos, ballVel};
+        Ball ballInFrame{{ballPos,
+                        ballVel,
+                        {ball->getRadius(), 0.0f},
+                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f}};
 
         //ballInFrame.draw(*debugWindow);
         //obbInFrame.draw(*debugWindow);
@@ -268,18 +275,22 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
 float Collisions::timeToCollOBBOBB(OBB* rect1, OBB* rect2)
 {
     sf::Rect<float > boundingBox = rect1->getBoundingBox();
-    AABB boundingAABB1{{boundingBox.width, boundingBox.height}, 0.0f,
-                      {boundingBox.left, boundingBox.top},
-                       rect1->getVelocity()};
+    AABB boundingAABB1{{{boundingBox.left, boundingBox.top},
+                       rect1->getVelocity(),
+                        {boundingBox.width, boundingBox.height},
+                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+                      }};
 
     //sf::RectangleShape drawable1{{boundingBox.width, boundingBox.height}};
     //drawable1.setPosition(boundingBox.left, boundingBox.top);
     //debugWindow->draw(drawable1);
 
     boundingBox = rect2->getBoundingBox();
-    AABB boundingAABB2{{boundingBox.width, boundingBox.height}, 0.0f,
-                      {boundingBox.left, boundingBox.top},
-                       rect2->getVelocity()};
+    AABB boundingAABB2{{{boundingBox.left, boundingBox.top},
+                       rect2->getVelocity(),
+                        {boundingBox.width, boundingBox.height},
+                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+                      }};
 
     //sf::RectangleShape drawable2{{boundingBox.width, boundingBox.height}};
     //drawable2.setPosition(boundingBox.left, boundingBox.top);
@@ -315,9 +326,11 @@ float Collisions::timeToCollOBBOBB(OBB* rect1, OBB* rect2)
 float Collisions::timeToCollOBBPoly(OBB* rect, Polygon* poly)
 {
     sf::Rect<float > boundingBox = rect->getBoundingBox();
-    AABB boundingAABB1{{boundingBox.width, boundingBox.height}, 0.0f,
-                      {boundingBox.left, boundingBox.top},
-                       rect->getVelocity()};
+    AABB boundingAABB1{{{boundingBox.left, boundingBox.top},
+                       rect->getVelocity(),
+                        {boundingBox.width, boundingBox.height},
+                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+                      }};
 
     //sf::RectangleShape drawable1{{boundingBox.width, boundingBox.height}};
     //drawable1.setPosition(boundingBox.left, boundingBox.top);
@@ -331,9 +344,11 @@ float Collisions::timeToCollOBBPoly(OBB* rect, Polygon* poly)
     debugWindow->draw(verts, 4, sf::Lines);*/
 
     boundingBox = poly->getBoundingBox();
-    AABB boundingAABB2{{boundingBox.width, boundingBox.height}, 0.0f,
-                      {boundingBox.left, boundingBox.top},
-                       poly->getVelocity()};
+    AABB boundingAABB2{{{boundingBox.left, boundingBox.top},
+                       poly->getVelocity(),
+                        {boundingBox.width, boundingBox.height},
+                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+                      }};
 
     //sf::RectangleShape drawable2{{boundingBox.width, boundingBox.height}};
     //drawable2.setPosition(boundingBox.left, boundingBox.top);
@@ -370,9 +385,13 @@ float Collisions::timeToCollOBBPoly(OBB* rect, Polygon* poly)
 float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
 {
     sf::Rect<float > boundingBox = poly->getBoundingBox();
-    AABB boundingAABB1{{boundingBox.width, boundingBox.height}, 0.0f,
-                      {boundingBox.left, boundingBox.top},
-                       poly->getVelocity()};
+    AABB boundingAABB1{
+        {{boundingBox.left, boundingBox.top},
+            poly->getVelocity(),
+            {boundingBox.width, boundingBox.height},
+            0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+          }
+          };
 
     sf::Vertex verts[] = {
         sf::Vertex{{boundingBox.left, boundingBox.top}},
@@ -454,9 +473,11 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
 float Collisions::timeToCollPolyPoly(Polygon* poly1, Polygon *poly2)
 {
     sf::Rect<float > boundingBox = poly1->getBoundingBox();
-    AABB boundingAABB1{{boundingBox.width, boundingBox.height}, 0.0f,
-                      {boundingBox.left, boundingBox.top},
-                       poly1->getVelocity()};
+    AABB boundingAABB1{{{boundingBox.left, boundingBox.top},
+                       poly1->getVelocity(),
+                        {boundingBox.width, boundingBox.height},
+                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+                      }};
 
     //sf::RectangleShape drawable1{{boundingBox.width, boundingBox.height}};
     //drawable1.setPosition(boundingBox.left, boundingBox.top);
@@ -470,9 +491,11 @@ float Collisions::timeToCollPolyPoly(Polygon* poly1, Polygon *poly2)
     debugWindow->draw(verts, 4, sf::Lines);*/
 
     boundingBox = poly2->getBoundingBox();
-    AABB boundingAABB2{{boundingBox.width, boundingBox.height}, 0.0f,
-                      {boundingBox.left, boundingBox.top},
-                       poly2->getVelocity()};
+    AABB boundingAABB2{{{boundingBox.left, boundingBox.top},
+                       poly2->getVelocity(),
+                        {boundingBox.width, boundingBox.height},
+                        0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+                      }};
 
     //sf::RectangleShape drawable2{{boundingBox.width, boundingBox.height}};
     //drawable2.setPosition(boundingBox.left, boundingBox.top);

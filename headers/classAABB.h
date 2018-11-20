@@ -11,7 +11,7 @@ class AABB : public PhysicsObject
     sf::Vector2f centreOfMass;
 
 public:
-    AABB(sf::Vector2f _size, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
+    AABB(ObjectProperties init);
     ~AABB();
 
     sf::Rect<float> getGlobalBounds();

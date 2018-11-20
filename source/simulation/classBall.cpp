@@ -27,13 +27,15 @@
     @param initPos The initial position of the ball.
     @param initVel The initial velocity of the ball.
 */
-Ball::Ball(float _radius, float _mass, sf::Vector2f _initPos, sf::Vector2f _initVel) :
-PhysicsObject(_initPos, _initVel, _mass), radius{_radius}
+Ball::Ball(ObjectProperties init) :
+PhysicsObject(init)
 {
-    density = _mass/(3.14159265359*_radius*_radius);
+    radius = sqrtf(init._size.x * init._size.x +
+                   init._size.y * init._size.y);
+    density = init._mass/(3.14159265359*radius*radius);
     centreOfMass = {0.0f, 0.0f};
 
-    momentInertia = 0.5*_mass*_radius*_radius;
+    momentInertia = 0.5*init._mass*radius*radius;
 }
 
 Ball::~Ball() {}

@@ -74,23 +74,19 @@ public:
     void updateAllObjects(bool enableForces, float dt);
 
     void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
-    void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass=1);
-    void spawnNewRect(sf::Vector2f position,
+    void spawnNewBall(ObjectProperties init);
+    /*void spawnNewRect(sf::Vector2f position,
                       float width,
                       float height,
                       sf::Vector2f velocity,
                       float mass,
                       float rotation);
-    void spawnStaticRect(sf::Vector2f position, float width, float height, float rotation);
-    void spawnStaticBall(sf::Vector2f position, float radius);
+    void spawnStaticRect(sf::Vector2f position, float width, float height, float rotation);*/
+    void spawnStaticBall(ObjectProperties init);
     void spawnNewPoly(std::vector<sf::Vertex> &vertices,
-                                sf::Vector2f position,
-                                sf::Vector2f velocity,
-                                float mass,
-                                float rotation);
+                                ObjectProperties init);
     void spawnStaticPoly(std::vector<sf::Vertex> &vertices,
-                                sf::Vector2f position,
-                                float rotation);
+                                ObjectProperties init);
 
     void removeBall(int index);
     void removeRect(int index);

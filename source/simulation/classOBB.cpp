@@ -27,26 +27,21 @@
     @param initPos The initial position of the ball.
     @param initVel The initial velocity of the ball.
 */
-OBB::OBB(sf::Vector2f _size,
-         float _mass,
-         sf::Vector2f _initPos,
-         sf::Vector2f _initVel,
-         float _rotation,
-         float _rotRate) :
-PhysicsObject(_initPos, _initVel, _mass),
-         size{_size}
+OBB::OBB(ObjectProperties init) :
+PhysicsObject(init),
+         size{init._size}
 {
     if(size.x < 0.0f)
         size.x = -size.x;
     if(size.y < 0.0f)
         size.y = -size.y;
-    density = _mass/(size.x*size.y);
+    density = init._mass/(size.x*size.y);
     centreOfMass = {0.0f, 0.0f}; //sf::Vector2f{size.x/2.0f, size.y/2.0f};
 
-    rotAngle = _rotation;
-    rotRate = _rotRate;
+    rotAngle = init._rotation;
+    rotRate = init._rotRate;
 
-    momentInertia = _mass*(sfVectorMath::square(size))/12.0f;
+    momentInertia = init._mass*(sfVectorMath::square(size))/12.0f;
 }
 
 OBB::~OBB() {}

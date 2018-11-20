@@ -42,7 +42,8 @@ struct Arbiter
 	CStructs::PairWiseVel pwv;
     CStructs::PairWiseMass pwm;
 	// Combined friction
-	float friction;
+	float coefFriction;
+	float coefRestitution;
 };
 
 struct ArbiterKey

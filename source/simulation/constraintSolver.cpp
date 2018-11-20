@@ -91,7 +91,7 @@ CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
     c.cw1 = -sfVectorMath::cross(contactPoint - p1.getPosition(), tangent);
     c.c2 = tangent;
     c.cw2 = sfVectorMath::cross(contactPoint - p2.getPosition(), tangent);
-    c.lambdaMin = -1.0f*frictionLimit;
+    c.lambdaMin = -frictionLimit;
     c.lambdaMax = -c.lambdaMin;
     c.bias = 0.0f;
 

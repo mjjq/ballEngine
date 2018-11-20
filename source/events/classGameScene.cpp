@@ -204,10 +204,11 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
         {
             BallSpawnVals sVals;
             if(beParser::checkBallJson(currJ, sVals))
-                ballSim.spawnNewBall(sVals.position+position,
+                ballSim.spawnNewBall({sVals.position+position,
                                      sVals.velocity+velocity,
-                                     sVals.radius,
-                                     sVals.mass);
+                                     {sVals.radius, 0.0f},
+                                     sVals.mass,
+                                     0.0f, 0.0f});
         }
         for(json &currJ : j["Ballgrid"])
         {
@@ -224,20 +225,20 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
         for(json &currJ : j["statAABB"])
         {
             AABBSpawnVals sVals;
-            if(beParser::checkAABBJson(currJ, sVals))
+            /*if(beParser::checkAABBJson(currJ, sVals))
                 ballSim.spawnStaticRect(sVals.position + position,
                                      sVals.dimensions.x,
-                                     sVals.dimensions.y, 0.0f);
+                                     sVals.dimensions.y, 0.0f);*/
         }
         for(json &currJ : j["dynAABB"])
         {
             AABBSpawnVals sVals;
-            if(beParser::checkAABBJson(currJ, sVals))
+            /*(if(beParser::checkAABBJson(currJ, sVals))
                 ballSim.spawnNewRect(sVals.position + position,
                                      sVals.dimensions.x,
                                      sVals.dimensions.y,
                                      {velocity},
-                                     5.0f, 0.0f);
+                                     5.0f, 0.0f);*/
         }
     }
 }

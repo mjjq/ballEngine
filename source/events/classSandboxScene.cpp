@@ -137,10 +137,14 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    ballSim.spawnNewBall(static_cast<sf::Vector2f>(mousePosOnClick),
+                    ballSim.spawnNewBall({static_cast<sf::Vector2f>(mousePosOnClick),
                                          velocity,
-                                         spawnRadius,
-                                         spawnMass);
+                                         {spawnRadius, 0.0f},
+                                         spawnMass,
+                                         1.0f,
+                                         0.0f,
+                                         spawnRotation,
+                                         0.0f});
                     drawLine = false;
                 }
             }
@@ -150,8 +154,15 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    ballSim.spawnStaticBall(static_cast<sf::Vector2f>(mousePosOnClick),
-                                         300.0f*sqrt(velocity.x*velocity.x + velocity.y*velocity.y));
+                    ballSim.spawnStaticBall({static_cast<sf::Vector2f>(mousePosOnClick),
+                                            {0.0f, 0.0f},
+                                            {300.0f*velocity.x, 300.0f*velocity.y},
+                                            0.0f,
+                                            1.0f,
+                                            0.0f,
+                                            spawnRotation,
+                                            0.0f,
+                                            });
                     drawLine = false;
                 }
             }
@@ -170,10 +181,13 @@ void SandboxScene::load()
                     for(sf::Vertex &vert : verts)
                         vert.position = vert.position*spawnRadius;
                     ballSim.spawnNewPoly(verts,
-                                         static_cast<sf::Vector2f>(mousePosOnClick),
+                                         {static_cast<sf::Vector2f>(mousePosOnClick),
                                          velocity,
+                                         {0.0f, 0.0f},
                                          spawnMass,
-                                         spawnRotation);
+                                         1.0f, 0.0f,
+                                         spawnRotation,
+                                         0.0f});
                     drawLine = false;
                 }
             }
@@ -205,8 +219,14 @@ void SandboxScene::load()
                         vert.position.y = 30.0f * vert.position.y * velocity.y;
                     }
                     ballSim.spawnStaticPoly(verts,
-                                         static_cast<sf::Vector2f>(mousePosOnClick),
-                                         spawnRotation);
+                                         {static_cast<sf::Vector2f>(mousePosOnClick),
+                                            {0.0f, 0.0f},
+                                            {0.0f, 0.0f},
+                                            0.0f,
+                                            1.0f,
+                                            0.0f,
+                                             spawnRotation,
+                                             0.0f});
                     drawLine = false;
                 }
             }
@@ -231,10 +251,13 @@ void SandboxScene::load()
                         sf::Vertex{{-10.0f, 10.0f}}
                     };*/
                     ballSim.spawnNewPoly(verts,
-                                         static_cast<sf::Vector2f>(mousePosOnClick),
+                                         {static_cast<sf::Vector2f>(mousePosOnClick),
                                          velocity,
+                                         {0.0f, 0.0f},
                                          spawnMass,
-                                         spawnRotation);
+                                         1.0f, 0.0f,
+                                         spawnRotation,
+                                         0.0f});
                     drawLine = false;
                 }
             }
@@ -263,8 +286,12 @@ void SandboxScene::load()
                         vert.position = vert.position * velocity.x*velocity.y;
                     }
                     ballSim.spawnStaticPoly(verts,
-                                         static_cast<sf::Vector2f>(mousePosOnClick),
-                                         spawnRotation);
+                                         {static_cast<sf::Vector2f>(mousePosOnClick),
+                                            {0.0f, 0.0f},
+                                            {0.0f, 0.0f},
+                                            0.0f,
+                                            1.0f, 0.0f,
+                                            spawnRotation, 0.0f});
                     drawLine = false;
                 }
             }
