@@ -14,10 +14,10 @@
 #include <limits>
 #include <tuple>
 
-#include "../../headers/classAABB.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/integrators.h"
-#include "../../headers/stringConversion.h"
+#include "classAABB.h"
+#include "sfVectorMath.h"
+#include "integrators.h"
+#include "stringConversion.h"
 
 /**
     Construct the ball.

@@ -6,9 +6,9 @@
 #include <tuple>
 #include <cassert>
 
-#include "../../headers/collisionDetection.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "collisionDetection.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 std::vector<sf::Vector2f > Collisions::edgesOf(std::vector<sf::Vertex > &vertices)
 {

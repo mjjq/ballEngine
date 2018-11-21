@@ -6,10 +6,10 @@
 #include <tuple>
 #include <cassert>
 
-#include "../../headers/collisionDetection.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
-#include "../../headers/constraintSolver.h"
+#include "collisionDetection.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
+#include "constraintSolver.h"
 
 #define CONCAT2(x,y) x##y
 #define CONCAT(x,y) CONCAT2(x,y)

@@ -6,9 +6,9 @@
 #include <tuple>
 #include <cassert>
 
-#include "../../headers/collisionDetection.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "collisionDetection.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 void Collisions::generateContacts(PhysicsObject* p1, PhysicsObject*p2,
                                 std::vector<Contact > &retContacts,

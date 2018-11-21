@@ -5,8 +5,8 @@
 #include <limits>
 #include <tuple>
 
-#include "../../headers/integrators.h"
-#include "../../headers/forces.h"
+#include "integrators.h"
+#include "forces.h"
 
 sfPair integrators::eulerMethod(sf::Vector2f xvec, float dt, float M, float G)
 {

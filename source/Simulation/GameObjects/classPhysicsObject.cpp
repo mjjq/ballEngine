@@ -5,10 +5,10 @@
 #include <limits>
 #include <tuple>
 
-#include "../../headers/classPhysicsObject.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/integrators.h"
-#include "../../headers/stringConversion.h"
+#include "classPhysicsObject.h"
+#include "sfVectorMath.h"
+#include "integrators.h"
+#include "stringConversion.h"
 
 PhysicsObject::PhysicsObject(ObjectProperties init) :
                     position{init._position},

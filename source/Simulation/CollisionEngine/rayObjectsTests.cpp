@@ -6,9 +6,9 @@
 #include <tuple>
 #include <cassert>
 
-#include "../../headers/collisionDetection.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "collisionDetection.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
                                   sf::Vector2f rayDir,

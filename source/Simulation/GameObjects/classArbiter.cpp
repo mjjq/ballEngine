@@ -1,11 +1,11 @@
 #include <iostream>
 #include <cmath>
 
-#include "../../headers/classArbiter.h"
-#include "../../headers/collisionDetection.h"
-#include "../../headers/constraintSolver.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "classArbiter.h"
+#include "collisionDetection.h"
+#include "constraintSolver.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
 {

@@ -5,8 +5,8 @@
 #include <limits>
 #include <tuple>
 
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/forces.h"
+#include "sfVectorMath.h"
+#include "forces.h"
 
 /**
     Returns change in velocity of a gravitational force. This function must be

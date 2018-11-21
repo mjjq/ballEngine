@@ -1,9 +1,9 @@
 #include <iostream>
 #include <cmath>
 
-#include "../../headers/constraintSolver.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "constraintSolver.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 float Constraints::multiply(CStructs::Constraint &c,
                             CStructs::PairWiseVel &v)
