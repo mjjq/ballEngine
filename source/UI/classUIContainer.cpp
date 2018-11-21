@@ -7,10 +7,10 @@
 #include <functional>
 #include "../../extern/json.hpp"
 
-#include "../../headers/classUIContainer.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/structs.h"
-#include "../../headers/jsonParsing.h"
+#include "classUIContainer.h"
+#include "sfVectorMath.h"
+#include "structs.h"
+#include "jsonParsing.h"
 
 
 UIContainer::UIContainer(bool _isVisible) :

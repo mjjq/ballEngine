@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../headers/class2DMatrix.h"
+#include "class2DMatrix.h"
 #include <tuple>
 #include <algorithm>
 #include <cmath>

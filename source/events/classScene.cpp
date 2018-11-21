@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "../../headers/classScene.h"
+#include "classScene.h"
 
 void Scene::requestScene(SceneEnum scEnum)
 {

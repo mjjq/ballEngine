@@ -31,6 +31,7 @@
 					<Add option="-std=c++14" />
 					<Add option="-pg" />
 					<Add option="-DSFML_STATIC" />
+					<Add directory="headers" />
 				</Compiler>
 				<Linker>
 					<Add option="-pg -lgmon" />
@@ -45,6 +46,7 @@
 					<Add library="gdi32" />
 					<Add library="freetype" />
 					<Add library="jpeg" />
+					<Add directory="headers" />
 				</Linker>
 			</Target>
 		</Build>
@@ -100,43 +102,43 @@
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="source/Events/classGameScene.cpp" />
+		<Unit filename="source/Events/classKeyBinds.cpp" />
+		<Unit filename="source/Events/classMainMenuScene.cpp" />
+		<Unit filename="source/Events/classMenuScene.cpp" />
+		<Unit filename="source/Events/classPauseMenuScene.cpp" />
+		<Unit filename="source/Events/classSandboxScene.cpp" />
+		<Unit filename="source/Events/classScene.cpp" />
+		<Unit filename="source/Events/classSceneManager.cpp" />
+		<Unit filename="source/Events/classSurvivalScene.cpp" />
+		<Unit filename="source/Miscellaneous/class2DMatrix.cpp" />
+		<Unit filename="source/Miscellaneous/jsonParsing.cpp" />
+		<Unit filename="source/Miscellaneous/sfVectorMath.cpp" />
+		<Unit filename="source/Miscellaneous/stringConversion.cpp" />
+		<Unit filename="source/Miscellaneous/structs.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/collisionDetection.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/collisionResolving.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/constraintSolver.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/contactPoints.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/minkowskiMath.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/penetrationTests.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/rayObjectsTests.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/sepAxisTests.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classAABB.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classArbiter.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classBall.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classOBB.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classPhysicsObject.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classPolygon.cpp" />
+		<Unit filename="source/Simulation/Movement/forces.cpp" />
+		<Unit filename="source/Simulation/Movement/integrators.cpp" />
+		<Unit filename="source/Simulation/classUniverse.cpp" />
 		<Unit filename="source/UI/classUIButton.cpp" />
 		<Unit filename="source/UI/classUIContainer.cpp" />
 		<Unit filename="source/UI/classUIGroup.cpp" />
 		<Unit filename="source/UI/classUISlider.cpp" />
 		<Unit filename="source/UI/classUITextElement.cpp" />
 		<Unit filename="source/UI/classUIWindow.cpp" />
-		<Unit filename="source/events/classGameScene.cpp" />
-		<Unit filename="source/events/classKeyBinds.cpp" />
-		<Unit filename="source/events/classMainMenuScene.cpp" />
-		<Unit filename="source/events/classMenuScene.cpp" />
-		<Unit filename="source/events/classPauseMenuScene.cpp" />
-		<Unit filename="source/events/classSandboxScene.cpp" />
-		<Unit filename="source/events/classScene.cpp" />
-		<Unit filename="source/events/classSceneManager.cpp" />
-		<Unit filename="source/events/classSurvivalScene.cpp" />
-		<Unit filename="source/miscellaneous/class2DMatrix.cpp" />
-		<Unit filename="source/miscellaneous/jsonParsing.cpp" />
-		<Unit filename="source/miscellaneous/sfVectorMath.cpp" />
-		<Unit filename="source/miscellaneous/stringConversion.cpp" />
-		<Unit filename="source/miscellaneous/structs.cpp" />
-		<Unit filename="source/simulation/classAABB.cpp" />
-		<Unit filename="source/simulation/classArbiter.cpp" />
-		<Unit filename="source/simulation/classBall.cpp" />
-		<Unit filename="source/simulation/classOBB.cpp" />
-		<Unit filename="source/simulation/classPhysicsObject.cpp" />
-		<Unit filename="source/simulation/classPolygon.cpp" />
-		<Unit filename="source/simulation/classUniverse.cpp" />
-		<Unit filename="source/simulation/collisionDetection.cpp" />
-		<Unit filename="source/simulation/collisionResolving.cpp" />
-		<Unit filename="source/simulation/constraintSolver.cpp" />
-		<Unit filename="source/simulation/contactPoints.cpp" />
-		<Unit filename="source/simulation/forces.cpp" />
-		<Unit filename="source/simulation/integrators.cpp" />
-		<Unit filename="source/simulation/minkowskiMath.cpp" />
-		<Unit filename="source/simulation/penetrationTests.cpp" />
-		<Unit filename="source/simulation/rayObjectsTests.cpp" />
-		<Unit filename="source/simulation/sepAxisTests.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -6,11 +6,11 @@
 #include <tuple>
 #include <functional>
 
-#include "../../headers/classUIButton.h"
-#include "../../headers/classUIWindow.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
-#include "../../headers/structs.h"
+#include "classUIButton.h"
+#include "classUIWindow.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
+#include "structs.h"
 
 UIButton::UIButton(ButtonParams _bParams, WindowParams &_wParams, bool _changeState) :
             UIWindow(_wParams), unclickedColor{_bParams.color}, upFunc{_bParams.func},

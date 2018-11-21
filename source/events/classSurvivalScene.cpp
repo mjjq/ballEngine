@@ -1,4 +1,4 @@
-#include "../../headers/classSurvivalScene.h"
+#include "classSurvivalScene.h"
 
 SurvivalScene::SurvivalScene(sf::RenderWindow &_window,
                            sf::Time &_targetFTime,

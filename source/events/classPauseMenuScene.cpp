@@ -18,9 +18,9 @@
 #include <fstream>
 #include <map>
 
-#include "../../headers/classPauseMenuScene.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "classPauseMenuScene.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 
 void PauseMenuScene::load()

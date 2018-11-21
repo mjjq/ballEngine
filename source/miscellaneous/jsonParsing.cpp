@@ -1,6 +1,6 @@
 #include <iostream>
 #include <map>
-#include "../../headers/jsonParsing.h"
+#include "jsonParsing.h"
 
 bool beParser::checkBallJson(json &j, BallSpawnVals &sVals)
 {

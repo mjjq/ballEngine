@@ -1,4 +1,4 @@
-#include "../../headers/classKeyBinds.h"
+#include "classKeyBinds.h"
 
 bool KeyBinds::isFuncContinuous = false;
 

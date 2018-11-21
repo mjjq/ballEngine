@@ -9,8 +9,8 @@
 #include <iostream>
 #include <sstream>
 #include <SFML/Graphics.hpp>
-#include "../../headers/stringConversion.h"
-#include "../../headers/integrators.h"
+#include "stringConversion.h"
+#include "integrators.h"
 
 template <typename T>
 std::ostream& operator << ( std::ostream& outs, const sf::Vector2<T> &vec2 )

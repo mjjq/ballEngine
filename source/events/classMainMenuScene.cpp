@@ -18,9 +18,9 @@
 #include <fstream>
 #include <map>
 
-#include "../../headers/classMainMenuScene.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "classMainMenuScene.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 
 void MainMenuScene::load()

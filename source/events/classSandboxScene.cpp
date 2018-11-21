@@ -1,4 +1,4 @@
-#include "../../headers/classSandboxScene.h"
+#include "classSandboxScene.h"
 
 SandboxScene::SandboxScene(sf::RenderWindow &_window,
                            sf::Time &_targetFTime,

@@ -5,7 +5,7 @@
 #include <limits>
 #include <tuple>
 
-#include "./headers/classSceneManager.h"
+#include "classSceneManager.h"
 
 int main()
 {

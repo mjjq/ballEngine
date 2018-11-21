@@ -5,9 +5,9 @@
 #include <limits>
 #include <tuple>
 
-#include "../../headers/classUniverse.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "classUniverse.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
 typedef std::pair<ArbiterKey, Arbiter> ArbPair;

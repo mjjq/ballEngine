@@ -19,10 +19,10 @@
 #include <map>
 #include "../../extern/json.hpp"
 
-#include "../../headers/classGameScene.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
-#include "../../headers/jsonParsing.h"
+#include "classGameScene.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
+#include "jsonParsing.h"
 
 
 

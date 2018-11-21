@@ -10,7 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <math.h>
-#include "../../headers/sfVectorMath.h"
+#include "sfVectorMath.h"
 
 const float PI{3.14159265359};
 

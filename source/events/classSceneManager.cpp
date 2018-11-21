@@ -7,7 +7,7 @@
 #include <functional>
 #include <numeric>
 
-#include "../../headers/classSceneManager.h"
+#include "classSceneManager.h"
 
 
 SceneManager::SceneManager()

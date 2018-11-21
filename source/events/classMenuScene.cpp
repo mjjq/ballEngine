@@ -18,9 +18,9 @@
 #include <fstream>
 #include <map>
 
-#include "../../headers/classMenuScene.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "classMenuScene.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 
 
