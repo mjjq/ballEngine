@@ -10,6 +10,25 @@
 #include "../../headers/sfVectorMath.h"
 #include "../../headers/stringConversion.h"
 
+void Collisions::generateContacts(PhysicsObject* p1, PhysicsObject*p2,
+                                std::vector<Contact > &retContacts,
+                                ClippedPoints &cp,
+                                sf::Vector2f contactNorm,
+                                float separation)
+{
+    for(int i=0; i<(int)cp.size(); ++i)
+    {
+        Contact tempContact;
+        tempContact.normal = contactNorm;
+        tempContact.position = cp[i];
+        tempContact.rA = cp[i] - p1->getPosition();
+        tempContact.rB = cp[i] - p2->getPosition();
+        tempContact.separation = separation;
+
+        retContacts.push_back(tempContact);
+    }
+}
+
 std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex > &obj1,
                                                         std::vector<sf::Vertex > &obj2,
                                                         sf::Vector2f contactNormal)

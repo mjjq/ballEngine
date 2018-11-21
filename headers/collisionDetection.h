@@ -78,12 +78,6 @@ public:
     static std::pair<bool, sf::Vector2f> sepAxisTest(std::vector<sf::Vertex> &obj1,
                                           std::vector<sf::Vertex> &obj2);
 
-    static void applyImpulse(PhysicsObject *obj1,
-                             PhysicsObject *obj2,
-                             sf::Vector2f contactNorm,
-                             sf::Vector2f penetVector,
-                             ClippedPoints &collisionPoints);
-
 
     static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
                                                        std::vector<sf::Vertex > &obj2,
@@ -105,6 +99,12 @@ public:
     static std::pair<sf::Vector2f, sf::Vector2f> getContactNormal(Ball* ball, Polygon* poly);
 
     static int getClosestVertex(std::vector<sf::Vertex > &poly, sf::Vertex &intPoint);
+
+    static void generateContacts(PhysicsObject* p1, PhysicsObject*p2,
+                                std::vector<Contact > &retContacts,
+                                ClippedPoints &cp,
+                                sf::Vector2f contactNorm,
+                                float separation);
 };
 
 #endif // COLLDETECT_H
