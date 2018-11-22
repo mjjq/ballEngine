@@ -7,6 +7,7 @@
 #include "classOBB.h"
 #include "classPolygon.h"
 #include "classArbiter.h"
+#include "GJK.h"
 
 //typedef std::pair<sf::Vector2f, sf::Vector2f> Edge;
 struct Edge

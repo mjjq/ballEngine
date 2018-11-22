@@ -438,7 +438,9 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
     debugWindow->draw(quad2);*/
     std::vector<Contact> contResult;
 
-    std::pair<bool, sf::Vector2f> sepAxis = Collisions::sepAxisTest(poly1Vert, poly2Vert);
+    //std::pair<bool, sf::Vector2f> sepAxis = Collisions::sepAxisTest(poly1Vert, poly2Vert);
+    std::pair<bool, sf::Vector2f> sepAxis = std::make_pair(false, sf::Vector2f{0.0f, 0.0f});
+    std::cout << GJK::isIntersecting(poly1, poly2) << "\n";
 
     if(sepAxis.first)
     {

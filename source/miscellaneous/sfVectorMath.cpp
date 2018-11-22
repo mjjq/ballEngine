@@ -137,3 +137,13 @@ sf::Vector2f sfVectorMath::orthogonal(sf::Vector2f v, float scalar)
 {
     return {v.y*scalar, -v.x*scalar};
 }
+
+
+sf::Vector2f sfVectorMath::tripleProduct(sf::Vector2f v1,
+                               sf::Vector2f v2,
+                               sf::Vector2f v3)
+{
+    sf::Vector2f result = v2 * sfVectorMath::dot(v3, v1) -
+                        v1 * sfVectorMath::dot(v2, v3);
+    return result;
+}
