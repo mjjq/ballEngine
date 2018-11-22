@@ -23,12 +23,12 @@ class GJK
     typedef std::vector<sf::Vertex > ClippedPoints;
     typedef std::vector<sf::Vertex > PolyVerts;
 
-    static sf::Vertex support(PolyVerts &p1, PolyVerts &p2,
+    static sf::Vertex support(PhysicsObject* p1, PhysicsObject* p2,
                               sf::Vector2f &direction);
     static sf::Vertex farthestPointInDir(PolyVerts &p, sf::Vector2f direction);
 
 public:
-    static bool isIntersecting(Polygon* p1, Polygon* p2);
+    static bool isIntersecting(PhysicsObject* p1, PhysicsObject* p2);
 
     static ClippedPoints getClosestPoints(PolyVerts &p1, PolyVerts &p2);
 };

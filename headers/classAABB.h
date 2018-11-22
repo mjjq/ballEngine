@@ -24,6 +24,8 @@ public:
 
     void draw(sf::RenderWindow &_window);
 
+    sf::Vertex farthestPointInDir(sf::Vector2f direction);
+
     std::vector<sf::Vertex > constructVerts();
 
 };

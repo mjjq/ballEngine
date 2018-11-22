@@ -22,7 +22,7 @@ public:
 
     void draw(sf::RenderWindow &_window);
 
-
+    sf::Vertex farthestPointInDir(sf::Vector2f direction);
 };
 
 #endif // CLASS_UNIVERSE_H

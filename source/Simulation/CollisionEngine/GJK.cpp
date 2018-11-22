@@ -43,6 +43,8 @@ bool Simplex::contains(sf::Vector2f point)
         sf::Vector2f AB = b.position - a.position;
 
         sf::Vector2f abPerp = sfVectorMath::tripleProduct(AB, AO, AB);
+        if(sfVectorMath::square(abPerp) <= 0.0f)
+            abPerp = sfVectorMath::orthogonal(AB, 1.0f);
 
         bestDirection = abPerp;
     }
@@ -62,34 +64,6 @@ sf::Vertex Simplex::getLast()
 
 sf::Vector2f Simplex::getNewDir(sf::Vector2f point)
 {
-    /*if(vertices.size() == 2)
-    {
-        sf::Vector2f A = vertices[vertices.size()-2].position;
-        sf::Vector2f B = vertices[vertices.size()-1].position;
-        sf::Vector2f O = point;
-
-        sf::Vector2f AB = B-A;
-        sf::Vector2f AO = A-O;
-
-        sf::Vector2f newDir = sfVectorMath::tripleProduct(AB, AO, AB);
-
-        if(sfVectorMath::square(newDir) > 0.0f)
-            return sfVectorMath::norm(newDir);
-
-        return sfVectorMath::orthogonal(AB, 1.0f);
-    }
-    else if(vertices.size() >= 2)
-    {
-        sf::Vector2f AO = point - bestEdge.v1;
-        sf::Vector2f AB = bestEdge.dir;
-
-        sf::Vector2f newDir = AO * sfVectorMath::square(AB) -
-                                AB * sfVectorMath::dot(AB, AO);
-
-        return newDir;
-    }
-
-    return {0.0f, 0.0f};*/
     return bestDirection;
 }
 
@@ -111,10 +85,10 @@ sf::Vertex GJK::farthestPointInDir(PolyVerts &p, sf::Vector2f direction)
     return farthestVertex;
 }
 
-sf::Vertex GJK::support(PolyVerts &p1, PolyVerts &p2, sf::Vector2f &direction)
+sf::Vertex GJK::support(PhysicsObject* p1, PhysicsObject* p2, sf::Vector2f &direction)
 {
-    sf::Vertex point1 = farthestPointInDir(p1, direction);
-    sf::Vertex point2 = farthestPointInDir(p2, -direction);
+    sf::Vertex point1 = p1->farthestPointInDir(direction);
+    sf::Vertex point2 = p2->farthestPointInDir(-direction);
 
     sf::Vertex point3;
     point3.position = point1.position - point2.position;
@@ -122,15 +96,12 @@ sf::Vertex GJK::support(PolyVerts &p1, PolyVerts &p2, sf::Vector2f &direction)
     return point3;
 }
 
-bool GJK::isIntersecting(Polygon* p1, Polygon* p2)
+bool GJK::isIntersecting(PhysicsObject* p1, PhysicsObject* p2)
 {
     sf::Vector2f direction = p1->getPosition() - p2->getPosition();
 
-    PolyVerts p1Verts = p1->constructVerts();
-    PolyVerts p2Verts = p2->constructVerts();
-
     Simplex simp;
-    simp.add(support(p1Verts, p2Verts, direction));
+    simp.add(support(p1, p2, direction));
     direction = -direction;
 
     const int MAX_ITERATIONS = 100;
@@ -138,7 +109,7 @@ bool GJK::isIntersecting(Polygon* p1, Polygon* p2)
 
     while(i < MAX_ITERATIONS)
     {
-        simp.add(support(p1Verts, p2Verts, direction));
+        simp.add(support(p1, p2, direction));
 
         if(sfVectorMath::dot(simp.getLast().position, direction) <= 0.0f)
         {

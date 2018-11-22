@@ -86,7 +86,7 @@ std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* second
     ClippedPoints cp;
     std::vector<Contact> contResult;
     cp.push_back(firstBall->getPosition() + rhat*firstBall->getRadius());
-
+    std::cout << GJK::isIntersecting(firstBall, secondBall) << "\n";
     //sf::CircleShape circ1{2.0f};
     //circ1.setPosition(cp[0]);
     //sf::CircleShape circ2{2.0f};
@@ -95,7 +95,8 @@ std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* second
     //debugWindow->draw(circ1);
     //debugWindow->draw(circ2);
 
-    float separation = sfVectorMath::dot(penetVector, rhat);
+    //float separation = sfVectorMath::dot(penetVector, rhat);
+    float separation = 1.0f;
     if(separation <= 0.0f)
     {
         Collisions::generateContacts(firstBall, secondBall, contResult, cp, rhat, separation);
@@ -438,9 +439,9 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
     debugWindow->draw(quad2);*/
     std::vector<Contact> contResult;
 
-    //std::pair<bool, sf::Vector2f> sepAxis = Collisions::sepAxisTest(poly1Vert, poly2Vert);
-    std::pair<bool, sf::Vector2f> sepAxis = std::make_pair(false, sf::Vector2f{0.0f, 0.0f});
-    std::cout << GJK::isIntersecting(poly1, poly2) << "\n";
+    std::pair<bool, sf::Vector2f> sepAxis = Collisions::sepAxisTest(poly1Vert, poly2Vert);
+    //std::pair<bool, sf::Vector2f> sepAxis = std::make_pair(false, sf::Vector2f{0.0f, 0.0f});
+    //std::cout << GJK::isIntersecting(poly1, poly2) << "\n";
 
     if(sepAxis.first)
     {

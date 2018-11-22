@@ -106,6 +106,8 @@ public:
 
     float getCoefRestitution();
     float getCoefFriction();
+
+    virtual sf::Vertex farthestPointInDir(sf::Vector2f direction) = 0;
 };
 
 #endif // CLASS_DYNOBJ_H

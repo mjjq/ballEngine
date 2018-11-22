@@ -85,3 +85,22 @@ std::vector<sf::Vertex > AABB::constructVerts()
 
     return obbVerts;
 }
+
+sf::Vertex AABB::farthestPointInDir(sf::Vector2f direction)
+{
+    std::vector<sf::Vertex > obbVerts = constructVerts();
+    sf::Vertex result;
+
+    float maxProj = -1e15;
+    for(unsigned int i=0; i<4; ++i)
+    {
+        float currProj = sfVectorMath::dot(obbVerts[i].position, direction);
+        if(currProj > maxProj)
+        {
+            maxProj = currProj;
+            result = obbVerts[i];
+        }
+    }
+
+    return result;
+}

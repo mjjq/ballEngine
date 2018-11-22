@@ -71,3 +71,11 @@ float Ball::getMinSize()
 {
     return radius;
 }
+
+sf::Vertex Ball::farthestPointInDir(sf::Vector2f direction)
+{
+    sf::Vector2f vertPos = getPosition();
+    vertPos += getRadius() * sfVectorMath::norm(direction);
+
+    return sf::Vertex{vertPos};
+}
