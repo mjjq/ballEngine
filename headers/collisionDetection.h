@@ -10,13 +10,13 @@
 #include "GJK.h"
 
 //typedef std::pair<sf::Vector2f, sf::Vector2f> Edge;
-struct Edge
+/*struct Edge
 {
     sf::Vector2f v1;
     sf::Vector2f v2;
     sf::Vector2f dir;
     sf::Vector2f max;
-};
+};*/
 
 typedef std::vector<sf::Vector2f > ClippedPoints;
 
