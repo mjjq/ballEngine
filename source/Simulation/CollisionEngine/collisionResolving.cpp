@@ -408,18 +408,18 @@ std::vector<Contact> Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
     cp.push_back(contactPoint);
 
 
-    Edge cpEdge = GJK::getClosestPoints(ball, poly);
+    /*Edge cpEdge = GJK::getClosestPoints(ball, poly);
     std::vector<sf::Vertex > vData = {
         {cpEdge.v1}, {cpEdge.v2}
     };
     debugWindow->draw(vData.data(), 2, sf::LineStrip);
-    //sf::CircleShape circ1{2.0f};
-    //circ1.setPosition(contactPoint);
-    //sf::CircleShape circ2{2.0f};
-    //circ2.setPosition(*cp.end());
+    sf::CircleShape circ1{2.0f};
+    circ1.setPosition(cpEdge.v1);
+    sf::CircleShape circ2{2.0f};
+    circ2.setPosition(ball->getPosition());
 
-    //debugWindow->draw(circ1);
-    //debugWindow->draw(circ2);
+    debugWindow->draw(circ1);
+    debugWindow->draw(circ2);*/
 
     std::vector<Contact> contResult;
 
@@ -451,11 +451,11 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
     //std::cout << GJK::isIntersecting(poly1, poly2) << "\n";
 
 
-    Edge cpEdge = GJK::getClosestPoints(poly1, poly2);
+    /*Edge cpEdge = GJK::getClosestPoints(poly1, poly2);
     std::vector<sf::Vertex > vData = {
         {cpEdge.v1}, {cpEdge.v2}
     };
-    debugWindow->draw(vData.data(), 2, sf::LineStrip);
+    debugWindow->draw(vData.data(), 2, sf::LineStrip);*/
 
     if(sepAxis.first)
     {
