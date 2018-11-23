@@ -6,6 +6,7 @@
 #include "classAABB.h"
 #include "classOBB.h"
 #include "classPolygon.h"
+#include "classCapsule.h"
 #include "classArbiter.h"
 #include "GJK.h"
 
@@ -59,6 +60,9 @@ public:
     static std::vector<Contact> collisionOBBPoly(OBB *rect, Polygon *poly);
     static std::vector<Contact> collisionBallPoly(Ball *ball, Polygon *poly);
     static std::vector<Contact> collisionPolyPoly(Polygon* poly1, Polygon *poly2);
+    static std::vector<Contact> collisionBallCaps(Ball* ball, Capsule* caps);
+    static std::vector<Contact> collisionPolyCaps(Polygon* poly, Capsule* caps);
+    static std::vector<Contact> collisionCapsCaps(Capsule* caps1, Capsule* caps2);
 
     static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
     static sf::Vector2f calcPenetVector(Ball* ball1, Ball* ball2);

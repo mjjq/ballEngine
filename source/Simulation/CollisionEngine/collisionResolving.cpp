@@ -37,6 +37,9 @@ REGISTER_RESOLVE_FUNCTION(OBB, OBB,   &Collisions::collisionOBBOBB)
 REGISTER_RESOLVE_FUNCTION(OBB, Polygon,  &Collisions::collisionOBBPoly)
 REGISTER_RESOLVE_FUNCTION(Ball, Polygon,   &Collisions::collisionBallPoly)
 REGISTER_RESOLVE_FUNCTION(Polygon, Polygon,   &Collisions::collisionPolyPoly)
+REGISTER_RESOLVE_FUNCTION(Ball, Capsule, &Collisions::collisionBallCaps)
+REGISTER_RESOLVE_FUNCTION(Polygon, Capsule, &Collisions::collisionPolyCaps)
+REGISTER_RESOLVE_FUNCTION(Capsule, Capsule, &Collisions::collisionCapsCaps)
 
 
 std::vector<Contact> Collisions::resolveCollision(PhysicsObject* p1, PhysicsObject* p2)
@@ -492,6 +495,73 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
 
             contResult.push_back(tempContact);
         }
+    }
+    return contResult;
+}
+
+
+std::vector<Contact> Collisions::collisionBallCaps(Ball* ball, Capsule* caps)
+{
+    Edge closestLine = GJK::getClosestPoints(ball, caps);
+
+    float capsuleRadius = caps->getRadius();
+    float lineLengthSq = sfVectorMath::square(closestLine.dir);
+
+    std::vector<Contact > contResult;
+    ClippedPoints cp;
+
+    if(lineLengthSq <= capsuleRadius*capsuleRadius)
+    {
+        sf::Vector2f contactNorm = sfVectorMath::norm(closestLine.dir);
+        float separation = sqrtf(lineLengthSq) - capsuleRadius;
+        cp.push_back(closestLine.v1);
+
+        Collisions::generateContacts(ball, caps, contResult, cp, contactNorm, separation);
+    }
+    return contResult;
+}
+
+std::vector<Contact> Collisions::collisionPolyCaps(Polygon* poly, Capsule* caps)
+{
+    Edge closestLine = GJK::getClosestPoints(poly, caps);
+
+    float capsuleRadius = caps->getRadius();
+    float lineLengthSq = sfVectorMath::square(closestLine.dir);
+
+    std::vector<Contact > contResult;
+    ClippedPoints cp;
+
+    if(lineLengthSq <= capsuleRadius*capsuleRadius)
+    {
+        sf::Vector2f contactNorm = sfVectorMath::norm(closestLine.dir);
+        float separation = sqrtf(lineLengthSq) - capsuleRadius;
+        cp.push_back(closestLine.v1);
+
+        Collisions::generateContacts(poly, caps, contResult, cp, contactNorm, separation);
+    }
+    return contResult;
+
+}
+
+std::vector<Contact> Collisions::collisionCapsCaps(Capsule* caps1, Capsule* caps2)
+{
+    Edge closestLine = GJK::getClosestPoints(caps1, caps2);
+
+    float caps1Radius = caps1->getRadius();
+    float caps2Radius = caps2->getRadius();
+    float capsuleRadius = caps1Radius + caps2Radius;
+    float lineLengthSq = sfVectorMath::square(closestLine.dir);
+
+    std::vector<Contact > contResult;
+    ClippedPoints cp;
+
+    if(lineLengthSq <= capsuleRadius*capsuleRadius)
+    {
+        sf::Vector2f contactNorm = sfVectorMath::norm(closestLine.dir);
+        float separation = sqrtf(lineLengthSq) - capsuleRadius;
+        cp.push_back(closestLine.v1);
+
+        Collisions::generateContacts(caps1, caps2, contResult, cp, contactNorm, separation);
     }
     return contResult;
 }

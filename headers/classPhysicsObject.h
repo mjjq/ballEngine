@@ -9,6 +9,7 @@ enum class ObjectType
     AABB,
     OBB,
     Polygon,
+    Capsule,
     _Count,
 };
 
@@ -22,6 +23,7 @@ struct ObjectProperties
     float _coefRest = 0.0f;
     float _rotation = 0.0f;
     float _rotRate = 0.0f;
+    std::vector<sf::Vertex > _vertices = {};
 };
 
 class PhysicsObject

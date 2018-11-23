@@ -17,8 +17,7 @@ class Polygon : public PhysicsObject
     void genBoundingOBB();
 
 public:
-    Polygon(std::vector<sf::Vertex > _vertices,
-        ObjectProperties init);
+    Polygon(ObjectProperties init);
     ~Polygon();
 
     sf::Rect<float> getGlobalBounds();

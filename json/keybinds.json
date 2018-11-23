@@ -32,7 +32,8 @@
 		"spwnDPoly"		: ["LShift", "LMB"],
 		"spwnSPoly"		: ["LShift", "RMB"],
 		"spwnJson"		: ["MMB"],
-		"spwnSys"		: ["LControl", "RMB"]
+		"spwnSys"		: ["LControl", "RMB"],
+		"spwnCaps"		: ["LAlt", "LMB"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"      : ["D"],

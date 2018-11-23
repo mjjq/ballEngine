@@ -5,6 +5,7 @@
 #include "classPhysicsObject.h"
 #include "classAABB.h"
 #include "classPolygon.h"
+#include "classCapsule.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 #include "classArbiter.h"
@@ -83,10 +84,9 @@ public:
                       float rotation);
     void spawnStaticRect(sf::Vector2f position, float width, float height, float rotation);*/
     void spawnStaticBall(ObjectProperties init);
-    void spawnNewPoly(std::vector<sf::Vertex> &vertices,
-                                ObjectProperties init);
-    void spawnStaticPoly(std::vector<sf::Vertex> &vertices,
-                                ObjectProperties init);
+    void spawnNewPoly(ObjectProperties init);
+    void spawnStaticPoly(ObjectProperties init);
+    void spawnNewObject(bool isStatic, ObjectType type, ObjectProperties init);
 
     void removeBall(int index);
     void removeRect(int index);
