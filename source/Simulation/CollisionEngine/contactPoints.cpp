@@ -371,7 +371,7 @@ int Collisions::getClosestVertex(std::vector<sf::Vertex > &poly, sf::Vertex &int
 {
     float minR = 1e+15f;
     int result = 0;
-    for(int i=0; i<poly.size(); ++i)
+    for(int i=0; i<(int)poly.size(); ++i)
     {
         if(sfVectorMath::square(poly[i].position - intPoint.position) < minR)
         {

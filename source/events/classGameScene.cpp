@@ -222,24 +222,24 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
                                        sVals.mass,
                                        sVals.radius);
         }
-        for(json &currJ : j["statAABB"])
+        /*for(json &currJ : j["statAABB"])
         {
             AABBSpawnVals sVals;
-            /*if(beParser::checkAABBJson(currJ, sVals))
+            if(beParser::checkAABBJson(currJ, sVals))
                 ballSim.spawnStaticRect(sVals.position + position,
                                      sVals.dimensions.x,
-                                     sVals.dimensions.y, 0.0f);*/
+                                     sVals.dimensions.y, 0.0f);
         }
         for(json &currJ : j["dynAABB"])
         {
             AABBSpawnVals sVals;
-            /*(if(beParser::checkAABBJson(currJ, sVals))
+            (if(beParser::checkAABBJson(currJ, sVals))
                 ballSim.spawnNewRect(sVals.position + position,
                                      sVals.dimensions.x,
                                      sVals.dimensions.y,
                                      {velocity},
-                                     5.0f, 0.0f);*/
-        }
+                                     5.0f, 0.0f);
+        }*/
     }
 }
 

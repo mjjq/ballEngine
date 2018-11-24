@@ -74,6 +74,7 @@
 		<Unit filename="headers/classAABB.h" />
 		<Unit filename="headers/classArbiter.h" />
 		<Unit filename="headers/classBall.h" />
+		<Unit filename="headers/classCapsule.h" />
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classMainMenuScene.h" />
@@ -129,6 +130,7 @@
 		<Unit filename="source/Simulation/GameObjects/classAABB.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classArbiter.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classBall.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classCapsule.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classOBB.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classPhysicsObject.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classPolygon.cpp" />

@@ -75,32 +75,16 @@ std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* second
 {
     using namespace sfVectorMath;
 
-    //float coefRest = 0.9f;
-    //sf::Vector2f relPos = firstBall->getPosition() - secondBall->getPosition();
     sf::Vector2f rhat = norm(secondBall->getPosition() - firstBall->getPosition());
-
-    //sf::Vector2f v1 = firstBall->getVelocity();
-    //sf::Vector2f v2 = secondBall->getVelocity();
-    float m1 = firstBall->getMass();
-    float m2 = secondBall->getMass();
 
     sf::Vector2f penetVector = Collisions::calcPenetVector(firstBall, secondBall);
 
     ClippedPoints cp;
     std::vector<Contact> contResult;
     cp.push_back(firstBall->getPosition() + rhat*firstBall->getRadius());
-    //std::cout << GJK::isIntersecting(firstBall, secondBall) << "\n";
-
-    //sf::CircleShape circ1{2.0f};
-    //circ1.setPosition(cp[0]);
-    //sf::CircleShape circ2{2.0f};
-    //circ2.setPosition(*cp.end());
-
-    //debugWindow->draw(circ1);
-    //debugWindow->draw(circ2);
 
     float separation = sfVectorMath::dot(penetVector, rhat);
-    //float separation = 1.0f;
+
     if(separation <= 0.0f)
     {
         Collisions::generateContacts(firstBall, secondBall, contResult, cp, rhat, separation);
@@ -195,18 +179,18 @@ std::vector<Contact> Collisions::collisionBallAABB(Ball* origBall, AABB* origAAB
 
 
     //Collisions::applyImpulse(origBall, origAABB, contactNormal, penetVector, cp);
-
+    return std::vector<Contact > {};
 }
 
 std::vector<Contact> Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
 {
 
-    sf::Vector2f v = rect1->getVelocity() - rect2->getVelocity();
+   // sf::Vector2f v = rect1->getVelocity() - rect2->getVelocity();
 
     float redMassRect1 = rect2->getMass()/(rect1->getMass() + rect2->getMass());
     float redMassRect2 = rect1->getMass()/(rect1->getMass() + rect2->getMass());
 
-    float coefRest = 0.7f;
+    //float coefRest = 0.7f;
     //std::cout << v << "\n";float penetDistance = distance - ball.getRadius();
     sf::Rect<float> rect1Bounds = rect1->getGlobalBounds();
     sf::Rect<float> rect2Bounds = rect2->getGlobalBounds();
@@ -227,7 +211,6 @@ std::vector<Contact> Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
     else if(rCent.y >= rect2Bounds.top + rect2Bounds.height)
         boolYMax = true;
 
-    //std::cout << boolXMin << boolXMax << boolYMin << boolYMax << "\n";
     sf::Vector2f contactNormal = {0.0f, 0.0f};
     sf::Vector2f contactLinePos = {0.0f, 0.0f};
     if((boolXMin || boolXMax) && !(boolYMin || boolYMax))
@@ -243,9 +226,6 @@ std::vector<Contact> Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
             contactLinePos = {rect2Bounds.left + rect2Bounds.width, rect2Bounds.top};
             //contactLinePos = {rect2Bounds.left, rect2Bounds.top};
         }
-
-        rect1->addSolvedVelocity({-coefRest*redMassRect1*2.0f*v.x, 0.0f}, {-coefRest*redMassRect1*2.0f*v.x, 0.0f});
-        rect2->addSolvedVelocity({coefRest*redMassRect2*2.0f*v.x, 0.0f}, {coefRest*redMassRect2*2.0f*v.x, 0.0f});
     }
     else if(!(boolXMin || boolXMax) && (boolYMin || boolYMax))
     {
@@ -261,19 +241,13 @@ std::vector<Contact> Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
             contactLinePos = {rect2Bounds.left, rect2Bounds.top + rect2Bounds.height};
             //contactLinePos = {rect2Bounds.left, rect2Bounds.top};
         }
-
-        rect1->addSolvedVelocity({0.0f, -coefRest*redMassRect1*2.0f*v.y}, {0.0f, -coefRest*redMassRect1*2.0f*v.y});
-        rect2->addSolvedVelocity({0.0f, coefRest*redMassRect2*2.0f*v.y}, {0.0f, coefRest*redMassRect2*2.0f*v.y});
     }
     else
     {
         contactNormal =  Collisions::calcContactNorm(*rect1, *rect2);
-
-        sf::Vector2f newVel{v.x*std::abs(contactNormal.x), v.y*std::abs(contactNormal.y)};
-        rect1->addSolvedVelocity(-newVel*coefRest*redMassRect1*2.0f, -newVel*coefRest*redMassRect1*2.0f);
-        rect2->addSolvedVelocity(newVel*coefRest*redMassRect2*2.0f, newVel*coefRest*redMassRect2*2.0f);
     }
 
+    std::vector<Contact > result;
     if(sfVectorMath::square(contactNormal)>1e-15)
     {
         sf::Vector2f penetVector = Collisions::calcPenetVector(*rect1, *rect2);
@@ -282,6 +256,7 @@ std::vector<Contact> Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
         rect1->setPosition(rect1->getPosition() - redMassRect1*penetVector);
         rect2->setPosition(rect2->getPosition() + redMassRect2*penetVector);
     }
+    return result;
 }
 
 std::vector<Contact> Collisions::collisionBallOBB(Ball* ball, OBB* rect)
@@ -315,7 +290,7 @@ std::vector<Contact> Collisions::collisionBallOBB(Ball* ball, OBB* rect)
         std::pair<sf::Vector2f, sf::Vector2f> contact = Collisions::getContactNormal(&ballInFrame, &obbInFrame);
 
         sf::Vector2f contactNorm = sfVectorMath::rotate(contact.first, rotAngle);
-        sf::Vector2f cornerPos = sfVectorMath::rotate(contact.second, rotAngle);
+        //sf::Vector2f cornerPos = sfVectorMath::rotate(contact.second, rotAngle);
 
         //std::cout << contactNorm << " norm\n";
         //std::cout << penetVector << " pen\n";
@@ -327,6 +302,7 @@ std::vector<Contact> Collisions::collisionBallOBB(Ball* ball, OBB* rect)
         //std::vector<sf::Vertex > rectVerts = rect->constructVerts();
         //ClippedPoints cp = Collisions::getContactPoints(rectVerts, *ball, contactNorm);
         //Collisions::applyImpulse(ball, rect, contactNorm, penetVector, cp);
+        return std::vector<Contact > {};
 }
 
 std::vector<Contact> Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
@@ -361,7 +337,7 @@ std::vector<Contact> Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
     //debugWindow->draw(circ2);
     //if(cp.size()>0)
         //Collisions::applyImpulse(rect1, rect2, -contactNorm, -penetVector, cp);
-
+    return std::vector<Contact > {};
 }
 
 std::vector<Contact> Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
@@ -394,7 +370,7 @@ std::vector<Contact> Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
 
     //debugWindow->draw(circ1);
     //debugWindow->draw(circ2);
-        //Collisions::applyImpulse(rect, poly, -contactNorm, -penetVector, cp);
+      return std::vector<Contact > {};
 }
 
 std::vector<Contact> Collisions::collisionBallPoly(Ball *ball, Polygon *poly)

@@ -11,14 +11,14 @@
 #include "stringConversion.h"
 
 PhysicsObject::PhysicsObject(ObjectProperties init) :
-                    position{init._position},
+                  coefRestitution{init._coefRest},
+                  coefFriction{init._coefFric},
+                  position{init._position},
                   nStepPosition{init._position},
                   cStepVelocity{init._velocity},
-                  mass{init._mass},
-                  coefFriction{init._coefFric},
-                  coefRestitution{init._coefRest},
                   rotAngle{init._rotation},
-                  rotRate{init._rotRate}
+                  rotRate{init._rotRate},
+                  mass{init._mass}
                   {}
 
 PhysicsObject::~PhysicsObject() {}

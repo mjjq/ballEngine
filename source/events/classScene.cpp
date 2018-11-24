@@ -19,12 +19,12 @@ SceneEnum Scene::pollNextScene()
     return nextScene;
 }
 
-void Scene::update(sf::RenderWindow &window)
+void Scene::update(sf::RenderWindow &_window)
 {
 
 }
 
-void Scene::redraw(sf::RenderWindow &window)
+void Scene::redraw(sf::RenderWindow &_window)
 {
 
 }
@@ -34,7 +34,7 @@ void Scene::initBindings()
 
 }
 
-void Scene::loadUI(std::string filePath, UIContainer &container)
+void Scene::loadUI(std::string filePath, UIContainer &_container)
 {
     using json = nlohmann::json;
     std::ifstream initInput(filePath);
@@ -44,7 +44,7 @@ void Scene::loadUI(std::string filePath, UIContainer &container)
         json j;
         input >> j;
         for(json &winJ : j["Windows"])
-            container.addWindow(winJ, buttonFuncMap, sliderFuncMap, textVarMap);
+            _container.addWindow(winJ, buttonFuncMap, sliderFuncMap, textVarMap);
     }
 }
 

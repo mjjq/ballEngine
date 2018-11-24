@@ -99,8 +99,8 @@ float Collisions::rayPolyIntersect(sf::Vector2f rayStart,
                                   std::vector<sf::Vertex > &poly,
                                   float tmin, float tmax, float epsilon)
 {
-    sf::Vector2f r = rayStart;
-    sf::Vector2f v = rayDir;
+    //sf::Vector2f r = rayStart;
+    //sf::Vector2f v = rayDir;
 
     std::vector<Edge > potentialEdges;
 

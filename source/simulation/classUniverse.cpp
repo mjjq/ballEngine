@@ -454,7 +454,7 @@ void BallUniverse::collTimeForBall(unsigned int index)
 
 void BallUniverse::removeBall(int index)
 {
-    if(std::abs(index) < dynamicObjects.size())
+    if(std::abs(index) < (int)dynamicObjects.size())
     {
         if(index >=0)
             dynamicObjects.erase(dynamicObjects.begin() + index);
@@ -485,7 +485,7 @@ void BallUniverse::removeBall(int index)
 
 void BallUniverse::removeRect(int index)
 {
-    if(std::abs(index) < staticObjects.size())
+    if(std::abs(index) < (int)staticObjects.size())
     {
         if(index >= 0)
             staticObjects.erase(staticObjects.begin() + index);
@@ -568,8 +568,8 @@ void BallUniverse::broadPhase()
 
 float BallUniverse::physicsLoop()
 {
-    float dtR = dt;
-    float epsilon = 1e-5;
+    //float dtR = dt;
+    //float epsilon = 1e-5;
 
     pushBall(playerInput, currentPlayer);
 
@@ -835,7 +835,7 @@ void BallUniverse::createAltBallGrid(int numWide, int numHigh, float spacing, sf
         for(int i=-numWide/2; i<=numWide/2; ++i)
             for(int j=-numHigh/2; j<=numHigh/2; ++j)
             {
-                sf::Vector2f offsetPosition = {i*spacing,j*spacing};
+                //sf::Vector2f offsetPosition = {i*spacing,j*spacing};
                 //spawnNewBall(centralPosition + offsetPosition, init_velocity, ballRadius, pow(-1,i)*ballMass);
                 //std::cout << i << " " << j << "\n";
             }

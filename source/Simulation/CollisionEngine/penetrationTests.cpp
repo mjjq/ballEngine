@@ -187,14 +187,14 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
     sf::Vector2f cornerPos  = {0.0f, 0.0f};
     sf::Vector2f cornerPosVert  = {0.0f, 0.0f};
 
-    float ballRad = ball->getRadius();
+    //float ballRad = ball->getRadius();
 
     float distance = 1e+15;
-    float minVertDistSq = 1e+15;
+    //float minVertDistSq = 1e+15;
 
     bool touchCorner = true;
 
-    int theVertex = 0;
+    //int theVertex = 0;
 
     for(unsigned int i=0; i<verts.size(); ++i)
     {
@@ -208,7 +208,7 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
         float tanDist = sfVectorMath::dot(relPos, sfVectorMath::norm(tangent));
         float segDistSq = sfVectorMath::square(tangent);
 
-        theVertex = i;
+        //theVertex = i;
 
         if(std::abs(normDist) <= distance)
         {

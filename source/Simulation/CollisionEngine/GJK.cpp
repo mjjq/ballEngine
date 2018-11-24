@@ -187,7 +187,7 @@ bool GJK::isIntersecting(PhysicsObject* p1, PhysicsObject* p2)
                 direction = simp.getNewDir({0.0f, 0.0f});
         }
         i++;
-    }
+    } return false;
 }
 
 Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
@@ -230,21 +230,21 @@ Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
             break;
         }
 
-        sf::Vertex p1 = closestPToOrigin(simp.getSData(0).difference.position,
+        sf::Vertex point1 = closestPToOrigin(simp.getSData(0).difference.position,
                                          c.difference.position);
-        sf::Vertex p2 = closestPToOrigin(c.difference.position,
+        sf::Vertex point2 = closestPToOrigin(c.difference.position,
                                          simp.getSData(1).difference.position);
 
-        if(sfVectorMath::square(p1.position) < sfVectorMath::square(p2.position))
+        if(sfVectorMath::square(point1.position) < sfVectorMath::square(point2.position))
         {
             simp.setSData(1, c);
-            direction = p1.position;
+            direction = point1.position;
             Q = direction;
         }
         else
         {
             simp.setSData(0, c);
-            direction = p2.position;
+            direction = point2.position;
             Q = direction;
         }
         i++;
