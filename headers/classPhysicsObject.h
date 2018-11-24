@@ -110,6 +110,7 @@ public:
     float getCoefFriction();
 
     virtual sf::Vertex farthestPointInDir(sf::Vector2f direction) = 0;
+    virtual sf::Rect<float > getBoundingBox() = 0;
 };
 
 #endif // CLASS_DYNOBJ_H

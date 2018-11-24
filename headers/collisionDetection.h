@@ -64,6 +64,8 @@ public:
     static std::vector<Contact> collisionPolyCaps(Polygon* poly, Capsule* caps);
     static std::vector<Contact> collisionCapsCaps(Capsule* caps1, Capsule* caps2);
 
+    static bool isAABBIntersecting(PhysicsObject* p1, PhysicsObject* p2);
+
     static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
     static sf::Vector2f calcPenetVector(Ball* ball1, Ball* ball2);
     static sf::Vector2f calcPenetVector(AABB &rect1, AABB &rect2);

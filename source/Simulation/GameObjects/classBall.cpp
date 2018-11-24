@@ -79,3 +79,10 @@ sf::Vertex Ball::farthestPointInDir(sf::Vector2f direction)
 
     return sf::Vertex{vertPos};
 }
+
+sf::Rect<float > Ball::getBoundingBox()
+{
+    sf::Rect<float > rect{position.x-radius, position.y-radius,
+                            2.0f*radius, 2.0f*radius};
+    return rect;
+}

@@ -76,21 +76,13 @@ sf::Rect<float > OBB::getGlobalBounds()
 
 sf::Rect<float > OBB::getBoundingBox()
 {
-    sf::VertexArray obbVerts(sf::Points, 4);
+    float maxX = farthestPointInDir({1.0f, 0.0f}).position.x;
+    float maxY = farthestPointInDir({0.0f, 1.0f}).position.y;
+    float minX = farthestPointInDir({-1.0f, 0.0f}).position.x;
+    float minY = farthestPointInDir({0.0f, -1.0f}).position.y;
 
-    obbVerts[0].position = sf::Vector2f(-size.x/2.0f, -size.y/2.0f);
-    obbVerts[1].position = sf::Vector2f(size.x/2.0f, -size.y/2.0f);
-    obbVerts[2].position = sf::Vector2f(-size.x/2.0f, size.y/2.0f);
-    obbVerts[3].position = sf::Vector2f(size.x/2.0f, size.y/2.0f);
-
-    for(unsigned int i=0; i<4; ++i)
-    {
-        obbVerts[i].position = sfVectorMath::rotate(obbVerts[i].position,
-                                                    rotAngle);
-        obbVerts[i].position += position;
-    }
-
-    return obbVerts.getBounds();
+    sf::Rect<float > rect{minX, minY, maxX-minX, maxY-minY};
+    return rect;
 }
 
 std::vector<sf::Vertex > OBB::constructVerts()

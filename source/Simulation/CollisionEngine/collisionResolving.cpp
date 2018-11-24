@@ -456,7 +456,7 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
 
         //debugWindow->draw(circ1);
         //debugWindow->draw(circ2);
-        debugWindow->draw(circ3);
+        //debugWindow->draw(circ3);
 
         float separation = sfVectorMath::dot(penetVector, contactNorm);
 
@@ -540,4 +540,12 @@ std::vector<Contact> Collisions::collisionCapsCaps(Capsule* caps1, Capsule* caps
         Collisions::generateContacts(caps1, caps2, contResult, cp, contactNorm, separation);
     }
     return contResult;
+}
+
+bool Collisions::isAABBIntersecting(PhysicsObject* p1, PhysicsObject* p2)
+{
+    sf::Rect<float > rect1 = p1->getBoundingBox();
+    sf::Rect<float > rect2 = p2->getBoundingBox();
+
+    return rect1.intersects(rect2);
 }

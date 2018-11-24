@@ -69,6 +69,11 @@ sf::Rect<float > AABB::getGlobalBounds()
     return sf::Rect<float >{position.x, position.y, size.x, size.y};
 }
 
+sf::Rect<float > AABB::getBoundingBox()
+{
+    return sf::Rect<float >{position.x, position.y, size.x, size.y};
+}
+
 
 std::vector<sf::Vertex > AABB::constructVerts()
 {

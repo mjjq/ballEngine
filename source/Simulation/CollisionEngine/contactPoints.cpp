@@ -64,15 +64,15 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
     //flip = true;
     //std::cout << refEdge.v1 << " v1\n";
    // std::cout << refEdge.v2 << " v2\n";
-   sf::Vertex line1[] = {
+   /*sf::Vertex line1[] = {
         sf::Vertex(edge1.v1),
         sf::Vertex(edge1.v2)
-    };
+    };*/
     /*sf::Vertex line2[] = {
         sf::Vertex(edge2.v1),
         sf::Vertex(edge2.v2)
     };*/
-    debugWindow->draw(line1, 2, sf::Lines);
+    //debugWindow->draw(line1, 2, sf::Lines);
     //debugWindow->draw(line2, 2, sf::Lines);
 
 
@@ -122,7 +122,7 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
 
     //std::cout << cpFinal[0] << " " << cpFinal[1] << "\n";
     //std::cout << cp.size() << "\n";
-if(cpFinal.size() >= 1)
+/*if(cpFinal.size() >= 1)
     {
     sf::CircleShape circ1{2.5f};
     circ1.setPosition(cpFinal[0]);
@@ -137,7 +137,7 @@ if(cpFinal.size() >= 1)
     }
     debugWindow->draw(circ1);
 
-    }
+    }*/
 
     return cpFinal;
 }
@@ -151,11 +151,11 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
     //std::cout << contactNormal << "norm\n";
     //std::cout << edge1.dir << "edge\n";
 
-    sf::Vertex line1[] = {
+    /*sf::Vertex line1[] = {
         sf::Vertex(edge1.v1),
         sf::Vertex(edge1.v2)
     };
-    debugWindow->draw(line1, 2, sf::Lines);
+    debugWindow->draw(line1, 2, sf::Lines);*/
 
     //bool flip = false;
     Edge refEdge;

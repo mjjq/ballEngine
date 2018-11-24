@@ -20,8 +20,18 @@ Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
             obj2 = p1;
         }
 
-        contacts = Collisions::resolveCollision(obj1, obj2);
-        numContacts = contacts.size();
+        //if(Collisions::isAABBIntersecting(obj1, obj2))
+        //{
+            contacts = Collisions::resolveCollision(obj1, obj2);
+            numContacts = contacts.size();
+        /*}
+        else
+        {
+            contacts = {};
+            numContacts = 0;
+        }*/
+
+
         coefFriction = sqrtf(obj1->getCoefFriction() * obj2->getCoefFriction());
         coefRestitution = std::max(obj1->getCoefRestitution(),
                                obj2->getCoefRestitution());
@@ -39,8 +49,16 @@ Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
 
 void Arbiter::update()
 {
-    contacts = Collisions::resolveCollision(obj1, obj2);
-    numContacts = contacts.size();
+    //if(Collisions::isAABBIntersecting(obj1, obj2))
+    //{
+        contacts = Collisions::resolveCollision(obj1, obj2);
+        numContacts = contacts.size();
+    /*}
+    else
+    {
+        contacts = {};
+        numContacts = 0;
+    }*/
 
     pwv.v1 = obj1->getVelocity();
     pwv.v2 = obj2->getVelocity();

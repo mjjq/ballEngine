@@ -23,6 +23,8 @@ public:
     void draw(sf::RenderWindow &_window);
 
     sf::Vertex farthestPointInDir(sf::Vector2f direction);
+
+    sf::Rect<float > getBoundingBox();
 };
 
 #endif // CLASS_UNIVERSE_H

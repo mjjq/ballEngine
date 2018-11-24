@@ -15,6 +15,7 @@ public:
     ~AABB();
 
     sf::Rect<float> getGlobalBounds();
+    sf::Rect<float > getBoundingBox();
 
     static const ObjectType MY_TYPE = ObjectType::AABB;
     ObjectType type() const override;
@@ -27,6 +28,7 @@ public:
     sf::Vertex farthestPointInDir(sf::Vector2f direction);
 
     std::vector<sf::Vertex > constructVerts();
+
 
 };
 

@@ -113,23 +113,13 @@ sf::Rect<float > Polygon::getGlobalBounds()
 
 sf::Rect<float > Polygon::getBoundingBox()
 {
-    sf::VertexArray PolygonVerts(sf::Points, 4);
+    float maxX = farthestPointInDir({1.0f, 0.0f}).position.x;
+    float maxY = farthestPointInDir({0.0f, 1.0f}).position.y;
+    float minX = farthestPointInDir({-1.0f, 0.0f}).position.x;
+    float minY = farthestPointInDir({0.0f, -1.0f}).position.y;
 
-    PolygonVerts[0].position = sf::Vector2f(boundingOBB.left, boundingOBB.top);
-    PolygonVerts[1].position = sf::Vector2f(boundingOBB.left + boundingOBB.width, boundingOBB.top);
-    PolygonVerts[2].position = sf::Vector2f(boundingOBB.left + boundingOBB.width, boundingOBB.top + boundingOBB.height);
-    PolygonVerts[3].position = sf::Vector2f(boundingOBB.left, boundingOBB.top + boundingOBB.height);
-    //PolygonVerts[3].position = sf::Vector2f(size.x/2.0f, size.y/2.0f);
-
-    for(unsigned int i=0; i<4; ++i)
-    {
-        //PolygonVerts[i].position += centrePosition;
-        PolygonVerts[i].position = sfVectorMath::rotate(PolygonVerts[i].position,
-                                                    rotAngle);
-        PolygonVerts[i].position += position;
-    }
-
-    return PolygonVerts.getBounds();
+    sf::Rect<float > rect{minX, minY, maxX-minX, maxY-minY};
+    return rect;
 }
 
 std::vector<sf::Vertex > Polygon::constructVerts()

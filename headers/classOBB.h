@@ -14,13 +14,13 @@ public:
     ~OBB();
 
     sf::Rect<float> getGlobalBounds();
+    sf::Rect<float > getBoundingBox();
 
     static const ObjectType MY_TYPE = ObjectType::OBB;
     ObjectType type() const override;
 
     float getMinSize();
     sf::Vector2f getCoM();
-    sf::Rect<float > getBoundingBox();
     std::vector<sf::Vertex > constructVerts();
     float getRotAngle();
 

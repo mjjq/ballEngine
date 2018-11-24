@@ -187,7 +187,8 @@ bool GJK::isIntersecting(PhysicsObject* p1, PhysicsObject* p2)
                 direction = simp.getNewDir({0.0f, 0.0f});
         }
         i++;
-    } return false;
+    }
+    return false;
 }
 
 Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)

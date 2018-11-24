@@ -89,14 +89,13 @@ sf::Rect<float > Capsule::getGlobalBounds()
 
 sf::Rect<float > Capsule::getBoundingBox()
 {
-    sf::VertexArray CapsuleVerts(sf::Points, 4);
+    float maxX = farthestPointInDir({1.0f, 0.0f}).position.x + radius;
+    float maxY = farthestPointInDir({0.0f, 1.0f}).position.y + radius;
+    float minX = farthestPointInDir({-1.0f, 0.0f}).position.x - radius;
+    float minY = farthestPointInDir({0.0f, -1.0f}).position.y - radius;
 
-    CapsuleVerts[0] = farthestPointInDir({1.0f, 0.0f});
-    CapsuleVerts[1] = farthestPointInDir({0.0f, 1.0f});
-    CapsuleVerts[2] = farthestPointInDir({-1.0f, 0.0f});
-    CapsuleVerts[3] = farthestPointInDir({0.0f, -1.0f});
-
-    return CapsuleVerts.getBounds();
+    sf::Rect<float > rect{minX, minY, maxX-minX, maxY-minY};
+    return rect;
 }
 
 std::vector<sf::Vertex > Capsule::constructVerts()
