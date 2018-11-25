@@ -57,15 +57,12 @@ void SandboxScene::load()
             {"chgBColour",  [&]{ballSim.changeBallColour();}},
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
-            {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});
-                                KeyBinds::isFuncContinuous = true;}},
-            {"mvPlrRgt",    [&]{ballSim.playerInFunc({-1,0});
+            {"plrJump",     [&]{ballSim.playerInFunc({0,1});
+                                KeyBinds::isFuncContinuous = false;}},
+            {"mvPlrRgt",    [&]{ballSim.playerInFunc({1,0});
                                 KeyBinds::isFuncContinuous = true;}
                                 },
-            {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});
-                                KeyBinds::isFuncContinuous = true;}
-                                },
-            {"mvPlrLft",    [&]{ballSim.playerInFunc({1,0});
+            {"mvPlrLft",    [&]{ballSim.playerInFunc({-1,0});
                                 KeyBinds::isFuncContinuous = true;}
                                 },
             {"spwnSingle",  [&]{
@@ -137,7 +134,7 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    ballSim.spawnNewObject(false, ObjectType::Ball,
+                    ballSim.spawnNewObject(false, SpawnObjectType::Ball,
                                            {static_cast<sf::Vector2f>(mousePosOnClick),
                                          velocity,
                                          {spawnRadius, 0.0f},
@@ -151,11 +148,27 @@ void SandboxScene::load()
             }
             },
 
+            {"spwnChar",  [&]{
+                if(drawLine == true){
+                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);
+                    ballSim.spawnNewCharacter({static_cast<sf::Vector2f>(mousePosOnClick),
+                                              velocity,
+                                              {spawnRadius, 2.0f*spawnRadius},
+                                              spawnMass,
+                                              2.5f,
+                                              9.0f
+                                              });
+                    drawLine = false;
+                }
+            }
+            },
+
             {"spwnCaps",  [&]{
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    ballSim.spawnNewObject(false, ObjectType::Capsule,
+                    ballSim.spawnNewObject(false, SpawnObjectType::Capsule,
                                            {static_cast<sf::Vector2f>(mousePosOnClick),
                                          velocity,
                                          {spawnRadius, 3.0f*spawnRadius},

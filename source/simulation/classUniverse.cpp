@@ -152,7 +152,7 @@ void BallUniverse::spawnStaticPoly(ObjectProperties init)
     }
 }
 
-void BallUniverse::spawnNewObject(bool isStatic, ObjectType type, ObjectProperties init)
+void BallUniverse::spawnNewObject(bool isStatic, SpawnObjectType type, ObjectProperties init)
 {
     sf::Vector2f position = init._position;
     if(!(position.x < 0 ||
@@ -164,21 +164,21 @@ void BallUniverse::spawnNewObject(bool isStatic, ObjectType type, ObjectProperti
         {
             switch(type)
             {
-                case ObjectType::Ball :
+                case SpawnObjectType::Ball :
                 {
                     std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
                     dynamicObjects.push_back(std::move(newBall));
                     numOfBalls++;
                     break;
                 }
-                case ObjectType::Polygon :
+                case SpawnObjectType::Polygon :
                 {
                     std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(init);
                     dynamicObjects.push_back(std::move(newPoly));
                     numOfBalls++;
                     break;
                 }
-                case ObjectType::Capsule :
+                case SpawnObjectType::Capsule :
                 {
                     std::unique_ptr<Capsule > newCapsule = std::make_unique<Capsule >(init);
                     dynamicObjects.push_back(std::move(newCapsule));
@@ -194,19 +194,19 @@ void BallUniverse::spawnNewObject(bool isStatic, ObjectType type, ObjectProperti
             init._mass = 1e+15;
             switch(type)
             {
-                case ObjectType::Ball:
+                case SpawnObjectType::Ball:
                 {
                     std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
                     staticObjects.push_back(std::move(newBall));
                     break;
                 }
-                case ObjectType::Polygon:
+                case SpawnObjectType::Polygon:
                 {
                     std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(init);
                     staticObjects.push_back(std::move(newPoly));
                     break;
                 }
-                case ObjectType::Capsule:
+                case SpawnObjectType::Capsule:
                 {
                     std::unique_ptr<Capsule > newCapsule = std::make_unique<Capsule >(init);
                     staticObjects.push_back(std::move(newCapsule));
@@ -219,7 +219,23 @@ void BallUniverse::spawnNewObject(bool isStatic, ObjectType type, ObjectProperti
     }
 }
 
+void BallUniverse::spawnNewCharacter(CharacterProperties init)
+{
+    ObjectProperties objProps;
+    objProps._position = init.position;
+    objProps._velocity = init.velocity;
+    objProps._mass = init.mass;
+    objProps._size = init.size;
+    objProps._coefFric = 5.0f;
 
+    std::unique_ptr<Capsule > newCapsule = std::make_unique<Capsule >(objProps);
+    Character newChar{newCapsule.get(), init};
+    dynamicObjects.push_back(std::move(newCapsule));
+    characters.push_back(newChar);
+
+
+    numOfBalls++;
+}
 
 //void resetAndCheckBounce(std::vector<Ball>)
 /**
@@ -1168,7 +1184,15 @@ void BallUniverse::applyUGravity()
 
 void BallUniverse::playerInFunc(sf::Vector2f relVector)
 {
-    playerInput += relVector;
+    if(sfVectorMath::dot(relVector, {0.0f, 1.0f}) <= 0)
+    {
+        if(sfVectorMath::dot(relVector, {1.0f, 0.0f}) > 0.0f)
+            characters[0].moveRight();
+        else
+            characters[0].moveLeft();
+    }
+    else
+        characters[0].jump();
 }
 
 BallUniverse::BallUniverse(int _worldSizeX,

@@ -326,6 +326,11 @@ float PhysicsObject::getMomentInertia()
     return momentInertia;
 }
 
+void PhysicsObject::setMomentInertia(float i)
+{
+    momentInertia = i;
+}
+
 float PhysicsObject::getRotRate()
 {
     return rotRate;

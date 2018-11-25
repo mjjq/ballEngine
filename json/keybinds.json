@@ -8,7 +8,7 @@
 		"zmFromMse"	 	: ["Equal"],
 		"rstView"	 	: ["Num0"],
 		"tglSimPse"	 	: ["P"],
-		"viewPan"	 	: ["Space"],
+		"viewPan"	 	: ["V"],
 		"incMass" 	 	: ["M"],
 		"decMass"	 	: ["LControl", "M"],
 		"incRad"	 	: ["R"],
@@ -22,10 +22,9 @@
 		"chgBColour" 	: ["LControl", "K"],
 		"undoBall"   	: ["LControl", "Z"],
 		"undoRect"   	: ["LAlt", "Z"],
-		"mvPlrFwd"      : ["W"],
 		"mvPlrRgt"      : ["D"],
-		"mvPlrBck"      : ["S"],
 		"mvPlrLft"      : ["A"],
+		"plrJump"       : ["Space"],
 		"spwnSingle"	: ["LMB"],
 		"spwnSCirc"		: ["RMB"],
 		"spwnDAABB"		: ["LControl", "LMB"],
@@ -33,7 +32,7 @@
 		"spwnSPoly"		: ["LShift", "RMB"],
 		"spwnJson"		: ["MMB"],
 		"spwnSys"		: ["LControl", "RMB"],
-		"spwnCaps"		: ["LAlt", "LMB"]
+		"spwnChar"		: ["LAlt", "LMB"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"      : ["D"],

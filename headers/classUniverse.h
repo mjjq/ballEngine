@@ -6,15 +6,26 @@
 #include "classAABB.h"
 #include "classPolygon.h"
 #include "classCapsule.h"
+#include "classCharacter.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 #include "classArbiter.h"
+
+enum class SpawnObjectType
+{
+    Ball,
+    Polygon,
+    Capsule,
+    _Count,
+};
 
 class BallUniverse
 {
     std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
     std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
     std::map<ArbiterKey, Arbiter> arbiters;
+
+    std::vector<Character > characters;
 
     int worldSizeX;
     int worldSizeY;
@@ -86,7 +97,8 @@ public:
     void spawnStaticBall(ObjectProperties init);
     void spawnNewPoly(ObjectProperties init);
     void spawnStaticPoly(ObjectProperties init);
-    void spawnNewObject(bool isStatic, ObjectType type, ObjectProperties init);
+    void spawnNewObject(bool isStatic, SpawnObjectType type, ObjectProperties init);
+    void spawnNewCharacter(CharacterProperties init);
 
     void removeBall(int index);
     void removeRect(int index);

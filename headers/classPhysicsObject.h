@@ -103,6 +103,7 @@ public:
 
     sf::Vector2f getCoM();
     float getMomentInertia();
+    void setMomentInertia(float i);
     float getRotRate();
     void setRotRate(float _rotRate);
 
