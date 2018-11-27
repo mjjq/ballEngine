@@ -56,6 +56,8 @@ protected:
     bool isPlayer = false;
 
 public:
+    sf::Vector2f contactNormal;
+
     PhysicsObject(ObjectProperties init);
     ~PhysicsObject();
 

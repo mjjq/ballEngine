@@ -147,6 +147,7 @@ public:
     void splitBalls(int ballIndex, float relDirection, float speed);
     void applyUGravity();
     void playerInFunc(sf::Vector2f relVector);
+    void charContactData();
 
 };
 

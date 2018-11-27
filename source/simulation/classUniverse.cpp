@@ -600,6 +600,7 @@ float BallUniverse::physicsLoop()
     }
 
     broadPhase();
+    charContactData();
 
     updateAllObjects(enable_forces, dt);
 
@@ -1193,6 +1194,36 @@ void BallUniverse::playerInFunc(sf::Vector2f relVector)
     }
     else
         characters[0].jump();
+}
+
+void BallUniverse::charContactData()
+{
+    for(Character &char1 : characters)
+    {
+        char1.contactData.clear();
+        PhysicsObject* collider = char1.collider;
+        for(auto it = arbiters.begin(); it != arbiters.end(); ++it)
+        {
+            if(it->second.obj1 == collider)
+            {
+                Contact arbContact = it->second.contacts[0];
+                ContactData newData{arbContact.position,
+                                    arbContact.normal,
+                                    arbContact.tangent,
+                                    arbContact.rA};
+                char1.contactData.push_back(newData);
+            }
+            else if(it->second.obj2 == collider)
+            {
+                Contact arbContact = it->second.contacts[0];
+                ContactData newData{arbContact.position,
+                                    -arbContact.normal,
+                                    -arbContact.tangent,
+                                    arbContact.rB};
+                char1.contactData.push_back(newData);
+            }
+        }
+    }
 }
 
 BallUniverse::BallUniverse(int _worldSizeX,
