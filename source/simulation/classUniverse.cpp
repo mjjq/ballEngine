@@ -1200,8 +1200,8 @@ void BallUniverse::charContactData()
 {
     for(Character &char1 : characters)
     {
-        char1.contactData.clear();
-        PhysicsObject* collider = char1.collider;
+        char1.clearContactData();
+        PhysicsObject* collider = char1.getColliderAddress();
         for(auto it = arbiters.begin(); it != arbiters.end(); ++it)
         {
             if(it->second.obj1 == collider)
@@ -1211,7 +1211,7 @@ void BallUniverse::charContactData()
                                     arbContact.normal,
                                     arbContact.tangent,
                                     arbContact.rA};
-                char1.contactData.push_back(newData);
+                char1.addContactData(newData);
             }
             else if(it->second.obj2 == collider)
             {
@@ -1220,7 +1220,7 @@ void BallUniverse::charContactData()
                                     -arbContact.normal,
                                     -arbContact.tangent,
                                     arbContact.rB};
-                char1.contactData.push_back(newData);
+                char1.addContactData(newData);
             }
         }
     }

@@ -25,14 +25,20 @@ class Character
 {
     CharacterProperties properties;
     void moveSideWays(float input);
-public:
-    Character(Capsule* _collider, CharacterProperties init);
     std::vector<ContactData > contactData;
     Capsule* collider;
+
+    static float MAX_SLOPE_ANGLE;
+    static float MAX_SLOPE_COSINE;
+public:
+    Character(Capsule* _collider, CharacterProperties init);
 
     void moveLeft();
     void moveRight();
     void jump();
+    void addContactData(ContactData &data);
+    void clearContactData();
+    Capsule* getColliderAddress();
 };
 
 #endif // CLASS_CHAR_H

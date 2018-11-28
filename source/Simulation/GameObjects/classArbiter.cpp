@@ -24,12 +24,6 @@ Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
         //{
             contacts = Collisions::resolveCollision(obj1, obj2);
             numContacts = contacts.size();
-
-            if(numContacts>0)
-            {
-                obj1->contactNormal = contacts[0].normal;
-                obj2->contactNormal = -contacts[0].normal;
-            }
         /*}
         else
         {
@@ -65,12 +59,6 @@ void Arbiter::update()
         contacts = {};
         numContacts = 0;
     }*/
-
-    if(numContacts>0)
-    {
-        obj1->contactNormal = contacts[0].normal;
-        obj2->contactNormal = -contacts[0].normal;
-    }
 
     pwv.v1 = obj1->getVelocity();
     pwv.v2 = obj2->getVelocity();
