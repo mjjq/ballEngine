@@ -84,6 +84,7 @@ public:
     void setVelocity(sf::Vector2f vel);
     void setMass(float _mass);
     void applyExternalImpulse(sf::Vector2f force, float dt);
+    void setCoefFriction(float coef);
 
     void sampleNextPosition();
     void sampleCurrentPosition();

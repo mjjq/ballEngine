@@ -227,6 +227,11 @@ float PhysicsObject::getGPE(PhysicsObject* otherObj)
     return -getMass()*otherObj->getMass()/getDistance(otherObj);
 }
 
+void PhysicsObject::setCoefFriction(float coef)
+{
+    coefFriction = coef;
+}
+
 
 
 /**

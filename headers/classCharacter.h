@@ -19,7 +19,9 @@ struct CharacterProperties
     float mass;
     float movementSpeed;
     float jumpPower;
+    float coefFriction = 4.0f;
 };
+
 
 class Character
 {
@@ -27,6 +29,8 @@ class Character
     void moveSideWays(float input);
     std::vector<ContactData > contactData;
     Capsule* collider;
+
+    bool slopeOkay = true;
 
     static float MAX_SLOPE_ANGLE;
     static float MAX_SLOPE_COSINE;
@@ -38,6 +42,8 @@ public:
     void jump();
     void addContactData(ContactData &data);
     void clearContactData();
+    bool updateState();
+    bool getSlopeState();
     Capsule* getColliderAddress();
 };
 

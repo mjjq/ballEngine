@@ -1212,6 +1212,9 @@ void BallUniverse::charContactData()
                                     arbContact.tangent,
                                     arbContact.rA};
                 char1.addContactData(newData);
+
+                if(!char1.updateState())
+                    it->second.coefFriction = 0.0f;
             }
             else if(it->second.obj2 == collider)
             {
@@ -1221,6 +1224,9 @@ void BallUniverse::charContactData()
                                     -arbContact.tangent,
                                     arbContact.rB};
                 char1.addContactData(newData);
+
+                if(!char1.updateState())
+                    it->second.coefFriction = 0.0f;
             }
         }
     }

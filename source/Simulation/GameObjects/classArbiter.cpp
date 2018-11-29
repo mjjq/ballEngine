@@ -53,6 +53,10 @@ void Arbiter::update()
     //{
         contacts = Collisions::resolveCollision(obj1, obj2);
         numContacts = contacts.size();
+
+        coefFriction = sqrtf(obj1->getCoefFriction() * obj2->getCoefFriction());
+        coefRestitution = std::max(obj1->getCoefRestitution(),
+                               obj2->getCoefRestitution());
     /*}
     else
     {
