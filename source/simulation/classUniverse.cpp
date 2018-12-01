@@ -587,9 +587,6 @@ float BallUniverse::physicsLoop()
     //float dtR = dt;
     //float epsilon = 1e-5;
 
-    pushBall(playerInput, currentPlayer);
-
-    playerInput = {0,0};
 
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
     {
@@ -603,6 +600,9 @@ float BallUniverse::physicsLoop()
     charContactData();
 
     updateAllObjects(enable_forces, dt);
+    pushBall(playerInput, currentPlayer);
+
+    playerInput = {0,0};
 
     for(ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
     {
@@ -1066,7 +1066,7 @@ void BallUniverse::pushBall(float force, float relDirection, int i)
 
 void BallUniverse::pushBall(sf::Vector2f &resVector, int ballArg)
 {
-    if(dynamicObjects.size()>0 && currentPlayer >= 0)
+    /*if(dynamicObjects.size()>0 && currentPlayer >= 0)
     {
         sf::Vector2f currVel = dynamicObjects.at(ballArg).get()->getVelocity();
         float currVelDir = 0;
@@ -1084,6 +1084,18 @@ void BallUniverse::pushBall(sf::Vector2f &resVector, int ballArg)
 
             dynamicObjects.at(ballArg).get()->applyExternalImpulse(rotVec, dt);
         }
+    }*/
+    if(characters.size()>0 && sfVectorMath::square(resVector)>0.0f)
+    {
+        if(sfVectorMath::dot(resVector, {0.0f, 1.0f}) <= 0)
+        {
+            if(sfVectorMath::dot(resVector, {1.0f, 0.0f}) > 0.0f)
+                characters[0].moveRight();
+            else
+                characters[0].moveLeft();
+        }
+        else
+            characters[0].jump();
     }
 
 }
@@ -1185,15 +1197,7 @@ void BallUniverse::applyUGravity()
 
 void BallUniverse::playerInFunc(sf::Vector2f relVector)
 {
-    if(sfVectorMath::dot(relVector, {0.0f, 1.0f}) <= 0)
-    {
-        if(sfVectorMath::dot(relVector, {1.0f, 0.0f}) > 0.0f)
-            characters[0].moveRight();
-        else
-            characters[0].moveLeft();
-    }
-    else
-        characters[0].jump();
+    playerInput = relVector;
 }
 
 void BallUniverse::charContactData()

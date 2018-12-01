@@ -44,11 +44,9 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
     c.lambdaMin = 0.0f;
     c.lambdaMax = 1e+15;
 
-    c.bias = -0.0f * sfVectorMath::dot(relVel, normal);
-
     float baumGarte = sfVectorMath::dot(penetVector, normal);
 
-    c.bias += 0.1f * baumGarte;
+    c.bias = 0.1f * baumGarte;
     /*std::cout << normal << "norm\n";
     std::cout << penetVector << "pen\n";
     std::cout << baumGarte << " bgarte\n";

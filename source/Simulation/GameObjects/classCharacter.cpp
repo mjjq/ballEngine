@@ -17,7 +17,7 @@ void Character::moveSideWays(float input)
 {
     if(contactData.size() > 0)
     {
-        for(int i=0; i<contactData.size(); ++i)
+        for(int i=0; i<(int)contactData.size(); ++i)
         {
             if(slopeOkay)
             {
@@ -80,7 +80,7 @@ bool Character::updateState()
     //slopeOkay = true;
     //collider->setCoefFriction(properties.coefFriction);
 
-    for(int i=0; i<contactData.size(); ++i)
+    for(int i=0; i<(int)contactData.size(); ++i)
     {
         float dProduct = sfVectorMath::dot(contactData[i].normal, {0.0f, 1.0f});
         if(dProduct < MAX_SLOPE_COSINE)

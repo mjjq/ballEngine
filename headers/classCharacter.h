@@ -25,10 +25,10 @@ struct CharacterProperties
 
 class Character
 {
+    Capsule* collider;
     CharacterProperties properties;
     void moveSideWays(float input);
     std::vector<ContactData > contactData;
-    Capsule* collider;
 
     bool slopeOkay = true;
 
