@@ -525,6 +525,7 @@ void BallUniverse::removeRect(int index)
 
 void BallUniverse::broadPhase()
 {
+    float dtR = dt;
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
     {
         PhysicsObject* obji = dynamicObjects[i].get();
@@ -550,7 +551,15 @@ void BallUniverse::broadPhase()
                     iter->second.update();
             }
             else
-                arbiters.erase(key);
+            {
+                if(obji->isBullet() || objj->isBullet())
+                {
+                    //float newDt = Collisions::timeToCollision(obji, objj);
+                    //if(newDt < dtR)
+                }
+                else
+                    arbiters.erase(key);
+            }
         }
     }
 

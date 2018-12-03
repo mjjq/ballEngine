@@ -18,7 +18,8 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   cStepVelocity{init._velocity},
                   rotAngle{init._rotation},
                   rotRate{init._rotRate},
-                  mass{init._mass}
+                  mass{init._mass},
+                  bullet{init._bullet}
                   {}
 
 PhysicsObject::~PhysicsObject() {}
@@ -192,6 +193,10 @@ float PhysicsObject::getSpeed()
     return pow(sfVectorMath::dot(getVelocity(),getVelocity()),0.5);
 }
 
+bool PhysicsObject::isBullet()
+{
+    return bullet;
+}
 
 /**
     Get the relative speed between this ball and another ball.

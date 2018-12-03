@@ -60,7 +60,8 @@ void Character::moveRight()
 
 void Character::jump()
 {
-    collider->addSolvedVelocity({0.0f, -properties.jumpPower},
+    if(touchingSurface && (slopeOkay || contactData.size()==2))
+        collider->addSolvedVelocity({0.0f, -properties.jumpPower},
                                 {0.0f, -properties.jumpPower});
 }
 
@@ -73,6 +74,7 @@ void Character::clearContactData()
 {
     contactData.clear();
     slopeOkay = true;
+    touchingSurface = false;
 }
 
 bool Character::updateState()
@@ -82,6 +84,7 @@ bool Character::updateState()
 
     for(int i=0; i<(int)contactData.size(); ++i)
     {
+        touchingSurface = true;
         float dProduct = sfVectorMath::dot(contactData[i].normal, {0.0f, 1.0f});
         if(dProduct < MAX_SLOPE_COSINE)
         {

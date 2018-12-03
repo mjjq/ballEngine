@@ -31,6 +31,7 @@ class Character
     std::vector<ContactData > contactData;
 
     bool slopeOkay = true;
+    bool touchingSurface = false;
 
     static float MAX_SLOPE_ANGLE;
     static float MAX_SLOPE_COSINE;

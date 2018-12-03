@@ -24,6 +24,7 @@ struct ObjectProperties
     float _rotation = 0.0f;
     float _rotRate = 0.0f;
     std::vector<sf::Vertex > _vertices = {};
+    bool _bullet = false;
 };
 
 class PhysicsObject
@@ -54,6 +55,7 @@ protected:
     std::deque<sf::Vector2f> previousPositions;
     bool samplePreviousPositions = false;
     bool isPlayer = false;
+    bool bullet = false;
 
 public:
     PhysicsObject(ObjectProperties init);
@@ -72,6 +74,7 @@ public:
     float getKE();
     float getSpeed();
     sf::Vector2f getMomentum();
+    bool isBullet();
 
     float getGPE(PhysicsObject* otherObj);
     float getDistance(PhysicsObject* otherObj);
