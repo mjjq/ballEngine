@@ -76,6 +76,7 @@
 		<Unit filename="headers/classBall.h" />
 		<Unit filename="headers/classCapsule.h" />
 		<Unit filename="headers/classCharacter.h" />
+		<Unit filename="headers/classEquipable.h" />
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classMainMenuScene.h" />
@@ -84,6 +85,7 @@
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classPhysicsObject.h" />
 		<Unit filename="headers/classPolygon.h" />
+		<Unit filename="headers/classProjectileWeapon.h" />
 		<Unit filename="headers/classSandboxScene.h" />
 		<Unit filename="headers/classScene.h" />
 		<Unit filename="headers/classSceneManager.h" />
@@ -120,6 +122,7 @@
 		<Unit filename="source/Miscellaneous/stringConversion.cpp" />
 		<Unit filename="source/Miscellaneous/structs.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/GJK.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/classArbiter.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/collisionDetection.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/collisionResolving.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/constraintSolver.cpp" />
@@ -128,16 +131,16 @@
 		<Unit filename="source/Simulation/CollisionEngine/penetrationTests.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/rayObjectsTests.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/sepAxisTests.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classAABB.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classArbiter.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classBall.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classCapsule.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacter.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classOBB.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classPhysicsObject.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classPolygon.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classEquipable.cpp" />
 		<Unit filename="source/Simulation/Movement/forces.cpp" />
 		<Unit filename="source/Simulation/Movement/integrators.cpp" />
+		<Unit filename="source/Simulation/PhysicsObjects/classAABB.cpp" />
+		<Unit filename="source/Simulation/PhysicsObjects/classBall.cpp" />
+		<Unit filename="source/Simulation/PhysicsObjects/classCapsule.cpp" />
+		<Unit filename="source/Simulation/PhysicsObjects/classOBB.cpp" />
+		<Unit filename="source/Simulation/PhysicsObjects/classPhysicsObject.cpp" />
+		<Unit filename="source/Simulation/PhysicsObjects/classPolygon.cpp" />
 		<Unit filename="source/Simulation/classUniverse.cpp" />
 		<Unit filename="source/UI/classUIButton.cpp" />
 		<Unit filename="source/UI/classUIContainer.cpp" />
