@@ -2,6 +2,7 @@
 #define CLASS_CHAR_H
 
 #include "classCapsule.h"
+#include "classProjectileWeapon.h"
 
 struct ContactData
 {
@@ -25,6 +26,8 @@ struct CharacterProperties
 
 class Character
 {
+    static float MAX_SLOPE_ANGLE;
+    static float MAX_SLOPE_COSINE;
     Capsule* collider;
     CharacterProperties properties;
     void moveSideWays(float input);
@@ -33,8 +36,8 @@ class Character
     bool slopeOkay = true;
     bool touchingSurface = false;
 
-    static float MAX_SLOPE_ANGLE;
-    static float MAX_SLOPE_COSINE;
+    Equipable* equippedItem;
+
 public:
     Character(Capsule* _collider, CharacterProperties init);
 
@@ -46,6 +49,7 @@ public:
     bool updateState();
     bool getSlopeState();
     Capsule* getColliderAddress();
+    Equipable* getEquippedItem();
 };
 
 #endif // CLASS_CHAR_H

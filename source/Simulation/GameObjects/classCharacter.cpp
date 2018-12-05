@@ -105,3 +105,8 @@ Capsule* Character::getColliderAddress()
 {
     return collider;
 }
+
+Equipable* Character::getEquippedItem()
+{
+    return equippedItem;
+}

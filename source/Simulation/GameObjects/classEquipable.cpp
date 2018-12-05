@@ -1,1 +1,3 @@
+#include "classEquipable.h"
+
 
