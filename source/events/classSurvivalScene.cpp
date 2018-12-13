@@ -124,14 +124,14 @@ void SurvivalScene::load()
             {"chgBColour",  [&]{ballSim.changeBallColour();}},
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
-            {"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});
-                                KeyBinds::isFuncContinuous = true;}},
-            {"mvPlrRgt",    [&]{if(gameLogic.allowPlayerMovement)ballSim.playerInFunc({-0.2,0});
+            //{"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});
+            //                    KeyBinds::isFuncContinuous = true;}},
+            /*{"mvPlrRgt",    [&]{if(gameLogic.allowPlayerMovement)ballSim.playerInFunc({-0.2,0});
                                 KeyBinds::isFuncContinuous = true;}},
             {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});
                                 KeyBinds::isFuncContinuous = true;}},
             {"mvPlrLft",    [&]{if(gameLogic.allowPlayerMovement)ballSim.playerInFunc({0.2,0});
-                                KeyBinds::isFuncContinuous = true;}},
+                                KeyBinds::isFuncContinuous = true;}},*/
             {"startGme",    [&]{startGame();}},
             {"restart",     [&]{restartGame();}}
         };

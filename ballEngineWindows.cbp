@@ -29,11 +29,10 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-std=c++14" />
-					<Add option="-pg" />
 					<Add option="-DSFML_STATIC" />
 				</Compiler>
 				<Linker>
-					<Add option="-pg -lgmon" />
+					<Add option="-s" />
 					<Add option="-static-libstdc++" />
 					<Add option="-static-libgcc" />
 					<Add option="-static" />
@@ -78,6 +77,7 @@
 		<Unit filename="headers/classBall.h" />
 		<Unit filename="headers/classCapsule.h" />
 		<Unit filename="headers/classCharacter.h" />
+		<Unit filename="headers/classCharacterManager.h" />
 		<Unit filename="headers/classEquipable.h" />
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classKeyBinds.h" />
@@ -136,6 +136,7 @@
 		<Unit filename="source/Simulation/CollisionEngine/rayObjectsTests.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/sepAxisTests.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacter.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classCharacterManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classEquipable.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classProjectileWeapon.cpp" />
 		<Unit filename="source/Simulation/Movement/forces.cpp" />

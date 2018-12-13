@@ -3,6 +3,7 @@
 
 #include "classCapsule.h"
 #include "classProjectileWeapon.h"
+#include "Observer.h"
 
 struct ContactData
 {
@@ -24,8 +25,9 @@ struct CharacterProperties
 };
 
 
-class Character
+class Character : public Entity
 {
+    Subject charSubject;
     static float MAX_SLOPE_ANGLE;
     static float MAX_SLOPE_COSINE;
     Capsule* collider;
@@ -39,7 +41,7 @@ class Character
     Equipable* equippedItem;
 
 public:
-    Character(Capsule* _collider, CharacterProperties init);
+    Character(CharacterProperties init, Observer* obs = nullptr, Capsule* rigidBind = nullptr);
 
     void moveLeft();
     void moveRight();
@@ -50,6 +52,8 @@ public:
     bool getSlopeState();
     Capsule* getColliderAddress();
     Equipable* getEquippedItem();
+
+    void equipablePrimary();
 };
 
 #endif // CLASS_CHAR_H

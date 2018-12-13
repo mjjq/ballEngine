@@ -219,23 +219,11 @@ void BallUniverse::spawnNewObject(bool isStatic, SpawnObjectType type, ObjectPro
     }
 }
 
-void BallUniverse::spawnNewCharacter(CharacterProperties init)
+void BallUniverse::spawnNewObject(std::unique_ptr<PhysicsObject> obj)
 {
-    ObjectProperties objProps;
-    objProps._position = init.position;
-    objProps._velocity = init.velocity;
-    objProps._mass = init.mass;
-    objProps._size = init.size;
-    objProps._coefFric = 5.0f;
-
-    std::unique_ptr<Capsule > newCapsule = std::make_unique<Capsule >(objProps);
-    Character newChar{newCapsule.get(), init};
-    dynamicObjects.push_back(std::move(newCapsule));
-    characters.push_back(newChar);
-
-
-    numOfBalls++;
+    dynamicObjects.emplace_back(std::move(obj));
 }
+
 
 //void resetAndCheckBounce(std::vector<Ball>)
 /**
@@ -290,15 +278,18 @@ void BallUniverse::updateAllObjects(bool _enableForces, float _dt)
     if(_enableForces==true)
         for(auto iter1 = dynamicObjects.begin(); iter1 != dynamicObjects.end(); ++iter1)
             for(auto iter2 = dynamicObjects.begin(); iter2 != dynamicObjects.end(); ++iter2)
-                if(&iter1 != &iter2)
+                if(&iter1 != &iter2 && !(*iter1)->ignoresGravity() && !(*iter2)->ignoresGravity())
                     updateFirstVelocity(intEnum, _dt, (*iter1).get(), (*iter2).get());
 
     if(universalGravity==true)
         for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); iter++)
         {
-            std::pair<sf::Vector2f,sf::Vector2f> solution;
-            solution = integrators::verletMethod(_dt, uGravityDir);
-            (*iter)->addSolvedVelocity(solution.first, solution.second);
+            if(!(*iter)->ignoresGravity())
+            {
+                std::pair<sf::Vector2f,sf::Vector2f> solution;
+                solution = integrators::verletMethod(_dt, uGravityDir);
+                (*iter)->addSolvedVelocity(solution.first, solution.second);
+            }
         }
 }
 
@@ -606,12 +597,9 @@ float BallUniverse::physicsLoop()
     }
 
     broadPhase();
-    charContactData();
+    universeSub.notify(*this, Event{EventType::Character_Contact});
 
     updateAllObjects(enable_forces, dt);
-    pushBall(playerInput, currentPlayer);
-
-    playerInput = {0,0};
 
     for(ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
     {
@@ -980,7 +968,6 @@ void BallUniverse::clearSimulation()
     colliderArray.clearMatrix();
     staticCollArray.clearMatrix();
     numOfBalls = 0;
-    currentPlayer = -1;
     arbiters.clear();
 }
 
@@ -1061,7 +1048,7 @@ int BallUniverse::getNumTimesColld(unsigned int index)
 
 void BallUniverse::pushBall(float force, float relDirection, int i)
 {
-    if(dynamicObjects.size()>0 && currentPlayer >= 0)
+    if(dynamicObjects.size()>0)
     {
         sf::Vector2f velocity = dynamicObjects.at(i).get()->getVelocity();
         sf::Vector2f forceVec{0,0};
@@ -1094,24 +1081,8 @@ void BallUniverse::pushBall(sf::Vector2f &resVector, int ballArg)
             dynamicObjects.at(ballArg).get()->applyExternalImpulse(rotVec, dt);
         }
     }*/
-    if(characters.size()>0 && sfVectorMath::square(resVector)>0.0f)
-    {
-        if(sfVectorMath::dot(resVector, {0.0f, 1.0f}) <= 0)
-        {
-            if(sfVectorMath::dot(resVector, {1.0f, 0.0f}) > 0.0f)
-                characters[0].moveRight();
-            else
-                characters[0].moveLeft();
-        }
-        else
-            characters[0].jump();
-    }
 
-}
 
-void BallUniverse::pushPlayer(float force, float relDirection)
-{
-    pushBall(force, relDirection, currentPlayer);
 }
 
 void BallUniverse::toggleTrajectories()
@@ -1120,45 +1091,22 @@ void BallUniverse::toggleTrajectories()
     {
         enable_trajectories = false;
         for(int i=0; (unsigned)i<dynamicObjects.size(); ++i)
-            if(i!=currentPlayer)
-                dynamicObjects.at(i).get()->setSamplePrevPosBool(false);
+            dynamicObjects.at(i).get()->setSamplePrevPosBool(false);
     }
     else
     {
         enable_trajectories = true;
         for(int i=0; (unsigned)i<dynamicObjects.size(); ++i)
-            if(i!=currentPlayer)
-                dynamicObjects.at(i).get()->setSamplePrevPosBool(true);
+            dynamicObjects.at(i).get()->setSamplePrevPosBool(true);
     }
 }
 
 void BallUniverse::setPlayer(unsigned int playerIndex)
 {
-    if(playerIndex < dynamicObjects.size() && playerIndex >= 0)
-    {
-        if(currentPlayer >=0)
-        {
-            dynamicObjects.at(currentPlayer).get()->setIsPlayer(false);
-            //dynamicObjects.at(currentPlayer).setFillColor(sf::Color::Green);
-            //dynamicObjects.at(currentPlayer).setSamplePrevPosBool(enable_trajectories);
-        }
-        dynamicObjects.at(playerIndex).get()->setIsPlayer(true);
-        //dynamicObjects.at(playerIndex).setFillColor(sf::Color::Red);
-        //dynamicObjects.at(currentPlayer).setSamplePrevPosBool(enable_trajectories);
-        currentPlayer = playerIndex;
-    }
 }
 
 void BallUniverse::togglePlayerTraj()
 {
-    if(currentPlayer>=0)
-    {
-        PhysicsObject *currentObj = dynamicObjects.at(currentPlayer).get();
-        if(currentObj->getSamplePrevPosBool())
-            currentObj->setSamplePrevPosBool(false);
-        else
-            currentObj->setSamplePrevPosBool(true);
-    }
 }
 
 void BallUniverse::splitBalls(int ballIndex, float relDirection, float speed)
@@ -1204,45 +1152,10 @@ void BallUniverse::applyUGravity()
     }
 }
 
-void BallUniverse::playerInFunc(sf::Vector2f relVector)
+
+void BallUniverse::newObserver(Observer* obs)
 {
-    playerInput = relVector;
-}
-
-void BallUniverse::charContactData()
-{
-    for(Character &char1 : characters)
-    {
-        char1.clearContactData();
-        PhysicsObject* collider = char1.getColliderAddress();
-        for(auto it = arbiters.begin(); it != arbiters.end(); ++it)
-        {
-            if(it->second.obj1 == collider)
-            {
-                Contact arbContact = it->second.contacts[0];
-                ContactData newData{arbContact.position,
-                                    arbContact.normal,
-                                    arbContact.tangent,
-                                    arbContact.rA};
-                char1.addContactData(newData);
-
-                if(!char1.updateState())
-                    it->second.coefFriction = 0.0f;
-            }
-            else if(it->second.obj2 == collider)
-            {
-                Contact arbContact = it->second.contacts[0];
-                ContactData newData{arbContact.position,
-                                    -arbContact.normal,
-                                    -arbContact.tangent,
-                                    arbContact.rB};
-                char1.addContactData(newData);
-
-                if(!char1.updateState())
-                    it->second.coefFriction = 0.0f;
-            }
-        }
-    }
+    universeSub.addObserver(obs);
 }
 
 BallUniverse::BallUniverse(int _worldSizeX,

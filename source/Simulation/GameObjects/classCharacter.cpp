@@ -7,14 +7,16 @@
 float Character::MAX_SLOPE_ANGLE = 50.0f;
 float Character::MAX_SLOPE_COSINE = cosf(sfVectorMath::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
-Character::Character(Capsule* _collider, CharacterProperties init) :
-    collider{_collider}, properties{init}
+Character::Character(CharacterProperties init, Observer* obs, Capsule* rigidBind) :
+    properties{init}, collider{rigidBind}
 {
+    charSubject.addObserver(obs);
     collider->setMomentInertia(1e+15);
 }
 
 void Character::moveSideWays(float input)
 {
+    std::cout << contactData.size() << "\n";
     if(contactData.size() > 0)
     {
         for(int i=0; i<(int)contactData.size(); ++i)
@@ -109,4 +111,9 @@ Capsule* Character::getColliderAddress()
 Equipable* Character::getEquippedItem()
 {
     return equippedItem;
+}
+
+void Character::equipablePrimary()
+{
+    charSubject.notify(*this, Event{EventType::Fire_Bullet});
 }

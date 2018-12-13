@@ -16,6 +16,9 @@ void SandboxScene::load()
         isLoaded = true;
 
         ballSim = BallUniverse{2000,2000,1.0f,false,false};
+        charMan = CharacterManager{};
+        charWorldInterface = ICharWorld{&ballSim, &charMan};
+        ballSim.newObserver(&charWorldInterface);
 
         wSize = ballSim.getWorldSize();
         changeBoundaryRect(wSize);
@@ -57,12 +60,13 @@ void SandboxScene::load()
             {"chgBColour",  [&]{ballSim.changeBallColour();}},
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
-            {"plrJump",     [&]{ballSim.playerInFunc({0,1});
+            {"equPrim",     [&]{charMan.equipablePrimary(0);}},
+            {"plrJump",     [&]{charMan.moveCharacter({0,1}, 0);
                                 KeyBinds::isFuncContinuous = false;}},
-            {"mvPlrRgt",    [&]{ballSim.playerInFunc({1,0});
+            {"mvPlrRgt",    [&]{charMan.moveCharacter({1,0}, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
-            {"mvPlrLft",    [&]{ballSim.playerInFunc({-1,0});
+            {"mvPlrLft",    [&]{charMan.moveCharacter({-1,0}, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
             {"spwnSingle",  [&]{
@@ -152,7 +156,7 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    ballSim.spawnNewCharacter({static_cast<sf::Vector2f>(mousePosOnClick),
+                    charWorldInterface.spawnNewCharacter({static_cast<sf::Vector2f>(mousePosOnClick),
                                               velocity,
                                               {spawnRadius, 2.0f*spawnRadius},
                                               spawnMass,
@@ -387,6 +391,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
     mousePosOnPan = sf::Mouse::getPosition(window);
 
     ballSim.universeLoop(currentFrameTime, targetFrameTime);
+
 
     timeToNextSpawn -= currentFrameTime;
 }

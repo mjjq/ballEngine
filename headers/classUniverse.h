@@ -10,6 +10,7 @@
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 #include "classArbiter.h"
+#include "Observer.h"
 
 enum class SpawnObjectType
 {
@@ -19,13 +20,8 @@ enum class SpawnObjectType
     _Count,
 };
 
-class BallUniverse
+class BallUniverse : public Entity
 {
-    std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
-    std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
-    std::map<ArbiterKey, Arbiter> arbiters;
-
-    std::vector<Character > characters;
 
     int worldSizeX;
     int worldSizeY;
@@ -56,8 +52,6 @@ class BallUniverse
     float sampledt = 5*dt;
     float timeToNextSample = sampledt;
     bool enable_trajectories = false;
-    int currentPlayer = -1;
-    sf::Vector2f playerInput{0, 0};
 
     void calcCollTimes();
     void findShortestCollTime();
@@ -78,7 +72,12 @@ class BallUniverse
     float physicsLoopAbsorb();
     void broadPhase();
 
+    Subject universeSub;
 public:
+    std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
+    std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
+    std::map<ArbiterKey, Arbiter> arbiters;
+
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
@@ -98,7 +97,7 @@ public:
     void spawnNewPoly(ObjectProperties init);
     void spawnStaticPoly(ObjectProperties init);
     void spawnNewObject(bool isStatic, SpawnObjectType type, ObjectProperties init);
-    void spawnNewCharacter(CharacterProperties init);
+    void spawnNewObject(std::unique_ptr<PhysicsObject> obj);
 
     void removeBall(int index);
     void removeRect(int index);
@@ -142,13 +141,11 @@ public:
     sf::Vector2f getObjPosition(unsigned int i);
     void pushBall(float force, float relDirection, int i);
     void pushBall(sf::Vector2f &resVector, int ballArg);
-    void pushPlayer(float force, float relDirection);
     void setPlayer(unsigned int playerIndex);
     void splitBalls(int ballIndex, float relDirection, float speed);
     void applyUGravity();
-    void playerInFunc(sf::Vector2f relVector);
-    void charContactData();
 
+    void newObserver(Observer* obs);
 };
 
 #endif // CLASS_UNIVERSE_H

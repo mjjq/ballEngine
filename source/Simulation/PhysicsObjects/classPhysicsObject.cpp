@@ -1,10 +1,3 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <cmath>
-#include <thread>
-#include <limits>
-#include <tuple>
-
 #include "classPhysicsObject.h"
 #include "sfVectorMath.h"
 #include "integrators.h"
@@ -19,7 +12,8 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   rotAngle{init._rotation},
                   rotRate{init._rotRate},
                   mass{init._mass},
-                  bullet{init._bullet}
+                  bullet{init._bullet},
+                  ignoreGravity{init._ignoreGravity}
                   {}
 
 PhysicsObject::~PhysicsObject() {}
@@ -196,6 +190,11 @@ float PhysicsObject::getSpeed()
 bool PhysicsObject::isBullet()
 {
     return bullet;
+}
+
+bool PhysicsObject::ignoresGravity()
+{
+    return ignoreGravity;
 }
 
 /**

@@ -2,6 +2,12 @@
 #define CLASS_PHYSOBJ_H
 
 #include <deque>
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <cmath>
+#include <thread>
+#include <limits>
+#include <tuple>
 
 enum class ObjectType
 {
@@ -25,9 +31,15 @@ struct ObjectProperties
     float _rotRate = 0.0f;
     std::vector<sf::Vertex > _vertices = {};
     bool _bullet = false;
+    bool _ignoreGravity = false;
 };
 
-class PhysicsObject
+class Entity
+{
+
+};
+
+class PhysicsObject : public Entity
 {
     float coefRestitution = 0.0f;
     float coefFriction = 1.0f;
@@ -56,6 +68,7 @@ protected:
     bool samplePreviousPositions = false;
     bool isPlayer = false;
     bool bullet = false;
+    bool ignoreGravity = false;
 
 public:
     PhysicsObject(ObjectProperties init);
@@ -75,6 +88,7 @@ public:
     float getSpeed();
     sf::Vector2f getMomentum();
     bool isBullet();
+    bool ignoresGravity();
 
     float getGPE(PhysicsObject* otherObj);
     float getDistance(PhysicsObject* otherObj);
