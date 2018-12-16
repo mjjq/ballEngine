@@ -7,7 +7,8 @@
 class SandboxScene : public GameScene
 {
     CharacterManager charMan;
-    ICharWorld charWorldInterface{nullptr, nullptr};
+    ProjectileManager projMan;
+    ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
 public:
     SandboxScene(sf::RenderWindow &_window,
                  sf::Time &_targetFTime,

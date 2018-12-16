@@ -1,10 +1,13 @@
 #include "characterWorldInterface.h"
 #include "sfVectorMath.h"
 
-ICharWorld::ICharWorld(BallUniverse* _world, CharacterManager* _cMang)
+ICharWorld::ICharWorld(BallUniverse* _world,
+                       CharacterManager* _cMang,
+                       ProjectileManager* _pMang)
 {
     world = _world;
     charMan = _cMang;
+    projMan = _pMang;
 }
 
 /*void ICharWorld::checkEquippedWeapon()
@@ -93,29 +96,68 @@ void ICharWorld::charContactData()
     }
 }
 
+void ICharWorld::projContactData()
+{
+    for(int i=0; i<(int)projMan->projectiles.size(); ++i)
+    {
+        Projectile* proj = projMan->projectiles[i];
+        PhysicsObject* collider = proj->getColliderAddress();
+        for(auto it = world->arbiters.begin(); it != world->arbiters.end(); ++it)
+        {
+            if(it->second.obj1 == collider || it->second.obj2 == collider)
+                proj->onCollide();
+        }
+    }
+}
+
 
 void ICharWorld::onNotify(Entity& entity, Event event)
 {
     switch(event.type)
     {
-        case(EventType::Fire_Bullet):
+        case(EventType::Fire_Weapon):
         {
-            Character& currentChar = static_cast<Character& >(entity);
-            sf::Vector2f position = currentChar.getColliderAddress()->getPosition();
-            position = position + sf::Vector2f{20.0f, -10.0f};
-            ObjectProperties temp;
-            temp._position = position;
-            temp._velocity = {20.0f, 0.0f};
-            temp._size = {3.0f, 3.0f};
-            temp._ignoreGravity = true;
-            world->spawnNewObject(false, SpawnObjectType::Ball, temp);
-            std::cout << "bullet fired\n";
-            //world->spawnObject(new GameObject);
+            std::cout << "fire\n";
+            ProjectileWeapon& currentWep = static_cast<ProjectileWeapon& >(entity);
+            sf::Vector2f position = currentWep.getParentPos() + currentWep.getLocalPosition();
+            float angle = currentWep.getAimAngle();
+            Projectile* proj = new Projectile{currentWep.PROJ_TYPE,
+                                                position,
+                                                sfVectorMath::rotate({1.0f, 0.0f}, angle)};
+            proj->addObserver(this);
+            std::unique_ptr<Ball > newBall = std::make_unique<Ball >(proj->getProjProps());
+            proj->setColliderAddress(newBall.get());
+
+            projMan->addProjectile(proj);
+            world->spawnNewObject(std::move(newBall));
+
+            break;
+        }
+        case(EventType::Destroy_Projectile) :
+        {
+            Projectile& proj = static_cast<Projectile& >(entity);
+            std::cout << proj.getColliderAddress();
+            for(int i=0; i<world->dynamicObjects.size(); ++i)
+            {
+                if(world->dynamicObjects[i].get() == proj.getColliderAddress())
+                {
+                    world->removeBall(i);
+                    break;
+                }
+            }
+            projMan->removeProjectile(&proj);
+
             break;
         }
         case(EventType::Character_Contact) :
         {
             charContactData();
+            break;
+        }
+        case(EventType::Projectile_Contact) :
+        {
+            projContactData();
+            break;
         }
         default :
         {

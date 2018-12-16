@@ -17,7 +17,8 @@ void SandboxScene::load()
 
         ballSim = BallUniverse{2000,2000,1.0f,false,false};
         charMan = CharacterManager{};
-        charWorldInterface = ICharWorld{&ballSim, &charMan};
+        projMan = ProjectileManager{};
+        charWorldInterface = ICharWorld{&ballSim, &charMan, &projMan};
         ballSim.newObserver(&charWorldInterface);
 
         wSize = ballSim.getWorldSize();
@@ -48,6 +49,10 @@ void SandboxScene::load()
             {"viewPan",     [&]{
                 checkForViewPan(mousePosOnPan);
                 canZoom = true;
+                KeyBinds::isFuncContinuous = true;
+                    }},
+            {"aimChar",     [&]{
+                charMan.setAimAngle(0, (sf::Vector2f)mousePosOnPan);
                 KeyBinds::isFuncContinuous = true;
                     }},
             {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
@@ -392,6 +397,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     ballSim.universeLoop(currentFrameTime, targetFrameTime);
 
+    charMan.setAimAngle(0, window.mapPixelToCoords(mousePosOnPan));
 
     timeToNextSpawn -= currentFrameTime;
 }

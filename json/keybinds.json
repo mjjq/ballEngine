@@ -33,7 +33,8 @@
 		"spwnJson"		: ["MMB"],
 		"spwnSys"		: ["LControl", "RMB"],
 		"spwnChar"		: ["LAlt", "LMB"],
-		"equPrim"		: ["Q"]
+		"equPrim"		: ["Q"],
+		"aimChar"		: ["X"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"      : ["D"],

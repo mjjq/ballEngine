@@ -14,7 +14,7 @@ void CharacterManager::addCharacter(Character* newChar)
 
 void CharacterManager::moveCharacter(sf::Vector2f direction, int characterIndex)
 {
-    if(characters.size()>characterIndex && sfVectorMath::square(direction)>0.0f)
+    if((int)characters.size()>characterIndex && sfVectorMath::square(direction)>0.0f)
     {
         if(sfVectorMath::dot(direction, {0.0f, 1.0f}) <= 0)
         {
@@ -37,4 +37,21 @@ void CharacterManager::equipablePrimary(int charIndex)
 void CharacterManager::newObserver(Observer* obs)
 {
     subCharMan.addObserver(obs);
+}
+
+void CharacterManager::setAimAngle(int index, sf::Vector2f targetPos)
+{
+    if(index < (int)characters.size())
+    {
+        Character* currChar = characters[index];
+        sf::Vector2f relPos = targetPos - currChar->getPosition();
+
+        float angle = 0.0f;
+        if(sfVectorMath::square(relPos) > 0.0f)
+        {
+            angle = atan2(relPos.y, relPos.x);
+        }
+        //std::cout << 180.0f * angle / sfVectorMath::PI << "\n";
+        currChar->getEquippedItem()->changeAimAngle(180.0f * angle / sfVectorMath::PI);
+    }
 }

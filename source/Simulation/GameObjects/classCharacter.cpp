@@ -11,6 +11,7 @@ Character::Character(CharacterProperties init, Observer* obs, Capsule* rigidBind
     properties{init}, collider{rigidBind}
 {
     charSubject.addObserver(obs);
+    equippedItem->addObserver(obs);
     collider->setMomentInertia(1e+15);
 }
 
@@ -115,5 +116,17 @@ Equipable* Character::getEquippedItem()
 
 void Character::equipablePrimary()
 {
-    charSubject.notify(*this, Event{EventType::Fire_Bullet});
+    equippedItem->updateParentPos(collider->getPosition());
+    equippedItem->primaryFunc();
+    //charSubject.notify(*this, Event{EventType::Fire_Bullet});
+}
+
+sf::Vector2f Character::getEquipablePosition()
+{
+    return equippedItem->getLocalPosition() + collider->getPosition();
+}
+
+sf::Vector2f Character::getPosition()
+{
+    return collider->getPosition();
 }

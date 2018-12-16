@@ -222,6 +222,7 @@ void BallUniverse::spawnNewObject(bool isStatic, SpawnObjectType type, ObjectPro
 void BallUniverse::spawnNewObject(std::unique_ptr<PhysicsObject> obj)
 {
     dynamicObjects.emplace_back(std::move(obj));
+    ++numOfBalls;
 }
 
 
@@ -598,6 +599,7 @@ float BallUniverse::physicsLoop()
 
     broadPhase();
     universeSub.notify(*this, Event{EventType::Character_Contact});
+    universeSub.notify(*this, Event{EventType::Projectile_Contact});
 
     updateAllObjects(enable_forces, dt);
 

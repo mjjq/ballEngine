@@ -30,15 +30,15 @@ class Character : public Entity
     Subject charSubject;
     static float MAX_SLOPE_ANGLE;
     static float MAX_SLOPE_COSINE;
-    Capsule* collider;
     CharacterProperties properties;
+    Capsule* collider;
     void moveSideWays(float input);
     std::vector<ContactData > contactData;
 
     bool slopeOkay = true;
     bool touchingSurface = false;
 
-    Equipable* equippedItem;
+    Equipable* equippedItem = new ProjectileWeapon{};
 
 public:
     Character(CharacterProperties init, Observer* obs = nullptr, Capsule* rigidBind = nullptr);
@@ -54,6 +54,8 @@ public:
     Equipable* getEquippedItem();
 
     void equipablePrimary();
+    sf::Vector2f getPosition();
+    sf::Vector2f getEquipablePosition();
 };
 
 #endif // CLASS_CHAR_H

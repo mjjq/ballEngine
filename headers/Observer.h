@@ -4,8 +4,10 @@
 
 enum class EventType
 {
-    Fire_Bullet,
+    Fire_Weapon,
+    Destroy_Projectile,
     Character_Contact,
+    Projectile_Contact,
     Count
 };
 

@@ -69,7 +69,7 @@
 		</Linker>
 		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/GJK.h" />
-		<Unit filename="headers/SpawnInterface.h" />
+		<Unit filename="headers/Observer.h" />
 		<Unit filename="headers/characterWorldInterface.h" />
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classAABB.h" />
@@ -87,6 +87,8 @@
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classPhysicsObject.h" />
 		<Unit filename="headers/classPolygon.h" />
+		<Unit filename="headers/classProjectile.h" />
+		<Unit filename="headers/classProjectileManager.h" />
 		<Unit filename="headers/classProjectileWeapon.h" />
 		<Unit filename="headers/classSandboxScene.h" />
 		<Unit filename="headers/classScene.h" />
@@ -118,8 +120,8 @@
 		<Unit filename="source/Events/classScene.cpp" />
 		<Unit filename="source/Events/classSceneManager.cpp" />
 		<Unit filename="source/Events/classSurvivalScene.cpp" />
-		<Unit filename="source/Interfaces/SpawnInterface.cpp" />
 		<Unit filename="source/Interfaces/characterWorldInterface.cpp" />
+		<Unit filename="source/Miscellaneous/Observer.cpp" />
 		<Unit filename="source/Miscellaneous/class2DMatrix.cpp" />
 		<Unit filename="source/Miscellaneous/jsonParsing.cpp" />
 		<Unit filename="source/Miscellaneous/sfVectorMath.cpp" />
@@ -138,6 +140,8 @@
 		<Unit filename="source/Simulation/GameObjects/classCharacter.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacterManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classEquipable.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classProjectile.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classProjectileManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classProjectileWeapon.cpp" />
 		<Unit filename="source/Simulation/Movement/forces.cpp" />
 		<Unit filename="source/Simulation/Movement/integrators.cpp" />
