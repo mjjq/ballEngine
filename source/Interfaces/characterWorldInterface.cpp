@@ -117,7 +117,6 @@ void ICharWorld::onNotify(Entity& entity, Event event)
     {
         case(EventType::Fire_Weapon):
         {
-            std::cout << "fire\n";
             ProjectileWeapon& currentWep = static_cast<ProjectileWeapon& >(entity);
             sf::Vector2f position = currentWep.getParentPos() + currentWep.getLocalPosition();
             float angle = currentWep.getAimAngle();
@@ -136,7 +135,6 @@ void ICharWorld::onNotify(Entity& entity, Event event)
         case(EventType::Destroy_Projectile) :
         {
             Projectile& proj = static_cast<Projectile& >(entity);
-            std::cout << proj.getColliderAddress();
             for(int i=0; i<world->dynamicObjects.size(); ++i)
             {
                 if(world->dynamicObjects[i].get() == proj.getColliderAddress())

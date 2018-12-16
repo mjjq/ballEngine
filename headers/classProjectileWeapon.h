@@ -14,7 +14,7 @@ public:
     const EquipableType MY_TYPE = EquipableType::PWeapon;
     EquipableType type() const override;
 
-    ProjectileType PROJ_TYPE = ProjectileType::Bullet;
+    ProjectileType PROJ_TYPE = ProjectileType::Bomb;
 
     void primaryFunc();
     void secondaryFunc();

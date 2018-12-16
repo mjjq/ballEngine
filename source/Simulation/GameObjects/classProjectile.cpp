@@ -26,7 +26,6 @@ Projectile::Projectile(ProjectileType type,
 
 void Projectile::onCollide()
 {
-    std::cout << "bullet collision\n";
     projSub.notify(*this, Event{EventType::Destroy_Projectile});
 }
 
