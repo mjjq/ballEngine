@@ -22,6 +22,8 @@ public:
     void spawnNewCharacter(CharacterProperties init);
     void charContactData();
     void projContactData();
+    Character* getProjCharCollision(Projectile& proj);
+    void dealDamage(Projectile& proj);
     virtual void onNotify(Entity& entity, Event event);
 };
 

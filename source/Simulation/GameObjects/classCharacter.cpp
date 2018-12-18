@@ -8,7 +8,7 @@ float Character::MAX_SLOPE_ANGLE = 50.0f;
 float Character::MAX_SLOPE_COSINE = cosf(sfVectorMath::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
 Character::Character(CharacterProperties init, Observer* obs, Capsule* rigidBind) :
-    properties{init}, collider{rigidBind}
+    properties{init}, collider{rigidBind}, currentHealth{init.maxHealth}
 {
     charSubject.addObserver(obs);
     equippedItem->addObserver(obs);
@@ -129,4 +129,19 @@ sf::Vector2f Character::getEquipablePosition()
 sf::Vector2f Character::getPosition()
 {
     return collider->getPosition();
+}
+
+void Character::setHealth(float health)
+{
+    if(health < 0.0f)
+        currentHealth = 0.0f;
+    else if(health > properties.maxHealth)
+        currentHealth = properties.maxHealth;
+    else
+        currentHealth = health;
+}
+
+float Character::getHealth()
+{
+    return currentHealth;
 }

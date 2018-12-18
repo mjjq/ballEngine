@@ -22,6 +22,7 @@ struct CharacterProperties
     float movementSpeed;
     float jumpPower;
     float coefFriction = 4.0f;
+    float maxHealth = 10.0f;
 };
 
 
@@ -40,6 +41,7 @@ class Character : public Entity
 
     Equipable* equippedItem = new ProjectileWeapon{};
 
+    float currentHealth = 1.0f;
 public:
     Character(CharacterProperties init, Observer* obs = nullptr, Capsule* rigidBind = nullptr);
 
@@ -56,6 +58,9 @@ public:
     void equipablePrimary();
     sf::Vector2f getPosition();
     sf::Vector2f getEquipablePosition();
+
+    void setHealth(float health);
+    float getHealth();
 };
 
 #endif // CLASS_CHAR_H

@@ -21,6 +21,8 @@ class Projectile : public Entity
     void initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir);
 
     Subject projSub;
+
+    float damage = 0.0f;
 public:
     Projectile(ProjectileType type,
                sf::Vector2f initPos,
@@ -32,6 +34,8 @@ public:
     void setColliderAddress(PhysicsObject* object);
 
     void addObserver(Observer* obs);
+
+    float getDamage();
 };
 
 #endif // CLASS_PROJECTILE_H

@@ -26,6 +26,7 @@ Projectile::Projectile(ProjectileType type,
 
 void Projectile::onCollide()
 {
+    projSub.notify(*this, Event{EventType::Deal_Damage});
     projSub.notify(*this, Event{EventType::Destroy_Projectile});
 }
 
@@ -50,6 +51,7 @@ void Projectile::initialiseBullet(sf::Vector2f initPos, sf::Vector2f initDir)
     float bulletSpeed = 5.0f;
     float bulletMass = 1.0f;
     float bulletRadius = 2.5f;
+    damage = 2.0f;
 
     ObjectProperties init;
     init._position = initPos;
@@ -69,6 +71,7 @@ void Projectile::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
     float bulletSpeed = 5.0f;
     float bulletMass = 5.0f;
     float bulletRadius = 5.0f;
+    damage = 1.0f;
 
     ObjectProperties init;
     init._position = initPos;
@@ -86,4 +89,9 @@ void Projectile::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
 void Projectile::addObserver(Observer* obs)
 {
     projSub.addObserver(obs);
+}
+
+float Projectile::getDamage()
+{
+    return damage;
 }

@@ -110,6 +110,43 @@ void ICharWorld::projContactData()
     }
 }
 
+Character* ICharWorld::getProjCharCollision(Projectile& proj)
+{
+    PhysicsObject* projectileObj = proj.getColliderAddress();
+
+    for(int i=0; i<charMan->characters.size(); ++i)
+    {
+        Character* charI = charMan->characters[i];
+        PhysicsObject* charObj = charI->getColliderAddress();
+
+        ArbiterKey key{projectileObj, charObj};
+
+        auto it = world->arbiters.find(key);
+        if(it != world->arbiters.end())
+        {
+            return charI;
+        }
+    }
+    return nullptr;
+}
+
+void ICharWorld::dealDamage(Projectile& proj)
+{
+    Character* charI = getProjCharCollision(proj);
+
+    if(charI != nullptr)
+    {
+        float damage = proj.getDamage();
+
+        charI->setHealth(charI->getHealth() - damage);
+
+        if(charI->getHealth() <= 0.0f)
+        {
+            std::cout << charI << " is dead\n";
+        }
+    }
+}
+
 
 void ICharWorld::onNotify(Entity& entity, Event event)
 {
@@ -156,6 +193,10 @@ void ICharWorld::onNotify(Entity& entity, Event event)
         {
             projContactData();
             break;
+        }
+        case(EventType::Deal_Damage) :
+        {
+            dealDamage(static_cast<Projectile& >(entity));
         }
         default :
         {

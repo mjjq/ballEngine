@@ -8,6 +8,7 @@ enum class EventType
     Destroy_Projectile,
     Character_Contact,
     Projectile_Contact,
+    Deal_Damage,
     Count
 };
 
