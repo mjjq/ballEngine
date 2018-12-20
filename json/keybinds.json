@@ -32,7 +32,7 @@
 		"spwnSPoly"		: ["LShift", "RMB"],
 		"spwnJson"		: ["MMB"],
 		"spwnSys"		: ["LControl", "RMB"],
-		"spwnChar"		: ["LAlt", "LMB"],
+		"spwnChar"		: ["X", "LMB"],
 		"equPrim"		: ["Q"],
 		"aimChar"		: ["X"]
 	},

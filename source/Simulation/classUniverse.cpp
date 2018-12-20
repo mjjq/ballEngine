@@ -28,10 +28,10 @@ void BallUniverse::spawnNewBall(ObjectProperties init)
         numOfBalls++;
         //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
         //setPlayer(dynamicObjects.size()-1);
-        colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        //colliderArray.printMatrix();
+        ////colliderArray.printMatrix();
         if(enable_collisions)
             calcCollTimes();
     }
@@ -60,10 +60,10 @@ void BallUniverse::spawnNewBall(ObjectProperties init)
         numOfBalls++;
         //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
         //setPlayer(dynamicObjects.size()-1);
-        colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        //colliderArray.printMatrix();
+        ////colliderArray.printMatrix();
         if(enable_collisions)
             calcCollTimes();
     }
@@ -124,10 +124,10 @@ void BallUniverse::spawnNewPoly(ObjectProperties init)
         numOfBalls++;
         //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
         //setPlayer(dynamicObjects.size()-1);
-        colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        //colliderArray.printMatrix();
+        ////colliderArray.printMatrix();
         if(enable_collisions)
             calcCollTimes();
     }
@@ -335,10 +335,10 @@ void BallUniverse::calcCollTimes()
                 /*if(dynamicObjects.at(i).getDistance(dynamicObjects.at(j)) < 0.99*(dynamicObjects.at(i).getRadius() + dynamicObjects.at(j).getRadius()))
                 {
                      std::cout << "Overlapping balls " << i << " " << j << " at " << dynamicObjects.at(i).sf::CircleShape::getPosition() << " \n";
-                     std::cout << colliderArray.getElementValue(i,j) << "\n";
+                     std::cout << //colliderArray.getElementValue(i,j) << "\n";
                 }*/
                     float tColl = Collisions::timeToCollision(dynamicObjects.at(i).get(), dynamicObjects.at(j).get());
-                    colliderArray.setElementValue(j,i, tColl);
+                    //colliderArray.setElementValue(j,i, tColl);
 
             }
     for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
@@ -358,7 +358,7 @@ void BallUniverse::findShortestCollTime()
     int yStat = 0;
     float collTupleDyn = colliderArray.getMatrixMin(xDyn, yDyn);
     float collTupleStat = staticCollArray.getMatrixMin(xStat, yStat);
-    //colliderArray.printMatrix(); std::cout << "\n";
+    ////colliderArray.printMatrix(); std::cout << "\n";
     //staticCollArray.printMatrix(); std::cout << "\n";
     if(collTupleDyn < collTupleStat)
     {
@@ -390,15 +390,15 @@ void BallUniverse::collTimeForBall(unsigned int index)
             //   dynamicObjects.at(index).getDistance(dynamicObjects.at(i)))
             //{
                 float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), dynamicObjects.at(i).get());
-                colliderArray.setElementValue(i, index, tColl);
+                //colliderArray.setElementValue(i, index, tColl);
             //}
             //else
-            //    colliderArray.setElementValue(index, i, std::numeric_limits<float>::quiet_NaN());
+            //    //colliderArray.setElementValue(index, i, std::numeric_limits<float>::quiet_NaN());
         }
         else if(index > i)
         {
             float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), dynamicObjects.at(i).get());
-            colliderArray.setElementValue(index, i, tColl);
+            //colliderArray.setElementValue(index, i, tColl);
         }
     }
     for(unsigned int i=0; i<staticCollArray.getWidth(); ++i)
@@ -465,13 +465,19 @@ void BallUniverse::removeBall(int index)
     if(std::abs(index) < (int)dynamicObjects.size())
     {
         if(index >=0)
+        {
             dynamicObjects.erase(dynamicObjects.begin() + index);
+
+        }
         else if(index < 0)
+        {
+
             dynamicObjects.erase(dynamicObjects.end() + index + 1);
+        }
 
         numOfBalls--;
-        colliderArray.removeEndRow();
-        colliderArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //colliderArray.removeEndRow();
+        //colliderArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
 
         staticCollArray.removeEndRow();
 
@@ -482,7 +488,7 @@ void BallUniverse::removeBall(int index)
     {
         numOfBalls = 0;
         dynamicObjects.clear();
-        colliderArray.clearMatrix();
+        //colliderArray.clearMatrix();
 
         staticCollArray.removeEndRow();
     }
@@ -663,7 +669,7 @@ float BallUniverse::physicsLoop()
             if(std::abs(dtR) > epsilon)
                 updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
 
-            colliderArray.addConstValue(-dtR);
+            //colliderArray.addConstValue(-dtR);
             staticCollArray.addConstValue(-dtR);
 
             if(collWithStatic)
@@ -967,7 +973,7 @@ void BallUniverse::clearSimulation()
 {
     dynamicObjects.clear();
     staticObjects.clear();
-    colliderArray.clearMatrix();
+    //colliderArray.clearMatrix();
     staticCollArray.clearMatrix();
     numOfBalls = 0;
     arbiters.clear();

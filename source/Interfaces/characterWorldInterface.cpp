@@ -102,10 +102,17 @@ void ICharWorld::projContactData()
     {
         Projectile* proj = projMan->projectiles[i];
         PhysicsObject* collider = proj->getColliderAddress();
-        for(auto it = world->arbiters.begin(); it != world->arbiters.end(); ++it)
+
+        bool colliderFound = false;
+        auto it = world->arbiters.begin();
+        while(it != world->arbiters.end() && !colliderFound)
         {
             if(it->second.obj1 == collider || it->second.obj2 == collider)
+            {
+                colliderFound = true;
                 proj->onCollide();
+            }
+            ++it;
         }
     }
 }
@@ -172,14 +179,18 @@ void ICharWorld::onNotify(Entity& entity, Event event)
         case(EventType::Destroy_Projectile) :
         {
             Projectile& proj = static_cast<Projectile& >(entity);
-            for(int i=0; i<world->dynamicObjects.size(); ++i)
+
+            bool objDeleted = false;
+            int i=0;
+            while(++i < world->dynamicObjects.size() && !objDeleted)
             {
                 if(world->dynamicObjects[i].get() == proj.getColliderAddress())
                 {
                     world->removeBall(i);
-                    break;
+                    objDeleted = true;
                 }
             }
+
             projMan->removeProjectile(&proj);
 
             break;

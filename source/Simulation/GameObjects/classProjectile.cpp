@@ -26,7 +26,7 @@ Projectile::Projectile(ProjectileType type,
 
 void Projectile::onCollide()
 {
-    projSub.notify(*this, Event{EventType::Deal_Damage});
+    //projSub.notify(*this, Event{EventType::Deal_Damage});
     projSub.notify(*this, Event{EventType::Destroy_Projectile});
 }
 
