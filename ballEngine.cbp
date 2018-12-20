@@ -22,9 +22,10 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-pg" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
+					<Add option="-pg" />
 				</Linker>
 			</Target>
 		</Build>
