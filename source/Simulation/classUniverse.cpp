@@ -30,7 +30,7 @@ void BallUniverse::spawnNewBall(ObjectProperties init)
         //setPlayer(dynamicObjects.size()-1);
         //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         ////colliderArray.printMatrix();
         if(enable_collisions)
             calcCollTimes();
@@ -62,7 +62,7 @@ void BallUniverse::spawnNewBall(ObjectProperties init)
         //setPlayer(dynamicObjects.size()-1);
         //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         ////colliderArray.printMatrix();
         if(enable_collisions)
             calcCollTimes();
@@ -83,7 +83,7 @@ void BallUniverse::spawnStaticBall(ObjectProperties init)
         std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
         staticObjects.push_back(std::move(newBall));
 
-        staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(enable_collisions)
             calcCollTimes();
     }
@@ -103,7 +103,7 @@ void BallUniverse::spawnStaticBall(ObjectProperties init)
                                                                  rotation, 0.0f);
         staticObjects.push_back(std::move(newRect));
 
-        staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(enable_collisions)
             calcCollTimes();
     }
@@ -126,7 +126,7 @@ void BallUniverse::spawnNewPoly(ObjectProperties init)
         //setPlayer(dynamicObjects.size()-1);
         //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
+        //staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
         ////colliderArray.printMatrix();
         if(enable_collisions)
             calcCollTimes();
@@ -146,7 +146,7 @@ void BallUniverse::spawnStaticPoly(ObjectProperties init)
         std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(init);
 
         staticObjects.push_back(std::move(newPoly));
-        staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
         if(enable_collisions)
             calcCollTimes();
     }
@@ -345,7 +345,7 @@ void BallUniverse::calcCollTimes()
         for(unsigned int j=0; j<staticCollArray.getWidth(); ++j)
         {
             float tColl = Collisions::timeToCollision(dynamicObjects.at(i).get(), staticObjects.at(j).get());
-            staticCollArray.setElementValue(j,i, tColl);
+            //staticCollArray.setElementValue(j,i, tColl);
         }
 }
 
@@ -359,7 +359,7 @@ void BallUniverse::findShortestCollTime()
     float collTupleDyn = colliderArray.getMatrixMin(xDyn, yDyn);
     float collTupleStat = staticCollArray.getMatrixMin(xStat, yStat);
     ////colliderArray.printMatrix(); std::cout << "\n";
-    //staticCollArray.printMatrix(); std::cout << "\n";
+    ////staticCollArray.printMatrix(); std::cout << "\n";
     if(collTupleDyn < collTupleStat)
     {
         //std::cout << "Dyn\n";
@@ -404,7 +404,7 @@ void BallUniverse::collTimeForBall(unsigned int index)
     for(unsigned int i=0; i<staticCollArray.getWidth(); ++i)
     {
         float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), staticObjects.at(i).get());
-        staticCollArray.setElementValue(i, index, tColl);
+        //staticCollArray.setElementValue(i, index, tColl);
     }
 }
 
@@ -479,7 +479,7 @@ void BallUniverse::removeBall(int index)
         //colliderArray.removeEndRow();
         //colliderArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
 
-        staticCollArray.removeEndRow();
+        ////staticCollArray.removeEndRow();
 
         if(enable_collisions)
             calcCollTimes();
@@ -490,11 +490,11 @@ void BallUniverse::removeBall(int index)
         dynamicObjects.clear();
         //colliderArray.clearMatrix();
 
-        staticCollArray.removeEndRow();
+        ////staticCollArray.removeEndRow();
     }
 
     arbiters.clear();
-    broadPhase();
+    //broadPhase();
 }
 
 void BallUniverse::removeRect(int index)
@@ -506,7 +506,7 @@ void BallUniverse::removeRect(int index)
         else if(index < 0)
             staticObjects.erase(staticObjects.end() + index + 1);
 
-        staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
 
         if(enable_collisions)
             calcCollTimes();
@@ -514,7 +514,7 @@ void BallUniverse::removeRect(int index)
     else if(index == -1 && staticObjects.size() == 1)
     {
         staticObjects.clear();
-        staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
+        //staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
     }
 
     arbiters.clear();
@@ -670,7 +670,7 @@ float BallUniverse::physicsLoop()
                 updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
 
             //colliderArray.addConstValue(-dtR);
-            staticCollArray.addConstValue(-dtR);
+            //staticCollArray.addConstValue(-dtR);
 
             if(collWithStatic)
                 Collisions::ballCollision(dynamicObjects[collider2], staticObjects[collider1]);
@@ -875,7 +875,7 @@ void BallUniverse::createSPSys(sf::Vector2f centralPosition, sf::Vector2f initVe
     //spawnStaticRect(centralPosition, 300.0f*initVelocity.x, 300.0f*initVelocity.y);
     //spawnNewRect(centralPosition, 50.0f, 50.0f, initVelocity, 5.0f);
     //std::cout << "Size: " << staticObjects.size() << "\n";
-    //staticCollArray.printMatrix();
+    ////staticCollArray.printMatrix();
     //std::cout << "\n";
 }
 
@@ -974,7 +974,7 @@ void BallUniverse::clearSimulation()
     dynamicObjects.clear();
     staticObjects.clear();
     //colliderArray.clearMatrix();
-    staticCollArray.clearMatrix();
+    //staticCollArray.clearMatrix();
     numOfBalls = 0;
     arbiters.clear();
 }

@@ -7,12 +7,16 @@ void ProjectileManager::addProjectile(Projectile* proj)
 
 void ProjectileManager::removeProjectile(Projectile* proj)
 {
-    for(int i=0; i<(int)projectiles.size(); ++i)
+    int i=0;
+    bool projFound = false;
+
+    while(i<projectiles.size() && !projFound)
     {
         if(projectiles[i] == proj)
         {
             projectiles.erase(projectiles.begin() + i);
-            break;
+            projFound = true;
         }
+        ++i;
     }
 }

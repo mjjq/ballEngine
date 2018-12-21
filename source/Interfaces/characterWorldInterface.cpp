@@ -182,13 +182,14 @@ void ICharWorld::onNotify(Entity& entity, Event event)
 
             bool objDeleted = false;
             int i=0;
-            while(++i < world->dynamicObjects.size() && !objDeleted)
+            while(i < world->dynamicObjects.size() && !objDeleted)
             {
                 if(world->dynamicObjects[i].get() == proj.getColliderAddress())
                 {
                     world->removeBall(i);
                     objDeleted = true;
                 }
+                ++i;
             }
 
             projMan->removeProjectile(&proj);
