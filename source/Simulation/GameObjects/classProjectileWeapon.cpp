@@ -2,7 +2,38 @@
 
 #include "sfVectorMath.h"
 
+ProjectileWeapon::ProjectileWeapon(WeaponType type) : Equipable()
+{
+    switch(type)
+    {
+        case(WeaponType::Rifle) :
+        {
+                initialiseRifle();
+                break;
+        }
+        case(WeaponType::GrenLauncher) :
+        {
+                initialiseGrenLaunch();
+                break;
+        }
+    }
+}
+
 EquipableType ProjectileWeapon::type() const { return MY_TYPE; }
+
+void ProjectileWeapon::initialiseRifle()
+{
+    muzzleLength = 20.0f;
+    PROJ_TYPE = ProjectileType::Bullet;
+    remainingAmmo = 10;
+}
+
+void ProjectileWeapon::initialiseGrenLaunch()
+{
+    muzzleLength = 20.0f;
+    PROJ_TYPE = ProjectileType::Bomb;
+    remainingAmmo = 10;
+}
 
 void ProjectileWeapon::primaryFunc()
 {

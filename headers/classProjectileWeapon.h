@@ -4,10 +4,21 @@
 #include "classEquipable.h"
 #include "classProjectile.h"
 
+enum class WeaponType
+{
+    Rifle,
+    GrenLauncher,
+    _Count
+};
+
 class ProjectileWeapon : public Equipable
 {
     unsigned int remainingAmmo = 10;
+
+    void initialiseRifle();
+    void initialiseGrenLaunch();
 public:
+    ProjectileWeapon(WeaponType type);
     float muzzleLength = 20.0f;
     sf::Vector2f localMuzzlePos = {0.0f, 0.0f};
 

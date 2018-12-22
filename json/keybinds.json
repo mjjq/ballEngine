@@ -30,11 +30,10 @@
 		"spwnDAABB"		: ["LControl", "LMB"],
 		"spwnDPoly"		: ["LShift", "LMB"],
 		"spwnSPoly"		: ["LShift", "RMB"],
-		"spwnJson"		: ["MMB"],
 		"spwnSys"		: ["LControl", "RMB"],
 		"spwnChar"		: ["X", "LMB"],
-		"equPrim"		: ["Q"],
-		"aimChar"		: ["X"]
+		"equPrim"		: ["MMB"],
+		"nxtItem"		: ["Tab"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"      : ["D"],

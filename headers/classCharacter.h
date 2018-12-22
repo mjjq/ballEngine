@@ -4,6 +4,7 @@
 #include "classCapsule.h"
 #include "classProjectileWeapon.h"
 #include "Observer.h"
+#include "classInventory.h"
 
 struct ContactData
 {
@@ -39,7 +40,7 @@ class Character : public Entity
     bool slopeOkay = true;
     bool touchingSurface = false;
 
-    Equipable* equippedItem = new ProjectileWeapon{};
+    Inventory characterItems{};
 
     float currentHealth = 1.0f;
 public:
@@ -53,14 +54,15 @@ public:
     bool updateState();
     bool getSlopeState();
     Capsule* getColliderAddress();
-    Equipable* getEquippedItem();
 
     void equipablePrimary();
     sf::Vector2f getPosition();
-    sf::Vector2f getEquipablePosition();
+    void changeAimAngle(float angle);
 
     void setHealth(float health);
     float getHealth();
+
+    void switchNextItem();
 };
 
 #endif // CLASS_CHAR_H

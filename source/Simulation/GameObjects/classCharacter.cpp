@@ -11,8 +11,9 @@ Character::Character(CharacterProperties init, Observer* obs, Capsule* rigidBind
     properties{init}, collider{rigidBind}, currentHealth{init.maxHealth}
 {
     charSubject.addObserver(obs);
-    equippedItem->addObserver(obs);
+    //equippedItem->addObserver(obs);
     collider->setMomentInertia(1e+15);
+    characterItems.addObserver(obs);
 }
 
 void Character::moveSideWays(float input)
@@ -109,26 +110,33 @@ Capsule* Character::getColliderAddress()
     return collider;
 }
 
-Equipable* Character::getEquippedItem()
+/*Equipable* Character::getEquippedItem()
 {
-    return equippedItem;
-}
+    return nullptr;
+}*/
 
 void Character::equipablePrimary()
 {
-    equippedItem->updateParentPos(collider->getPosition());
-    equippedItem->primaryFunc();
+    characterItems.updateEquippedPos(collider->getPosition());
+    characterItems.firePrimary();
+    //equippedItem->updateParentPos(collider->getPosition());
+    //equippedItem->primaryFunc();
     //charSubject.notify(*this, Event{EventType::Fire_Bullet});
 }
 
-sf::Vector2f Character::getEquipablePosition()
+/*sf::Vector2f Character::getEquipablePosition()
 {
     return equippedItem->getLocalPosition() + collider->getPosition();
-}
+}*/
 
 sf::Vector2f Character::getPosition()
 {
     return collider->getPosition();
+}
+
+void Character::changeAimAngle(float angle)
+{
+    characterItems.getEquippedItem().changeAimAngle(angle);
 }
 
 void Character::setHealth(float health)
@@ -144,4 +152,9 @@ void Character::setHealth(float health)
 float Character::getHealth()
 {
     return currentHealth;
+}
+
+void Character::switchNextItem()
+{
+    characterItems.nextItem();
 }

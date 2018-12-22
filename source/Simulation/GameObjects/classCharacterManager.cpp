@@ -52,6 +52,14 @@ void CharacterManager::setAimAngle(int index, sf::Vector2f targetPos)
             angle = atan2(relPos.y, relPos.x);
         }
         //std::cout << 180.0f * angle / sfVectorMath::PI << "\n";
-        currChar->getEquippedItem()->changeAimAngle(180.0f * angle / sfVectorMath::PI);
+        currChar->changeAimAngle(180.0f * angle / sfVectorMath::PI);
+    }
+}
+
+void CharacterManager::switchNextItem(int charIndex)
+{
+    if(charIndex < (int)characters.size())
+    {
+        characters[charIndex]->switchNextItem();
     }
 }

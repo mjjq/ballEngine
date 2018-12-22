@@ -17,6 +17,7 @@ public:
     void equipablePrimary(int charIndex);
     void newObserver(Observer* obs);
     void setAimAngle(int index, sf::Vector2f targetPos);
+    void switchNextItem(int charIndex);
 };
 
 #endif // CLASS_CHAR_MANAGER_H

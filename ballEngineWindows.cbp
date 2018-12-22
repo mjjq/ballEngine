@@ -70,6 +70,7 @@
 		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/GJK.h" />
 		<Unit filename="headers/Observer.h" />
+		<Unit filename="headers/SpawnInterface.h" />
 		<Unit filename="headers/characterWorldInterface.h" />
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classAABB.h" />
@@ -80,6 +81,7 @@
 		<Unit filename="headers/classCharacterManager.h" />
 		<Unit filename="headers/classEquipable.h" />
 		<Unit filename="headers/classGameScene.h" />
+		<Unit filename="headers/classInventory.h" />
 		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classMainMenuScene.h" />
 		<Unit filename="headers/classMenuScene.h" />
@@ -140,6 +142,7 @@
 		<Unit filename="source/Simulation/GameObjects/classCharacter.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacterManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classEquipable.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classInventory.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classProjectile.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classProjectileManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classProjectileWeapon.cpp" />
