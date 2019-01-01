@@ -55,8 +55,6 @@ void SandboxScene::load()
                 charMan.setAimAngle(0, (sf::Vector2f)mousePosOnPan);
                 KeyBinds::isFuncContinuous = true;
                     }},
-            {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
-            {"setPlyr1",    [&]{ballSim.setPlayer(1);}},
             {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
             {"pauseGme",    [&]{togglePause();}},
             {"tglForces",   [&]{ballSim.toggleForces();}},

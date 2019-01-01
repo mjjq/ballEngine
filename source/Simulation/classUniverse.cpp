@@ -1054,44 +1054,6 @@ int BallUniverse::getNumTimesColld(unsigned int index)
     return -1;
 }
 
-void BallUniverse::pushBall(float force, float relDirection, int i)
-{
-    if(dynamicObjects.size()>0)
-    {
-        sf::Vector2f velocity = dynamicObjects.at(i).get()->getVelocity();
-        sf::Vector2f forceVec{0,0};
-        if(sfVectorMath::dot(velocity, velocity) > 1e-10)
-            forceVec = sfVectorMath::rotate(force*sfVectorMath::norm(velocity), relDirection);
-        else
-            forceVec = sfVectorMath::rotate({0,-force}, relDirection);
-        dynamicObjects.at(i).get()->applyExternalImpulse(forceVec, dt);
-    }
-}
-
-void BallUniverse::pushBall(sf::Vector2f &resVector, int ballArg)
-{
-    /*if(dynamicObjects.size()>0 && currentPlayer >= 0)
-    {
-        sf::Vector2f currVel = dynamicObjects.at(ballArg).get()->getVelocity();
-        float currVelDir = 0;
-        if(currVel.y < 0)
-            currVelDir = 180;
-        if(currVel.x > 0)
-            currVelDir = -90.0f+180.0f*atan(currVel.y/currVel.x)/(3.14159265359f);
-        else if(currVel.x<0)
-            currVelDir = 90.0f+180.0f*atan(currVel.y/currVel.x)/(3.14159265359f);
-
-        if(sfVectorMath::square(resVector) > 1e-10)
-        {
-
-            sf::Vector2f rotVec = sfVectorMath::rotate(resVector, currVelDir);
-
-            dynamicObjects.at(ballArg).get()->applyExternalImpulse(rotVec, dt);
-        }
-    }*/
-
-
-}
 
 void BallUniverse::toggleTrajectories()
 {
@@ -1107,10 +1069,6 @@ void BallUniverse::toggleTrajectories()
         for(int i=0; (unsigned)i<dynamicObjects.size(); ++i)
             dynamicObjects.at(i).get()->setSamplePrevPosBool(true);
     }
-}
-
-void BallUniverse::setPlayer(unsigned int playerIndex)
-{
 }
 
 void BallUniverse::togglePlayerTraj()
@@ -1160,6 +1118,27 @@ void BallUniverse::applyUGravity()
     }
 }
 
+
+void BallUniverse::createExplosion(sf::Vector2f position,
+                         float radiusOfEffect,
+                         float strength)
+{
+    ObjectProperties tempProps;
+    tempProps._position = position;
+    tempProps._vertices = {sf::Vertex{{0.0f, 0.0f}}};
+    Polygon tempObject(tempProps);
+
+    for(int i=0; i<dynamicObjects.size(); ++i)
+    {
+        Edge GJKResult = GJK::getClosestPoints(dynamicObjects[i].get(), &tempObject);
+
+        float distanceSq = sfVectorMath::square(GJKResult.v2 - GJKResult.v1);
+        if(distanceSq < radiusOfEffect*radiusOfEffect)
+        {
+
+        }
+    }
+}
 
 void BallUniverse::newObserver(Observer* obs)
 {

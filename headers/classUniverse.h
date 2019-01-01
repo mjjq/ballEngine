@@ -139,11 +139,12 @@ public:
     void toggleTrajectories();
     void togglePlayerTraj();
     sf::Vector2f getObjPosition(unsigned int i);
-    void pushBall(float force, float relDirection, int i);
-    void pushBall(sf::Vector2f &resVector, int ballArg);
-    void setPlayer(unsigned int playerIndex);
     void splitBalls(int ballIndex, float relDirection, float speed);
     void applyUGravity();
+
+    void createExplosion(sf::Vector2f position,
+                         float radiusOfEffect,
+                         float strength);
 
     void newObserver(Observer* obs);
 };

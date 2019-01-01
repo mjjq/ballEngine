@@ -115,8 +115,6 @@ void SurvivalScene::load()
                 checkForViewPan(mousePosOnPan);
                 canZoom = true;
                     }},
-            {"setPlyr0",    [&]{ballSim.setPlayer(0);}},
-            {"setPlyr1",    [&]{ballSim.setPlayer(1);}},
             {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
             {"pauseGme",    [&]{togglePause();}},
             {"tglForces",   [&]{ballSim.toggleForces();}},
@@ -163,7 +161,7 @@ void SurvivalScene::load()
                              0.0f});
         spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 2.0f, 2.0f);
         //spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {3,0});
-        ballSim.setPlayer(0);
+        //ballSim.setPlayer(0);
         ballSim.toggleCollisions();
         ballSim.toggleTrajectories();
         ballSim.togglePlayerTraj();
