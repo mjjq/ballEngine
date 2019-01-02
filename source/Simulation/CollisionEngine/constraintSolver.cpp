@@ -99,6 +99,25 @@ CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
     return c;
 }
 
+CStructs::Constraint Constraints::makeDistanceConstraint(PhysicsObject &p1,
+                                                         PhysicsObject &p2)
+{
+    CStructs::Constraint c;
+
+    sf::Vector2f relPos = p1.getPosition() - p2.getPosition();
+    //float crossProd = sfVectorMath::cross(p1.getPosition(), p2.getPosition());
+
+    c.c1 = relPos;
+    c.cw1 = 0.0f;//crossProd;
+    c.c2 = -relPos;
+    c.cw2 = 0.0f;//-crossProd;
+    c.bias = 0.0f;
+    c.lambdaMax = 1e+15;
+    c.lambdaMin = -1e+15;
+
+    return c;
+}
+
 
 void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
                                 CStructs::Constraint &j,

@@ -10,6 +10,7 @@
 #include "class2DMatrix.h"
 #include "stringConversion.h"
 #include "classArbiter.h"
+#include "classJoint.h"
 #include "Observer.h"
 
 enum class SpawnObjectType
@@ -77,6 +78,7 @@ public:
     std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
     std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
     std::map<ArbiterKey, Arbiter> arbiters;
+    std::vector<Joint> joints;
 
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
@@ -145,6 +147,8 @@ public:
     void createExplosion(sf::Vector2f position,
                          float radiusOfEffect,
                          float strength);
+
+    void newJoint(int index1, int index2);
 
     void newObserver(Observer* obs);
 };

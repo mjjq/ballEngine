@@ -33,7 +33,8 @@
 		"spwnSys"		: ["LControl", "RMB"],
 		"spwnChar"		: ["X", "LMB"],
 		"equPrim"		: ["MMB"],
-		"nxtItem"		: ["Tab"]
+		"nxtItem"		: ["Tab"],
+		"newJoint"		: ["LControl", "J"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"      : ["D"],

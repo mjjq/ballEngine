@@ -604,6 +604,7 @@ float BallUniverse::physicsLoop()
     }
 
     broadPhase();
+
     universeSub.notify(*this, Event{EventType::Character_Contact});
     universeSub.notify(*this, Event{EventType::Projectile_Contact});
 
@@ -613,12 +614,20 @@ float BallUniverse::physicsLoop()
     {
         arb->second.PreStep(1.0f/dt);
     }
+    for(auto jointIt = joints.begin(); jointIt != joints.end(); ++jointIt)
+    {
+        jointIt->PreStep(1.0f/dt);
+    }
 
     for (int i = 0; i < 10; ++i)
     {
         for (ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
         {
             arb->second.ApplyImpulse();
+        }
+        for(auto jointIt = joints.begin(); jointIt != joints.end(); ++jointIt)
+        {
+            jointIt->ApplyImpulse();
         }
     }
     //std::cout << "hello\n";
@@ -1137,6 +1146,19 @@ void BallUniverse::createExplosion(sf::Vector2f position,
         {
 
         }
+    }
+}
+
+void BallUniverse::newJoint(int index1, int index2)
+{
+    if(index1 < dynamicObjects.size() &&
+       index2 < dynamicObjects.size() &&
+       index1 != index2)
+    {
+        std::cout << "joint created\n";
+        Joint nJoint(dynamicObjects[index1].get(),
+                       dynamicObjects[index2].get());
+        joints.push_back(nJoint);
     }
 }
 

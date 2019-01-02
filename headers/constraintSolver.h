@@ -12,8 +12,8 @@ namespace CStructs
         float cw1;
         sf::Vector2f c2;
         float cw2;
-        float lambdaMin;
-        float lambdaMax;
+        float lambdaMin = -1e+15;
+        float lambdaMax = -lambdaMin;
         float bias;
     };
 
@@ -60,7 +60,8 @@ public:
                                                         sf::Vector2f tangent,
                                                         float frictionLimit);
 
-
+    static CStructs::Constraint makeDistanceConstraint(PhysicsObject &p1,
+                                                       PhysicsObject &p2);
 
     static void solveConstraints(CStructs::PairWiseVel &returnVel,
                                 CStructs::Constraint &j,
