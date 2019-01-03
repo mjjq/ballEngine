@@ -9,6 +9,7 @@ enum class EventType
     Character_Contact,
     Projectile_Contact,
     Deal_Damage,
+    Gen_Explosion,
     Count
 };
 

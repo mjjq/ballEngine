@@ -64,6 +64,9 @@ void SandboxScene::load()
             {"undoBall",    [&]{ballSim.removeBall(-1);}},
             {"undoRect",    [&]{ballSim.removeRect(-1);}},
             {"newJoint",    [&]{ballSim.newJoint(0, 1);}},
+            {"mouseExp",    [&]{ballSim.createExplosion(window.mapPixelToCoords(sf::Mouse::getPosition(window)),
+                                                        200.0f,
+                                                        25.0f);}},
             {"equPrim",     [&]{charMan.equipablePrimary(0);}},
             {"nxtItem",     [&]{charMan.switchNextItem(0);}},
             {"plrJump",     [&]{charMan.moveCharacter({0,1}, 0);

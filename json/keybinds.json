@@ -34,7 +34,8 @@
 		"spwnChar"		: ["X", "LMB"],
 		"equPrim"		: ["MMB"],
 		"nxtItem"		: ["Tab"],
-		"newJoint"		: ["LControl", "J"]
+		"newJoint"		: ["LControl", "J"],
+		"mouseExp"		: ["E"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"      : ["D"],

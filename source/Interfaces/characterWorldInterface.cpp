@@ -210,6 +210,13 @@ void ICharWorld::onNotify(Entity& entity, Event event)
         {
             dealDamage(static_cast<Projectile& >(entity));
         }
+        case(EventType::Gen_Explosion) :
+        {
+            Projectile& proj = static_cast<Projectile& >(entity);
+
+            world->createExplosion(proj.getColliderAddress()->getPosition(),
+                                   200.0f, 25.0f);
+        }
         default :
         {
             break;

@@ -986,6 +986,7 @@ void BallUniverse::clearSimulation()
     //staticCollArray.clearMatrix();
     numOfBalls = 0;
     arbiters.clear();
+    joints.clear();
 }
 
 const int& BallUniverse::getWorldSizeX()
@@ -1135,16 +1136,34 @@ void BallUniverse::createExplosion(sf::Vector2f position,
     ObjectProperties tempProps;
     tempProps._position = position;
     tempProps._vertices = {sf::Vertex{{0.0f, 0.0f}}};
-    Polygon tempObject(tempProps);
 
     for(int i=0; i<dynamicObjects.size(); ++i)
     {
+        Polygon tempObject(tempProps);
+        tempObject.setMomentInertia(1.0f);
+
         Edge GJKResult = GJK::getClosestPoints(dynamicObjects[i].get(), &tempObject);
 
         float distanceSq = sfVectorMath::square(GJKResult.v2 - GJKResult.v1);
-        if(distanceSq < radiusOfEffect*radiusOfEffect)
+        if(distanceSq < radiusOfEffect*radiusOfEffect && distanceSq > 0.0f)
         {
+            float factor = std::min(strength, strength/sqrtf(distanceSq));
+            sf::Vector2f sepVector = factor*(GJKResult.v2 - GJKResult.v1);
+            tempObject.setVelocity(dynamicObjects[i]->getVelocity() - sepVector);
 
+            Arbiter tempArb{dynamicObjects[i].get(), &tempObject};
+            Contact tempContact;
+            tempContact.normal = sfVectorMath::norm(GJKResult.v1 - GJKResult.v2);
+            tempContact.position = GJKResult.v1;
+            tempContact.rA = tempContact.position - dynamicObjects[i]->getPosition();
+            tempContact.rB = {0.0f, 0.0f};
+            tempArb.contacts.push_back(tempContact);
+
+            tempArb.PreStep(1.0f/dt);
+            tempArb.ApplyImpulse();
+
+            dynamicObjects[i]->addSolvedVelocity(factor*tempContact.normal,
+                                                 factor*tempContact.normal);
         }
     }
 }
@@ -1155,9 +1174,13 @@ void BallUniverse::newJoint(int index1, int index2)
        index2 < dynamicObjects.size() &&
        index1 != index2)
     {
-        std::cout << "joint created\n";
-        Joint nJoint(dynamicObjects[index1].get(),
-                       dynamicObjects[index2].get());
+        //std::cout << "joint created\n";
+        //Joint nJoint(dynamicObjects[index1].get(),
+        //               dynamicObjects[index2].get());
+        //joints.push_back(nJoint);
+        int objSize = dynamicObjects.size();
+        Joint nJoint(dynamicObjects[objSize-2].get(),
+                       dynamicObjects[objSize-1].get());
         joints.push_back(nJoint);
     }
 }
