@@ -121,7 +121,7 @@ Character* ICharWorld::getProjCharCollision(Projectile& proj)
 {
     PhysicsObject* projectileObj = proj.getColliderAddress();
 
-    for(int i=0; i<charMan->characters.size(); ++i)
+    for(int i=0; i<(int)charMan->characters.size(); ++i)
     {
         Character* charI = charMan->characters[i];
         PhysicsObject* charObj = charI->getColliderAddress();
@@ -182,7 +182,7 @@ void ICharWorld::onNotify(Entity& entity, Event event)
 
             bool objDeleted = false;
             int i=0;
-            while(i < world->dynamicObjects.size() && !objDeleted)
+            while(i < (int)world->dynamicObjects.size() && !objDeleted)
             {
                 if(world->dynamicObjects[i].get() == proj.getColliderAddress())
                 {

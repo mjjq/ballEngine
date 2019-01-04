@@ -2,6 +2,8 @@
 #define CLASS_SURVIVALSCENE_H
 
 #include "classGameScene.h"
+#include "classCharacterManager.h"
+#include "characterWorldInterface.h"
 
 class SurvivalScene : public GameScene
 {
@@ -15,6 +17,9 @@ class SurvivalScene : public GameScene
         sf::Time upTimer = sf::seconds(0.0f);
     };
     GameLogic gameLogic;
+
+    CharacterManager charMan;
+    ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
 
     void mouseWorldEvents(sf::Event &event);
 

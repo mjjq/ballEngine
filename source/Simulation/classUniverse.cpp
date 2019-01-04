@@ -337,14 +337,14 @@ void BallUniverse::calcCollTimes()
                      std::cout << "Overlapping balls " << i << " " << j << " at " << dynamicObjects.at(i).sf::CircleShape::getPosition() << " \n";
                      std::cout << //colliderArray.getElementValue(i,j) << "\n";
                 }*/
-                    float tColl = Collisions::timeToCollision(dynamicObjects.at(i).get(), dynamicObjects.at(j).get());
+                    //float tColl = Collisions::timeToCollision(dynamicObjects.at(i).get(), dynamicObjects.at(j).get());
                     //colliderArray.setElementValue(j,i, tColl);
 
             }
     for(unsigned int i=0; i<staticCollArray.getHeight(); ++i)
         for(unsigned int j=0; j<staticCollArray.getWidth(); ++j)
         {
-            float tColl = Collisions::timeToCollision(dynamicObjects.at(i).get(), staticObjects.at(j).get());
+            //float tColl = Collisions::timeToCollision(dynamicObjects.at(i).get(), staticObjects.at(j).get());
             //staticCollArray.setElementValue(j,i, tColl);
         }
 }
@@ -389,7 +389,7 @@ void BallUniverse::collTimeForBall(unsigned int index)
             //   2.0*dynamicObjects.at(index).getRelSpeed(dynamicObjects.at(i))*dt >
             //   dynamicObjects.at(index).getDistance(dynamicObjects.at(i)))
             //{
-                float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), dynamicObjects.at(i).get());
+                //float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), dynamicObjects.at(i).get());
                 //colliderArray.setElementValue(i, index, tColl);
             //}
             //else
@@ -397,13 +397,13 @@ void BallUniverse::collTimeForBall(unsigned int index)
         }
         else if(index > i)
         {
-            float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), dynamicObjects.at(i).get());
+            //float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), dynamicObjects.at(i).get());
             //colliderArray.setElementValue(index, i, tColl);
         }
     }
     for(unsigned int i=0; i<staticCollArray.getWidth(); ++i)
     {
-        float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), staticObjects.at(i).get());
+        //float tColl = Collisions::timeToCollision(dynamicObjects.at(index).get(), staticObjects.at(i).get());
         //staticCollArray.setElementValue(i, index, tColl);
     }
 }
@@ -523,7 +523,7 @@ void BallUniverse::removeRect(int index)
 
 void BallUniverse::broadPhase()
 {
-    float dtR = dt;
+    //float dtR = dt;
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
     {
         PhysicsObject* obji = dynamicObjects[i].get();
@@ -1137,7 +1137,7 @@ void BallUniverse::createExplosion(sf::Vector2f position,
     tempProps._position = position;
     tempProps._vertices = {sf::Vertex{{0.0f, 0.0f}}};
 
-    for(int i=0; i<dynamicObjects.size(); ++i)
+    for(int i=0; i<(int)dynamicObjects.size(); ++i)
     {
         Polygon tempObject(tempProps);
         tempObject.setMomentInertia(1.0f);
@@ -1170,8 +1170,8 @@ void BallUniverse::createExplosion(sf::Vector2f position,
 
 void BallUniverse::newJoint(int index1, int index2)
 {
-    if(index1 < dynamicObjects.size() &&
-       index2 < dynamicObjects.size() &&
+    if(index1 < (int)dynamicObjects.size() &&
+       index2 < (int)dynamicObjects.size() &&
        index1 != index2)
     {
         //std::cout << "joint created\n";

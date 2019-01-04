@@ -10,7 +10,7 @@ void ProjectileManager::removeProjectile(Projectile* proj)
     int i=0;
     bool projFound = false;
 
-    while(i<projectiles.size() && !projFound)
+    while(i<(int)projectiles.size() && !projFound)
     {
         if(projectiles[i] == proj)
         {

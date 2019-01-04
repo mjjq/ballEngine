@@ -44,7 +44,7 @@ Equipable& Inventory::getEquippedItem()
 
 void Inventory::addObserver(Observer* obs)
 {
-    for(int i=0; i<equipableItems.size(); ++i)
+    for(int i=0; i<(int)equipableItems.size(); ++i)
     {
         equipableItems[i]->addObserver(obs);
     }

@@ -83,6 +83,9 @@ void SurvivalScene::load()
         isLoaded = true;
 
         ballSim = BallUniverse{2000, 2000, 1.0f, false, false};
+        charMan = CharacterManager{};
+        charWorldInterface = ICharWorld{&ballSim, &charMan, nullptr};
+        ballSim.newObserver(&charWorldInterface);
 
         gameLogic = GameLogic{};
 
@@ -130,6 +133,12 @@ void SurvivalScene::load()
                                 KeyBinds::isFuncContinuous = true;}},
             {"mvPlrLft",    [&]{if(gameLogic.allowPlayerMovement)ballSim.playerInFunc({0.2,0});
                                 KeyBinds::isFuncContinuous = true;}},*/
+            {"mvPlrRgt",    [&]{charMan.moveCharacter({1,0}, 0);
+                                KeyBinds::isFuncContinuous = true;}
+                                },
+            {"mvPlrLft",    [&]{charMan.moveCharacter({-1,0}, 0);
+                                KeyBinds::isFuncContinuous = true;}
+                                },
             {"startGme",    [&]{startGame();}},
             {"restart",     [&]{restartGame();}}
         };

@@ -16,6 +16,10 @@ ProjectileWeapon::ProjectileWeapon(WeaponType type) : Equipable()
                 initialiseGrenLaunch();
                 break;
         }
+        default:
+        {
+            break;
+        }
     }
 }
 
