@@ -22,10 +22,11 @@ struct CharacterProperties
     float mass;
     float movementSpeed;
     float jumpPower;
+    ObjectType bodyType = ObjectType::Capsule;
     float coefFriction = 4.0f;
     float maxHealth = 10.0f;
+    float currentHealth = maxHealth;
 };
-
 
 class Character : public Entity
 {
@@ -33,7 +34,7 @@ class Character : public Entity
     static float MAX_SLOPE_ANGLE;
     static float MAX_SLOPE_COSINE;
     CharacterProperties properties;
-    Capsule* collider;
+    PhysicsObject* collider;
     void moveSideWays(float input);
     std::vector<ContactData > contactData;
 
@@ -41,10 +42,8 @@ class Character : public Entity
     bool touchingSurface = false;
 
     Inventory characterItems{};
-
-    float currentHealth = 1.0f;
 public:
-    Character(CharacterProperties init, Observer* obs = nullptr, Capsule* rigidBind = nullptr);
+    Character(CharacterProperties init, Observer* obs = nullptr, PhysicsObject* rigidBind = nullptr);
 
     void moveLeft();
     void moveRight();
@@ -53,7 +52,7 @@ public:
     void clearContactData();
     bool updateState();
     bool getSlopeState();
-    Capsule* getColliderAddress();
+    PhysicsObject* getColliderAddress();
 
     void equipablePrimary();
     sf::Vector2f getPosition();
@@ -61,6 +60,7 @@ public:
 
     void setHealth(float health);
     float getHealth();
+    CharacterProperties getProperties();
 
     void switchNextItem();
 };

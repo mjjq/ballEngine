@@ -35,14 +35,7 @@ void SurvivalScene::spawnRandomBalls(int nOBalls,
         sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
         sf::Vector2f newVelocity = {velocityX, velocityY};
 
-        ballSim.spawnNewBall({newPos,
-                             newVelocity,
-                             {ballRadius, 0.0f},
-                             ballMass,
-                             0.0f,
-                             1.0f,
-                             0.0f,
-                             0.0f});
+        charWorldInterface.spawnNewProjectile(ProjectileType::Bullet, newPos, newVelocity);
     }
 }
 
@@ -84,7 +77,8 @@ void SurvivalScene::load()
 
         ballSim = BallUniverse{2000, 2000, 1.0f, false, false};
         charMan = CharacterManager{};
-        charWorldInterface = ICharWorld{&ballSim, &charMan, nullptr};
+        projMan = ProjectileManager{};
+        charWorldInterface = ICharWorld{&ballSim, &charMan, &projMan};
         ballSim.newObserver(&charWorldInterface);
 
         gameLogic = GameLogic{};
@@ -118,7 +112,7 @@ void SurvivalScene::load()
                 checkForViewPan(mousePosOnPan);
                 canZoom = true;
                     }},
-            {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
+            {"focusPlr",    [&]{focusOnBall(0);}},
             {"pauseGme",    [&]{togglePause();}},
             {"tglForces",   [&]{ballSim.toggleForces();}},
             {"tglCols",     [&]{ballSim.toggleCollisions();}},
@@ -150,7 +144,7 @@ void SurvivalScene::load()
             {"currFPS",     [&]{return std::to_string(currentFPS);}},
             {"cdtimer",     [&]{return std::to_string(1+gameLogic.countDownTimer.asMilliseconds()/1000);}},
             {"uptimer",     [&]{return std::to_string(gameLogic.upTimer.asMilliseconds());}},
-            {"playSpd",     [&]{return ballSim.getBallSpeed(playerBallIndex);}}
+            {"playSpd",     [&]{return ballSim.getBallSpeed(0);}}
         };
 
         loadKeybinds("./json/keybinds.json", "SurvivalScene");
@@ -160,15 +154,24 @@ void SurvivalScene::load()
         container.setWindowIsVisible(2, false);
         container.setWindowIsVisible(3, false);
 
-        ballSim.spawnNewBall({sf::Vector2f{wSize.x/2.0f, wSize.y/1.2f},
+        /*ballSim.spawnNewBall({sf::Vector2f{wSize.x/2.0f, wSize.y/1.2f},
                              {0.0f, 2.0f},
                              {10.0f, 0.0f},
                              2.0f,
                              1.0f,
                              0.0f,
                              0.0f,
-                             0.0f});
+                             0.0f});*/
         spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 2.0f, 2.0f);
+
+        charWorldInterface.spawnNewCharacter({
+                                {wSize.x/2.0f, wSize.y/1.2f},
+                                {0.0f, 0.0f},
+                                {10.0f, 0.0f},
+                                2.0f,
+                                2.0f,
+                                1.0f
+                            });
         //spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {3,0});
         //ballSim.setPlayer(0);
         ballSim.toggleCollisions();
@@ -194,9 +197,11 @@ void SurvivalScene::update(sf::RenderWindow &_window)
         {
             ballSim.universeLoop(currentFrameTime, targetFrameTime);
 
+            playerProperties = charMan.getCharacterProperties(0);
+
             gameLogic.upTimer += currentFrameTime;
 
-            if(ballSim.getNumTimesColld(playerBallIndex) > 0)
+            if(playerProperties.currentHealth < playerProperties.maxHealth)
                 endGame();
         }
         else

@@ -17,8 +17,10 @@ class SurvivalScene : public GameScene
         sf::Time upTimer = sf::seconds(0.0f);
     };
     GameLogic gameLogic;
+    CharacterProperties playerProperties;
 
     CharacterManager charMan;
+    ProjectileManager projMan;
     ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
 
     void mouseWorldEvents(sf::Event &event);

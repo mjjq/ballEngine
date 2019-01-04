@@ -26,9 +26,7 @@ Projectile::Projectile(ProjectileType type,
 
 void Projectile::onCollide()
 {
-    //projSub.notify(*this, Event{EventType::Deal_Damage});
-    projSub.notify(*this, Event{EventType::Gen_Explosion});
-    projSub.notify(*this, Event{EventType::Destroy_Projectile});
+    onCollideLambda();
 }
 
 PhysicsObject* Projectile::getColliderAddress()
@@ -49,9 +47,9 @@ ObjectProperties Projectile::getProjProps()
 
 void Projectile::initialiseBullet(sf::Vector2f initPos, sf::Vector2f initDir)
 {
-    float bulletSpeed = 5.0f;
-    float bulletMass = 1.0f;
-    float bulletRadius = 2.5f;
+    float bulletSpeed = 1.0f;
+    float bulletMass = 5.0f;
+    float bulletRadius = 5.5f;
     damage = 2.0f;
 
     ObjectProperties init;
@@ -65,6 +63,11 @@ void Projectile::initialiseBullet(sf::Vector2f initPos, sf::Vector2f initDir)
     init._size = {bulletRadius, bulletRadius};
 
     projProperties = init;
+
+    onCollideLambda = [&]{
+        projSub.notify(*this, Event{EventType::Deal_Damage});
+        projSub.notify(*this, Event{EventType::Destroy_Projectile});
+    };
 }
 
 void Projectile::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
@@ -85,6 +88,11 @@ void Projectile::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
     init._size = {bulletRadius, bulletRadius};
 
     projProperties = init;
+
+    onCollideLambda = [&]{
+        projSub.notify(*this, Event{EventType::Deal_Damage});
+        projSub.notify(*this, Event{EventType::Gen_Explosion});
+    };
 }
 
 void Projectile::addObserver(Observer* obs)

@@ -23,6 +23,7 @@ class Projectile : public Entity
     Subject projSub;
 
     float damage = 0.0f;
+    std::function<void()> onCollideLambda = [&]{};
 public:
     Projectile(ProjectileType type,
                sf::Vector2f initPos,

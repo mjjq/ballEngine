@@ -52,11 +52,46 @@ void ICharWorld::spawnNewCharacter(CharacterProperties init)
     objProps._size = init.size;
     objProps._coefFric = 5.0f;
 
-    std::unique_ptr<Capsule > newCapsule = std::make_unique<Capsule >(objProps);
-    Character* newChar = new Character{init, this, newCapsule.get()};
+    switch(init.bodyType)
+    {
+        case(ObjectType::Capsule) :
+        {
+            std::unique_ptr<Capsule > newCapsule = std::make_unique<Capsule >(objProps);
+            Character* newChar = new Character{init, this, newCapsule.get()};
 
-    world->spawnNewObject(std::move(newCapsule));
-    charMan->addCharacter(newChar);
+            world->spawnNewObject(std::move(newCapsule));
+            charMan->addCharacter(newChar);
+
+            break;
+        }
+        case(ObjectType::Ball) :
+        {
+            std::unique_ptr<Ball > newCapsule = std::make_unique<Ball >(objProps);
+            Character* newChar = new Character{init, this, newCapsule.get()};
+
+            world->spawnNewObject(std::move(newCapsule));
+            charMan->addCharacter(newChar);
+
+            break;
+        }
+        default :
+        {
+            break;
+        }
+    }
+}
+
+void ICharWorld::spawnNewProjectile(ProjectileType type,
+                                    sf::Vector2f position,
+                                    sf::Vector2f velocity)
+{
+    Projectile* proj = new Projectile{type, position, velocity};
+    proj->addObserver(this);
+    std::unique_ptr<Ball > newBall = std::make_unique<Ball >(proj->getProjProps());
+    proj->setColliderAddress(newBall.get());
+
+    projMan->addProjectile(proj);
+    world->spawnNewObject(std::move(newBall));
 }
 
 void ICharWorld::charContactData()

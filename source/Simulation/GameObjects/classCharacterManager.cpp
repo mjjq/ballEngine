@@ -63,3 +63,13 @@ void CharacterManager::switchNextItem(int charIndex)
         characters[charIndex]->switchNextItem();
     }
 }
+
+CharacterProperties CharacterManager::getCharacterProperties(int index)
+{
+    if(index < (int)characters.size())
+    {
+        return characters[index]->getProperties();
+    }
+
+    return CharacterProperties{};
+}

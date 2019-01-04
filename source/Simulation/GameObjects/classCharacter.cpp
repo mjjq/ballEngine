@@ -7,8 +7,8 @@
 float Character::MAX_SLOPE_ANGLE = 50.0f;
 float Character::MAX_SLOPE_COSINE = cosf(sfVectorMath::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
-Character::Character(CharacterProperties init, Observer* obs, Capsule* rigidBind) :
-    properties{init}, collider{rigidBind}, currentHealth{init.maxHealth}
+Character::Character(CharacterProperties init, Observer* obs, PhysicsObject* rigidBind) :
+    properties{init}, collider{rigidBind}
 {
     charSubject.addObserver(obs);
     //equippedItem->addObserver(obs);
@@ -105,7 +105,7 @@ bool Character::getSlopeState()
     return slopeOkay;
 }
 
-Capsule* Character::getColliderAddress()
+PhysicsObject* Character::getColliderAddress()
 {
     return collider;
 }
@@ -142,16 +142,21 @@ void Character::changeAimAngle(float angle)
 void Character::setHealth(float health)
 {
     if(health < 0.0f)
-        currentHealth = 0.0f;
+        properties.currentHealth = 0.0f;
     else if(health > properties.maxHealth)
-        currentHealth = properties.maxHealth;
+        properties.currentHealth = properties.maxHealth;
     else
-        currentHealth = health;
+        properties.currentHealth = health;
 }
 
 float Character::getHealth()
 {
-    return currentHealth;
+    return properties.currentHealth;
+}
+
+CharacterProperties Character::getProperties()
+{
+    return properties;
 }
 
 void Character::switchNextItem()

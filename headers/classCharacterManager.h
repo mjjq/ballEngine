@@ -18,6 +18,7 @@ public:
     void newObserver(Observer* obs);
     void setAimAngle(int index, sf::Vector2f targetPos);
     void switchNextItem(int charIndex);
+    CharacterProperties getCharacterProperties(int index);
 };
 
 #endif // CLASS_CHAR_MANAGER_H
