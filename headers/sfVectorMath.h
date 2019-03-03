@@ -15,6 +15,9 @@ namespace sfVectorMath
     float getAverage(std::vector<float> &vec);
     float cross(sf::Vector2f v1, sf::Vector2f v2);
     sf::Vector2f orthogonal(sf::Vector2f v, float scalar);
+    sf::Vector2f tripleProduct(sf::Vector2f v1,
+                               sf::Vector2f v2,
+                               sf::Vector2f v3);
 }
 
 #endif // SF_VECTOR_MATH_H

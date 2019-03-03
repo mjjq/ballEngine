@@ -48,11 +48,11 @@ public:
     SceneEnum pollNextScene();
     void setPrevScene(SceneEnum scEnum);
 
-    virtual void update(sf::RenderWindow &window);
-    virtual void redraw(sf::RenderWindow &window);
+    virtual void update(sf::RenderWindow &_window);
+    virtual void redraw(sf::RenderWindow &_window);
     virtual void initBindings();
 
-    void loadUI(std::string filePath, UIContainer &container);
+    void loadUI(std::string filePath, UIContainer &_container);
     void loadKeybinds(std::string filePath,
                       std::string sceneType);
 

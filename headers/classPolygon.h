@@ -17,12 +17,7 @@ class Polygon : public PhysicsObject
     void genBoundingOBB();
 
 public:
-    Polygon(std::vector<sf::Vertex > _vertices,
-        float _mass,
-        sf::Vector2f _initPos,
-        sf::Vector2f _initVel,
-        float _rotation,
-        float _rotRate);
+    Polygon(ObjectProperties init);
     ~Polygon();
 
     sf::Rect<float> getGlobalBounds();
@@ -40,6 +35,8 @@ public:
     float getRotAngle();
 
     void draw(sf::RenderWindow &_window);
+
+    sf::Vertex farthestPointInDir(sf::Vector2f direction);
 
 };
 

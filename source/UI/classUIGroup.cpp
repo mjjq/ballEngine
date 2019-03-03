@@ -7,12 +7,12 @@
 #include <functional>
 #include <memory>
 
-#include "../../headers/classUIGroup.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
-#include "../../headers/classUIButton.h"
-#include "../../headers/classUISlider.h"
-#include "../../headers/structs.h"
+#include "classUIGroup.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
+#include "classUIButton.h"
+#include "classUISlider.h"
+#include "structs.h"
 
 UIGroup::UIGroup(WindowParams &params) : UIWindow(params)
 {

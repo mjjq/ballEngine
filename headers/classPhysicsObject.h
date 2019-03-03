@@ -2,6 +2,12 @@
 #define CLASS_PHYSOBJ_H
 
 #include <deque>
+#include <iostream>
+#include <SFML/Graphics.hpp>
+#include <cmath>
+#include <thread>
+#include <limits>
+#include <tuple>
 
 enum class ObjectType
 {
@@ -9,11 +15,34 @@ enum class ObjectType
     AABB,
     OBB,
     Polygon,
+    Capsule,
     _Count,
 };
 
-class PhysicsObject
+struct ObjectProperties
 {
+    sf::Vector2f _position;
+    sf::Vector2f _velocity = {0.0f, 0.0f};
+    sf::Vector2f _size = {1.0f, 1.0f};
+    float _mass = 1.0f;
+    float _coefFric = 0.0f;
+    float _coefRest = 0.0f;
+    float _rotation = 0.0f;
+    float _rotRate = 0.0f;
+    std::vector<sf::Vertex > _vertices = {};
+    bool _bullet = false;
+    bool _ignoreGravity = false;
+};
+
+class Entity
+{
+
+};
+
+class PhysicsObject : public Entity
+{
+    float coefRestitution = 0.0f;
+    float coefFriction = 1.0f;
 protected:
     sf::Vector2f position;
     sf::Vector2f nStepPosition = getPosition();
@@ -38,11 +67,11 @@ protected:
     std::deque<sf::Vector2f> previousPositions;
     bool samplePreviousPositions = false;
     bool isPlayer = false;
+    bool bullet = false;
+    bool ignoreGravity = false;
 
 public:
-    PhysicsObject(sf::Vector2f _position,
-                  sf::Vector2f _velocity,
-                  float _mass);
+    PhysicsObject(ObjectProperties init);
     ~PhysicsObject();
 
     virtual ObjectType type() const = 0;
@@ -58,6 +87,8 @@ public:
     float getKE();
     float getSpeed();
     sf::Vector2f getMomentum();
+    bool isBullet();
+    bool ignoresGravity();
 
     float getGPE(PhysicsObject* otherObj);
     float getDistance(PhysicsObject* otherObj);
@@ -70,6 +101,7 @@ public:
     void setVelocity(sf::Vector2f vel);
     void setMass(float _mass);
     void applyExternalImpulse(sf::Vector2f force, float dt);
+    void setCoefFriction(float coef);
 
     void sampleNextPosition();
     void sampleCurrentPosition();
@@ -89,8 +121,15 @@ public:
 
     sf::Vector2f getCoM();
     float getMomentInertia();
+    void setMomentInertia(float i);
     float getRotRate();
     void setRotRate(float _rotRate);
+
+    float getCoefRestitution();
+    float getCoefFriction();
+
+    virtual sf::Vertex farthestPointInDir(sf::Vector2f direction) = 0;
+    virtual sf::Rect<float > getBoundingBox() = 0;
 };
 
 #endif // CLASS_DYNOBJ_H

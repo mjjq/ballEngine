@@ -2,9 +2,13 @@
 #define CLASS_SANDBOXSCENE_H
 
 #include "classGameScene.h"
+#include "characterWorldInterface.h"
 
 class SandboxScene : public GameScene
 {
+    CharacterManager charMan;
+    ProjectileManager projMan;
+    ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
 public:
     SandboxScene(sf::RenderWindow &_window,
                  sf::Time &_targetFTime,

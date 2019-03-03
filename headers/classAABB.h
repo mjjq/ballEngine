@@ -11,10 +11,11 @@ class AABB : public PhysicsObject
     sf::Vector2f centreOfMass;
 
 public:
-    AABB(sf::Vector2f _size, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
+    AABB(ObjectProperties init);
     ~AABB();
 
     sf::Rect<float> getGlobalBounds();
+    sf::Rect<float > getBoundingBox();
 
     static const ObjectType MY_TYPE = ObjectType::AABB;
     ObjectType type() const override;
@@ -24,7 +25,10 @@ public:
 
     void draw(sf::RenderWindow &_window);
 
+    sf::Vertex farthestPointInDir(sf::Vector2f direction);
+
     std::vector<sf::Vertex > constructVerts();
+
 
 };
 

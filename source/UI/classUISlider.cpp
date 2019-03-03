@@ -6,8 +6,8 @@
 #include <tuple>
 #include <functional>
 
-#include "../../headers/classUISlider.h"
-#include "../../headers/stringConversion.h"
+#include "classUISlider.h"
+#include "stringConversion.h"
 
 
 UISlider::UISlider(SliderParams &sParams, ButtonParams &bParams, WindowParams &wParams) :

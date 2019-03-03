@@ -10,28 +10,23 @@ class OBB : public PhysicsObject
     sf::Vector2f size;
 
 public:
-    OBB(sf::Vector2f _size,
-        float _mass,
-        sf::Vector2f _initPos,
-        sf::Vector2f _initVel,
-        float _rotation,
-        float _rotRate);
+    OBB(ObjectProperties init);
     ~OBB();
 
     sf::Rect<float> getGlobalBounds();
+    sf::Rect<float > getBoundingBox();
 
     static const ObjectType MY_TYPE = ObjectType::OBB;
     ObjectType type() const override;
 
     float getMinSize();
     sf::Vector2f getCoM();
-    sf::Rect<float > getBoundingBox();
     std::vector<sf::Vertex > constructVerts();
     float getRotAngle();
 
     void draw(sf::RenderWindow &_window);
 
-
+    sf::Vertex farthestPointInDir(sf::Vector2f direction);
 };
 
 #endif // CLASS_UNIVERSE_H

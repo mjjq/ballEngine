@@ -6,13 +6,13 @@
 #include <tuple>
 #include <functional>
 
-#include "../../headers/classUIWindow.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
-#include "../../headers/classUIButton.h"
-#include "../../headers/classUISlider.h"
-#include "../../headers/classUIGroup.h"
-#include "../../headers/structs.h"
+#include "classUIWindow.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
+#include "classUIButton.h"
+#include "classUISlider.h"
+#include "classUIGroup.h"
+#include "structs.h"
 
 //sf::Vector2u UIWindow::appWinSize;
 

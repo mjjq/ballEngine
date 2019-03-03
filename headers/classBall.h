@@ -10,7 +10,7 @@ class Ball : public PhysicsObject
     float radius;
 
 public:
-    Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
+    Ball(ObjectProperties init);
     ~Ball();
 
     static const ObjectType MY_TYPE = ObjectType::Ball;
@@ -22,7 +22,9 @@ public:
 
     void draw(sf::RenderWindow &_window);
 
+    sf::Vertex farthestPointInDir(sf::Vector2f direction);
 
+    sf::Rect<float > getBoundingBox();
 };
 
 #endif // CLASS_UNIVERSE_H
