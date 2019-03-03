@@ -37,7 +37,14 @@
  }
  ],
 
- "AABBs" : [
+ "statAABBs" : [
+ {
+    "position" : [0, 0],
+    "dimensions" : [100, 100]
+ }
+ ],
+
+ "dynAABBs" : [
  {
     "position" : [0, 0],
     "dimensions" : [100, 100]

@@ -2,14 +2,27 @@
 #define CLASS_UNIVERSE_H
 #include "integrators.h"
 #include "collisionDetection.h"
-#include "classBall.h"
+#include "classPhysicsObject.h"
+#include "classAABB.h"
+#include "classPolygon.h"
+#include "classCapsule.h"
+#include "classCharacter.h"
 #include "class2DMatrix.h"
 #include "stringConversion.h"
+#include "classArbiter.h"
+#include "classJoint.h"
+#include "Observer.h"
 
-class BallUniverse
+enum class SpawnObjectType
 {
-    std::vector<Ball> ballArray;
-    std::vector<sf::RectangleShape > AARectArray;
+    Ball,
+    Polygon,
+    Capsule,
+    _Count,
+};
+
+class BallUniverse : public Entity
+{
 
     int worldSizeX;
     int worldSizeY;
@@ -19,7 +32,7 @@ class BallUniverse
     bool enable_forces;
     bool enable_collisions;
     bool universalGravity = false;
-    sf::Vector2f uGravityDir{0, 1};
+    sf::Vector2f uGravityDir{0, 0.2};
     float minBallSize = 0.001;
 
     float collAccumulator = 0.0f;
@@ -40,8 +53,6 @@ class BallUniverse
     float sampledt = 5*dt;
     float timeToNextSample = sampledt;
     bool enable_trajectories = false;
-    int currentPlayer = -1;
-    sf::Vector2f playerInput{0, 0};
 
     void calcCollTimes();
     void findShortestCollTime();
@@ -51,27 +62,45 @@ class BallUniverse
     float totalEnergy = 0;
     sf::Vector2f totalMomentum = sf::Vector2f{0,0};
 
-    void calcTotalKE(std::vector<Ball> &ballArray);
-    void calcTotalMomentum(std::vector<Ball> &ballArray);
-    void calcTotalGPE(std::vector<Ball> &ballArray);
+    void calcTotalKE(std::vector<PhysicsObject* > &_dynamicObjects);
+    void calcTotalMomentum(std::vector<PhysicsObject* > &_dynamicObjects);
+    void calcTotalGPE(std::vector<PhysicsObject* > &_dynamicObjects);
     void calcTotalEnergy();
 
-    bool checkForBounce(Ball &ball);
+    bool checkForBounce(PhysicsObject* object);
 
     float physicsLoop();
     float physicsLoopAbsorb();
+    void broadPhase();
 
-
+    Subject universeSub;
 public:
+    std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
+    std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
+    std::map<ArbiterKey, Arbiter> arbiters;
+    std::vector<Joint> joints;
+
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
 
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
-    void updateFirstVelocity(Integrators integType, float dt, Ball &firstBall, Ball &secondBall);
+    void updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2);
     void updateAllObjects(bool enableForces, float dt);
 
     void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
-    void spawnNewBall(sf::Vector2f position, sf::Vector2f velocity, float radius, float mass=1);
-    void spawnNewRect(sf::Vector2f position, float width, float height);
+    void spawnNewBall(ObjectProperties init);
+    /*void spawnNewRect(sf::Vector2f position,
+                      float width,
+                      float height,
+                      sf::Vector2f velocity,
+                      float mass,
+                      float rotation);
+    void spawnStaticRect(sf::Vector2f position, float width, float height, float rotation);*/
+    void spawnStaticBall(ObjectProperties init);
+    void spawnNewPoly(ObjectProperties init);
+    void spawnStaticPoly(ObjectProperties init);
+    void spawnNewObject(bool isStatic, SpawnObjectType type, ObjectProperties init);
+    void spawnNewObject(std::unique_ptr<PhysicsObject> obj);
+
     void removeBall(int index);
     void removeRect(int index);
     void createBallGrid(int numWide, int numHigh, float spacing, sf::Vector2f centralPosition,
@@ -111,15 +140,17 @@ public:
     void drawSampledPositions(sf::RenderWindow &window);
     void toggleTrajectories();
     void togglePlayerTraj();
-    sf::Vector2f getBallPosition(unsigned int i);
-    void pushBall(float force, float relDirection, int i);
-    void pushBall(sf::Vector2f &resVector, int ballArg);
-    void pushPlayer(float force, float relDirection);
-    void setPlayer(unsigned int playerIndex);
+    sf::Vector2f getObjPosition(unsigned int i);
     void splitBalls(int ballIndex, float relDirection, float speed);
     void applyUGravity();
-    void playerInFunc(sf::Vector2f relVector);
 
+    void createExplosion(sf::Vector2f position,
+                         float radiusOfEffect,
+                         float strength);
+
+    void newJoint(int index1, int index2);
+
+    void newObserver(Observer* obs);
 };
 
 #endif // CLASS_UNIVERSE_H

@@ -3,63 +3,28 @@
 
 #include <deque>
 #include "integrators.h"
+#include "classPhysicsObject.h"
 
-class Ball : public sf::CircleShape
+class Ball : public PhysicsObject
 {
-    sf::Vector2f cStepVelocity;
-    sf::Vector2f nStepVelocity = cStepVelocity;
-    sf::Vector2f cStepModVelocity = {0,0};
-    sf::Vector2f nStepPosition = getPosition();
-    sf::Vector2f pStepPosition = nStepPosition;
-    float dampingFactor = 1;
-    float mass;
-    float density;
-    //float radius;
-    int numDynColls = 0;
-
-    float lenJonesForce(float x, float x_0, float r, float m);
-    float exptCollForce(float x, float x_0, float r, float m);
-    float newtonForce(float x, float x_0, float r, float G, float M);
-
-    std::deque<sf::Vector2f> previousPositions;
-    bool samplePreviousPositions = false;
-    bool isPlayer = false;
+    float radius;
 
 public:
-    Ball(float radius, float mass, sf::Vector2f initPos, sf::Vector2f initVel);
+    Ball(ObjectProperties init);
+    ~Ball();
 
+    static const ObjectType MY_TYPE = ObjectType::Ball;
+    ObjectType type() const override;
 
-    void applyExternalImpulse(sf::Vector2f force, float dt);
-    void updatePosition(float dt);
-    void sampleNextPosition();
-    void sampleCurrentPosition();
+    float getRadius();
+    float getMinSize();
+    sf::Vector2f getCoM();
 
-    float getMass();
-    void setMass(float _mass);
-    float getDensity();
-    //float getRadius();
-    sf::Vector2f getVelocity();
-    void setVelocity(sf::Vector2f vel);
-    void addSolvedVelocity(sf::Vector2f &cStep, sf::Vector2f &nStep);
-    void setToCollided();
-    void resetToCollided();
-    bool getHasCollided();
-    float getKE();
-    float getGPE(Ball &otherBall);
-    sf::Vector2f getMomentum();
-    float getDistance(Ball &otherBall);
-    float getSpeed();
-    float getRelSpeed(Ball &otherBall);
+    void draw(sf::RenderWindow &_window);
 
-    bool getSamplePrevPosBool();
-    void setSamplePrevPosBool(bool value);
-    std::deque<sf::Vector2f>& getPreviousPositions();
+    sf::Vertex farthestPointInDir(sf::Vector2f direction);
 
-    bool getIsPlayer();
-    void setIsPlayer(bool value);
-
-    void incTimesCollided();
-    int getNumCollTimes();
+    sf::Rect<float > getBoundingBox();
 };
 
 #endif // CLASS_UNIVERSE_H

@@ -6,9 +6,9 @@
 #include <tuple>
 #include <functional>
 
-#include "../../headers/classTextElement.h"
-#include "../../headers/sfVectorMath.h"
-#include "../../headers/stringConversion.h"
+#include "classTextElement.h"
+#include "sfVectorMath.h"
+#include "stringConversion.h"
 
 
 void UITextElement::updateElement(sf::RenderWindow &window, sf::View &GUIView, sf::Vector2f parentPosition)
