@@ -3,6 +3,7 @@
 
 #include "classBall.h"
 #include "Observer.h"
+#include "classRenderable.h"
 
 enum class ProjectileType
 {
@@ -14,6 +15,7 @@ enum class ProjectileType
 class Projectile : public Entity
 {
     PhysicsObject* collider;
+    Renderable* renderObj;
     ObjectProperties projProperties;
     ProjectileType projType;
 
@@ -28,6 +30,8 @@ public:
     Projectile(ProjectileType type,
                sf::Vector2f initPos,
                sf::Vector2f initDir);
+    Projectile(ObjectProperties objProps,
+               std::function<void()> onColl = [&]{});
     void onCollide();
 
     ObjectProperties getProjProps();

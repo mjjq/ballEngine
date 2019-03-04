@@ -24,6 +24,13 @@ Projectile::Projectile(ProjectileType type,
     }
 }
 
+Projectile::Projectile(ObjectProperties objProps,
+               std::function<void()> onColl)
+{
+    projType = ProjectileType::_Count;
+    projProperties = objProps;
+}
+
 void Projectile::onCollide()
 {
     onCollideLambda();

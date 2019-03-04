@@ -1,6 +1,7 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
-#include "classPhysicsObject.h"
+
+#include <vector>
 
 enum class EventType
 {
@@ -10,6 +11,7 @@ enum class EventType
     Projectile_Contact,
     Deal_Damage,
     Gen_Explosion,
+    New_Renderable,
     Count
 };
 
@@ -19,6 +21,11 @@ public:
     EventType type;
     Event(EventType _type) : type{_type}
     {}
+};
+
+class Entity
+{
+
 };
 
 class Observer

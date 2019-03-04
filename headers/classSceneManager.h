@@ -9,6 +9,7 @@
 #include "classUIContainer.h"
 #include "classUIWindow.h"
 #include "sceneEnums.h"
+#include "classRenderer.h"
 
 class SceneManager
 {
@@ -36,6 +37,8 @@ class SceneManager
     PauseMenuScene pauseMenu{window};
     Scene *currScene = &menu;
     Scene *gameScene = nullptr;
+
+    Renderer* sceneRenderer = new Renderer();
 
     SceneEnum thisSceneEnum = SceneEnum::LAST;
     SceneEnum nextSceneEnum = SceneEnum::LAST;

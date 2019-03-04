@@ -8,6 +8,7 @@
 #include <thread>
 #include <limits>
 #include <tuple>
+#include "Observer.h"
 
 enum class ObjectType
 {
@@ -32,11 +33,7 @@ struct ObjectProperties
     std::vector<sf::Vertex > _vertices = {};
     bool _bullet = false;
     bool _ignoreGravity = false;
-};
-
-class Entity
-{
-
+    ObjectType type = ObjectType::_Count;
 };
 
 class PhysicsObject : public Entity
