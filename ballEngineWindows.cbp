@@ -71,6 +71,7 @@
 		<Unit filename="headers/GJK.h" />
 		<Unit filename="headers/Observer.h" />
 		<Unit filename="headers/SpawnInterface.h" />
+		<Unit filename="headers/baseObject.h" />
 		<Unit filename="headers/characterWorldInterface.h" />
 		<Unit filename="headers/class2DMatrix.h" />
 		<Unit filename="headers/classAABB.h" />

@@ -10,8 +10,8 @@ void Renderer::redrawAll(sf::RenderWindow &window)
     sf::Sprite newSprite;
     for(int i=0; i<(int)renderObjects.size(); ++i)
     {
-        for(int j=0; j<(int)renderObjects[i]->primitives.size(); ++j)
-            window.draw(*renderObjects[i]->primitives[j]);
+        //for(int j=0; j<(int)renderObjects[i]->primitives.size(); ++j)
+            window.draw(*renderObjects[i]->primDrawable);
 
         std::string &texID = renderObjects[i]->textureID;
 

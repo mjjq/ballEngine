@@ -23,6 +23,7 @@ public:
     void spawnNewProjectile(ProjectileType type,
                             sf::Vector2f position,
                             sf::Vector2f velocity);
+    void spawnNewProjectile(ObjectProperties objProps);
     void charContactData();
     void projContactData();
     Character* getProjCharCollision(Projectile& proj);

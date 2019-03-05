@@ -1190,6 +1190,20 @@ void BallUniverse::newObserver(Observer* obs)
     universeSub.addObserver(obs);
 }
 
+void BallUniverse::onNotify(Entity& entity, Event event)
+{
+    switch(event.type)
+    {
+        case(EventType::New_PhysicsObj):
+        {
+
+        }
+        default:
+            break;
+    }
+
+}
+
 BallUniverse::BallUniverse(int _worldSizeX,
                            int _worldSizeY,
                            float _dt,

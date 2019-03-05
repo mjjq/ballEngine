@@ -12,6 +12,8 @@ enum class EventType
     Deal_Damage,
     Gen_Explosion,
     New_Renderable,
+    New_PhysicsObj,
+    Update_Position,
     Count
 };
 
@@ -28,7 +30,7 @@ class Entity
 
 };
 
-class Observer
+class Observer : public Entity
 {
 public:
     virtual ~Observer() {}

@@ -58,6 +58,8 @@ void PhysicsObject::updatePosition(float dt)
     //std::cout << "Next:    " << nStepVelocity << "\n";
     cStepVelocity = nStepVelocity;
     cStepModVelocity = {0,0};
+
+    physSubject.notify(*this, Event(EventType::Update_Position));
 }
 
 /**
@@ -358,4 +360,9 @@ float PhysicsObject::getCoefRestitution()
 float PhysicsObject::getCoefFriction()
 {
     return coefFriction;
+}
+
+float PhysicsObject::getRotAngle()
+{
+    return rotAngle;
 }

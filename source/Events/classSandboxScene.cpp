@@ -146,7 +146,7 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    ballSim.spawnNewObject(false, SpawnObjectType::Ball,
+                    /*ballSim.spawnNewObject(false, SpawnObjectType::Ball,
                                            {static_cast<sf::Vector2f>(mousePosOnClick),
                                          velocity,
                                          {spawnRadius, 0.0f},
@@ -154,7 +154,16 @@ void SandboxScene::load()
                                          spawnCoefFriction,
                                          spawnCoefRest,
                                          spawnRotation,
+                                         spawnRotRate});*/
+                    charWorldInterface.spawnNewProjectile({static_cast<sf::Vector2f>(mousePosOnClick),
+                                         velocity,
+                                         {spawnRadius, 0.0f},
+                                         spawnMass,
+                                         spawnCoefFriction,
+                                         spawnCoefRest,
+                                         spawnRotation,
                                          spawnRotRate});
+                    std::cout << "spawned\n";
                     drawLine = false;
                 }
             }

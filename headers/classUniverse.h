@@ -21,7 +21,7 @@ enum class SpawnObjectType
     _Count,
 };
 
-class BallUniverse : public Entity
+class BallUniverse : public Observer
 {
 
     int worldSizeX;
@@ -151,6 +151,8 @@ public:
     void newJoint(int index1, int index2);
 
     void newObserver(Observer* obs);
+
+    void onNotify(Entity& entity, Event event);
 };
 
 #endif // CLASS_UNIVERSE_H

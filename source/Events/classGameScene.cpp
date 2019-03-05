@@ -447,8 +447,8 @@ void GameScene::unload()
 
 void GameScene::redraw(sf::RenderWindow &_window)
 {
-    ballSim.drawSampledPositions(_window);
-    ballSim.drawBalls(_window);
+    //ballSim.drawSampledPositions(_window);
+    //ballSim.drawBalls(_window);
     window.draw(boundaryRect);
 
     container.renderWindows(_window, GUIView, worldView);

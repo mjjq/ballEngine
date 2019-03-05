@@ -94,6 +94,16 @@ void ICharWorld::spawnNewProjectile(ProjectileType type,
     world->spawnNewObject(std::move(newBall));
 }
 
+void ICharWorld::spawnNewProjectile(ObjectProperties objProps)
+{
+    Projectile* proj = new Projectile(objProps);
+    std::unique_ptr<Ball > newBall = std::make_unique<Ball >(objProps);
+    proj->setColliderAddress(newBall.get());
+
+    projMan->addProjectile(proj);
+    world->spawnNewObject(std::move(newBall));
+}
+
 void ICharWorld::charContactData()
 {
     for(int i=0; i<(int)charMan->characters.size(); ++i)

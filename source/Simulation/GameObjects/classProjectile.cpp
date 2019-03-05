@@ -29,6 +29,7 @@ Projectile::Projectile(ObjectProperties objProps,
 {
     projType = ProjectileType::_Count;
     projProperties = objProps;
+    renderObj = new Renderable(objProps.texture, objProps);
 }
 
 void Projectile::onCollide()
@@ -44,6 +45,7 @@ PhysicsObject* Projectile::getColliderAddress()
 void Projectile::setColliderAddress(PhysicsObject* object)
 {
     collider = object;
+    collider->physSubject.addObserver(this);
 }
 
 ObjectProperties Projectile::getProjProps()
@@ -110,4 +112,19 @@ void Projectile::addObserver(Observer* obs)
 float Projectile::getDamage()
 {
     return damage;
+}
+
+void Projectile::onNotify(Entity& entity, Event event)
+{
+    switch(event.type)
+    {
+        case(EventType::Update_Position):
+        {
+            renderObj->updatePosition(collider->getPosition());
+            renderObj->updateOrientation(collider->getRotAngle());
+            break;
+        }
+        default:
+            break;
+    }
 }

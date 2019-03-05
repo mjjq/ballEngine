@@ -12,7 +12,7 @@ enum class ProjectileType
     _Count
 };
 
-class Projectile : public Entity
+class Projectile : public Observer
 {
     PhysicsObject* collider;
     Renderable* renderObj;
@@ -41,6 +41,8 @@ public:
     void addObserver(Observer* obs);
 
     float getDamage();
+
+    void onNotify(Entity& entity, Event event);
 };
 
 #endif // CLASS_PROJECTILE_H
