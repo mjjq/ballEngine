@@ -14,8 +14,8 @@ enum class ProjectileType
 
 class Projectile : public Observer
 {
-    PhysicsObject* collider;
-    Renderable* renderObj;
+    PhysicsObject* collider = nullptr;
+    Renderable* renderObj = nullptr;
     ObjectProperties projProperties;
     ProjectileType projType;
 
@@ -32,6 +32,7 @@ public:
                sf::Vector2f initDir);
     Projectile(ObjectProperties objProps,
                std::function<void()> onColl = [&]{});
+    ~Projectile();
     void onCollide();
 
     ObjectProperties getProjProps();

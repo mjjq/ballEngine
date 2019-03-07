@@ -19,6 +19,11 @@ Renderable::Renderable(std::string _texID,
     renderSubject.notify(*this, Event(EventType::New_Renderable));
 }
 
+Renderable::~Renderable()
+{
+    renderSubject.notify(*this, Event(EventType::Delete_Renderable));
+}
+
 void Renderable::generateDrawables(ObjectProperties objProps)
 {
     switch(objProps.type)

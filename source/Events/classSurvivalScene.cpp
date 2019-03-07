@@ -75,15 +75,15 @@ void SurvivalScene::load()
     {
         isLoaded = true;
 
-        ballSim = BallUniverse{2000, 2000, 1.0f, false, false};
-        charMan = CharacterManager{};
-        projMan = ProjectileManager{};
-        charWorldInterface = ICharWorld{&ballSim, &charMan, &projMan};
-        ballSim.newObserver(&charWorldInterface);
+        ballSim = new BallUniverse{2000, 2000, 1.0f, false, false};
+        charMan = new CharacterManager{};
+        projMan = new ProjectileManager{};
+        charWorldInterface = ICharWorld{ballSim, charMan, projMan};
+        ballSim->newObserver(&charWorldInterface);
 
         gameLogic = GameLogic{};
 
-        wSize = ballSim.getWorldSize();
+        wSize = ballSim->getWorldSize();
         changeBoundaryRect(wSize);
         resetCamera();
         adjustViewSize(window.getSize());
@@ -98,39 +98,39 @@ void SurvivalScene::load()
             {"setStar",     [&]{spawnRadius=50;spawnMass=10000;}},
             {"setPlanet",   [&]{spawnRadius=10;spawnMass=1;}},
             {"setAstrd",    [&]{spawnRadius=3;spawnMass=0.01;}},
-            {"tglTrj",      [&]{ballSim.toggleTrajectories();}},
-            {"tglPTraj",    [&]{ballSim.togglePlayerTraj();}},
-            {"tglIntMthd",  [&]{ballSim.toggleRK4();}},
-            {"clearSim",    [&]{ballSim.clearSimulation();}},
-            {"decSimStep",  [&]{ballSim.decSimStep(0.1);}},
-            {"incSimStep",  [&]{ballSim.incSimStep(0.1);}},
+            {"tglTrj",      [&]{ballSim->toggleTrajectories();}},
+            {"tglPTraj",    [&]{ballSim->togglePlayerTraj();}},
+            {"tglIntMthd",  [&]{ballSim->toggleRK4();}},
+            {"clearSim",    [&]{ballSim->clearSimulation();}},
+            {"decSimStep",  [&]{ballSim->decSimStep(0.1);}},
+            {"incSimStep",  [&]{ballSim->incSimStep(0.1);}},
             {"zmToMse",     [&]{zoomToMouse(2.0f);}},
             {"zmFromMse",   [&]{zoomToMouse(0.5f);}},
             {"rstView",     [&]{resetCamera();}},
-            {"tglSimPse",   [&]{ballSim.toggleSimPause();}},
+            {"tglSimPse",   [&]{ballSim->toggleSimPause();}},
             {"viewPan",     [&]{
                 checkForViewPan(mousePosOnPan);
                 canZoom = true;
                     }},
             {"focusPlr",    [&]{focusOnBall(0);}},
             {"pauseGme",    [&]{togglePause();}},
-            {"tglForces",   [&]{ballSim.toggleForces();}},
-            {"tglCols",     [&]{ballSim.toggleCollisions();}},
-            {"chgBColour",  [&]{ballSim.changeBallColour();}},
-            {"undoBall",    [&]{ballSim.removeBall(-1);}},
-            {"undoRect",    [&]{ballSim.removeRect(-1);}},
-            //{"mvPlrFwd",    [&]{ballSim.playerInFunc({0,1});
+            {"tglForces",   [&]{ballSim->toggleForces();}},
+            {"tglCols",     [&]{ballSim->toggleCollisions();}},
+            {"chgBColour",  [&]{ballSim->changeBallColour();}},
+            {"undoBall",    [&]{ballSim->removeBall(-1);}},
+            {"undoRect",    [&]{ballSim->removeRect(-1);}},
+            //{"mvPlrFwd",    [&]{ballSim->playerInFunc({0,1});
             //                    KeyBinds::isFuncContinuous = true;}},
-            /*{"mvPlrRgt",    [&]{if(gameLogic.allowPlayerMovement)ballSim.playerInFunc({-0.2,0});
+            /*{"mvPlrRgt",    [&]{if(gameLogic.allowPlayerMovement)ballSim->playerInFunc({-0.2,0});
                                 KeyBinds::isFuncContinuous = true;}},
-            {"mvPlrBck",    [&]{ballSim.playerInFunc({0,-1});
+            {"mvPlrBck",    [&]{ballSim->playerInFunc({0,-1});
                                 KeyBinds::isFuncContinuous = true;}},
-            {"mvPlrLft",    [&]{if(gameLogic.allowPlayerMovement)ballSim.playerInFunc({0.2,0});
+            {"mvPlrLft",    [&]{if(gameLogic.allowPlayerMovement)ballSim->playerInFunc({0.2,0});
                                 KeyBinds::isFuncContinuous = true;}},*/
-            {"mvPlrRgt",    [&]{charMan.moveCharacter({1,0}, 0);
+            {"mvPlrRgt",    [&]{charMan->moveCharacter({1,0}, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
-            {"mvPlrLft",    [&]{charMan.moveCharacter({-1,0}, 0);
+            {"mvPlrLft",    [&]{charMan->moveCharacter({-1,0}, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
             {"startGme",    [&]{startGame();}},
@@ -144,7 +144,7 @@ void SurvivalScene::load()
             {"currFPS",     [&]{return std::to_string(currentFPS);}},
             {"cdtimer",     [&]{return std::to_string(1+gameLogic.countDownTimer.asMilliseconds()/1000);}},
             {"uptimer",     [&]{return std::to_string(gameLogic.upTimer.asMilliseconds());}},
-            {"playSpd",     [&]{return ballSim.getBallSpeed(0);}}
+            {"playSpd",     [&]{return ballSim->getBallSpeed(0);}}
         };
 
         loadKeybinds("./json/keybinds.json", "SurvivalScene");
@@ -154,7 +154,7 @@ void SurvivalScene::load()
         container.setWindowIsVisible(2, false);
         container.setWindowIsVisible(3, false);
 
-        /*ballSim.spawnNewBall({sf::Vector2f{wSize.x/2.0f, wSize.y/1.2f},
+        /*ballSim->spawnNewBall({sf::Vector2f{wSize.x/2.0f, wSize.y/1.2f},
                              {0.0f, 2.0f},
                              {10.0f, 0.0f},
                              2.0f,
@@ -164,19 +164,19 @@ void SurvivalScene::load()
                              0.0f});*/
         spawnRandomBalls(50, sf::Vector2f{wSize.x/2.0f, wSize.y/2.0f}, wSize.x/2.0f, 10.0f, 2.0f, 2.0f);
 
-        charWorldInterface.spawnNewCharacter({
+        /*charWorldInterface.spawnNewCharacter({
                                 {wSize.x/2.0f, wSize.y/1.2f},
                                 {0.0f, 0.0f},
                                 {10.0f, 0.0f},
                                 2.0f,
                                 2.0f,
                                 1.0f
-                            });
+                            });*/
         //spawnFromJson({wSize.x/2.0f, wSize.y/2.0f}, {3,0});
-        //ballSim.setPlayer(0);
-        ballSim.toggleCollisions();
-        ballSim.toggleTrajectories();
-        ballSim.togglePlayerTraj();
+        //ballSim->setPlayer(0);
+        ballSim->toggleCollisions();
+        ballSim->toggleTrajectories();
+        ballSim->togglePlayerTraj();
     }
 }
 
@@ -195,9 +195,9 @@ void SurvivalScene::update(sf::RenderWindow &_window)
     {
         if(gameLogic.countDownTimer.asSeconds() <= 0.0f)
         {
-            ballSim.universeLoop(currentFrameTime, targetFrameTime);
+            ballSim->universeLoop(currentFrameTime, targetFrameTime);
 
-            playerProperties = charMan.getCharacterProperties(0);
+            playerProperties = charMan->getCharacterProperties(0);
 
             gameLogic.upTimer += currentFrameTime;
 

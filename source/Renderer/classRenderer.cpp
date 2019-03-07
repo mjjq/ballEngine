@@ -1,4 +1,5 @@
 #include "classRenderer.h"
+#include <iostream>
 
 Renderer::Renderer()
 {
@@ -25,6 +26,22 @@ void Renderer::redrawAll(sf::RenderWindow &window)
 
 void Renderer::onNotify(Entity& entity, Event event)
 {
-    if(event.type == EventType::New_Renderable)
-        renderObjects.push_back((Renderable*)&entity);
+    switch(event.type)
+    {
+        case(EventType::New_Renderable):
+        {
+            renderObjects.push_back((Renderable*)&entity);
+            break;
+        }
+        case(EventType::Delete_Renderable):
+        {
+            Renderable* obj = (Renderable*)&entity;
+            for(int i=0; i<renderObjects.size(); ++i)
+                if(renderObjects[i] == obj)
+                    renderObjects.erase(renderObjects.begin() + i);
+            break;
+        }
+        default:
+            break;
+    }
 }

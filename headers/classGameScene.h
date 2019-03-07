@@ -4,6 +4,9 @@
 
 #include "classScene.h"
 #include "classUniverse.h"
+#include "classCharacterManager.h"
+#include "classProjectileManager.h"
+#include "characterWorldInterface.h"
 #include "classUIContainer.h"
 
 class GameScene : public Scene
@@ -49,7 +52,10 @@ protected:
     float spawnCoefFriction = 1.0f;
 
 
-    BallUniverse ballSim{2000, 2000, 1.0f, false, false};
+    BallUniverse* ballSim = nullptr;//{2000, 2000, 1.0f, false, false};
+    CharacterManager* charMan = nullptr;
+    ProjectileManager* projMan = nullptr;
+    ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
     sf::RectangleShape boundaryRect;
 
     bool canZoom = false;

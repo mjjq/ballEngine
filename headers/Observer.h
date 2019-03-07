@@ -12,7 +12,9 @@ enum class EventType
     Deal_Damage,
     Gen_Explosion,
     New_Renderable,
+    Delete_Renderable,
     New_PhysicsObj,
+    Delete_PhysicsObj,
     Update_Position,
     Count
 };

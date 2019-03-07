@@ -3,6 +3,8 @@
 #include "integrators.h"
 #include "stringConversion.h"
 
+Subject PhysicsObject::engineNotify;
+
 PhysicsObject::PhysicsObject(ObjectProperties init) :
                   coefRestitution{init._coefRest},
                   coefFriction{init._coefFric},
@@ -14,9 +16,14 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   mass{init._mass},
                   bullet{init._bullet},
                   ignoreGravity{init._ignoreGravity}
-                  {}
+{
+    engineNotify.notify(*this, Event(EventType::New_PhysicsObj));
+}
 
-PhysicsObject::~PhysicsObject() {}
+PhysicsObject::~PhysicsObject()
+{
+    engineNotify.notify(*this, Event(EventType::Delete_PhysicsObj));
+}
 
 
 

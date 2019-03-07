@@ -30,6 +30,16 @@ Projectile::Projectile(ObjectProperties objProps,
     projType = ProjectileType::_Count;
     projProperties = objProps;
     renderObj = new Renderable(objProps.texture, objProps);
+    collider = new Ball(objProps);
+    collider->physSubject.addObserver(this);
+}
+
+Projectile::~Projectile()
+{
+    if(collider != nullptr)
+        delete collider;
+    if(renderObj != nullptr)
+        delete renderObj;
 }
 
 void Projectile::onCollide()

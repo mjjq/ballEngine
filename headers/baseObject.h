@@ -21,11 +21,12 @@ struct ObjectProperties
     float _coefRest = 0.0f;
     float _rotation = 0.0f;
     float _rotRate = 0.0f;
-    std::vector<sf::Vertex > _vertices = {};
+    bool isStatic = false;
     bool _bullet = false;
     bool _ignoreGravity = false;
-    std::string texture = "";
     ObjectType type = ObjectType::Ball;
+    std::vector<sf::Vertex > _vertices = {};
+    std::string texture = "";
 };
 
 #endif // BASE_OBJECT_H

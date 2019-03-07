@@ -43,7 +43,7 @@ void ICharWorld::equipablePrimary(Equipable* item, Character* character)
 }*/
 
 
-void ICharWorld::spawnNewCharacter(CharacterProperties init)
+/*void ICharWorld::spawnNewCharacter(CharacterProperties init)
 {
     ObjectProperties objProps;
     objProps._position = init.position;
@@ -79,7 +79,7 @@ void ICharWorld::spawnNewCharacter(CharacterProperties init)
             break;
         }
     }
-}
+}*/
 
 void ICharWorld::spawnNewProjectile(ProjectileType type,
                                     sf::Vector2f position,
@@ -87,21 +87,24 @@ void ICharWorld::spawnNewProjectile(ProjectileType type,
 {
     Projectile* proj = new Projectile{type, position, velocity};
     proj->addObserver(this);
-    std::unique_ptr<Ball > newBall = std::make_unique<Ball >(proj->getProjProps());
-    proj->setColliderAddress(newBall.get());
-
     projMan->addProjectile(proj);
-    world->spawnNewObject(std::move(newBall));
+    //std::unique_ptr<Ball > newBall = std::make_unique<Ball >(proj->getProjProps());
+    //proj->setColliderAddress(newBall.get());
+
+    //projMan->addProjectile(proj);
+    //world->spawnNewObject(std::move(newBall));
 }
 
 void ICharWorld::spawnNewProjectile(ObjectProperties objProps)
 {
     Projectile* proj = new Projectile(objProps);
-    std::unique_ptr<Ball > newBall = std::make_unique<Ball >(objProps);
-    proj->setColliderAddress(newBall.get());
-
+    proj->addObserver(this);
     projMan->addProjectile(proj);
-    world->spawnNewObject(std::move(newBall));
+    //std::unique_ptr<Ball > newBall = std::make_unique<Ball >(objProps);
+    //proj->setColliderAddress(newBall.get());
+
+    //projMan->addProjectile(proj);
+    //world->spawnNewObject(std::move(newBall));
 }
 
 void ICharWorld::charContactData()
@@ -213,11 +216,11 @@ void ICharWorld::onNotify(Entity& entity, Event event)
                                                 position,
                                                 sfVectorMath::rotate({1.0f, 0.0f}, angle)};
             proj->addObserver(this);
-            std::unique_ptr<Ball > newBall = std::make_unique<Ball >(proj->getProjProps());
-            proj->setColliderAddress(newBall.get());
+            //std::unique_ptr<Ball > newBall = std::make_unique<Ball >(proj->getProjProps());
+            //proj->setColliderAddress(newBall.get());
 
-            projMan->addProjectile(proj);
-            world->spawnNewObject(std::move(newBall));
+            //projMan->addProjectile(proj);
+            //world->spawnNewObject(std::move(newBall));
 
             break;
         }
@@ -229,7 +232,7 @@ void ICharWorld::onNotify(Entity& entity, Event event)
             int i=0;
             while(i < (int)world->dynamicObjects.size() && !objDeleted)
             {
-                if(world->dynamicObjects[i].get() == proj.getColliderAddress())
+                if(world->dynamicObjects[i] == proj.getColliderAddress())
                 {
                     world->removeBall(i);
                     objDeleted = true;

@@ -22,6 +22,7 @@ public:
                std::vector<sf::Drawable* > _primitives = {});
     Renderable(std::string _texID,
                ObjectProperties objProps);
+    ~Renderable();
     //std::vector<sf::Drawable* > primitives;
 
     void updatePosition(sf::Vector2f position);

@@ -43,6 +43,7 @@ protected:
     bool ignoreGravity = false;
 
 public:
+    static Subject engineNotify;
     Subject physSubject;
 
     PhysicsObject(ObjectProperties init);

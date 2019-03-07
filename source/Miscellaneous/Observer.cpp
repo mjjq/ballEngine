@@ -10,11 +10,26 @@ void Subject::notify(Entity& entity, Event event)
 
 void Subject::addObserver(Observer* observer)
 {
-    observers_.emplace_back(observer);
-    numObservers_++;
+    bool uniqueObserver = true;
+    for(int i=0; i<observers_.size(); ++i)
+        if(observers_[i] == observer)
+            uniqueObserver = false;
+
+    if(uniqueObserver)
+    {
+        observers_.emplace_back(observer);
+        numObservers_++;
+    }
 }
 
 void Subject::removeObserver(Observer* observer)
 {
-
+    for(int i=0; i<observers_.size(); ++i)
+    {
+        if(observers_[i] == observer)
+        {
+            observers_.erase(observers_.begin() + i);
+            numObservers_--;
+        }
+    }
 }

@@ -19,10 +19,6 @@ class SurvivalScene : public GameScene
     GameLogic gameLogic;
     CharacterProperties playerProperties;
 
-    CharacterManager charMan;
-    ProjectileManager projMan;
-    ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
-
     void mouseWorldEvents(sf::Event &event);
 
     void spawnRandomBalls(int nOBalls,

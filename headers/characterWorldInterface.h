@@ -19,7 +19,7 @@ public:
                ProjectileManager* _pMang);
     void checkEquippedWeapon();
     void equipablePrimary(Equipable* item, Character* character);
-    void spawnNewCharacter(CharacterProperties init);
+    //void spawnNewCharacter(CharacterProperties init);
     void spawnNewProjectile(ProjectileType type,
                             sf::Vector2f position,
                             sf::Vector2f velocity);
