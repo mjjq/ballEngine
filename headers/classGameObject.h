@@ -16,6 +16,8 @@ class GameObject : public Observer
 {
     PhysicsObject* collider = nullptr;
     Renderable* renderObj = nullptr;
+
+
     ObjectProperties projProperties;
     ProjectileType projType;
 

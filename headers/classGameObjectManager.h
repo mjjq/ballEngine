@@ -7,8 +7,7 @@ class GameObjectManager
 {
 public:
     ~GameObjectManager();
-    ProjectileType PROJ_TYPE = ProjectileType::Bullet;
-    std::vector<GameObject* > projectiles;
+    std::vector<GameObject* > gameObjects;
     void addObject(GameObject* proj);
     void removeObject(GameObject* proj);
     void removeObject(int index);

@@ -146,9 +146,9 @@ void ICharWorld::charContactData()
 
 void ICharWorld::projContactData()
 {
-    for(int i=0; i<(int)projMan->projectiles.size(); ++i)
+    for(int i=0; i<(int)projMan->gameObjects.size(); ++i)
     {
-        GameObject* proj = projMan->projectiles[i];
+        GameObject* proj = projMan->gameObjects[i];
         PhysicsObject* collider = proj->getColliderAddress();
 
         bool colliderFound = false;

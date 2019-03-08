@@ -2,16 +2,16 @@
 
 GameObjectManager::~GameObjectManager()
 {
-    std::cout << projectiles.size() << "\n";
-    for(int i=0; i<projectiles.size(); ++i)
-        delete projectiles[i];
+    std::cout << gameObjects.size() << "\n";
+    for(int i=0; i<gameObjects.size(); ++i)
+        delete gameObjects[i];
 
-    projectiles.clear();
+    gameObjects.clear();
 }
 
 void GameObjectManager::addObject(GameObject* proj)
 {
-    projectiles.push_back(std::move(proj));
+    gameObjects.push_back(std::move(proj));
 }
 
 void GameObjectManager::removeObject(GameObject* proj)
@@ -19,9 +19,9 @@ void GameObjectManager::removeObject(GameObject* proj)
     int i=0;
     bool projFound = false;
 
-    while(i<(int)projectiles.size() && !projFound)
+    while(i<(int)gameObjects.size() && !projFound)
     {
-        if(projectiles[i] == proj)
+        if(gameObjects[i] == proj)
         {
             removeObject(i);
         }
@@ -31,22 +31,22 @@ void GameObjectManager::removeObject(GameObject* proj)
 
 void GameObjectManager::removeObject(int index)
 {
-    if(std::abs(index) < (int)projectiles.size())
+    if(std::abs(index) < (int)gameObjects.size())
     {
         if(index >=0)
         {
-            delete projectiles[index];
-            projectiles.erase(projectiles.begin() + index);
+            delete gameObjects[index];
+            gameObjects.erase(gameObjects.begin() + index);
         }
         else if(index < 0)
         {
-            delete projectiles[projectiles.size() + index];
-            projectiles.erase(projectiles.begin() + projectiles.size() + index);
+            delete gameObjects[gameObjects.size() + index];
+            gameObjects.erase(gameObjects.begin() + gameObjects.size() + index);
         }
     }
-    else if(index == -1 && projectiles.size() == 1)
+    else if(index == -1 && gameObjects.size() == 1)
     {
-        delete projectiles[0];
-        projectiles.clear();
+        delete gameObjects[0];
+        gameObjects.clear();
     }
 }
