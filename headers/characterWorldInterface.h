@@ -3,7 +3,7 @@
 
 #include "classUniverse.h"
 #include "classCharacterManager.h"
-#include "classProjectileManager.h"
+#include "classGameObjectManager.h"
 #include "classEquipable.h"
 #include "classProjectileWeapon.h"
 #include "Observer.h"
@@ -12,11 +12,11 @@ class ICharWorld : public Observer
 {
     BallUniverse* world;
     CharacterManager* charMan;
-    ProjectileManager* projMan;
+    GameObjectManager* projMan;
 public:
     ICharWorld(BallUniverse* _world,
                CharacterManager* _cMang,
-               ProjectileManager* _pMang);
+               GameObjectManager* _pMang);
     void checkEquippedWeapon();
     void equipablePrimary(Equipable* item, Character* character);
     //void spawnNewCharacter(CharacterProperties init);
@@ -26,8 +26,8 @@ public:
     void spawnNewProjectile(ObjectProperties objProps);
     void charContactData();
     void projContactData();
-    Character* getProjCharCollision(Projectile& proj);
-    void dealDamage(Projectile& proj);
+    Character* getProjCharCollision(GameObject& proj);
+    void dealDamage(GameObject& proj);
     virtual void onNotify(Entity& entity, Event event);
 };
 

@@ -1,8 +1,8 @@
 #include <iostream>
-#include "classProjectile.h"
+#include "classGameObject.h"
 #include "sfVectorMath.h"
 
-Projectile::Projectile(ProjectileType type,
+GameObject::GameObject(ProjectileType type,
                        sf::Vector2f initPos,
                        sf::Vector2f initDir)
 {
@@ -24,7 +24,7 @@ Projectile::Projectile(ProjectileType type,
     }
 }
 
-Projectile::Projectile(ObjectProperties objProps,
+GameObject::GameObject(ObjectProperties objProps,
                std::function<void()> onColl)
 {
     projType = ProjectileType::_Count;
@@ -34,7 +34,7 @@ Projectile::Projectile(ObjectProperties objProps,
     collider->physSubject.addObserver(this);
 }
 
-Projectile::~Projectile()
+GameObject::~GameObject()
 {
     if(collider != nullptr)
         delete collider;
@@ -42,29 +42,29 @@ Projectile::~Projectile()
         delete renderObj;
 }
 
-void Projectile::onCollide()
+void GameObject::onCollide()
 {
     onCollideLambda();
 }
 
-PhysicsObject* Projectile::getColliderAddress()
+PhysicsObject* GameObject::getColliderAddress()
 {
     return collider;
 }
 
-void Projectile::setColliderAddress(PhysicsObject* object)
+void GameObject::setColliderAddress(PhysicsObject* object)
 {
     collider = object;
     collider->physSubject.addObserver(this);
 }
 
-ObjectProperties Projectile::getProjProps()
+ObjectProperties GameObject::getProjProps()
 {
     return projProperties;
 }
 
 
-void Projectile::initialiseBullet(sf::Vector2f initPos, sf::Vector2f initDir)
+void GameObject::initialiseBullet(sf::Vector2f initPos, sf::Vector2f initDir)
 {
     float bulletSpeed = 1.0f;
     float bulletMass = 5.0f;
@@ -89,7 +89,7 @@ void Projectile::initialiseBullet(sf::Vector2f initPos, sf::Vector2f initDir)
     };
 }
 
-void Projectile::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
+void GameObject::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
 {
     float bulletSpeed = 5.0f;
     float bulletMass = 5.0f;
@@ -114,17 +114,17 @@ void Projectile::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
     };
 }
 
-void Projectile::addObserver(Observer* obs)
+void GameObject::addObserver(Observer* obs)
 {
     projSub.addObserver(obs);
 }
 
-float Projectile::getDamage()
+float GameObject::getDamage()
 {
     return damage;
 }
 
-void Projectile::onNotify(Entity& entity, Event event)
+void GameObject::onNotify(Entity& entity, Event event)
 {
     switch(event.type)
     {

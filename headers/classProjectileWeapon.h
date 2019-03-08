@@ -2,7 +2,7 @@
 #define CLASS_PROJWEAPON_H
 
 #include "classEquipable.h"
-#include "classProjectile.h"
+#include "classGameObject.h"
 
 enum class WeaponType
 {

@@ -3,7 +3,7 @@
 
 ICharWorld::ICharWorld(BallUniverse* _world,
                        CharacterManager* _cMang,
-                       ProjectileManager* _pMang)
+                       GameObjectManager* _pMang)
 {
     world = _world;
     charMan = _cMang;
@@ -85,9 +85,9 @@ void ICharWorld::spawnNewProjectile(ProjectileType type,
                                     sf::Vector2f position,
                                     sf::Vector2f velocity)
 {
-    Projectile* proj = new Projectile{type, position, velocity};
+    GameObject* proj = new GameObject{type, position, velocity};
     proj->addObserver(this);
-    projMan->addProjectile(proj);
+    projMan->addObject(proj);
     //std::unique_ptr<Ball > newBall = std::make_unique<Ball >(proj->getProjProps());
     //proj->setColliderAddress(newBall.get());
 
@@ -97,9 +97,9 @@ void ICharWorld::spawnNewProjectile(ProjectileType type,
 
 void ICharWorld::spawnNewProjectile(ObjectProperties objProps)
 {
-    Projectile* proj = new Projectile(objProps);
+    GameObject* proj = new GameObject(objProps);
     proj->addObserver(this);
-    projMan->addProjectile(proj);
+    projMan->addObject(proj);
     //std::unique_ptr<Ball > newBall = std::make_unique<Ball >(objProps);
     //proj->setColliderAddress(newBall.get());
 
@@ -148,7 +148,7 @@ void ICharWorld::projContactData()
 {
     for(int i=0; i<(int)projMan->projectiles.size(); ++i)
     {
-        Projectile* proj = projMan->projectiles[i];
+        GameObject* proj = projMan->projectiles[i];
         PhysicsObject* collider = proj->getColliderAddress();
 
         bool colliderFound = false;
@@ -165,7 +165,7 @@ void ICharWorld::projContactData()
     }
 }
 
-Character* ICharWorld::getProjCharCollision(Projectile& proj)
+Character* ICharWorld::getProjCharCollision(GameObject& proj)
 {
     PhysicsObject* projectileObj = proj.getColliderAddress();
 
@@ -185,7 +185,7 @@ Character* ICharWorld::getProjCharCollision(Projectile& proj)
     return nullptr;
 }
 
-void ICharWorld::dealDamage(Projectile& proj)
+void ICharWorld::dealDamage(GameObject& proj)
 {
     Character* charI = getProjCharCollision(proj);
 
@@ -212,7 +212,7 @@ void ICharWorld::onNotify(Entity& entity, Event event)
             ProjectileWeapon& currentWep = static_cast<ProjectileWeapon& >(entity);
             sf::Vector2f position = currentWep.getParentPos() + currentWep.getLocalPosition();
             float angle = currentWep.getAimAngle();
-            Projectile* proj = new Projectile{currentWep.PROJ_TYPE,
+            GameObject* proj = new GameObject{currentWep.PROJ_TYPE,
                                                 position,
                                                 sfVectorMath::rotate({1.0f, 0.0f}, angle)};
             proj->addObserver(this);
@@ -226,7 +226,7 @@ void ICharWorld::onNotify(Entity& entity, Event event)
         }
         case(EventType::Destroy_Projectile) :
         {
-            Projectile& proj = static_cast<Projectile& >(entity);
+            GameObject& proj = static_cast<GameObject& >(entity);
 
             bool objDeleted = false;
             int i=0;
@@ -240,7 +240,7 @@ void ICharWorld::onNotify(Entity& entity, Event event)
                 ++i;
             }
 
-            projMan->removeProjectile(&proj);
+            projMan->removeObject(&proj);
 
             break;
         }
@@ -256,11 +256,11 @@ void ICharWorld::onNotify(Entity& entity, Event event)
         }
         case(EventType::Deal_Damage) :
         {
-            dealDamage(static_cast<Projectile& >(entity));
+            dealDamage(static_cast<GameObject& >(entity));
         }
         case(EventType::Gen_Explosion) :
         {
-            Projectile& proj = static_cast<Projectile& >(entity);
+            GameObject& proj = static_cast<GameObject& >(entity);
 
             world->createExplosion(proj.getColliderAddress()->getPosition(),
                                    200.0f, 25.0f);

@@ -77,7 +77,7 @@ void SurvivalScene::load()
 
         ballSim = new BallUniverse{2000, 2000, 1.0f, false, false};
         charMan = new CharacterManager{};
-        projMan = new ProjectileManager{};
+        projMan = new GameObjectManager{};
         charWorldInterface = ICharWorld{ballSim, charMan, projMan};
         ballSim->newObserver(&charWorldInterface);
 

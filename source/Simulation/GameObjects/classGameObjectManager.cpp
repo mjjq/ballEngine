@@ -1,5 +1,6 @@
-#include "classProjectileManager.h"
-ProjectileManager::~ProjectileManager()
+#include "classGameObjectManager.h"
+
+GameObjectManager::~GameObjectManager()
 {
     std::cout << projectiles.size() << "\n";
     for(int i=0; i<projectiles.size(); ++i)
@@ -8,12 +9,12 @@ ProjectileManager::~ProjectileManager()
     projectiles.clear();
 }
 
-void ProjectileManager::addProjectile(Projectile* proj)
+void GameObjectManager::addObject(GameObject* proj)
 {
     projectiles.push_back(std::move(proj));
 }
 
-void ProjectileManager::removeProjectile(Projectile* proj)
+void GameObjectManager::removeObject(GameObject* proj)
 {
     int i=0;
     bool projFound = false;
@@ -22,13 +23,13 @@ void ProjectileManager::removeProjectile(Projectile* proj)
     {
         if(projectiles[i] == proj)
         {
-            removeProjectile(i);
+            removeObject(i);
         }
         ++i;
     }
 }
 
-void ProjectileManager::removeProjectile(int index)
+void GameObjectManager::removeObject(int index)
 {
     if(std::abs(index) < (int)projectiles.size())
     {

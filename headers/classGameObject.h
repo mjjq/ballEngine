@@ -1,5 +1,5 @@
-#ifndef CLASS_PROJECTILE_H
-#define CLASS_PROJECTILE_H
+#ifndef CLASS_GAMEOBJECT_H
+#define CLASS_GAMEOBJECT_H
 
 #include "classBall.h"
 #include "Observer.h"
@@ -12,7 +12,7 @@ enum class ProjectileType
     _Count
 };
 
-class Projectile : public Observer
+class GameObject : public Observer
 {
     PhysicsObject* collider = nullptr;
     Renderable* renderObj = nullptr;
@@ -27,12 +27,12 @@ class Projectile : public Observer
     float damage = 0.0f;
     std::function<void()> onCollideLambda = [&]{};
 public:
-    Projectile(ProjectileType type,
+    GameObject(ProjectileType type,
                sf::Vector2f initPos,
                sf::Vector2f initDir);
-    Projectile(ObjectProperties objProps,
+    GameObject(ObjectProperties objProps,
                std::function<void()> onColl = [&]{});
-    ~Projectile();
+    ~GameObject();
     void onCollide();
 
     ObjectProperties getProjProps();

@@ -17,7 +17,7 @@ void SandboxScene::load()
 
         ballSim = new BallUniverse{2000,2000,1.0f,false,false};
         charMan = new CharacterManager{};
-        projMan = new ProjectileManager{};
+        projMan = new GameObjectManager{};
         charWorldInterface = ICharWorld{ballSim, charMan, projMan};
         ballSim->newObserver(&charWorldInterface);
 
@@ -61,7 +61,7 @@ void SandboxScene::load()
             {"tglCols",     [&]{ballSim->toggleCollisions();}},
             {"tglGrav",     [&]{ballSim->toggleUGravity();}},
             {"chgBColour",  [&]{ballSim->changeBallColour();}},
-            {"undoBall",    [&]{projMan->removeProjectile(-1);}},
+            {"undoBall",    [&]{projMan->removeObject(-1);}},
             {"undoRect",    [&]{ballSim->removeRect(-1);}},
             {"newJoint",    [&]{ballSim->newJoint(0, 1);}},
             {"mouseExp",    [&]{ballSim->createExplosion(window.mapPixelToCoords(sf::Mouse::getPosition(window)),
