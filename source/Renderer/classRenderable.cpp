@@ -37,6 +37,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
             circle->setFillColor(sf::Color{180,180,180,100});
             primDrawable = std::move(circle);
             primTransformable = circle;
+            primShape = circle;
             break;
         }
         case(ObjectType::Polygon):
@@ -52,6 +53,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
 
             primDrawable = std::move(shape);
             primTransformable = shape;
+            primShape = shape;
             break;
         }
         case(ObjectType::Capsule):
@@ -65,6 +67,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
 
             primDrawable = std::move(shape);
             primTransformable = shape;
+            primShape = shape;
             break;
         }
         default:

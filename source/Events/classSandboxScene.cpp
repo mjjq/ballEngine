@@ -330,7 +330,8 @@ void SandboxScene::load()
                                              spawnRotRate,
                                              false, false, false,
                                              ObjectType::Polygon,
-                                             verts};
+                                             verts,
+                                             "asteroid.jpg"};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Polygon(props)));
                     drawLine = false;

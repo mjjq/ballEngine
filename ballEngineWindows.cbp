@@ -32,7 +32,6 @@
 					<Add option="-DSFML_STATIC" />
 				</Compiler>
 				<Linker>
-					<Add option="-s" />
 					<Add option="-static-libstdc++" />
 					<Add option="-static-libgcc" />
 					<Add option="-static" />
@@ -81,6 +80,8 @@
 		<Unit filename="headers/classCharacter.h" />
 		<Unit filename="headers/classCharacterManager.h" />
 		<Unit filename="headers/classEquipable.h" />
+		<Unit filename="headers/classGameObject.h" />
+		<Unit filename="headers/classGameObjectManager.h" />
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classInventory.h" />
 		<Unit filename="headers/classJoint.h" />
@@ -91,8 +92,7 @@
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classPhysicsObject.h" />
 		<Unit filename="headers/classPolygon.h" />
-		<Unit filename="headers/classProjectile.h" />
-		<Unit filename="headers/classProjectileManager.h" />
+		<Unit filename="headers/classProjectileComponent.h" />
 		<Unit filename="headers/classProjectileWeapon.h" />
 		<Unit filename="headers/classRenderable.h" />
 		<Unit filename="headers/classRenderer.h" />
@@ -149,9 +149,10 @@
 		<Unit filename="source/Simulation/GameObjects/classCharacter.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacterManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classEquipable.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classGameObject.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classGameObjectManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classInventory.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classProjectile.cpp" />
-		<Unit filename="source/Simulation/GameObjects/classProjectileManager.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classProjectileComponent.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classProjectileWeapon.cpp" />
 		<Unit filename="source/Simulation/Movement/forces.cpp" />
 		<Unit filename="source/Simulation/Movement/integrators.cpp" />

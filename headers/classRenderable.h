@@ -15,6 +15,7 @@ public:
     std::string textureID;
     sf::Drawable* primDrawable;
     sf::Transformable* primTransformable;
+    sf::Shape* primShape;
 
     static Subject renderSubject;
 
