@@ -21,7 +21,7 @@ struct ObjectProperties
     float _coefRest = 0.0f;
     float _rotation = 0.0f;
     float _rotRate = 0.0f;
-    bool isStatic = false;
+    bool _isStatic = false;
     bool _bullet = false;
     bool _ignoreGravity = false;
     ObjectType type = ObjectType::Ball;

@@ -209,15 +209,19 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    /*ballSim->spawnStaticBall({static_cast<sf::Vector2f>(mousePosOnClick),
-                                            {0.0f, 0.0f},
-                                            {300.0f*velocity.x, 300.0f*velocity.y},
-                                            0.0f,
-                                            spawnCoefFriction,
-                                            spawnCoefRest,
-                                            spawnRotation,
-                                            0.0f,
-                                            });*/
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             {0.0f, 0.0f},
+                                             {500.0f*sqrtf(velocity.x*velocity.x+velocity.y*velocity.y), 0.0f},
+                                             1e+15f,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             0.0f,
+                                             true, false, false,
+                                             ObjectType::Ball};
+
+                    projMan->addObject(new GameObject(new Renderable(props),
+                                                      new Ball(props)));
                     drawLine = false;
                 }
             }
@@ -235,17 +239,20 @@ void SandboxScene::load()
                     };
                     for(sf::Vertex &vert : verts)
                         vert.position = vert.position*spawnRadius;
-                    /*ballSim->spawnNewPoly({static_cast<sf::Vector2f>(mousePosOnClick),
-                                         velocity,
-                                         {0.0f, 0.0f},
-                                         spawnMass,
-                                         spawnCoefFriction,
-                                         spawnCoefRest,
-                                         spawnRotation,
-                                         spawnRotRate,
-                                         false, false, false,
-                                         ObjectType::Polygon,
-                                         verts});*/
+
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             velocity,
+                                             {spawnRadius, 0.0f},
+                                             spawnMass,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             spawnRotRate,
+                                             false, false, false,
+                                             ObjectType::Polygon,
+                                             verts};
+                    projMan->addObject(new GameObject(new Renderable(props),
+                                                      new Polygon(props)));
                     drawLine = false;
                 }
             }
@@ -276,17 +283,20 @@ void SandboxScene::load()
                         vert.position.x = 30.0f * vert.position.x * velocity.x;
                         vert.position.y = 30.0f * vert.position.y * velocity.y;
                     }
-                    /*ballSim->spawnStaticPoly({static_cast<sf::Vector2f>(mousePosOnClick),
-                                            {0.0f, 0.0f},
-                                            {0.0f, 0.0f},
-                                            0.0f,
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             {0.0f, 0.0f},
+                                             {0.0f, 0.0f},
+                                             1e+15f,
                                              spawnCoefFriction,
                                              spawnCoefRest,
                                              spawnRotation,
                                              0.0f,
                                              true, false, false,
                                              ObjectType::Polygon,
-                                             verts});*/
+                                             verts};
+
+                    projMan->addObject(new GameObject(new Renderable(props),
+                                                      new Polygon(props)));
                     drawLine = false;
                 }
             }
@@ -310,17 +320,19 @@ void SandboxScene::load()
                         vert.position.x = vert.position.x * spawnRadius/10.0f;
                         vert.position.y = vert.position.y * spawnRadius/10.0f;
                     }
-                    ballSim->spawnNewObject({static_cast<sf::Vector2f>(mousePosOnClick),
-                                         velocity,
-                                         {0.0f, 0.0f},
-                                         spawnMass,
-                                         spawnCoefFriction,
-                                         spawnCoefRest,
-                                         spawnRotation,
-                                         spawnRotRate,
-                                         false, false, false,
-                                         ObjectType::Polygon,
-                                         verts});
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             velocity,
+                                             {spawnRadius, 0.0f},
+                                             spawnMass,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             spawnRotRate,
+                                             false, false, false,
+                                             ObjectType::Polygon,
+                                             verts};
+                    projMan->addObject(new GameObject(new Renderable(props),
+                                                      new Polygon(props)));
                     drawLine = false;
                 }
             }

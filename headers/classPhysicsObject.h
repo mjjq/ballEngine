@@ -41,6 +41,7 @@ protected:
     bool isPlayer = false;
     bool bullet = false;
     bool ignoreGravity = false;
+    bool isStatic = false;
 
 public:
     static Subject engineNotify;
@@ -64,6 +65,7 @@ public:
     sf::Vector2f getMomentum();
     bool isBullet();
     bool ignoresGravity();
+    bool getIsStatic();
 
     float getGPE(PhysicsObject* otherObj);
     float getDistance(PhysicsObject* otherObj);

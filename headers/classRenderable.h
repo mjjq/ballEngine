@@ -20,8 +20,7 @@ public:
 
     Renderable(std::string _texID,
                std::vector<sf::Drawable* > _primitives = {});
-    Renderable(std::string _texID,
-               ObjectProperties objProps);
+    Renderable(ObjectProperties objProps);
     ~Renderable();
     //std::vector<sf::Drawable* > primitives;
 

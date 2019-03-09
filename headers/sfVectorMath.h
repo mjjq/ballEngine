@@ -18,6 +18,8 @@ namespace sfVectorMath
     sf::Vector2f tripleProduct(sf::Vector2f v1,
                                sf::Vector2f v2,
                                sf::Vector2f v3);
+
+    sf::Vector2f average(std::vector<sf::Vertex > verts);
 }
 
 #endif // SF_VECTOR_MATH_H

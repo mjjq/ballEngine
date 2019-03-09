@@ -34,6 +34,7 @@ public:
                sf::Vector2f initDir);
     GameObject(ObjectProperties objProps,
                std::function<void()> onColl = [&]{});
+    GameObject(Renderable* _renderObj, PhysicsObject* _collider);
     ~GameObject();
     void onCollide();
 

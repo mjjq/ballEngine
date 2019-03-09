@@ -11,10 +11,9 @@ Renderable::Renderable(std::string _texID,
     renderSubject.notify(*this, Event(EventType::New_Renderable));
 }
 
-Renderable::Renderable(std::string _texID,
-               ObjectProperties objProps)
+Renderable::Renderable(ObjectProperties objProps)
 {
-    textureID = _texID;
+    textureID = objProps.texture;
     generateDrawables(objProps);
     renderSubject.notify(*this, Event(EventType::New_Renderable));
 }
@@ -38,17 +37,34 @@ void Renderable::generateDrawables(ObjectProperties objProps)
             circle->setFillColor(sf::Color{180,180,180,100});
             primDrawable = std::move(circle);
             primTransformable = circle;
-            /*sf::VertexArray* line = new sf::VertexArray(sf::Lines, 2);
+            break;
+        }
+        case(ObjectType::Polygon):
+        {
+            sf::ConvexShape* shape = new sf::ConvexShape(objProps._vertices.size());
+            shape->setPosition(objProps._position);
+            shape->setOutlineThickness(-2);
+            shape->setOutlineColor(sf::Color::Red);
+            shape->setFillColor({80,80,80,80});
+            for(int i=0; i<objProps._vertices.size(); ++i)
+                shape->setPoint(i, objProps._vertices[i].position);
+            shape->setOrigin(sfVectorMath::average(objProps._vertices));
 
-            line->append(sf::Vertex(objProps._position));
-            line->append(sf::Vertex(objProps._position +
-                sfVectorMath::rotate(sf::Vector2f{0.0f, radius},
-                                     objProps._rotation)));*/
+            primDrawable = std::move(shape);
+            primTransformable = shape;
+            break;
+        }
+        case(ObjectType::Capsule):
+        {
+            float radius = objProps._size.x;
+            float length = objProps._size.y;
 
-            //sf::RectangleShape* rect = new sf::RectangleShape({0.0, radius});
+            sf::RectangleShape* shape = new sf::RectangleShape({2.0f*radius, length});
+            shape->setOrigin({radius, length/2.0f});
+            shape->setPosition(objProps._position);
 
-            //primitives.push_back(std::move(drawable));
-            //primitives.push_back(std::move(line));
+            primDrawable = std::move(shape);
+            primTransformable = shape;
             break;
         }
         default:

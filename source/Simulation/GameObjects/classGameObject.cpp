@@ -29,9 +29,18 @@ GameObject::GameObject(ObjectProperties objProps,
 {
     projType = ProjectileType::_Count;
     projProperties = objProps;
-    renderObj = new Renderable(objProps.texture, objProps);
+    renderObj = new Renderable(objProps);
     collider = new Ball(objProps);
     collider->physSubject.addObserver(this);
+}
+
+GameObject::GameObject(Renderable* _renderObj,
+                       PhysicsObject* _collider) :
+                           renderObj{_renderObj},
+                           collider{_collider}
+{
+    if(collider != nullptr)
+        collider->physSubject.addObserver(this);
 }
 
 GameObject::~GameObject()

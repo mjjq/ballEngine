@@ -89,7 +89,7 @@ void BallUniverse::spawnNewObject(ObjectProperties init)
        position.x> worldSizeX ||
        position.y> worldSizeY))
     {
-        if(!init.isStatic)
+        if(!init._isStatic)
         {
             switch(init.type)
             {
@@ -997,8 +997,16 @@ void BallUniverse::onNotify(Entity& entity, Event event)
     {
         case(EventType::New_PhysicsObj):
         {
-            dynamicObjects.push_back((PhysicsObject*)&entity);
-            numOfBalls++;
+            PhysicsObject* obj = (PhysicsObject*)&entity;
+            if(!obj->getIsStatic())
+            {
+                dynamicObjects.push_back(obj);
+                numOfBalls++;
+            }
+            else
+            {
+                staticObjects.push_back(obj);
+            }
             break;
         }
         case(EventType::Delete_PhysicsObj):
@@ -1010,6 +1018,14 @@ void BallUniverse::onNotify(Entity& entity, Event event)
                 {
                     dynamicObjects.erase(dynamicObjects.begin() + i);
                     numOfBalls--;
+                    arbiters.clear();
+                }
+            }
+            for(int i=0; i<staticObjects.size(); ++i)
+            {
+                if(obj == staticObjects[i])
+                {
+                    staticObjects.erase(staticObjects.begin() + i);
                     arbiters.clear();
                 }
             }

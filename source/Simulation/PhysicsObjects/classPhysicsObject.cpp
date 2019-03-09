@@ -15,7 +15,8 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   rotRate{init._rotRate},
                   mass{init._mass},
                   bullet{init._bullet},
-                  ignoreGravity{init._ignoreGravity}
+                  ignoreGravity{init._ignoreGravity},
+                  isStatic{init._isStatic}
 {
     engineNotify.notify(*this, Event(EventType::New_PhysicsObj));
 }
@@ -204,6 +205,11 @@ bool PhysicsObject::isBullet()
 bool PhysicsObject::ignoresGravity()
 {
     return ignoreGravity;
+}
+
+bool PhysicsObject::getIsStatic()
+{
+    return isStatic;
 }
 
 /**
