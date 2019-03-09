@@ -55,8 +55,8 @@ void SceneManager::mainLoop()
         }
 
         currScene->update(window);
-        currScene->redraw(window);
         sceneRenderer->redrawAll(window);
+        currScene->redraw(window);
         window.display();
 
         nextSceneEnum = currScene->pollNextScene();
