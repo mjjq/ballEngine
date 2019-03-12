@@ -15,6 +15,8 @@ enum class EventType
     Delete_Renderable,
     New_PhysicsObj,
     Delete_PhysicsObj,
+    New_LightSrc,
+    Delete_LightSrc,
     Update_Position,
     Count
 };

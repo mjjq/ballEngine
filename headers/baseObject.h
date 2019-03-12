@@ -26,7 +26,9 @@ struct ObjectProperties
     bool _ignoreGravity = false;
     ObjectType type = ObjectType::Ball;
     std::vector<sf::Vertex > _vertices = {};
-    std::string texture = "";
+    std::string shader = "";
+    std::string diffuse = "";
+    std::string normal = "";
 };
 
 #endif // BASE_OBJECT_H

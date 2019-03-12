@@ -4,6 +4,7 @@
 #include "classBall.h"
 #include "Observer.h"
 #include "classRenderable.h"
+#include "classLight.h"
 
 enum class ProjectileType
 {
@@ -16,6 +17,7 @@ class GameObject : public Observer
 {
     PhysicsObject* collider = nullptr;
     Renderable* renderObj = nullptr;
+    LightSource* lightSrc = nullptr;
 
 
     ObjectProperties projProperties;
@@ -34,7 +36,9 @@ public:
                sf::Vector2f initDir);
     GameObject(ObjectProperties objProps,
                std::function<void()> onColl = [&]{});
-    GameObject(Renderable* _renderObj, PhysicsObject* _collider);
+    GameObject(Renderable* _renderObj = nullptr,
+               PhysicsObject* _collider = nullptr,
+               LightSource* _lightSrc = nullptr);
     ~GameObject();
     void onCollide();
 

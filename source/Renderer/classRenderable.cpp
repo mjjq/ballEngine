@@ -6,15 +6,18 @@
 Renderable::Renderable(std::string _texID,
                std::vector<sf::Drawable* > _primitives) : Entity()
 {
-    textureID = _texID;
+    diffuseID = _texID;
     //primitives = _primitives;
     renderSubject.notify(*this, Event(EventType::New_Renderable));
 }
 
 Renderable::Renderable(ObjectProperties objProps)
 {
-    textureID = objProps.texture;
+    diffuseID = objProps.diffuse;
+    normalID = objProps.normal;
+    shaderID = objProps.shader;
     generateDrawables(objProps);
+    //primShape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(1, 1)));
     renderSubject.notify(*this, Event(EventType::New_Renderable));
 }
 
@@ -88,4 +91,4 @@ void Renderable::updateOrientation(float angle)
 
 Subject Renderable::renderSubject;
 
-const std::string Renderable::NULL_TEXTURE = "";
+const std::string Renderable::NULL_ID = "";

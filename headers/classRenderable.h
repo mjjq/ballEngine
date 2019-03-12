@@ -11,11 +11,16 @@ class Renderable : public Entity
     void generateDrawables(ObjectProperties objProps);
 
 public:
-    static const std::string NULL_TEXTURE;
-    std::string textureID;
+    static const std::string NULL_ID;
+    std::string diffuseID;
+    std::string normalID;
+    std::string shaderID;
+
     sf::Drawable* primDrawable;
     sf::Transformable* primTransformable;
     sf::Shape* primShape;
+
+    sf::Shader* shader = nullptr;
 
     static Subject renderSubject;
 

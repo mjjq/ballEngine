@@ -35,9 +35,11 @@ GameObject::GameObject(ObjectProperties objProps,
 }
 
 GameObject::GameObject(Renderable* _renderObj,
-                       PhysicsObject* _collider) :
+                       PhysicsObject* _collider,
+                       LightSource* _lightSrc) :
                            renderObj{_renderObj},
-                           collider{_collider}
+                           collider{_collider},
+                           lightSrc{_lightSrc}
 {
     if(collider != nullptr)
         collider->physSubject.addObserver(this);
@@ -49,6 +51,8 @@ GameObject::~GameObject()
         delete collider;
     if(renderObj != nullptr)
         delete renderObj;
+    if(lightSrc != nullptr)
+        delete lightSrc;
 }
 
 void GameObject::onCollide()

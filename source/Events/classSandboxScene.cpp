@@ -146,24 +146,23 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    /*ballSim->spawnNewObject(false, SpawnObjectType::Ball,
-                                           {static_cast<sf::Vector2f>(mousePosOnClick),
-                                         velocity,
-                                         {spawnRadius, 0.0f},
-                                         spawnMass,
-                                         spawnCoefFriction,
-                                         spawnCoefRest,
-                                         spawnRotation,
-                                         spawnRotRate});*/
-                    charWorldInterface.spawnNewProjectile({static_cast<sf::Vector2f>(mousePosOnClick),
-                                         velocity,
-                                         {spawnRadius, 0.0f},
-                                         spawnMass,
-                                         spawnCoefFriction,
-                                         spawnCoefRest,
-                                         spawnRotation,
-                                         spawnRotRate});
-                    std::cout << "spawned\n";
+
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             velocity,
+                                             {spawnRadius, 0.0f},
+                                             spawnMass,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             spawnRotRate,
+                                             false, false, false,
+                                             ObjectType::Ball,
+                                             {},
+                                             "phong",
+                                             "red.jpg",
+                                             "normal2.png"};
+                    projMan->addObject(new GameObject(new Renderable(props),
+                                                      new Ball(props)));
                     drawLine = false;
                 }
             }
@@ -331,9 +330,50 @@ void SandboxScene::load()
                                              false, false, false,
                                              ObjectType::Polygon,
                                              verts,
-                                             "asteroid.jpg"};
+                                             "phong",
+                                             "red.jpg",
+                                             "normal.jpg"};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Polygon(props)));
+                    drawLine = false;
+                }
+            }
+            },
+
+            {"spwnLight",  [&]{
+                if(drawLine == true){
+                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);
+                    std::vector<sf::Vertex > verts = {
+                        sf::Vertex{{-10.0f, -35.0f}},
+                        sf::Vertex{{10.0f, -10.0f}},
+                        sf::Vertex{{10.0f, 10.0f}},
+                        sf::Vertex{{-10.0f, 10.0f}},
+                        sf::Vertex{{-30.0f, 0.0f}},
+                        sf::Vertex{{-30.0f, -10.0f}}
+                    };
+
+                    for(sf::Vertex &vert : verts)
+                    {
+                        vert.position.x = vert.position.x * spawnRadius/10.0f;
+                        vert.position.y = vert.position.y * spawnRadius/10.0f;
+                    }
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             velocity,
+                                             {spawnRadius, 0.0f},
+                                             spawnMass,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             spawnRotRate,
+                                             false, false, false,
+                                             ObjectType::Polygon,
+                                             verts,
+                                             "light.frag"
+                                             };
+                    projMan->addObject(new GameObject(new Renderable(props),
+                                                      nullptr,
+                                                      new LightSource(props._position, sf::Vector3f(1.0, 1.0, 0.0))));
                     drawLine = false;
                 }
             }
