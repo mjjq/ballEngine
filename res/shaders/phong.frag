@@ -11,10 +11,20 @@ struct Material
     float shininess;
 };
 
+struct Light
+{
+    vec3 position;
+    vec3 color;
+
+    float constant;
+    float linear;
+    float quadratic;
+};
+
 uniform Material material;
 
-uniform vec3 lightColor;
-uniform vec3 lightPosition;
+#define NR_LIGHTS 10
+uniform Light lights[NR_LIGHTS];
 
 uniform float rotCosine;
 uniform float rotSine;
@@ -34,6 +44,25 @@ vec2 rotate(vec2 inputVec)
                 rotSine*inputVec.x + rotCosine*inputVec.y);
 }
 
+vec3 calcLight(Light _light, vec3 _normal, vec3 _fragPos, vec3 _viewDir, vec4 _diffTexel)
+{
+    vec3 relWorldPos = _light.position - _fragPos;
+    float lightDistance = distance(_light.position, _fragPos);
+    vec3 relWorldUnit = relWorldPos/lightDistance;
+    float attenuation = 1.0 / (_light.constant +
+                               _light.linear * lightDistance +
+                               _light.quadratic * lightDistance * lightDistance);
+
+    float diff = max(dot(_normal, relWorldUnit), 0.0);
+    float spec = pow(max(dot(_viewDir, reflect(-relWorldUnit, _normal)), 0.0), material.shininess);
+
+    vec3 diffuse = attenuation * material.diffuseStrength * diff * _light.color * _diffTexel.xyz;
+    vec3 ambient = attenuation * material.ambientStrength * _light.color * _diffTexel.xyz;
+    vec3 specular = attenuation * material.specularStrength * spec * _light.color;
+
+    return vec3(diffuse + ambient + specular);
+}
+
 void main() {
     vec3 viewDir = vec3(0.0, 0.0, 1.0);
 
@@ -44,17 +73,13 @@ void main() {
 
     vec3 normal = convToNormal( normTexel );
     normal = vec3(rotate(normal.xy), normal.z);
-    vec3 relWorldPos = lightPosition - FragPos;
-    vec3 relWorldUnit = normalize(relWorldPos);
 
+    vec3 lightColor = vec3(0.0);
 
-    float diff = max(dot(normal, relWorldUnit), 0.0);
-    float spec = pow(max(dot(viewDir, reflect(-relWorldUnit, normal)), 0.0), material.shininess);
+    for(int i=0; i<NR_LIGHTS; i++)
+        lightColor += calcLight(lights[i], normal, FragPos, viewDir, diffTexel);
 
-    vec3 diffuse = material.diffuseStrength * diff * lightColor;
-    vec3 ambient = material.ambientStrength * lightColor;
-    vec3 specular = material.specularStrength * spec * lightColor;
     vec3 emission = material.emissionStrength * emitTexel.xyz;
 
-    gl_FragColor = vec4((diffuse + ambient) * diffTexel.xyz + specular + emission, 1.0);
+    gl_FragColor = vec4(lightColor + emission, 1.0);
 }

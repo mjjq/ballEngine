@@ -1,6 +1,15 @@
+struct Light
+{
+    vec3 position;
+    vec3 color;
 
-uniform vec3 lightColor;
+    float constant;
+    float linear;
+    float quadratic;
+};
+
+uniform Light light;
 
 void main() {
-    gl_FragColor = vec4(lightColor, 1.0);
+    gl_FragColor = vec4(light.color, 1.0);
 }

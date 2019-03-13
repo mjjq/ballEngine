@@ -44,10 +44,26 @@ void Renderer::redrawAll(sf::RenderWindow &window)
         if(renderObjects[i]->shader != nullptr)
         {
             sf::Shader* shader = renderObjects[i]->shader;
-            if(lights.size() > 0)
+            for(int j=0; j<10; ++j)
             {
-                shader->setParameter("lightColor", lights[0]->color);
-                shader->setParameter("lightPosition", lights[0]->position);
+                std::string lightVal = "lights[" + std::to_string(j) + "]";
+                if(j < lights.size())
+                {
+                    shader->setParameter("light.color", lights[j]->color);
+                    shader->setParameter(lightVal + ".color", lights[j]->color);
+                    shader->setParameter(lightVal + ".position", lights[j]->position);
+                    shader->setParameter(lightVal + ".constant", lights[j]->constant);
+                    shader->setParameter(lightVal + ".linear", lights[j]->linear);
+                    shader->setParameter(lightVal + ".quadratic", lights[j]->quadratic);
+                }
+                else
+                {
+                    shader->setParameter(lightVal + ".color", sf::Vector3f(0.0,0.0,0.0));
+                    shader->setParameter(lightVal + ".position", sf::Vector3f(0.0,0.0,0.0));
+                    shader->setParameter(lightVal + ".constant", 1.0f);
+                    shader->setParameter(lightVal + ".linear", 0.0f);
+                    shader->setParameter(lightVal + ".quadratic", 0.0f);
+                }
             }
 
             float rotation = sfVectorMath::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
