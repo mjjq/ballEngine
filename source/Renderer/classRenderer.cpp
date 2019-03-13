@@ -21,14 +21,18 @@ bool Renderer::loadTexture(std::string textureName)
             return true;
         }
     }
+
+    std::cout << "failed to load texture: " << textureName << "\n";
     return false;
 }
 
 bool Renderer::textureIsLoaded(std::string textureName)
 {
-    if(loadedTextures.find(textureName) != loadedTextures.end())
+    if(loadedTextures.find(textureName) != loadedTextures.end() &&
+       textureName != Renderable::NULL_ID)
         return true;
 
+    std::cout << "texture isn't loaded\n";
     return false;
 }
 
@@ -37,20 +41,29 @@ void Renderer::redrawAll(sf::RenderWindow &window)
     sf::Sprite newSprite;
     for(int i=0; i<(int)renderObjects.size(); ++i)
     {
-        if(renderObjects[i]->shader != nullptr && lights.size() > 0)
+        if(renderObjects[i]->shader != nullptr)
         {
-            renderObjects[i]->shader->setParameter("lightColor",
-                                                   lights[0]->color);
-            renderObjects[i]->shader->setParameter("lightPosition",
-                                                   lights[0]->position);
+            sf::Shader* shader = renderObjects[i]->shader;
+            if(lights.size() > 0)
+            {
+                shader->setParameter("lightColor", lights[0]->color);
+                shader->setParameter("lightPosition", lights[0]->position);
+            }
+
             float rotation = sfVectorMath::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
-            renderObjects[i]->shader->setParameter("rotCosine",
-                                                   cos(rotation));
-            renderObjects[i]->shader->setParameter("rotSine",
-                                                   sin(rotation));
+            shader->setParameter("rotCosine", cos(rotation));
+            shader->setParameter("rotSine", sin(rotation));
+
+            shader->setParameter("material.diffuseMap", loadedTextures[renderObjects[i]->diffuseID]);
+            shader->setParameter("material.normalMap", loadedTextures[renderObjects[i]->normalID]);
+            shader->setParameter("material.emissionMap", loadedTextures[renderObjects[i]->emissionID]);
+            shader->setParameter("material.diffuseStrength", 1.0);
+            shader->setParameter("material.ambientStrength", 0.2);
+            shader->setParameter("material.specularStrength", 0.5);
+            shader->setParameter("material.emissionStrength", 1.0);
+            shader->setParameter("material.shininess", 32.0);
         }
-        renderObjects[i]->shader->setParameter("normalMap",
-                                loadedTextures[renderObjects[i]->normalID]);
+
         window.draw(*renderObjects[i]->primDrawable, renderObjects[i]->shader);
     }
 }
@@ -65,6 +78,7 @@ void Renderer::onNotify(Entity& entity, Event event)
             if(ren->primShape != nullptr)
                 if(loadTexture(ren->diffuseID) || textureIsLoaded(ren->diffuseID))
                 {
+                    std::cout << "assigned texture\n";
                     ren->primShape->setTexture(&loadedTextures[ren->diffuseID]);
                     ren->primShape->setFillColor(sf::Color::White);
                     ren->primShape->setOutlineThickness(0);
@@ -74,6 +88,7 @@ void Renderer::onNotify(Entity& entity, Event event)
                     ren->shader = &loadedShaders[ren->shaderID];
                 }
                 loadTexture(ren->normalID);
+                loadTexture(ren->emissionID);
             renderObjects.push_back(ren);
             break;
         }
@@ -108,7 +123,9 @@ bool Renderer::loadShader(std::string shaderName)
 {
     std::string filePath = SHADER_PATH + shaderName;
 
-    if(sf::Shader::isAvailable() && !shaderIsLoaded(shaderName))
+    if(sf::Shader::isAvailable() &&
+       !shaderIsLoaded(shaderName) &&
+       shaderName != Renderable::NULL_ID)
     {
         bool isFragment = false;
         bool isVert = false;

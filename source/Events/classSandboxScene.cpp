@@ -336,7 +336,8 @@ void SandboxScene::load()
                                              verts,
                                              "phong",
                                              "red.jpg",
-                                             "normal.jpg"};
+                                             "normal.jpg",
+                                             "spiro.jpg"};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Polygon(props)));
                     drawLine = false;
@@ -377,7 +378,7 @@ void SandboxScene::load()
                                              };
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Ball(props),
-                                                      new LightSource(props._position, sf::Vector3f(1.0, 1.0, 0.0))));
+                                                      new LightSource({props._position.x, props._position.y, 0.0f}, sf::Vector3f(1.0, 1.0, 1.0))));
                     drawLine = false;
                 }
             }

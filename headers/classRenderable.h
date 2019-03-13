@@ -15,6 +15,7 @@ public:
     std::string diffuseID;
     std::string normalID;
     std::string shaderID;
+    std::string emissionID;
 
     sf::Drawable* primDrawable;
     sf::Transformable* primTransformable;

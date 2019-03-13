@@ -29,6 +29,7 @@ struct ObjectProperties
     std::string shader = "";
     std::string diffuse = "";
     std::string normal = "";
+    std::string emission = "";
 };
 
 #endif // BASE_OBJECT_H
