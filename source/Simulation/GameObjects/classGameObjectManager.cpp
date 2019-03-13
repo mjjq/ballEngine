@@ -50,3 +50,12 @@ void GameObjectManager::removeObject(int index)
         gameObjects.clear();
     }
 }
+
+void GameObjectManager::clearAll()
+{
+    for(int i=0; i<(int)gameObjects.size(); ++i)
+    {
+        delete gameObjects[i];
+    }
+    gameObjects.clear();
+}

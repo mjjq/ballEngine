@@ -39,7 +39,7 @@ void SandboxScene::load()
             {"tglTrj",      [&]{ballSim->toggleTrajectories();}},
             {"tglPTraj",    [&]{ballSim->togglePlayerTraj();}},
             {"tglIntMthd",  [&]{ballSim->toggleRK4();}},
-            {"clearSim",    [&]{ballSim->clearSimulation();}},
+            {"clearSim",    [&]{projMan->clearAll();}},
             {"decSimStep",  [&]{ballSim->decSimStep(0.1);}},
             {"incSimStep",  [&]{ballSim->incSimStep(0.1);}},
             {"zmToMse",     [&]{zoomToMouse(2.0f);}},

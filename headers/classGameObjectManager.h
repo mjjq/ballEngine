@@ -11,6 +11,7 @@ public:
     void addObject(GameObject* proj);
     void removeObject(GameObject* proj);
     void removeObject(int index);
+    void clearAll();
 };
 
 #endif // CLASS_GAMEOBJECTMAN_H
