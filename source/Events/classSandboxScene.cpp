@@ -67,6 +67,10 @@ void SandboxScene::load()
             {"mouseExp",    [&]{ballSim->createExplosion(window.mapPixelToCoords(sf::Mouse::getPosition(window)),
                                                         200.0f,
                                                         25.0f);}},
+            {"mouseSin",    [&]{ballSim->createExplosion(window.mapPixelToCoords(sf::Mouse::getPosition(window)),
+                                                        200.0f,
+                                                        -1.0f);
+                                KeyBinds::isFuncContinuous = true;}},
             {"equPrim",     [&]{charMan->equipablePrimary(0);}},
             {"nxtItem",     [&]{charMan->switchNextItem(0);}},
             {"plrJump",     [&]{charMan->moveCharacter({0,1}, 0);
@@ -367,12 +371,12 @@ void SandboxScene::load()
                                              spawnRotation,
                                              spawnRotRate,
                                              false, false, false,
-                                             ObjectType::Polygon,
+                                             ObjectType::Ball,
                                              verts,
                                              "light.frag"
                                              };
                     projMan->addObject(new GameObject(new Renderable(props),
-                                                      nullptr,
+                                                      new Ball(props),
                                                       new LightSource(props._position, sf::Vector3f(1.0, 1.0, 0.0))));
                     drawLine = false;
                 }

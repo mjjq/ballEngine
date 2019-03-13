@@ -36,7 +36,8 @@
 		"equPrim"		: ["MMB"],
 		"nxtItem"		: ["Tab"],
 		"newJoint"		: ["LControl", "J"],
-		"mouseExp"		: ["E"]
+		"mouseExp"		: ["E"],
+		"mouseSin"		: ["Q"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"      : ["D"],

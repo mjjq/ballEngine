@@ -946,7 +946,14 @@ void BallUniverse::createExplosion(sf::Vector2f position,
         Edge GJKResult = GJK::getClosestPoints(dynamicObjects[i], &tempObject);
 
         float distanceSq = sfVectorMath::square(GJKResult.v2 - GJKResult.v1);
-        if(distanceSq < radiusOfEffect*radiusOfEffect && distanceSq > 0.0f)
+
+        float minDistance = 0.0f;
+        if(strength < 0.0f)
+        {
+            minDistance = 1.0f;
+        }
+
+        if(distanceSq < radiusOfEffect*radiusOfEffect && distanceSq > minDistance)
         {
             float factor = std::min(strength, strength/sqrtf(distanceSq));
             sf::Vector2f sepVector = factor*(GJKResult.v2 - GJKResult.v1);

@@ -143,8 +143,17 @@ void GameObject::onNotify(Entity& entity, Event event)
     {
         case(EventType::Update_Position):
         {
-            renderObj->updatePosition(collider->getPosition());
-            renderObj->updateOrientation(collider->getRotAngle());
+            if(renderObj != nullptr)
+            {
+                renderObj->updatePosition(collider->getPosition());
+                renderObj->updateOrientation(collider->getRotAngle());
+            }
+            if(lightSrc != nullptr)
+            {
+                sf::Vector2f collpos = collider->getPosition();
+                lightSrc->position.x = collpos.x;
+                lightSrc->position.y = collpos.y;
+            }
             break;
         }
         default:
