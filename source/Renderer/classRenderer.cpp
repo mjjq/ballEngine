@@ -49,12 +49,12 @@ void Renderer::redrawAll(sf::RenderWindow &window)
                 std::string lightVal = "lights[" + std::to_string(j) + "]";
                 if(j < lights.size())
                 {
-                    shader->setParameter("light.color", lights[j]->color);
-                    shader->setParameter(lightVal + ".color", lights[j]->color);
+                    shader->setParameter("light.color", lights[j]->lightProperties.color);
+                    shader->setParameter(lightVal + ".color", lights[j]->lightProperties.color);
                     shader->setParameter(lightVal + ".position", lights[j]->position);
-                    shader->setParameter(lightVal + ".constant", lights[j]->constant);
-                    shader->setParameter(lightVal + ".linear", lights[j]->linear);
-                    shader->setParameter(lightVal + ".quadratic", lights[j]->quadratic);
+                    shader->setParameter(lightVal + ".constant", lights[j]->lightProperties.constant);
+                    shader->setParameter(lightVal + ".linear", lights[j]->lightProperties.linear);
+                    shader->setParameter(lightVal + ".quadratic", lights[j]->lightProperties.quadratic);
                 }
                 else
                 {

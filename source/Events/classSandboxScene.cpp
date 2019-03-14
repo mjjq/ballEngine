@@ -379,9 +379,10 @@ void SandboxScene::load()
                                              verts,
                                              {"light.frag"},
                                              };
+                    LightProperties lProperties = {{props._position.x, props._position.y, 0.0f}};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Ball(props),
-                                                      new LightSource({props._position.x, props._position.y, 0.0f}, sf::Vector3f(1.0, 1.0, 1.0))));
+                                                      new LightSource(lProperties)));
                     drawLine = false;
                 }
             }

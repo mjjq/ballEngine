@@ -1,10 +1,8 @@
 #include "classLight.h"
 
-LightSource::LightSource(sf::Vector3f _position,
-                sf::Vector3f _color) : position{_position},
-                    color{_color}
+LightSource::LightSource(LightProperties properties) :
+    lightProperties{properties}, position{properties.position}
 {
-    linear = 0.005f;
     renderSubject.notify(*this, Event(EventType::New_LightSrc));
 }
 
