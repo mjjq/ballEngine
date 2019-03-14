@@ -162,9 +162,9 @@ void SandboxScene::load()
                                              false, false, false,
                                              ObjectType::Ball,
                                              {},
-                                             "phong",
+                                             {"phong",
                                              "red.jpg",
-                                             "normal2.png"};
+                                             "normal2.png"}};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Ball(props)));
                     drawLine = false;
@@ -253,7 +253,10 @@ void SandboxScene::load()
                                              spawnRotRate,
                                              false, false, false,
                                              ObjectType::Polygon,
-                                             verts};
+                                             verts,
+                                             {"phong",
+                                             "red.jpg",
+                                             "pyramidN.png"}};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Polygon(props)));
                     drawLine = false;
@@ -334,10 +337,10 @@ void SandboxScene::load()
                                              false, false, false,
                                              ObjectType::Polygon,
                                              verts,
-                                             "phong",
+                                             {"phong",
                                              "red.jpg",
                                              "normal.jpg",
-                                             "spiro.jpg"};
+                                             "spiro.jpg"}};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Polygon(props)));
                     drawLine = false;
@@ -374,7 +377,7 @@ void SandboxScene::load()
                                              false, false, false,
                                              ObjectType::Ball,
                                              verts,
-                                             "light.frag"
+                                             {"light.frag"},
                                              };
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Ball(props),

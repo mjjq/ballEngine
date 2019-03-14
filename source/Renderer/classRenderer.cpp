@@ -70,14 +70,14 @@ void Renderer::redrawAll(sf::RenderWindow &window)
             shader->setParameter("rotCosine", cos(rotation));
             shader->setParameter("rotSine", sin(rotation));
 
-            shader->setParameter("material.diffuseMap", loadedTextures[renderObjects[i]->diffuseID]);
-            shader->setParameter("material.normalMap", loadedTextures[renderObjects[i]->normalID]);
-            shader->setParameter("material.emissionMap", loadedTextures[renderObjects[i]->emissionID]);
-            shader->setParameter("material.diffuseStrength", 1.0);
-            shader->setParameter("material.ambientStrength", 0.2);
-            shader->setParameter("material.specularStrength", 0.5);
-            shader->setParameter("material.emissionStrength", 1.0);
-            shader->setParameter("material.shininess", 32.0);
+            shader->setParameter("material.diffuseMap", loadedTextures[renderObjects[i]->material.diffuseID]);
+            shader->setParameter("material.normalMap", loadedTextures[renderObjects[i]->material.normalID]);
+            shader->setParameter("material.emissionMap", loadedTextures[renderObjects[i]->material.emissionID]);
+            shader->setParameter("material.diffuseStrength", renderObjects[i]->material.diffuseStrength);
+            shader->setParameter("material.ambientStrength", renderObjects[i]->material.ambientStrength);
+            shader->setParameter("material.specularStrength", renderObjects[i]->material.specularStrength);
+            shader->setParameter("material.emissionStrength", renderObjects[i]->material.emissionStrength);
+            shader->setParameter("material.shininess", renderObjects[i]->material.shininess);
         }
 
         window.draw(*renderObjects[i]->primDrawable, renderObjects[i]->shader);
@@ -92,19 +92,19 @@ void Renderer::onNotify(Entity& entity, Event event)
         {
             Renderable* ren = (Renderable*)&entity;
             if(ren->primShape != nullptr)
-                if(loadTexture(ren->diffuseID) || textureIsLoaded(ren->diffuseID))
+                if(loadTexture(ren->material.diffuseID) || textureIsLoaded(ren->material.diffuseID))
                 {
                     std::cout << "assigned texture\n";
-                    ren->primShape->setTexture(&loadedTextures[ren->diffuseID]);
+                    ren->primShape->setTexture(&loadedTextures[ren->material.diffuseID]);
                     ren->primShape->setFillColor(sf::Color::White);
                     ren->primShape->setOutlineThickness(0);
                 }
-                if(loadShader(ren->shaderID) || shaderIsLoaded(ren->shaderID))
+                if(loadShader(ren->material.shaderID) || shaderIsLoaded(ren->material.shaderID))
                 {
-                    ren->shader = &loadedShaders[ren->shaderID];
+                    ren->shader = &loadedShaders[ren->material.shaderID];
                 }
-                loadTexture(ren->normalID);
-                loadTexture(ren->emissionID);
+                loadTexture(ren->material.normalID);
+                loadTexture(ren->material.emissionID);
             renderObjects.push_back(ren);
             break;
         }

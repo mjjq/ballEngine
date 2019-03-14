@@ -5,17 +5,14 @@
 #include "Observer.h"
 #include "baseObject.h"
 
-
 class Renderable : public Entity
 {
     void generateDrawables(ObjectProperties objProps);
 
 public:
     static const std::string NULL_ID;
-    std::string diffuseID;
-    std::string normalID;
-    std::string shaderID;
-    std::string emissionID;
+
+    Material material;
 
     sf::Drawable* primDrawable;
     sf::Transformable* primTransformable;

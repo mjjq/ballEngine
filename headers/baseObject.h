@@ -11,6 +11,20 @@ enum class ObjectType
     _Count,
 };
 
+struct Material
+{
+    std::string shaderID = "";
+    std::string diffuseID = "";
+    std::string normalID = "";
+    std::string emissionID = "";
+
+    float diffuseStrength = 1.0f;
+    float ambientStrength = 0.2f;
+    float specularStrength = 0.5f;
+    float emissionStrength = 0.3f;
+    float shininess = 32.0f;
+};
+
 struct ObjectProperties
 {
     sf::Vector2f _position;
@@ -26,10 +40,7 @@ struct ObjectProperties
     bool _ignoreGravity = false;
     ObjectType type = ObjectType::Ball;
     std::vector<sf::Vertex > _vertices = {};
-    std::string shader = "";
-    std::string diffuse = "";
-    std::string normal = "";
-    std::string emission = "";
+    Material material;
 };
 
 #endif // BASE_OBJECT_H

@@ -6,17 +6,14 @@
 Renderable::Renderable(std::string _texID,
                std::vector<sf::Drawable* > _primitives) : Entity()
 {
-    diffuseID = _texID;
+    material.diffuseID = _texID;
     //primitives = _primitives;
     renderSubject.notify(*this, Event(EventType::New_Renderable));
 }
 
 Renderable::Renderable(ObjectProperties objProps)
 {
-    diffuseID = objProps.diffuse;
-    normalID = objProps.normal;
-    shaderID = objProps.shader;
-    emissionID = objProps.emission;
+    material = objProps.material;
     generateDrawables(objProps);
     //primShape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(1, 1)));
     renderSubject.notify(*this, Event(EventType::New_Renderable));
