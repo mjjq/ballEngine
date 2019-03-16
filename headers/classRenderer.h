@@ -6,6 +6,7 @@
 #include "classRenderable.h"
 #include "classLight.h"
 #include "Observer.h"
+#include "windowManager.h"
 
 class Renderer : public Observer
 {
@@ -24,6 +25,8 @@ class Renderer : public Observer
     bool textureIsLoaded(std::string textureName);
     bool shaderIsLoaded(std::string shaderName);
 public:
+    WindowManager windowManager;
+
     Renderer();
     void redrawAll(sf::RenderWindow& window);
     void onNotify(Entity& entity, Event event);
