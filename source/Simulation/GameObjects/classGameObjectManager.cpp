@@ -3,7 +3,7 @@
 GameObjectManager::~GameObjectManager()
 {
     std::cout << gameObjects.size() << "\n";
-    for(int i=0; i<gameObjects.size(); ++i)
+    for(int i=0; i<(int)gameObjects.size(); ++i)
         delete gameObjects[i];
 
     gameObjects.clear();

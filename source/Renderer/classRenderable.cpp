@@ -48,7 +48,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
             shape->setOutlineThickness(-2);
             shape->setOutlineColor(sf::Color::Red);
             shape->setFillColor({80,80,80,80});
-            for(int i=0; i<objProps._vertices.size(); ++i)
+            for(int i=0; i<(int)objProps._vertices.size(); ++i)
                 shape->setPoint(i, objProps._vertices[i].position);
             shape->setOrigin(sfVectorMath::average(objProps._vertices));
 

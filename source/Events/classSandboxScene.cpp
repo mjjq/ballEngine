@@ -174,8 +174,8 @@ void SandboxScene::load()
 
             {"spwnChar",  [&]{
                 if(drawLine == true){
-                    sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
-                                                              spawnVelFactor);
+                    /*sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
+                                                              spawnVelFactor);*/
                     /*charWorldInterface.spawnNewCharacter({static_cast<sf::Vector2f>(mousePosOnClick),
                                               velocity,
                                               {spawnRadius, 2.0f*spawnRadius},

@@ -15,8 +15,8 @@ enum class ProjectileType
 
 class GameObject : public Observer
 {
-    PhysicsObject* collider = nullptr;
     Renderable* renderObj = nullptr;
+    PhysicsObject* collider = nullptr;
     LightSource* lightSrc = nullptr;
 
 

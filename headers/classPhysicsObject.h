@@ -48,7 +48,7 @@ public:
     Subject physSubject;
 
     PhysicsObject(ObjectProperties init);
-    ~PhysicsObject();
+    virtual ~PhysicsObject();
 
     virtual ObjectType type() const = 0;
     virtual void draw(sf::RenderWindow &_window) = 0;

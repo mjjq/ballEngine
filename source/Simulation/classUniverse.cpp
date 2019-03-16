@@ -644,7 +644,7 @@ void BallUniverse::createBallGrid(int numWide, int numHigh, float spacing, sf::V
         for(int i=-numWide/2; i<=numWide/2; ++i)
             for(int j=-numHigh/2; j<=numHigh/2; ++j)
             {
-                sf::Vector2f offsetPosition = {i*spacing,j*spacing};
+                //sf::Vector2f offsetPosition = {i*spacing,j*spacing};
                 /*spawnNewBall({centralPosition + offsetPosition,
                              init_velocity,
                              {ballRadius, 0.0f},
@@ -1019,7 +1019,7 @@ void BallUniverse::onNotify(Entity& entity, Event event)
         case(EventType::Delete_PhysicsObj):
         {
             PhysicsObject* obj = (PhysicsObject*)&entity;
-            for(int i=0; i<dynamicObjects.size(); ++i)
+            for(int i=0; i<(int)dynamicObjects.size(); ++i)
             {
                 if(obj == dynamicObjects[i])
                 {
@@ -1028,7 +1028,7 @@ void BallUniverse::onNotify(Entity& entity, Event event)
                     arbiters.clear();
                 }
             }
-            for(int i=0; i<staticObjects.size(); ++i)
+            for(int i=0; i<(int)staticObjects.size(); ++i)
             {
                 if(obj == staticObjects[i])
                 {

@@ -17,9 +17,9 @@ class LightSource : public Entity
 {
 public:
     static Subject renderSubject;
-    sf::Vector3f position;
-
     LightProperties lightProperties;
+
+    sf::Vector3f position;
 
     LightSource(LightProperties properties);
     ~LightSource();

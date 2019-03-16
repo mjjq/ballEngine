@@ -47,37 +47,37 @@ void Renderer::redrawAll(sf::RenderWindow &window)
             for(int j=0; j<10; ++j)
             {
                 std::string lightVal = "lights[" + std::to_string(j) + "]";
-                if(j < lights.size())
+                if(j < (int)lights.size())
                 {
-                    shader->setParameter("light.color", lights[j]->lightProperties.color);
-                    shader->setParameter(lightVal + ".color", lights[j]->lightProperties.color);
-                    shader->setParameter(lightVal + ".position", lights[j]->position);
-                    shader->setParameter(lightVal + ".constant", lights[j]->lightProperties.constant);
-                    shader->setParameter(lightVal + ".linear", lights[j]->lightProperties.linear);
-                    shader->setParameter(lightVal + ".quadratic", lights[j]->lightProperties.quadratic);
+                    shader->setUniform("light.color", lights[j]->lightProperties.color);
+                    shader->setUniform(lightVal + ".color", lights[j]->lightProperties.color);
+                    shader->setUniform(lightVal + ".position", lights[j]->position);
+                    shader->setUniform(lightVal + ".constant", lights[j]->lightProperties.constant);
+                    shader->setUniform(lightVal + ".linear", lights[j]->lightProperties.linear);
+                    shader->setUniform(lightVal + ".quadratic", lights[j]->lightProperties.quadratic);
                 }
                 else
                 {
-                    shader->setParameter(lightVal + ".color", sf::Vector3f(0.0,0.0,0.0));
-                    shader->setParameter(lightVal + ".position", sf::Vector3f(0.0,0.0,0.0));
-                    shader->setParameter(lightVal + ".constant", 1.0f);
-                    shader->setParameter(lightVal + ".linear", 0.0f);
-                    shader->setParameter(lightVal + ".quadratic", 0.0f);
+                    shader->setUniform(lightVal + ".color", sf::Vector3f(0.0,0.0,0.0));
+                    shader->setUniform(lightVal + ".position", sf::Vector3f(0.0,0.0,0.0));
+                    shader->setUniform(lightVal + ".constant", 1.0f);
+                    shader->setUniform(lightVal + ".linear", 0.0f);
+                    shader->setUniform(lightVal + ".quadratic", 0.0f);
                 }
             }
 
             float rotation = sfVectorMath::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
-            shader->setParameter("rotCosine", cos(rotation));
-            shader->setParameter("rotSine", sin(rotation));
+            shader->setUniform("rotCosine", (float)cos(rotation));
+            shader->setUniform("rotSine", (float)sin(rotation));
 
-            shader->setParameter("material.diffuseMap", loadedTextures[renderObjects[i]->material.diffuseID]);
-            shader->setParameter("material.normalMap", loadedTextures[renderObjects[i]->material.normalID]);
-            shader->setParameter("material.emissionMap", loadedTextures[renderObjects[i]->material.emissionID]);
-            shader->setParameter("material.diffuseStrength", renderObjects[i]->material.diffuseStrength);
-            shader->setParameter("material.ambientStrength", renderObjects[i]->material.ambientStrength);
-            shader->setParameter("material.specularStrength", renderObjects[i]->material.specularStrength);
-            shader->setParameter("material.emissionStrength", renderObjects[i]->material.emissionStrength);
-            shader->setParameter("material.shininess", renderObjects[i]->material.shininess);
+            shader->setUniform("material.diffuseMap", loadedTextures[renderObjects[i]->material.diffuseID]);
+            shader->setUniform("material.normalMap", loadedTextures[renderObjects[i]->material.normalID]);
+            shader->setUniform("material.emissionMap", loadedTextures[renderObjects[i]->material.emissionID]);
+            shader->setUniform("material.diffuseStrength", renderObjects[i]->material.diffuseStrength);
+            shader->setUniform("material.ambientStrength", renderObjects[i]->material.ambientStrength);
+            shader->setUniform("material.specularStrength", renderObjects[i]->material.specularStrength);
+            shader->setUniform("material.emissionStrength", renderObjects[i]->material.emissionStrength);
+            shader->setUniform("material.shininess", renderObjects[i]->material.shininess);
         }
 
         window.draw(*renderObjects[i]->primDrawable, renderObjects[i]->shader);
@@ -92,6 +92,7 @@ void Renderer::onNotify(Entity& entity, Event event)
         {
             Renderable* ren = (Renderable*)&entity;
             if(ren->primShape != nullptr)
+            {
                 if(loadTexture(ren->material.diffuseID) || textureIsLoaded(ren->material.diffuseID))
                 {
                     std::cout << "assigned texture\n";
@@ -99,19 +100,21 @@ void Renderer::onNotify(Entity& entity, Event event)
                     ren->primShape->setFillColor(sf::Color::White);
                     ren->primShape->setOutlineThickness(0);
                 }
-                if(loadShader(ren->material.shaderID) || shaderIsLoaded(ren->material.shaderID))
-                {
-                    ren->shader = &loadedShaders[ren->material.shaderID];
-                }
-                loadTexture(ren->material.normalID);
-                loadTexture(ren->material.emissionID);
+            }
+            if(loadShader(ren->material.shaderID) || shaderIsLoaded(ren->material.shaderID))
+            {
+                ren->shader = &loadedShaders[ren->material.shaderID];
+            }
+            loadTexture(ren->material.normalID);
+            loadTexture(ren->material.emissionID);
+
             renderObjects.push_back(ren);
             break;
         }
         case(EventType::Delete_Renderable):
         {
             Renderable* obj = (Renderable*)&entity;
-            for(int i=0; i<renderObjects.size(); ++i)
+            for(int i=0; i<(int)renderObjects.size(); ++i)
                 if(renderObjects[i] == obj)
                     renderObjects.erase(renderObjects.begin() + i);
             break;
@@ -125,7 +128,7 @@ void Renderer::onNotify(Entity& entity, Event event)
         case(EventType::Delete_LightSrc):
         {
             LightSource* obj = (LightSource*)&entity;
-            for(int i=0; i<lights.size(); ++i)
+            for(int i=0; i<(int)lights.size(); ++i)
                 if(lights[i] == obj)
                     lights.erase(lights.begin() + i);
             break;

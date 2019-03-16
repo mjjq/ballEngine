@@ -11,7 +11,7 @@ void Subject::notify(Entity& entity, Event event)
 void Subject::addObserver(Observer* observer)
 {
     bool uniqueObserver = true;
-    for(int i=0; i<observers_.size(); ++i)
+    for(int i=0; i<(int)observers_.size(); ++i)
         if(observers_[i] == observer)
             uniqueObserver = false;
 
@@ -24,7 +24,7 @@ void Subject::addObserver(Observer* observer)
 
 void Subject::removeObserver(Observer* observer)
 {
-    for(int i=0; i<observers_.size(); ++i)
+    for(int i=0; i<(int)observers_.size(); ++i)
     {
         if(observers_[i] == observer)
         {

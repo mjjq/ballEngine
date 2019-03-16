@@ -156,7 +156,7 @@ sf::Vector2f sfVectorMath::average(std::vector<sf::Vertex > verts)
     sf::Vector2f average = {0.0f, 0.0f};
     if(verts.size() > 0)
     {
-        for(int i=0; i<verts.size(); ++i)
+        for(int i=0; i<(int)verts.size(); ++i)
             average += verts[i].position;
         average = average/(float)verts.size();
     }
