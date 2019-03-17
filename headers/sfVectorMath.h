@@ -20,6 +20,12 @@ namespace sfVectorMath
                                sf::Vector2f v3);
 
     sf::Vector2f average(std::vector<sf::Vertex > verts);
+
+    float dot(sf::Vector3f const & v1, sf::Vector3f const & v2);
+    float square(sf::Vector3f const & vec);
+    sf::Vector3f norm(sf::Vector3f const & vec);
+    sf::Vector3f cross(sf::Vector3f const & v1,
+                       sf::Vector3f const & v2);
 }
 
 #endif // SF_VECTOR_MATH_H

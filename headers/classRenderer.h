@@ -14,6 +14,7 @@ class Renderer : public Observer
     const std::string SHADER_PATH = "./res/shaders/";
     const std::string FRAGMENT_EXTENSION = ".frag";
     const std::string VERT_EXTENSION = ".vert";
+    const std::string GEOMETRY_EXTENSION = ".geom";
 
     std::vector<Renderable* > renderObjects;
     std::vector<LightSource* > lights;

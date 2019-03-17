@@ -163,3 +163,28 @@ sf::Vector2f sfVectorMath::average(std::vector<sf::Vertex > verts)
 
     return average;
 }
+
+float sfVectorMath::dot(sf::Vector3f const & v1, sf::Vector3f const & v2)
+{
+    return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+}
+
+float sfVectorMath::square(sf::Vector3f const & vec)
+{
+    return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
+}
+
+sf::Vector3f sfVectorMath::norm(sf::Vector3f const & vec)
+{
+    return vec / sqrt(square(vec));
+}
+
+sf::Vector3f sfVectorMath::cross(sf::Vector3f const & v1,
+                                sf::Vector3f const & v2)
+{
+    float a = v1.y * v2.z - v1.z * v2.y;
+    float b = v1.z * v2.x - v1.x * v2.z;
+    float c = v1.x * v2.y - v1.y * v2.x;
+
+    return sf::Vector3f(a,b,c);
+}

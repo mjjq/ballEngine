@@ -146,18 +146,26 @@ bool Renderer::loadShader(std::string shaderName)
        !shaderIsLoaded(shaderName) &&
        shaderName != Renderable::NULL_ID)
     {
-        bool isFragment = false;
+        bool isFrag = false;
+        bool isGeom = false;
         bool isVert = false;
 
         if(shaderName.find(FRAGMENT_EXTENSION) != std::string::npos)
-            isFragment = true;
+            isFrag = true;
+        else if(shaderName.find(GEOMETRY_EXTENSION) != std::string::npos)
+            isGeom = true;
         else if(shaderName.find(VERT_EXTENSION) != std::string::npos)
             isVert = true;
 
-        if(isFragment)
+        if(isFrag)
         {
 
             if(loadedShaders[shaderName].loadFromFile(filePath, sf::Shader::Fragment))
+                return true;
+        }
+        else if(isGeom)
+        {
+            if(loadedShaders[shaderName].loadFromFile(filePath, sf::Shader::Geometry))
                 return true;
         }
         else if(isVert)
@@ -167,9 +175,12 @@ bool Renderer::loadShader(std::string shaderName)
         }
         else
         {
-            std::string vertName = filePath + ".vert";
-            std::string fragName = filePath + ".frag";
+            std::string vertName = filePath + VERT_EXTENSION;
+            std::string fragName = filePath + FRAGMENT_EXTENSION;
+            std::string geomName = filePath + GEOMETRY_EXTENSION;
 
+            if(loadedShaders[shaderName].loadFromFile(vertName, geomName, fragName))
+                return true;
             if(loadedShaders[shaderName].loadFromFile(vertName, fragName))
                 return true;
         }

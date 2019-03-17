@@ -90,6 +90,7 @@
 		<Unit filename="headers/classMainMenuScene.h" />
 		<Unit filename="headers/classMenuScene.h" />
 		<Unit filename="headers/classOBB.h" />
+		<Unit filename="headers/classOGLWrap.h" />
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classPhysicsObject.h" />
 		<Unit filename="headers/classPolygon.h" />
@@ -117,6 +118,7 @@
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
+		<Unit filename="headers/windowManager.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="source/Events/classGameScene.cpp" />
 		<Unit filename="source/Events/classKeyBinds.cpp" />
@@ -135,8 +137,10 @@
 		<Unit filename="source/Miscellaneous/stringConversion.cpp" />
 		<Unit filename="source/Miscellaneous/structs.cpp" />
 		<Unit filename="source/Renderer/classLight.cpp" />
+		<Unit filename="source/Renderer/classOGLWrap.cpp" />
 		<Unit filename="source/Renderer/classRenderable.cpp" />
 		<Unit filename="source/Renderer/classRenderer.cpp" />
+		<Unit filename="source/Renderer/windowManager.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/GJK.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/classArbiter.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/classJoint.cpp" />
