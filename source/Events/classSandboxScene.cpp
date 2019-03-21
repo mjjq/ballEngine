@@ -255,8 +255,8 @@ void SandboxScene::load()
                                              ObjectType::Polygon,
                                              verts,
                                              {"phong",
-                                             "red.jpg",
-                                             "pyramidN.png"}};
+                                              "red.jpg",
+                                              "pyramidN.png"}};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Polygon(props)));
                     drawLine = false;

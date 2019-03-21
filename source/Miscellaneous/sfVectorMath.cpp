@@ -188,3 +188,8 @@ sf::Vector3f sfVectorMath::cross(sf::Vector3f const & v1,
 
     return sf::Vector3f(a,b,c);
 }
+
+int sfVectorMath::modulo(int const & n1, int const & n2)
+{
+    return (n2 + (n1%n2)) % n2;
+}

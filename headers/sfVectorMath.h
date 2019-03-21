@@ -26,6 +26,8 @@ namespace sfVectorMath
     sf::Vector3f norm(sf::Vector3f const & vec);
     sf::Vector3f cross(sf::Vector3f const & v1,
                        sf::Vector3f const & v2);
+
+    int modulo(int const & n1, int const & n2);
 }
 
 #endif // SF_VECTOR_MATH_H

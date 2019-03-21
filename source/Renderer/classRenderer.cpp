@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "sfVectorMath.h"
+#include <SFML/OpenGL.hpp>
 
 Renderer::Renderer()
 {
@@ -55,6 +56,10 @@ void Renderer::redrawAll(sf::RenderWindow &window)
                     shader->setUniform(lightVal + ".constant", lights[j]->lightProperties.constant);
                     shader->setUniform(lightVal + ".linear", lights[j]->lightProperties.linear);
                     shader->setUniform(lightVal + ".quadratic", lights[j]->lightProperties.quadratic);
+
+                    //shadow rendering debug
+                    /*if(i!=0)
+                        window.draw(lights[j]->shadowStencil(*renderObjects[i]->primShape));*/
                 }
                 else
                 {
@@ -159,7 +164,6 @@ bool Renderer::loadShader(std::string shaderName)
 
         if(isFrag)
         {
-
             if(loadedShaders[shaderName].loadFromFile(filePath, sf::Shader::Fragment))
                 return true;
         }
@@ -179,8 +183,13 @@ bool Renderer::loadShader(std::string shaderName)
             std::string fragName = filePath + FRAGMENT_EXTENSION;
             std::string geomName = filePath + GEOMETRY_EXTENSION;
 
-            if(loadedShaders[shaderName].loadFromFile(vertName, geomName, fragName))
-                return true;
+            if(sf::Shader::isGeometryAvailable())
+            {
+                if(loadedShaders[shaderName].loadFromFile(vertName, geomName, fragName))
+                    return true;
+            }
+            else
+                std::cout << "geometry shaders unavailable\n";
             if(loadedShaders[shaderName].loadFromFile(vertName, fragName))
                 return true;
         }
