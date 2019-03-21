@@ -21,10 +21,13 @@ struct Light
     float quadratic;
 };
 
+
 uniform Material material;
 
 #define NR_LIGHTS 10
 uniform Light lights[NR_LIGHTS];
+uniform sampler2D shadowTextures[NR_LIGHTS];
+uniform sampler2D shadowTexture;
 
 uniform float rotCosine;
 uniform float rotSine;
@@ -56,9 +59,12 @@ vec3 calcLight(Light _light, vec3 _normal, vec3 _fragPos, vec3 _viewDir, vec4 _d
     float diff = max(dot(_normal, relWorldUnit), 0.0);
     float spec = pow(max(dot(_viewDir, reflect(-relWorldUnit, _normal)), 0.0), material.shininess);
 
-    vec3 diffuse = attenuation * material.diffuseStrength * diff * _light.color * _diffTexel.xyz;
+    vec2 shadSize = textureSize(shadowTexture, 0);
+    float shadow = texture2D(shadowTexture, vec2(gl_FragCoord.x/float(shadSize.x), gl_FragCoord.y/float(shadSize.y))).b;
+
+    vec3 diffuse = shadow * attenuation * material.diffuseStrength * diff * _light.color * _diffTexel.xyz;
     vec3 ambient = attenuation * material.ambientStrength * _light.color * _diffTexel.xyz;
-    vec3 specular = attenuation * material.specularStrength * spec * _light.color;
+    vec3 specular = shadow * attenuation * material.specularStrength * spec * _light.color;
 
     return vec3(diffuse + ambient + specular);
 }
@@ -77,7 +83,9 @@ void main() {
     vec3 lightColor = vec3(0.0);
 
     for(int i=0; i<NR_LIGHTS; i++)
+    {
         lightColor += calcLight(lights[i], normal, FragPos, viewDir, diffTexel);
+    }
 
     vec3 emission = material.emissionStrength * emitTexel.xyz;
 

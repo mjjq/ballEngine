@@ -18,19 +18,27 @@ class Renderer : public Observer
 
     std::vector<Renderable* > renderObjects;
     std::vector<LightSource* > lights;
+    std::vector<sf::RenderTexture* > shadowTextures;
     std::map<std::string, sf::Texture> loadedTextures;
     std::map<std::string, sf::Shader > loadedShaders;
+
+    sf::Texture blankShadowTexture;
 
     bool loadTexture(std::string textureName);
     bool loadShader(std::string shaderName);
     bool textureIsLoaded(std::string textureName);
     bool shaderIsLoaded(std::string shaderName);
+
+    void clearShadowTextures();
+    void displayShadowTextures();
+    void generateShadowTextures(std::vector<Renderable* > const & _renderObjects);
 public:
     WindowManager windowManager;
 
     Renderer();
     void redrawAll(sf::RenderWindow& window);
     void onNotify(Entity& entity, Event event);
+    void resizeWindow(sf::Vector2u newSize);
 };
 
 #endif // CLASS_RENDERER_H

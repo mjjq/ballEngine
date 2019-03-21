@@ -53,6 +53,9 @@ void SceneManager::mainLoop()
             else if(event.type == sf::Event::Closed)
                 currWin.close();
 
+            else if(event.type == sf::Event::Resized)
+                sceneRenderer->resizeWindow({event.size.width, event.size.height});
+
             currScene->events(event);
         }
 

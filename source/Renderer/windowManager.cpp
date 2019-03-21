@@ -136,3 +136,8 @@ sf::Clock& WindowManager::getFrameClock()
 {
     return frameClock;
 }
+
+sf::Vector2u WindowManager::getWindowSize()
+{
+    return window.getSize();
+}

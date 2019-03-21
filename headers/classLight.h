@@ -9,8 +9,8 @@ struct LightProperties
     sf::Vector3f position;
     sf::Vector3f color = sf::Vector3f(1.0, 1.0, 1.0);
     float constant = 1.0f;
-    float linear = 0.0005f;
-    float quadratic = 0.0001f;
+    float linear = 0.00002f;
+    float quadratic = 0.000005f;
     float lightMax = 1.0f;
 };
 
@@ -29,6 +29,12 @@ public:
 
 class LightSource : public Entity
 {
+    static std::string brightShaderCode;
+    static sf::Shader* brightShader;
+    static std::string brightShaderCode2;
+    static sf::Shader* brightShader2;
+    static std::string shadowShaderCode;
+    static sf::Shader* shadowShader;
 public:
     static Subject renderSubject;
     LightProperties lightProperties;
@@ -39,7 +45,8 @@ public:
     LightSource(LightProperties properties);
     ~LightSource();
 
-    sf::VertexArray shadowStencil(sf::Shape &shape);
+    sf::VertexArray shadowStencil(sf::Shape &shape,
+                                  sf::RenderTexture &shadowTexture);
     void calcEffectiveRadius(float attFactor);
 };
 

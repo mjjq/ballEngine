@@ -36,4 +36,5 @@ public:
     sf::Time& getTargFrameTime();
     float& getCurrentFPS();
     sf::Clock& getFrameClock();
+    sf::Vector2u getWindowSize();
 };

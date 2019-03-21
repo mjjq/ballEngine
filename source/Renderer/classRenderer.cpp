@@ -39,7 +39,9 @@ bool Renderer::textureIsLoaded(std::string textureName)
 
 void Renderer::redrawAll(sf::RenderWindow &window)
 {
-    sf::Sprite newSprite;
+    clearShadowTextures();
+    generateShadowTextures(renderObjects);
+    displayShadowTextures();
     for(int i=0; i<(int)renderObjects.size(); ++i)
     {
         if(renderObjects[i]->shader != nullptr)
@@ -48,6 +50,7 @@ void Renderer::redrawAll(sf::RenderWindow &window)
             for(int j=0; j<10; ++j)
             {
                 std::string lightVal = "lights[" + std::to_string(j) + "]";
+                std::string shadowVal = "shadowTextures[" + std::to_string(j) + "]";
                 if(j < (int)lights.size())
                 {
                     shader->setUniform("light.color", lights[j]->lightProperties.color);
@@ -56,10 +59,7 @@ void Renderer::redrawAll(sf::RenderWindow &window)
                     shader->setUniform(lightVal + ".constant", lights[j]->lightProperties.constant);
                     shader->setUniform(lightVal + ".linear", lights[j]->lightProperties.linear);
                     shader->setUniform(lightVal + ".quadratic", lights[j]->lightProperties.quadratic);
-
-                    //shadow rendering debug
-                    /*if(i!=0)
-                        window.draw(lights[j]->shadowStencil(*renderObjects[i]->primShape));*/
+                    //shader->setUniform(shadowVal, &shadowTextures[j]->getTexture());
                 }
                 else
                 {
@@ -68,8 +68,11 @@ void Renderer::redrawAll(sf::RenderWindow &window)
                     shader->setUniform(lightVal + ".constant", 1.0f);
                     shader->setUniform(lightVal + ".linear", 0.0f);
                     shader->setUniform(lightVal + ".quadratic", 0.0f);
+                    //shader->setUniform(shadowVal, &blankShadowTexture);
                 }
             }
+            if(shadowTextures.size() > 0)
+                shader->setUniform("shadowTexture", shadowTextures[0]->getTexture());
 
             float rotation = sfVectorMath::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
             shader->setUniform("rotCosine", (float)cos(rotation));
@@ -87,6 +90,7 @@ void Renderer::redrawAll(sf::RenderWindow &window)
 
         window.draw(*renderObjects[i]->primDrawable, renderObjects[i]->shader);
     }
+
 }
 
 void Renderer::onNotify(Entity& entity, Event event)
@@ -128,6 +132,11 @@ void Renderer::onNotify(Entity& entity, Event event)
         {
             LightSource* lSrc = (LightSource*)&entity;
             lights.push_back(lSrc);
+
+            sf::Vector2u winSize = windowManager.getWindowSize();
+            sf::RenderTexture* texture = new sf::RenderTexture;
+            texture->create(winSize.x, winSize.y);
+            shadowTextures.push_back(std::move(texture));
             break;
         }
         case(EventType::Delete_LightSrc):
@@ -135,7 +144,13 @@ void Renderer::onNotify(Entity& entity, Event event)
             LightSource* obj = (LightSource*)&entity;
             for(int i=0; i<(int)lights.size(); ++i)
                 if(lights[i] == obj)
+                {
                     lights.erase(lights.begin() + i);
+
+                    sf::RenderTexture* tToDelete = shadowTextures[i];
+                    shadowTextures.erase(shadowTextures.begin() + i);
+                    delete tToDelete;
+                }
             break;
         }
         default:
@@ -204,4 +219,48 @@ bool Renderer::shaderIsLoaded(std::string shaderName)
         return true;
 
     return false;
+}
+
+
+void Renderer::clearShadowTextures()
+{
+    sf::Vector2u winSize = windowManager.getWindowSize();
+    blankShadowTexture.create(winSize.x, winSize.y);
+    for(int i=0; i<(int)shadowTextures.size(); ++i)
+    {
+        shadowTextures[i]->setView(windowManager.getWindow().getView());
+        shadowTextures[i]->clear(sf::Color::Green);
+    }
+}
+
+void Renderer::displayShadowTextures()
+{
+    for(int i=0; i<(int)shadowTextures.size(); ++i)
+        shadowTextures[i]->display();
+}
+
+void Renderer::generateShadowTextures(std::vector<Renderable* > const & _renderObjects)
+{
+    for(int i=0; i<(int)lights.size(); ++i)
+    {
+        for(int j=0; j<(int)_renderObjects.size(); ++j)
+        {
+            lights[i]->shadowStencil(*renderObjects[j]->primShape, *shadowTextures[i]);
+        }
+    }
+
+    if(shadowTextures.size()>0)
+    {
+        sf::Sprite shape(shadowTextures[0]->getTexture());
+        windowManager.getWindow().draw(shape);
+    }
+}
+
+void Renderer::resizeWindow(sf::Vector2u newSize)
+{
+    for(int i=0; i<(int)shadowTextures.size(); ++i)
+    {
+        shadowTextures[i]->create(newSize.x, newSize.y);
+    }
+    clearShadowTextures();
 }
