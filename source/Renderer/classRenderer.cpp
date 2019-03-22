@@ -229,7 +229,7 @@ void Renderer::clearShadowTextures()
     for(int i=0; i<(int)shadowTextures.size(); ++i)
     {
         shadowTextures[i]->setView(windowManager.getWindow().getView());
-        shadowTextures[i]->clear(sf::Color::Green);
+        shadowTextures[i]->clear(sf::Color::White);
     }
 }
 
@@ -245,15 +245,21 @@ void Renderer::generateShadowTextures(std::vector<Renderable* > const & _renderO
     {
         for(int j=0; j<(int)_renderObjects.size(); ++j)
         {
+
             lights[i]->shadowStencil(*renderObjects[j]->primShape, *shadowTextures[i]);
+
+            std::string shadowTextureString = "shadowTextures[" + std::to_string(i) + "]";
+            if(_renderObjects[j]->shader != nullptr)
+                _renderObjects[j]->shader->setUniform(shadowTextureString,
+                                                      shadowTextures[i]->getTexture());
         }
     }
 
-    if(shadowTextures.size()>0)
+    /*if(shadowTextures.size()>0)
     {
         sf::Sprite shape(shadowTextures[0]->getTexture());
         windowManager.getWindow().draw(shape);
-    }
+    }*/
 }
 
 void Renderer::resizeWindow(sf::Vector2u newSize)

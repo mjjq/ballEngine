@@ -36,7 +36,9 @@ LightSource::~LightSource()
 sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
                                         sf::RenderTexture &shadowTexture)
 {
-    std::vector<Ray > stencilRays;
+    std::map<int, Ray > stencilRays;
+    int noStencilBounds = 0;
+    int smallestKey = 100000000;
     sf::Vector2f lightPos = {position.x, position.y};
 
     sf::Transform trans = shape.getTransform();
@@ -68,43 +70,46 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
             {
                 float tFactor = effectiveRadius - sqrtf(sfVectorMath::square(lightDir1));
                 if(tFactor > 0.0f)
-                    stencilRays.push_back(Ray(shapePos1, -norm(lightDir1), tFactor));
+                {
+                    ++noStencilBounds;
+                    stencilRays.insert({modulo(i-1, n), Ray(shapePos1, -norm(lightDir1), tFactor)});
+                    //if(i-1 < smallestKey) smallestKey = i-1;
+                }
             }
             if(dot(lightDir3, n3) <= 0.0)
             {
                 float tFactor = effectiveRadius - sqrtf(sfVectorMath::square(lightDir2));
                 if(tFactor > 0.0f)
-                    stencilRays.push_back(Ray(shapePos2, -norm(lightDir2), tFactor));
+                {
+                    ++noStencilBounds;
+                    stencilRays.insert({i, Ray(shapePos2, -norm(lightDir2), tFactor)});
+                    if(i < smallestKey) smallestKey = i;
+                }
             }
         }
-
-        if(stencilRays.size() == 2)
+        else
         {
-            brightShader->setUniform("existingTexture", shadowTexture.getTexture());
-            shadowTexture.draw(shape, brightShader);
-
-            sf::VertexArray result(sf::TriangleStrip, 4);
-            result[0].position = stencilRays[0].pos;
-            result[1].position = stencilRays[1].pos;
-            result[2].position = stencilRays[0].pos +
-                                 stencilRays[0].maxT*stencilRays[0].dir;
-            result[3].position = stencilRays[1].pos +
-                                 stencilRays[1].maxT*stencilRays[1].dir;
-            result[0].color = sf::Color(0,0,0,255);
-            result[1].color = sf::Color(0,0,0,255);
-            result[2].color = sf::Color(0,0,0,255);
-            result[3].color = sf::Color(0,0,0,255);
-
-            shadowShader->setUniform("existingTexture", shadowTexture.getTexture());
-            shadowTexture.draw(result, shadowShader);
-
-            brightShader2->setUniform("existingTexture", shadowTexture.getTexture());
-            shadowTexture.draw(shape, brightShader2);
-
-            return result;
+            float tFactor = effectiveRadius - sqrtf(sfVectorMath::square(lightDir2));
+            stencilRays.insert({i, Ray(shapePos2, -norm(lightDir2), tFactor)});
+            //if(i < smallestKey) smallestKey = i;
         }
-
     }
+    if(noStencilBounds == 2)
+    {
+        using sfVectorMath::modulo;
+        sf::VertexArray result(sf::TriangleStrip, stencilRays.size()*2);
+        int sRSize = stencilRays.size();
+        for(int j=0; j<sRSize; ++j)
+        {
+            Ray& temp = stencilRays[modulo(j+smallestKey, n)];
+            result[2*j+1].position = temp.pos + temp.maxT*temp.dir;
+            result[2*j].position = temp.pos;
+        }
+        shadowTexture.draw(result, shadowShader);
+
+        return result;
+    }
+
     sf::VertexArray result(sf::Points, 1);
     return result;
 }
@@ -152,15 +157,10 @@ std::string LightSource::brightShaderCode2 = \
 sf::Shader* LightSource::shadowShader = nullptr;
 
 std::string LightSource::shadowShaderCode = \
-    "uniform sampler2D existingTexture;" \
     "void main()" \
     "{" \
-    " ivec2 texSize = textureSize(existingTexture, 0);" \
-    " vec4 tex = texture2D(existingTexture, vec2(gl_FragCoord.x/float(texSize.x), gl_FragCoord.y/float(texSize.y))); " \
     " " \
     " " \
-    " if(tex.g > 0.0)" \
-    "   gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);" \
-    " else if(tex.b > 0.0)" \
-    "   gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);"    \
+    " " \
+    " gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);" \
     "}";

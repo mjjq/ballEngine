@@ -21,6 +21,7 @@ public:
         sf::Vector2f const & _dir,
         float const & _maxT = 1e+15f) :
         pos{_pos}, dir{_dir}, maxT{_maxT} {}
+    Ray() {}
 
     sf::Vector2f pos;
     sf::Vector2f dir;
