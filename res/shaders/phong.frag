@@ -27,7 +27,6 @@ uniform Material material;
 #define NR_LIGHTS 10
 uniform Light lights[NR_LIGHTS];
 uniform sampler2D shadowTextures[NR_LIGHTS];
-uniform sampler2D shadowTexture;
 
 uniform float rotCosine;
 uniform float rotSine;
@@ -47,7 +46,7 @@ vec2 rotate(vec2 inputVec)
                 rotSine*inputVec.x + rotCosine*inputVec.y);
 }
 
-vec3 calcLight(Light _light, vec3 _normal, vec3 _fragPos, vec3 _viewDir, vec4 _diffTexel)
+vec3 calcLight(Light _light, vec3 _normal, vec3 _fragPos, vec3 _viewDir, vec4 _diffTexel, float shadow)
 {
     vec3 relWorldPos = _light.position - _fragPos;
     float lightDistance = distance(_light.position, _fragPos);
@@ -59,9 +58,9 @@ vec3 calcLight(Light _light, vec3 _normal, vec3 _fragPos, vec3 _viewDir, vec4 _d
     float diff = max(dot(_normal, relWorldUnit), 0.0);
     float spec = pow(max(dot(_viewDir, reflect(-relWorldUnit, _normal)), 0.0), material.shininess);
 
-    vec3 diffuse =  attenuation * material.diffuseStrength  * diff * _light.color * _diffTexel.xyz;
+    vec3 diffuse =  attenuation * material.diffuseStrength  * diff * _light.color * _diffTexel.xyz * shadow;
     vec3 ambient =  attenuation * material.ambientStrength  * _light.color * _diffTexel.xyz;
-    vec3 specular = attenuation * material.specularStrength * spec * _light.color;
+    vec3 specular = attenuation * material.specularStrength * spec * _light.color * shadow;
 
     return vec3(diffuse + ambient + specular);
 }
@@ -85,7 +84,7 @@ void main() {
         float shadow = texture2D(shadowTextures[i],
                                  vec2(gl_FragCoord.x/float(shadSize.x),
                                       gl_FragCoord.y/float(shadSize.y))).b;
-        lightColor += shadow * calcLight(lights[i], normal, FragPos, viewDir, diffTexel);
+        lightColor += calcLight(lights[i], normal, FragPos, viewDir, diffTexel, shadow);
     }
 
     vec3 emission = material.emissionStrength * emitTexel.xyz;

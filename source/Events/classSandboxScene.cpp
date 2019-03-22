@@ -379,7 +379,7 @@ void SandboxScene::load()
                                              verts,
                                              {"light.frag"},
                                              };
-                    LightProperties lProperties = {{props._position.x, props._position.y, 0.0f}};
+                    LightProperties lProperties = {{props._position.x, props._position.y, 10.0f}};
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Ball(props),
                                                       new LightSource(lProperties)));
@@ -459,6 +459,30 @@ void SandboxScene::load()
         loadKeybinds("./json/keybinds.json", "SandboxScene");
 
         Collisions::setDebugWindow(window);
+
+
+        std::vector<sf::Vertex > verts = {
+            sf::Vertex{{0.0f, 0.0f}},
+            sf::Vertex{{(float)wSize.x, 0.0f}},
+            sf::Vertex{{(float)wSize.x, (float)wSize.y}},
+            sf::Vertex{{0.0f, (float)wSize.y}}
+        };
+        ObjectProperties props = {{(float)wSize.x/2.0f, (float)wSize.y/2.0f},
+                                 {0.0f, 0.0f},
+                                 {1.0f, 1.0f},
+                                 spawnMass,
+                                 spawnCoefFriction,
+                                 spawnCoefRest,
+                                 spawnRotation,
+                                 spawnRotRate,
+                                 false, false, false,
+                                 ObjectType::Polygon,
+                                 verts,
+                                 {"phong",
+                                 "white.png",
+                                 "blankN.jpg"}
+                                             };
+        projMan->addObject(new GameObject(new Renderable(props)));
     }
 }
 
