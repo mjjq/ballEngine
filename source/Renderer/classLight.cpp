@@ -8,23 +8,30 @@ LightSource::LightSource(LightProperties properties) :
     lightProperties{properties}, position{properties.position}
 {
     calcEffectiveRadius(5.0f/256.0f);
-    std::cout << effectiveRadius << " radius\n";
-    if(brightShader == nullptr)
-    {
-        brightShader = new sf::Shader();
-        brightShader->loadFromMemory(brightShaderCode, sf::Shader::Fragment);
-    }
-    if(brightShader2 == nullptr)
-    {
-        brightShader2 = new sf::Shader();
-        brightShader2->loadFromMemory(brightShaderCode2, sf::Shader::Fragment);
-    }
+
+    if(umbralShader.loadFromFile("./res/shaders/umbralgen.frag", sf::Shader::Fragment))
+        umbralShader.setUniform("lightWidth", 1.5f);
+
+    umbralTexture.create(500, 500);
+    sf::VertexArray uTVerts(sf::TriangleStrip, 4);
+    uTVerts[0].position = {0.0f, 0.0f};
+    uTVerts[0].texCoords = {0.0f, 0.0f};
+    uTVerts[1].position = {0.0f, 500.0f};
+    uTVerts[1].texCoords = {0.0f, 500.0f};
+    uTVerts[2].position = {500.0f, 0.0f};
+    uTVerts[2].texCoords = {500.0f, 0.0f};
+    uTVerts[3].position = {500.0f, 500.0f};
+    uTVerts[3].texCoords = {500.0f, 500.0f};
+    uTVerts[3].color = sf::Color::White;
+    umbralTexture.draw(uTVerts, &umbralShader);
+    umbralTexture.display();
+
     if(shadowShader == nullptr)
     {
         shadowShader = new sf::Shader();
-        shadowShader->loadFromMemory(shadowShaderCode, sf::Shader::Fragment);
+        if(shadowShader->loadFromMemory(shadowShaderCode, sf::Shader::Fragment))
+            shadowShader->setUniform("umbralTexture", umbralTexture.getTexture());
     }
-
     renderSubject.notify(*this, Event(EventType::New_LightSrc));
 }
 
@@ -97,15 +104,62 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
     if(noStencilBounds == 2)
     {
         using sfVectorMath::modulo;
+        using sfVectorMath::norm;
+        using sfVectorMath::orthogonal;
+        using sfVectorMath::dot;
+
+        sf::Vector2f perpLine = norm(orthogonal(shape.getPosition() -
+                                                lightPos, 1.0));
+        float minCosine = 1e+15;
+        float maxCosine = -minCosine;
+
+
         sf::VertexArray result(sf::TriangleStrip, stencilRays.size()*2);
         int sRSize = stencilRays.size();
         for(int j=0; j<sRSize; ++j)
         {
             Ray& temp = stencilRays[modulo(j+smallestKey, n)];
-            result[2*j+1].position = temp.pos + temp.maxT*temp.dir;
-            result[2*j].position = temp.pos;
+            result[2*j+1].position = temp.pos;
+            result[2*j].position = temp.pos + 900.0f*temp.dir;
+
+            float cosine = dot(norm(result[2*j+1].position - lightPos), perpLine);
+            if(cosine < minCosine) minCosine = cosine;
+            if(cosine > maxCosine) maxCosine = cosine;
+            result[2*j+1].texCoords = {cosine, 0.0f};
+
+            cosine = dot(norm(result[2*j].position - lightPos), perpLine);
+            if(cosine < minCosine) minCosine = cosine;
+            if(cosine > maxCosine) maxCosine = cosine;
+            result[2*j].texCoords = {cosine, 1.0f};
         }
-        shadowTexture.draw(result, shadowShader);
+        //scale texCoord to fit range [0,1]
+        for(int j=0; j<sRSize; ++j)
+        {
+            result[2*j+1].texCoords.x = (result[2*j+1].texCoords.x - minCosine) /
+                                        (maxCosine - minCosine);
+            result[2*j].texCoords.x = (result[2*j].texCoords.x - minCosine) /
+                                        (maxCosine - minCosine);
+        }
+
+        float shapeSize = 0.01f*sqrtf(sfVectorMath::square(result[2*sRSize - 1].position -
+                                                result[1].position));
+        umbralShader.setUniform("lightWidth", lightProperties.umbralRadius/shapeSize);
+        shadowTexture.draw(result, &umbralShader);
+        /*sf::VertexArray result(sf::TriangleStrip, 4);
+        int sRSize = stencilRays.size();
+        Ray& temp1 = stencilRays[modulo(smallestKey,n)];
+        Ray& temp2 = stencilRays[modulo(smallestKey+sRSize-1, n)];
+
+        result[2].position = temp1.pos + 100.0f*temp1.dir;
+        result[2].texCoords = {0.0f, 1.0f};
+        result[0].position = temp1.pos;
+        result[0].texCoords = {0.0f, 0.0f};
+        result[3].position = temp2.pos + 100.0f*temp2.dir;
+        result[3].texCoords = {1.0f, 1.0f};
+        result[1].position = temp2.pos;
+        result[1].texCoords = {1.0f, 0.0f};*/
+
+        shadowTexture.draw(result, &umbralShader);
 
         return result;
     }
@@ -126,41 +180,14 @@ void LightSource::calcEffectiveRadius(float attFactor)
 
 Subject LightSource::renderSubject;
 
-sf::Shader* LightSource::brightShader = nullptr;
-
-std::string LightSource::brightShaderCode = \
-    "uniform sampler2D existingTexture;" \
-    "void main()" \
-    "{" \
-    " ivec2 texSize = textureSize(existingTexture, 0);" \
-    " vec4 tex = texture2D(existingTexture, vec2(gl_FragCoord.x/float(texSize.x), gl_FragCoord.y/float(texSize.y))); " \
-    " " \
-    " " \
-    " " \
-    "   gl_FragColor = vec4(1.0*tex.g, 0.0, 0.0, 1.0);" \
-    "}";
-
-sf::Shader* LightSource::brightShader2 = nullptr;
-
-std::string LightSource::brightShaderCode2 = \
-    "uniform sampler2D existingTexture;" \
-    "void main()" \
-    "{" \
-    " ivec2 texSize = textureSize(existingTexture, 0);" \
-    " vec4 tex = texture2D(existingTexture, vec2(gl_FragCoord.x/float(texSize.x), gl_FragCoord.y/float(texSize.y))); " \
-    " " \
-    " " \
-    " " \
-    "   gl_FragColor = vec4(0.0, 0.0, 1.0*tex.r, 1.0);" \
-    "}";
-
 sf::Shader* LightSource::shadowShader = nullptr;
 
 std::string LightSource::shadowShaderCode = \
+    "uniform sampler2D umbralTexture;" \
     "void main()" \
     "{" \
+    " vec4 umbralColor = texture2D(umbralTexture, gl_TexCoord[0].xy);" \
     " " \
     " " \
-    " " \
-    " gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);" \
+    " gl_FragColor = umbralColor;" \
     "}";

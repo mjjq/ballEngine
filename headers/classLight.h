@@ -12,6 +12,7 @@ struct LightProperties
     float linear = 0.00002f;
     float quadratic = 0.000005f;
     float lightMax = 1.0f;
+    float umbralRadius = 1.0f;
 };
 
 struct Ray
@@ -30,13 +31,11 @@ public:
 
 class LightSource : public Entity
 {
-    static std::string brightShaderCode;
-    static sf::Shader* brightShader;
-    static std::string brightShaderCode2;
-    static sf::Shader* brightShader2;
     static std::string shadowShaderCode;
     static sf::Shader* shadowShader;
+    sf::Shader umbralShader;
 public:
+    sf::RenderTexture umbralTexture;
     static Subject renderSubject;
     LightProperties lightProperties;
 
