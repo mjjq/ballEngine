@@ -10,7 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <math.h>
-#include "sfVectorMath.h"
+#include "Math.h"
 
 const float PI{3.14159265359};
 
@@ -22,11 +22,12 @@ const float PI{3.14159265359};
 
     @return Dot product of the two vectors.
 */
-int sfVectorMath::dot(sf::Vector2i vec1, sf::Vector2i vec2)
+int Math::dot(sf::Vector2i const & vec1, sf::Vector2i const & vec2)
 {
     int prod = vec1.x*vec2.x + vec1.y*vec2.y;
     return prod;
 }
+
 
 /**
     Get the dot product between two 2D float vectors.
@@ -36,17 +37,31 @@ int sfVectorMath::dot(sf::Vector2i vec1, sf::Vector2i vec2)
 
     @return Dot product of the two vectors.
 */
-float sfVectorMath::dot(sf::Vector2f vec1, sf::Vector2f vec2)
+float Math::dot(sf::Vector2f const & vec1, sf::Vector2f const & vec2)
 {
     float prod = vec1.x*vec2.x + vec1.y*vec2.y;
     return prod;
 }
 
-float sfVectorMath::square(sf::Vector2f vec)
+
+float Math::dot(sf::Vector3f const & v1, sf::Vector3f const & v2)
+{
+    return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+}
+
+
+float Math::square(sf::Vector2f const & vec)
 {
     float square = vec.x*vec.x + vec.y*vec.y;
     return square;
 }
+
+
+float Math::square(sf::Vector3f const & vec)
+{
+    return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
+}
+
 
 /**
     Get the unit/normlised vector of an integer vector.
@@ -55,7 +70,7 @@ float sfVectorMath::square(sf::Vector2f vec)
 
     @return The unit/normalised vector.
 */
-sf::Vector2f sfVectorMath::norm(sf::Vector2i vec1)
+sf::Vector2f Math::norm(sf::Vector2i const & vec1)
 {
     sf::Vector2f normVec = static_cast<sf::Vector2f>(vec1)/static_cast<float>(pow(dot(vec1,vec1),0.5));
     return normVec;
@@ -69,10 +84,38 @@ sf::Vector2f sfVectorMath::norm(sf::Vector2i vec1)
 
     @return The unit/normalised vector.
 */
-sf::Vector2f sfVectorMath::norm(sf::Vector2f vec1)
+sf::Vector2f Math::norm(sf::Vector2f const & vec1)
 {
-    sf::Vector2f normVec = static_cast<sf::Vector2f>(vec1)/sqrtf(dot(vec1,vec1));
-    return normVec;
+    return vec1/sqrtf(square(vec1));
+}
+
+
+sf::Vector3f Math::norm(sf::Vector3f const & vec)
+{
+    return vec / sqrtf(square(vec));
+}
+
+
+float Math::cross(sf::Vector2f const & v1, sf::Vector2f const & v2)
+{
+    return v1.x*v2.y - v1.y*v2.x;
+}
+
+
+sf::Vector3f Math::cross(sf::Vector3f const & v1,
+                                 sf::Vector3f const & v2)
+{
+    float a = v1.y * v2.z - v1.z * v2.y;
+    float b = v1.z * v2.x - v1.x * v2.z;
+    float c = v1.x * v2.y - v1.y * v2.x;
+
+    return sf::Vector3f(a,b,c);
+}
+
+
+sf::Vector2f Math::orthogonal(sf::Vector2f const & v, float const & scalar)
+{
+    return {v.y*scalar, -v.x*scalar};
 }
 
 
@@ -84,7 +127,7 @@ sf::Vector2f sfVectorMath::norm(sf::Vector2f vec1)
 
     @return The rotated vector.
 */
-sf::Vector2f sfVectorMath::rotate(sf::Vector2f vec1, float angleDegree)
+sf::Vector2f Math::rotate(sf::Vector2f const & vec1, float const & angleDegree)
 {
     float cosine = cosf(PI * angleDegree / 180.0f);
     float sine = sinf(PI * angleDegree / 180.0f);
@@ -96,62 +139,17 @@ sf::Vector2f sfVectorMath::rotate(sf::Vector2f vec1, float angleDegree)
 }
 
 
-/**
-    Print the float vector, format (x, y).
-
-    @param vec The vector to print.
-
-    @return Void.
-*/
-void sfVectorMath::printVector(sf::Vector2f vec)
+sf::Vector2f Math::tripleProduct(sf::Vector2f const & v1,
+                                         sf::Vector2f const & v2,
+                                         sf::Vector2f const & v3)
 {
-   std::cout << "(" << vec.x << ", " << vec.y << ")\n";
-}
-
-
-/**
-    Print the integer vector, format (x, y).
-
-    @param vec The vector to print.
-
-    @return Void.
-*/
-void sfVectorMath::printVector(sf::Vector2i vec)
-{
-    std::cout << "(" << vec.x << ", " << vec.y << ")\n";
-}
-
-float sfVectorMath::getAverage(std::vector<float> &vec)
-{
-    float average = 0.0f;
-    for(auto &element : vec)
-        average += element;
-    average = average/vec.size();
-
-    return average;
-}
-
-float sfVectorMath::cross(sf::Vector2f v1, sf::Vector2f v2)
-{
-    return v1.x*v2.y - v1.y*v2.x;
-}
-
-sf::Vector2f sfVectorMath::orthogonal(sf::Vector2f v, float scalar)
-{
-    return {v.y*scalar, -v.x*scalar};
-}
-
-
-sf::Vector2f sfVectorMath::tripleProduct(sf::Vector2f v1,
-                               sf::Vector2f v2,
-                               sf::Vector2f v3)
-{
-    sf::Vector2f result = v2 * sfVectorMath::dot(v3, v1) -
-                        v1 * sfVectorMath::dot(v2, v3);
+    sf::Vector2f result = v2 * Math::dot(v3, v1) -
+                        v1 * Math::dot(v2, v3);
     return result;
 }
 
-sf::Vector2f sfVectorMath::average(std::vector<sf::Vertex > verts)
+
+sf::Vector2f Math::average(std::vector<sf::Vertex > const & verts)
 {
     sf::Vector2f average = {0.0f, 0.0f};
     if(verts.size() > 0)
@@ -164,32 +162,45 @@ sf::Vector2f sfVectorMath::average(std::vector<sf::Vertex > verts)
     return average;
 }
 
-float sfVectorMath::dot(sf::Vector3f const & v1, sf::Vector3f const & v2)
+
+float Math::average(std::vector<float> const & vec)
 {
-    return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+    float average = 0.0f;
+    for(auto &element : vec)
+        average += element;
+    average = average/vec.size();
+
+    return average;
 }
 
-float sfVectorMath::square(sf::Vector3f const & vec)
+
+/**
+    Print the float vector, format (x, y).
+
+    @param vec The vector to print.
+
+    @return Void.
+*/
+void Math::printVector(sf::Vector2f const & vec)
 {
-    return vec.x*vec.x + vec.y*vec.y + vec.z*vec.z;
+   std::cout << "(" << vec.x << ", " << vec.y << ")\n";
 }
 
-sf::Vector3f sfVectorMath::norm(sf::Vector3f const & vec)
+
+/**
+    Print the integer vector, format (x, y).
+
+    @param vec The vector to print.
+
+    @return Void.
+*/
+void Math::printVector(sf::Vector2i const & vec)
 {
-    return vec / sqrt(square(vec));
+    std::cout << "(" << vec.x << ", " << vec.y << ")\n";
 }
 
-sf::Vector3f sfVectorMath::cross(sf::Vector3f const & v1,
-                                sf::Vector3f const & v2)
-{
-    float a = v1.y * v2.z - v1.z * v2.y;
-    float b = v1.z * v2.x - v1.x * v2.z;
-    float c = v1.x * v2.y - v1.y * v2.x;
 
-    return sf::Vector3f(a,b,c);
-}
-
-int sfVectorMath::modulo(int const & n1, int const & n2)
+int Math::modulo(int const & n1, int const & n2)
 {
     return (n2 + (n1%n2)) % n2;
 }

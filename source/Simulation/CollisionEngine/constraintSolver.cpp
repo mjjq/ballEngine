@@ -2,15 +2,15 @@
 #include <cmath>
 
 #include "constraintSolver.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 float Constraints::multiply(CStructs::Constraint &c,
                             CStructs::PairWiseVel &v)
 {
-    float result = sfVectorMath::dot(c.c1, v.v1) +
+    float result = Math::dot(c.c1, v.v1) +
                     c.cw1 * v.w1 +
-                    sfVectorMath::dot(c.c2, v.v2) +
+                    Math::dot(c.c2, v.v2) +
                     c.cw2 * v.w2;
     return result;
 }
@@ -19,8 +19,8 @@ float Constraints::multiply(CStructs::Constraint &c,
 float Constraints::getDenom(CStructs::Constraint &c,
                             CStructs::PairWiseMass &m)
 {
-    return sfVectorMath::dot(c.c1, c.c1) / m.m1 +
-            sfVectorMath::dot(c.c2, c.c2) / m.m2 +
+    return Math::dot(c.c1, c.c1) / m.m1 +
+            Math::dot(c.c2, c.c2) / m.m2 +
             c.cw1 * c.cw1 / m.i1 +
             c.cw2 * c.cw2 / m.i2;
 }
@@ -38,13 +38,13 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
     penetVector = penetVector;
 
     c.c1 = -normal;
-    c.cw1 = -sfVectorMath::cross(contactPoint - p1.getPosition(), normal);
+    c.cw1 = -Math::cross(contactPoint - p1.getPosition(), normal);
     c.c2 = normal;
-    c.cw2 = sfVectorMath::cross(contactPoint - p2.getPosition(), normal);
+    c.cw2 = Math::cross(contactPoint - p2.getPosition(), normal);
     c.lambdaMin = 0.0f;
     c.lambdaMax = 1e+15;
 
-    float baumGarte = sfVectorMath::dot(penetVector, normal);
+    float baumGarte = Math::dot(penetVector, normal);
 
     c.bias = 0.1f * baumGarte;
     /*std::cout << normal << "norm\n";
@@ -65,9 +65,9 @@ CStructs::Constraint Constraints::makeContactConstraint(PhysicsObject &p1,
     CStructs::Constraint c;
 
     c.c1 = -normal;
-    c.cw1 = -sfVectorMath::cross(contactPoint - p1.getPosition(), normal);
+    c.cw1 = -Math::cross(contactPoint - p1.getPosition(), normal);
     c.c2 = normal;
-    c.cw2 = sfVectorMath::cross(contactPoint - p2.getPosition(), normal);
+    c.cw2 = Math::cross(contactPoint - p2.getPosition(), normal);
     c.lambdaMin = 0.0f;
     c.lambdaMax = 1e+15;
 
@@ -86,9 +86,9 @@ CStructs::Constraint Constraints::makeFrictionConstraint(PhysicsObject &p1,
     tangent = tangent;
 
     c.c1 = -tangent;
-    c.cw1 = -sfVectorMath::cross(contactPoint - p1.getPosition(), tangent);
+    c.cw1 = -Math::cross(contactPoint - p1.getPosition(), tangent);
     c.c2 = tangent;
-    c.cw2 = sfVectorMath::cross(contactPoint - p2.getPosition(), tangent);
+    c.cw2 = Math::cross(contactPoint - p2.getPosition(), tangent);
     c.lambdaMin = -frictionLimit;
     c.lambdaMax = -c.lambdaMin;
     c.bias = 0.0f;

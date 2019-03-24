@@ -15,7 +15,7 @@
 #include <tuple>
 
 #include "classOBB.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "integrators.h"
 #include "stringConversion.h"
 
@@ -41,7 +41,7 @@ PhysicsObject(init),
     rotAngle = init._rotation;
     rotRate = init._rotRate;
 
-    momentInertia = init._mass*(sfVectorMath::square(size))/12.0f;
+    momentInertia = init._mass*(Math::square(size))/12.0f;
 }
 
 OBB::~OBB() {}
@@ -96,7 +96,7 @@ std::vector<sf::Vertex > OBB::constructVerts()
 
     for(unsigned int i=0; i<4; ++i)
     {
-        obbVerts[i].position = sfVectorMath::rotate(obbVerts[i].position,
+        obbVerts[i].position = Math::rotate(obbVerts[i].position,
                                                     rotAngle);
         obbVerts[i].position += position;
     }
@@ -117,7 +117,7 @@ sf::Vertex OBB::farthestPointInDir(sf::Vector2f direction)
     float maxProj = -1e15;
     for(unsigned int i=0; i<4; ++i)
     {
-        float currProj = sfVectorMath::dot(obbVerts[i].position, direction);
+        float currProj = Math::dot(obbVerts[i].position, direction);
         if(currProj > maxProj)
         {
             maxProj = currProj;

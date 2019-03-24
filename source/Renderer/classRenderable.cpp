@@ -1,7 +1,7 @@
 #include "classRenderable.h"
 
 #include <cmath>
-#include "sfVectorMath.h"
+#include "Math.h"
 
 Renderable::Renderable(std::string _texID,
                std::vector<sf::Drawable* > _primitives) : Entity()
@@ -30,7 +30,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
     {
         case(ObjectType::Ball):
         {
-            float radius = sqrt(sfVectorMath::square(objProps._size));
+            float radius = sqrt(Math::square(objProps._size));
 
             sf::CircleShape* circle = new sf::CircleShape(radius);
             circle->setPosition(objProps._position);
@@ -50,7 +50,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
             shape->setFillColor({80,80,80,80});
             for(int i=0; i<(int)objProps._vertices.size(); ++i)
                 shape->setPoint(i, objProps._vertices[i].position);
-            shape->setOrigin(sfVectorMath::average(objProps._vertices));
+            shape->setOrigin(Math::average(objProps._vertices));
 
             primDrawable = std::move(shape);
             primTransformable = shape;

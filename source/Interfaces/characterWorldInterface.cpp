@@ -1,5 +1,5 @@
 #include "characterWorldInterface.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 
 ICharWorld::ICharWorld(BallUniverse* _world,
                        CharacterManager* _cMang,
@@ -214,7 +214,7 @@ void ICharWorld::onNotify(Entity& entity, Event event)
             float angle = currentWep.getAimAngle();
             GameObject* proj = new GameObject{currentWep.PROJ_TYPE,
                                                 position,
-                                                sfVectorMath::rotate({1.0f, 0.0f}, angle)};
+                                                Math::rotate({1.0f, 0.0f}, angle)};
             proj->addObserver(this);
             //std::unique_ptr<Ball > newBall = std::make_unique<Ball >(proj->getProjProps());
             //proj->setColliderAddress(newBall.get());

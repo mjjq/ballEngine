@@ -7,7 +7,7 @@
 #include <functional>
 
 #include "classUIWindow.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 #include "classUIButton.h"
 #include "classUISlider.h"

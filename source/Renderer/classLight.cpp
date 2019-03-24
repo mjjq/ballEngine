@@ -1,5 +1,5 @@
 #include "classLight.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include <iostream>
 #include <cmath>
 #include "stringConversion.h"
@@ -53,10 +53,10 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
     int n=shape.getPointCount();
     for(int i=0; i<(int)n; ++i)
     {
-        using sfVectorMath::orthogonal;
-        using sfVectorMath::dot;
-        using sfVectorMath::norm;
-        using sfVectorMath::modulo;
+        using Math::orthogonal;
+        using Math::dot;
+        using Math::norm;
+        using Math::modulo;
 
         sf::Vector2f shapePos0 = trans.transformPoint(shape.getPoint(modulo((i-2),n)));
         sf::Vector2f shapePos1 = trans.transformPoint(shape.getPoint(modulo((i-1),n)));
@@ -75,7 +75,7 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
         {
             if(dot(lightDir1, n1) <= 0.0)
             {
-                float tFactor = effectiveRadius - sqrtf(sfVectorMath::square(lightDir1));
+                float tFactor = effectiveRadius - sqrtf(Math::square(lightDir1));
                 if(tFactor > 0.0f)
                 {
                     ++noStencilBounds;
@@ -85,7 +85,7 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
             }
             if(dot(lightDir3, n3) <= 0.0)
             {
-                float tFactor = effectiveRadius - sqrtf(sfVectorMath::square(lightDir2));
+                float tFactor = effectiveRadius - sqrtf(Math::square(lightDir2));
                 if(tFactor > 0.0f)
                 {
                     ++noStencilBounds;
@@ -96,17 +96,17 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
         }
         else
         {
-            float tFactor = effectiveRadius - sqrtf(sfVectorMath::square(lightDir2));
+            float tFactor = effectiveRadius - sqrtf(Math::square(lightDir2));
             stencilRays.insert({i, Ray(shapePos2, -norm(lightDir2), tFactor)});
             //if(i < smallestKey) smallestKey = i;
         }
     }
     if(noStencilBounds == 2)
     {
-        using sfVectorMath::modulo;
-        using sfVectorMath::norm;
-        using sfVectorMath::orthogonal;
-        using sfVectorMath::dot;
+        using Math::modulo;
+        using Math::norm;
+        using Math::orthogonal;
+        using Math::dot;
 
         sf::Vector2f perpLine = norm(orthogonal(shape.getPosition() -
                                                 lightPos, 1.0));
@@ -141,7 +141,7 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
                                         (maxCosine - minCosine);
         }
 
-        float shapeSize = 0.01f*sqrtf(sfVectorMath::square(result[2*sRSize - 1].position -
+        float shapeSize = 0.01f*sqrtf(Math::square(result[2*sRSize - 1].position -
                                                 result[1].position));
         umbralShader.setUniform("lightWidth", lightProperties.umbralRadius/shapeSize);
         shadowTexture.draw(result, &umbralShader);

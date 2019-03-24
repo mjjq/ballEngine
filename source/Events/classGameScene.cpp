@@ -20,7 +20,7 @@
 #include "../../extern/json.hpp"
 
 #include "classGameScene.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 #include "jsonParsing.h"
 
@@ -75,7 +75,7 @@ sf::Vector2f GameScene::velocityFromMouse(sf::Vector2i _mousePosOnClick,
 
     /*float windowDiagSize = pow(windowSizeX*windowSizeX +
                                windowSizeY*windowSizeY, 0.5);*/
-    float worldDiagSize = sqrt(sfVectorMath::dot( ballSim->getWorldSize(),
+    float worldDiagSize = sqrt(Math::dot( ballSim->getWorldSize(),
                                                   ballSim->getWorldSize() ));
 
     sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/worldDiagSize;

@@ -15,7 +15,7 @@
 #include <tuple>
 
 #include "classBall.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "integrators.h"
 #include "stringConversion.h"
 
@@ -53,7 +53,7 @@ void Ball::draw(sf::RenderWindow &_window)
 
     sf::Vertex line[] = {
         sf::Vertex{position},
-        sf::Vertex{position + sfVectorMath::rotate(sf::Vector2f{0.0f, radius}, rotAngle)}
+        sf::Vertex{position + Math::rotate(sf::Vector2f{0.0f, radius}, rotAngle)}
     };
     //std::cout << getRotRate() << "\n";
     //drawable.setOutlineThickness(-1);
@@ -75,7 +75,7 @@ float Ball::getMinSize()
 sf::Vertex Ball::farthestPointInDir(sf::Vector2f direction)
 {
     sf::Vector2f vertPos = getPosition();
-    vertPos += getRadius() * sfVectorMath::norm(direction);
+    vertPos += getRadius() * Math::norm(direction);
 
     return sf::Vertex{vertPos};
 }

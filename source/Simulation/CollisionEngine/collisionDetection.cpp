@@ -7,7 +7,7 @@
 #include <cassert>
 
 #include "collisionDetection.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 
@@ -72,7 +72,7 @@ void Collisions::setDebugWindow(sf::RenderWindow &window)
 */
 float Collisions::timeToCollBallBall(Ball *firstBall, Ball *secondBall)
 {
-    using namespace sfVectorMath;
+    using namespace Math;
 
     sf::Vector2f relPos = firstBall->getPosition() - secondBall->getPosition();
     float radSum = firstBall->getRadius() + secondBall->getRadius();
@@ -241,11 +241,11 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
         sf::Rect<float > rectBounds = rect->getGlobalBounds();
         float rotAngle = rect->getRotAngle();
 
-        sf::Vector2f ballPos = sfVectorMath::rotate(ball->getPosition(), -rotAngle);
-        sf::Vector2f ballVel = sfVectorMath::rotate(ball->getVelocity(), -rotAngle);
-        sf::Vector2f rectPos = sfVectorMath::rotate(rect->getPosition(), -rotAngle) -
+        sf::Vector2f ballPos = Math::rotate(ball->getPosition(), -rotAngle);
+        sf::Vector2f ballVel = Math::rotate(ball->getVelocity(), -rotAngle);
+        sf::Vector2f rectPos = Math::rotate(rect->getPosition(), -rotAngle) -
                                sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f};
-        sf::Vector2f rectVel = sfVectorMath::rotate(rect->getVelocity(), -rotAngle);
+        sf::Vector2f rectVel = Math::rotate(rect->getVelocity(), -rotAngle);
         //- sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f}
         AABB obbInFrame{{rectPos,
                         rectVel,
@@ -254,8 +254,8 @@ float Collisions::timeToCollBallOBB(Ball *ball, OBB* rect)
                         }};
         sf::Vector2f relVelocity = ball->getVelocity() - rect->getVelocity();
         sf::Vector2f sepVector = ball->getPosition() - rect->getPosition();
-        relVelocity = sfVectorMath::rotate(relVelocity, -rect->getRotAngle());
-        sepVector = sfVectorMath::rotate(sepVector, -rect->getRotAngle());
+        relVelocity = Math::rotate(relVelocity, -rect->getRotAngle());
+        sepVector = Math::rotate(sepVector, -rect->getRotAngle());
 
         Ball ballInFrame{{ballPos,
                         ballVel,
@@ -393,17 +393,17 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
     {
         sf::Vector2f delta = ball->getRadius() * edgeTotals.at(i);
         minkSum[i].position += delta;
-        minkSum[i].position = sfVectorMath::rotate(minkSum[i].position, poly->getRotAngle());
+        minkSum[i].position = Math::rotate(minkSum[i].position, poly->getRotAngle());
         minkSum[i].position += poly->getPosition();
 
         sf::Vector2f relPos = ball->getPosition() - origPoly[i].position;
 
-        if(sfVectorMath::square(relPos) < ballRad*ballRad)
+        if(Math::square(relPos) < ballRad*ballRad)
             return 0.0f;
     }
 
     sf::Vector2f centreRelPos = ball->getPosition() - poly->getPosition();
-    sf::Vector2f ballVel = ball->getVelocity() + sfVectorMath::orthogonal(centreRelPos, poly->getRotRate());
+    sf::Vector2f ballVel = ball->getVelocity() + Math::orthogonal(centreRelPos, poly->getRotRate());
     float t = Collisions::rayPolyIntersect(ball->getPosition(), ballVel-poly->getVelocity(),
                                            minkSum, -1e+15f, 1e+15f, 1e-15f);
 
@@ -430,10 +430,10 @@ float Collisions::timeToCollBallPoly(Ball* ball, Polygon* poly)
 
 
     float minkSegLength = pow(ball->getRadius(), 2) *
-            (sfVectorMath::square(edgeTotals[vertexColl]) - 1.0f );
+            (Math::square(edgeTotals[vertexColl]) - 1.0f );
 
-    if(sfVectorMath::square(intPoint.position - minkSum[vertexColl].position) < minkSegLength ||
-       sfVectorMath::square(ball->getPosition() - minkSum[vertexColl].position) < minkSegLength)
+    if(Math::square(intPoint.position - minkSum[vertexColl].position) < minkSegLength ||
+       Math::square(ball->getPosition() - minkSum[vertexColl].position) < minkSegLength)
     {
         t = Collisions::raySphereIntersect(ball->getPosition(),
                                            ballVel-poly->getVelocity(),

@@ -19,7 +19,7 @@
 #include <map>
 
 #include "classMainMenuScene.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 

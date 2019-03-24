@@ -15,7 +15,7 @@
 #include <tuple>
 
 #include "classCapsule.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "integrators.h"
 #include "stringConversion.h"
 
@@ -41,7 +41,7 @@ PhysicsObject(init)
 
     for(sf::Vertex &vert : vertices)
     {
-        momentInertia += sfVectorMath::square(vert.position - centreOfMass);
+        momentInertia += Math::square(vert.position - centreOfMass);
     }
     momentInertia = momentInertia*init._mass/vertices.size();
 
@@ -66,8 +66,8 @@ void Capsule::draw(sf::RenderWindow &_window)
     rect.setOrigin({radius, length/2.0f});
     rect.rotate(rotAngle);
 
-    circ1.setPosition(position + sfVectorMath::rotate(vertices[0].position, rotAngle));
-    circ2.setPosition(position + sfVectorMath::rotate(vertices[1].position, rotAngle));
+    circ1.setPosition(position + Math::rotate(vertices[0].position, rotAngle));
+    circ2.setPosition(position + Math::rotate(vertices[1].position, rotAngle));
     rect.setPosition(position);
 
     //_window.draw(temp.data(), numVerts, sf::Lines);
@@ -103,7 +103,7 @@ std::vector<sf::Vertex > Capsule::constructVerts()
     std::vector<sf::Vertex > tFormedVerts;
     for(sf::Vertex &vert : vertices)
     {
-        sf::Vector2f newPos = sfVectorMath::rotate(vert.position, rotAngle);
+        sf::Vector2f newPos = Math::rotate(vert.position, rotAngle);
         newPos += position;
         tFormedVerts.push_back(sf::Vertex(newPos));
     }
@@ -133,7 +133,7 @@ sf::Vertex Capsule::farthestPointInDir(sf::Vector2f direction)
     float maxProj = -1e15;
     for(unsigned int i=0; i<obbVerts.size(); ++i)
     {
-        float currProj = sfVectorMath::dot(obbVerts[i].position, direction);
+        float currProj = Math::dot(obbVerts[i].position, direction);
         if(currProj > maxProj)
         {
             maxProj = currProj;

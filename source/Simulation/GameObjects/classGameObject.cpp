@@ -1,6 +1,6 @@
 #include <iostream>
 #include "classGameObject.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 
 GameObject::GameObject(ProjectileType type,
                        sf::Vector2f initPos,
@@ -86,8 +86,8 @@ void GameObject::initialiseBullet(sf::Vector2f initPos, sf::Vector2f initDir)
 
     ObjectProperties init;
     init._position = initPos;
-    if(sfVectorMath::square(initDir) > 0.0f)
-        init._velocity = bulletSpeed * sfVectorMath::norm(initDir);
+    if(Math::square(initDir) > 0.0f)
+        init._velocity = bulletSpeed * Math::norm(initDir);
     else
     init._velocity = {bulletSpeed, 0.0f};
     init._mass = bulletMass;
@@ -111,8 +111,8 @@ void GameObject::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
 
     ObjectProperties init;
     init._position = initPos;
-    if(sfVectorMath::square(initDir) > 0.0f)
-        init._velocity = bulletSpeed * sfVectorMath::norm(initDir);
+    if(Math::square(initDir) > 0.0f)
+        init._velocity = bulletSpeed * Math::norm(initDir);
     else
     init._velocity = {bulletSpeed, 0.0f};
     init._mass = bulletMass;

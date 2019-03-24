@@ -7,14 +7,14 @@
 #include <cassert>
 
 #include "collisionDetection.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 
 sf::Vector2f Collisions::calcPenetVector(Ball* ball1, Ball* ball2)
 {
     sf::Vector2f separationVec = ball2->getPosition() - ball1->getPosition();
-    float distance = sqrtf( sfVectorMath::square(separationVec) );
+    float distance = sqrtf( Math::square(separationVec) );
     float penetDistance =  distance - (ball1->getRadius() + ball2->getRadius());
     //std::cout << penetDistance << " pd\n";
 
@@ -23,7 +23,7 @@ sf::Vector2f Collisions::calcPenetVector(Ball* ball1, Ball* ball2)
 
 sf::Vector2f Collisions::calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball)
 {
-    float distance = sfVectorMath::dot( (rayStart - ball.getPosition()), rayNorm );
+    float distance = Math::dot( (rayStart - ball.getPosition()), rayNorm );
     float penetDistance = distance - ball.getRadius();
     //if(penetDistance >= 0.0f)
     //    return sf::Vector2f{0.0f,0.0f};
@@ -171,7 +171,7 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball *origBal
             cornerPos = sf::Vector2f{rectBounds.left + rectBounds.width, rectBounds.top + rectBounds.height};
         }
 
-        contactNormal = sfVectorMath::norm(cornerPos-rBall);
+        contactNormal = Math::norm(cornerPos-rBall);
     }
 
     return std::make_pair(contactNormal, cornerPos);
@@ -199,14 +199,14 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
     for(unsigned int i=0; i<verts.size(); ++i)
     {
         sf::Vector2f tangent = verts[(i+1)%verts.size()].position - verts[i].position;
-        sf::Vector2f norm = sfVectorMath::norm( sfVectorMath::orthogonal(tangent, 1.0f) );
+        sf::Vector2f norm = Math::norm( Math::orthogonal(tangent, 1.0f) );
         relPos = ball->getPosition() - verts[i].position;
         relPos2 = ball->getPosition() - verts[(i+1)%verts.size()].position;
 
-        float vertDistSq = sfVectorMath::square(relPos);
-        float normDist = sfVectorMath::dot(relPos, norm);
-        float tanDist = sfVectorMath::dot(relPos, sfVectorMath::norm(tangent));
-        float segDistSq = sfVectorMath::square(tangent);
+        float vertDistSq = Math::square(relPos);
+        float normDist = Math::dot(relPos, norm);
+        float tanDist = Math::dot(relPos, Math::norm(tangent));
+        float segDistSq = Math::square(tangent);
 
         //theVertex = i;
 
@@ -225,14 +225,14 @@ std::pair<sf::Vector2f, sf::Vector2f> Collisions::getContactNormal(Ball* ball, P
         {
             distance = sqrtf(vertDistSq);
             cornerPosVert = verts[i].position;
-            edgeNormVert = sfVectorMath::norm(ball->getPosition() -
+            edgeNormVert = Math::norm(ball->getPosition() -
                                       cornerPosVert);
             touchCorner = true;
         }
 
     }
     if(!touchCorner)
-        return std::make_pair(sfVectorMath::norm(edgeNorm), cornerPos);
+        return std::make_pair(Math::norm(edgeNorm), cornerPos);
 
-    return std::make_pair(sfVectorMath::norm(edgeNormVert), cornerPosVert);
+    return std::make_pair(Math::norm(edgeNormVert), cornerPosVert);
 }

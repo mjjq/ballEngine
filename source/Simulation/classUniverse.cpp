@@ -6,7 +6,7 @@
 #include <tuple>
 
 #include "classUniverse.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
@@ -161,7 +161,7 @@ void BallUniverse::spawnNewObject(ObjectProperties init)
 void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2)
 {
     sf::Vector2f relVec = obj1->getPosition() + obj1->getCoM() - (obj2->getPosition() + obj2->getCoM());
-    float r2 = sfVectorMath::square(relVec);
+    float r2 = Math::square(relVec);
     float totalR = obj1->getMinSize()+obj2->getMinSize();
 
     if(r2 > totalR*totalR)
@@ -945,7 +945,7 @@ void BallUniverse::createExplosion(sf::Vector2f position,
 
         Edge GJKResult = GJK::getClosestPoints(dynamicObjects[i], &tempObject);
 
-        float distanceSq = sfVectorMath::square(GJKResult.v2 - GJKResult.v1);
+        float distanceSq = Math::square(GJKResult.v2 - GJKResult.v1);
 
         float minDistance = 0.0f;
         if(strength < 0.0f)
@@ -961,7 +961,7 @@ void BallUniverse::createExplosion(sf::Vector2f position,
 
             Arbiter tempArb{dynamicObjects[i], &tempObject};
             Contact tempContact;
-            tempContact.normal = sfVectorMath::norm(GJKResult.v1 - GJKResult.v2);
+            tempContact.normal = Math::norm(GJKResult.v1 - GJKResult.v2);
             tempContact.position = GJKResult.v1;
             tempContact.rA = tempContact.position - dynamicObjects[i]->getPosition();
             tempContact.rB = {0.0f, 0.0f};

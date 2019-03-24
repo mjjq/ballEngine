@@ -15,7 +15,7 @@
 #include <tuple>
 
 #include "classAABB.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "integrators.h"
 #include "stringConversion.h"
 
@@ -33,7 +33,7 @@ PhysicsObject(init), size{init._size}
     density = init._mass/(size.x*size.y);
     centreOfMass = sf::Vector2f{size.x/2.0f, size.y/2.0f};
 
-    momentInertia = init._mass*(sfVectorMath::square(size))/12.0f;
+    momentInertia = init._mass*(Math::square(size))/12.0f;
 }
 
 AABB::~AABB() {}
@@ -99,7 +99,7 @@ sf::Vertex AABB::farthestPointInDir(sf::Vector2f direction)
     float maxProj = -1e15;
     for(unsigned int i=0; i<4; ++i)
     {
-        float currProj = sfVectorMath::dot(obbVerts[i].position, direction);
+        float currProj = Math::dot(obbVerts[i].position, direction);
         if(currProj > maxProj)
         {
             maxProj = currProj;

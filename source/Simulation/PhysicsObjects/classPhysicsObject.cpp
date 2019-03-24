@@ -1,5 +1,5 @@
 #include "classPhysicsObject.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "integrators.h"
 #include "stringConversion.h"
 
@@ -60,7 +60,7 @@ void PhysicsObject::updatePosition(float dt)
     //sf::Vector2f currPos = getPosition();
     pStepPosition = getPosition();
     setPosition(getPosition()+(cStepVelocity+cStepModVelocity)*dt);
-    rotAngle += rotRate*dt*180.0f/sfVectorMath::PI;
+    rotAngle += rotRate*dt*180.0f/Math::PI;
     //std::cout << rotRate << "\n";
     //std::cout << "Current: " << cStepVelocity << "\n";
     //std::cout << "Next:    " << nStepVelocity << "\n";
@@ -169,7 +169,7 @@ void PhysicsObject::addRotRate(float _rotRate)
 */
 float PhysicsObject::getKE()
 {
-    return 0.5*getMass()*sfVectorMath::dot(getVelocity(),getVelocity());
+    return 0.5*getMass()*Math::dot(getVelocity(),getVelocity());
 }
 
 
@@ -194,7 +194,7 @@ sf::Vector2f PhysicsObject::getMomentum()
 */
 float PhysicsObject::getSpeed()
 {
-    return pow(sfVectorMath::dot(getVelocity(),getVelocity()),0.5);
+    return pow(Math::dot(getVelocity(),getVelocity()),0.5);
 }
 
 bool PhysicsObject::isBullet()
@@ -222,7 +222,7 @@ bool PhysicsObject::getIsStatic()
 float PhysicsObject::getRelSpeed(PhysicsObject* otherObj)
 {
     sf::Vector2f relVelocity = getVelocity() - otherObj->getVelocity();
-    return pow(sfVectorMath::dot(relVelocity,relVelocity),0.5);
+    return pow(Math::dot(relVelocity,relVelocity),0.5);
 }
 
 
@@ -236,7 +236,7 @@ float PhysicsObject::getRelSpeed(PhysicsObject* otherObj)
 float PhysicsObject::getDistance(PhysicsObject* otherObj)
 {
     sf::Vector2f relPos = getPosition() - otherObj->getPosition();
-    return pow(sfVectorMath::dot(relPos,relPos),0.5);
+    return pow(Math::dot(relPos,relPos),0.5);
 }
 
 

@@ -1,7 +1,7 @@
 #include "classRenderer.h"
 #include <iostream>
 #include <cmath>
-#include "sfVectorMath.h"
+#include "Math.h"
 #include <SFML/OpenGL.hpp>
 
 Renderer::Renderer()
@@ -74,7 +74,7 @@ void Renderer::redrawAll(sf::RenderWindow &window)
             if(shadowTextures.size() > 0)
                 shader->setUniform("shadowTexture", shadowTextures[0]->getTexture());
 
-            float rotation = sfVectorMath::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
+            float rotation = Math::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
             shader->setUniform("rotCosine", (float)cos(rotation));
             shader->setUniform("rotSine", (float)sin(rotation));
 

@@ -4,7 +4,7 @@
 #include "classArbiter.h"
 #include "collisionDetection.h"
 #include "constraintSolver.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
@@ -81,14 +81,14 @@ void Arbiter::PreStep(float inv_dt)
 
     for(Contact &tempCont : contacts)
     {
-        tempCont.tangent = sfVectorMath::orthogonal(tempCont.normal, 1.0f);
+        tempCont.tangent = Math::orthogonal(tempCont.normal, 1.0f);
 
         sf::Vector2f relVel = pwv.v2 - pwv.v1;
 
         relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
                     Collisions::orthogonal(tempCont.rB, pwv.w2);
 
-        float restitution = coefRestitution * sfVectorMath::dot(relVel, tempCont.normal);
+        float restitution = coefRestitution * Math::dot(relVel, tempCont.normal);
 
         float baumGarte = tempCont.separation * inv_dt;
 
