@@ -23,6 +23,6 @@ void main() {
 
     gl_FragColor = vec4(colorA, 1.0-pct);
     //y = pow(st.y, 1.0);// + distance(st.x, 0.5);
-    gl_FragColor = vec4(st.y, 1.0-st.y, 0.0, 1.0);
+    //gl_FragColor = vec4(st.y, 1.0-st.y, 0.0, 1.0);
     //gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 }
