@@ -9,19 +9,21 @@ LightSource::LightSource(LightProperties properties) :
 {
     calcEffectiveRadius(5.0f/256.0f);
 
-    if(umbralShader.loadFromFile("./res/shaders/umbralgen.frag", sf::Shader::Fragment))
-        umbralShader.setUniform("lightWidth", 1.5f);
+    if(umbralShader.loadFromFile("./res/shaders/umbralgen.vert",
+                                 "./res/shaders/umbralgen.geom",
+                                 "./res/shaders/umbralgen.frag"))
+        umbralShader.setUniform("lightWidth", 0.5f);
 
     umbralTexture.create(500, 500);
     sf::VertexArray uTVerts(sf::TriangleStrip, 4);
     uTVerts[0].position = {0.0f, 0.0f};
     uTVerts[0].texCoords = {0.0f, 0.0f};
     uTVerts[1].position = {0.0f, 500.0f};
-    uTVerts[1].texCoords = {0.0f, 500.0f};
+    uTVerts[1].texCoords = {0.0f, 1.0f};
     uTVerts[2].position = {500.0f, 0.0f};
-    uTVerts[2].texCoords = {500.0f, 0.0f};
+    uTVerts[2].texCoords = {1.0f, 0.0f};
     uTVerts[3].position = {500.0f, 500.0f};
-    uTVerts[3].texCoords = {500.0f, 500.0f};
+    uTVerts[3].texCoords = {1.0f, 1.0f};
     uTVerts[3].color = sf::Color::White;
     umbralTexture.draw(uTVerts, &umbralShader);
     umbralTexture.display();
@@ -109,42 +111,53 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
         using Math::dot;
 
         sf::Vector2f perpLine = norm(orthogonal(shape.getPosition() -
-                                                lightPos, 1.0));
+                                                lightPos, -1.0));
         float minCosine = 1e+15;
         float maxCosine = -minCosine;
 
 
-        sf::VertexArray result(sf::TriangleStrip, stencilRays.size()*2);
+        sf::VertexArray result(sf::LineStrip, stencilRays.size());
         int sRSize = stencilRays.size();
         for(int j=0; j<sRSize; ++j)
         {
             Ray& temp = stencilRays[modulo(j+smallestKey, n)];
-            result[2*j+1].position = temp.pos;
-            result[2*j].position = temp.pos + 900.0f*temp.dir;
+            //result[2*j+1].position = temp.pos;
+            sf::Vector2f rayEnd = temp.pos + effectiveRadius*temp.dir;
+            result[j].position = temp.pos;
 
-            float cosine = dot(norm(result[2*j+1].position - lightPos), perpLine);
+            /*float cosine = dot((result[2*j+1].position - lightPos), perpLine);
+            if(cosine < minCosine) minCosine = cosine;
+            if(cosine > maxCosine) maxCosine = cosine;*/
+
+            float cosine = dot((rayEnd - lightPos), perpLine);
             if(cosine < minCosine) minCosine = cosine;
             if(cosine > maxCosine) maxCosine = cosine;
-            result[2*j+1].texCoords = {cosine, 0.0f};
-
-            cosine = dot(norm(result[2*j].position - lightPos), perpLine);
-            if(cosine < minCosine) minCosine = cosine;
-            if(cosine > maxCosine) maxCosine = cosine;
-            result[2*j].texCoords = {cosine, 1.0f};
+            result[j].texCoords = {cosine, 0.0f};
+            //result[2*j+1].texCoords = {cosine, 0.0f};
         }
         //scale texCoord to fit range [0,1]
         for(int j=0; j<sRSize; ++j)
         {
-            result[2*j+1].texCoords.x = (result[2*j+1].texCoords.x - minCosine) /
+            /*result[2*j+1].texCoords.x = (result[2*j+1].texCoords.x - minCosine) /
+                                        (maxCosine - minCosine);*/
+            result[j].texCoords.x = (result[j].texCoords.x - minCosine) /
                                         (maxCosine - minCosine);
-            result[2*j].texCoords.x = (result[2*j].texCoords.x - minCosine) /
-                                        (maxCosine - minCosine);
+
+            //result[2*j].color = sf::Color::Black;
+            //result[2*j+1].color = sf::Color::Black;
         }
 
-        float shapeSize = 0.01f*sqrtf(Math::square(result[2*sRSize - 1].position -
-                                                result[1].position));
-        umbralShader.setUniform("lightWidth", lightProperties.umbralRadius/shapeSize);
-        shadowTexture.draw(result, &umbralShader);
+        /*Math::printVector(result[0].texCoords); std::cout << "index 0\n";
+        Math::printVector(result[2].texCoords); std::cout << "index 2\n";
+        Math::printVector(result[2*sRSize-2].texCoords); std::cout << "index n-2\n";
+        Math::printVector(result[2*sRSize-4].texCoords); std::cout << "index n-4\n\n";*/
+
+        /*float shapeSize = 0.1f*sqrtf(Math::square(result[2*sRSize - 1].position -
+                                                result[1].position));*/
+        umbralShader.setUniform("lightWidth", 0.2f);
+        umbralShader.setUniform("lightPos", sf::Glsl::Vec3(lightPos.x, lightPos.y, 0.0f));
+        umbralShader.setUniform("rayLength", effectiveRadius);
+        //shadowTexture.draw(result);
         /*sf::VertexArray result(sf::TriangleStrip, 4);
         int sRSize = stencilRays.size();
         Ray& temp1 = stencilRays[modulo(smallestKey,n)];

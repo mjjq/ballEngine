@@ -255,14 +255,14 @@ void Renderer::generateShadowTextures(std::vector<Renderable* > const & _renderO
         }
     }
 
-    if(shadowTextures.size()>0)
+    /*if(shadowTextures.size()>0)
     {
         sf::Sprite shape(shadowTextures[0]->getTexture());
         sf::Sprite shape2(lights[0]->umbralTexture.getTexture());
         shape2.setPosition({0.0f, 1000.0f});
         windowManager.getWindow().draw(shape);
         windowManager.getWindow().draw(shape2);
-    }
+    }*/
 }
 
 void Renderer::resizeWindow(sf::Vector2u newSize)
