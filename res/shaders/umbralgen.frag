@@ -1,13 +1,12 @@
 vec3 colorA = vec3(0.0,0.0,0.0);
 vec3 colorB = vec3(1.0,1.0,1.0);
 
-in float trapDimension;
 in vec4 TexCoord;
 
 uniform float lightWidth;
 
 void main() {
-    vec2 st = TexCoord/trapDimension;
+    vec2 st = TexCoord/TexCoord.w;
     vec3 color = vec3(0.0);
 
     vec2 pos = vec2(1.0,0.0);
@@ -23,6 +22,7 @@ void main() {
     color = mix(colorA, colorB, pct);
 
     gl_FragColor = vec4(colorA, 1.0-pct);
-
-    //gl_FragColor = vec4(st.y, 1.0-st.y, 0.0, 1.0);
+    //y = pow(st.y, 1.0);// + distance(st.x, 0.5);
+    gl_FragColor = vec4(st.y, 1.0-st.y, 0.0, 1.0);
+    //gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 }

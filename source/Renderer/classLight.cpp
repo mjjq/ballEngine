@@ -82,7 +82,6 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
                 {
                     ++noStencilBounds;
                     stencilRays.insert({modulo(i-1, n), Ray(shapePos1, -norm(lightDir1), tFactor)});
-                    //if(i-1 < smallestKey) smallestKey = i-1;
                 }
             }
             if(dot(lightDir3, n3) <= 0.0)
@@ -100,7 +99,6 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
         {
             float tFactor = effectiveRadius - sqrtf(Math::square(lightDir2));
             stencilRays.insert({i, Ray(shapePos2, -norm(lightDir2), tFactor)});
-            //if(i < smallestKey) smallestKey = i;
         }
     }
     if(noStencilBounds == 2)
@@ -121,56 +119,26 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
         for(int j=0; j<sRSize; ++j)
         {
             Ray& temp = stencilRays[modulo(j+smallestKey, n)];
-            //result[2*j+1].position = temp.pos;
+
             sf::Vector2f rayEnd = temp.pos + effectiveRadius*temp.dir;
             result[j].position = temp.pos;
-
-            /*float cosine = dot((result[2*j+1].position - lightPos), perpLine);
-            if(cosine < minCosine) minCosine = cosine;
-            if(cosine > maxCosine) maxCosine = cosine;*/
 
             float cosine = dot((rayEnd - lightPos), perpLine);
             if(cosine < minCosine) minCosine = cosine;
             if(cosine > maxCosine) maxCosine = cosine;
             result[j].texCoords = {cosine, 0.0f};
-            //result[2*j+1].texCoords = {cosine, 0.0f};
         }
         //scale texCoord to fit range [0,1]
         for(int j=0; j<sRSize; ++j)
         {
-            /*result[2*j+1].texCoords.x = (result[2*j+1].texCoords.x - minCosine) /
-                                        (maxCosine - minCosine);*/
             result[j].texCoords.x = (result[j].texCoords.x - minCosine) /
                                         (maxCosine - minCosine);
-
-            //result[2*j].color = sf::Color::Black;
-            //result[2*j+1].color = sf::Color::Black;
         }
-
-        /*Math::printVector(result[0].texCoords); std::cout << "index 0\n";
-        Math::printVector(result[2].texCoords); std::cout << "index 2\n";
-        Math::printVector(result[2*sRSize-2].texCoords); std::cout << "index n-2\n";
-        Math::printVector(result[2*sRSize-4].texCoords); std::cout << "index n-4\n\n";*/
-
-        /*float shapeSize = 0.1f*sqrtf(Math::square(result[2*sRSize - 1].position -
-                                                result[1].position));*/
-        umbralShader.setUniform("lightWidth", 0.2f);
+        float shapeSize = sqrtf(Math::square(result[sRSize - 1].position -
+                                                result[1].position));
+        umbralShader.setUniform("lightWidth", lightProperties.umbralRadius/shapeSize);
         umbralShader.setUniform("lightPos", sf::Glsl::Vec3(lightPos.x, lightPos.y, 0.0f));
         umbralShader.setUniform("rayLength", effectiveRadius);
-        //shadowTexture.draw(result);
-        /*sf::VertexArray result(sf::TriangleStrip, 4);
-        int sRSize = stencilRays.size();
-        Ray& temp1 = stencilRays[modulo(smallestKey,n)];
-        Ray& temp2 = stencilRays[modulo(smallestKey+sRSize-1, n)];
-
-        result[2].position = temp1.pos + 100.0f*temp1.dir;
-        result[2].texCoords = {0.0f, 1.0f};
-        result[0].position = temp1.pos;
-        result[0].texCoords = {0.0f, 0.0f};
-        result[3].position = temp2.pos + 100.0f*temp2.dir;
-        result[3].texCoords = {1.0f, 1.0f};
-        result[1].position = temp2.pos;
-        result[1].texCoords = {1.0f, 0.0f};*/
 
         shadowTexture.draw(result, &umbralShader);
 
