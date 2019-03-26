@@ -45,6 +45,11 @@ LightSource::~LightSource()
 sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
                                         sf::RenderTexture &shadowTexture)
 {
+    using Math::orthogonal;
+    using Math::dot;
+    using Math::norm;
+    using Math::modulo;
+
     std::map<int, Ray > stencilRays;
     int noStencilBounds = 0;
     int smallestKey = 100000000;
@@ -61,72 +66,54 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
 
     for(int i=0; i<(int)n; ++i)
     {
-        using Math::orthogonal;
-        using Math::dot;
-        using Math::norm;
-        using Math::modulo;
-
         sf::Vector2f shapePos0 = shapePoints[modulo((i-2),n)];
         sf::Vector2f shapePos1 = shapePoints[modulo((i-1),n)];
-        sf::Vector2f shapePos2 = shapePoints[modulo((i),n)];
+        sf::Vector2f shapePos2 = shapePoints[i];
         sf::Vector2f shapePos3 = shapePoints[modulo((i+1),n)];
 
         sf::Vector2f n1 = orthogonal(shapePos1 - shapePos0, 1.0);
         sf::Vector2f n2 = orthogonal(shapePos2 - shapePos1, 1.0);
         sf::Vector2f n3 = orthogonal(shapePos3 - shapePos2, 1.0);
 
-        sf::Vector2f lightDir1 = lightPos - shapePos1;
-        sf::Vector2f lightDir2 = lightPos - shapePos2;
-        sf::Vector2f lightDir3 = lightPos - shapePos3;
+        sf::Vector2f lightDir1 = shapePos1 - lightPos;
+        sf::Vector2f lightDir2 = shapePos2 - lightPos;
+        sf::Vector2f lightDir3 = shapePos3 - lightPos;
 
-        if(dot(lightDir2, n2) > 0.00001)
+        if(dot(lightDir2, n2) <= 0.0)
         {
-            if(dot(lightDir1, n1) <= 0.0)
+            if(dot(lightDir1, n1) > 0.00001)
             {
-                float tFactor = effectiveRadius - sqrtf(Math::square(lightDir1));
-                if(tFactor > 0.0f)
-                {
-                    ++noStencilBounds;
-                    stencilRays.insert({modulo(i-1, n), Ray(shapePos1, -norm(lightDir1), tFactor)});
-                }
+
+                ++noStencilBounds;
+                stencilRays.insert({modulo(i-1, n), Ray(shapePos1, norm(lightDir1), 1.0f)});
             }
-            if(dot(lightDir3, n3) <= 0.0)
+            if(dot(lightDir3, n3) > 0.00001)
             {
-                float tFactor = effectiveRadius - sqrtf(Math::square(lightDir2));
-                if(tFactor > 0.0f)
-                {
-                    ++noStencilBounds;
-                    stencilRays.insert({i, Ray(shapePos2, -norm(lightDir2), tFactor)});
-                    if(i < smallestKey) smallestKey = i;
-                }
+                ++noStencilBounds;
+                stencilRays.insert({i, Ray(shapePos2, norm(lightDir2), 1.0f)});
+
+                if(i < smallestKey)
+                    smallestKey = i;
             }
         }
         else
         {
-            float tFactor = effectiveRadius - sqrtf(Math::square(lightDir2));
-            stencilRays.insert({i, Ray(shapePos2, -norm(lightDir2), tFactor)});
+            stencilRays.insert({i, Ray(shapePos2, norm(lightDir2), 1.0f)});
         }
     }
+
     if(noStencilBounds == 2)
     {
-        using Math::modulo;
-        using Math::norm;
-        using Math::orthogonal;
-        using Math::dot;
-        using Math::cross;
-        using Math::square;
-
         sf::Vector2f paraLine = norm(shape.getPosition()-lightPos);
         sf::Vector2f perpLine = orthogonal(paraLine, -1.0);
         float minCosine = 1e+15;
         float maxCosine = -minCosine;
-
-
         sf::VertexArray result(sf::LineStrip, stencilRays.size());
 
         int sRSize = stencilRays.size();
         Ray& firstRay = stencilRays[modulo(smallestKey, n)];
         Ray& lastRay = stencilRays[modulo(smallestKey+sRSize-1, n)];
+
         for(int j=0; j<sRSize; ++j)
         {
             Ray& temp = stencilRays[modulo(j+smallestKey, n)];
@@ -134,7 +121,8 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
             sf::Vector2f rayEnd = temp.pos + effectiveRadius*temp.dir;
             result[j].position = temp.pos;
 
-            float cosine = dot(norm(temp.pos - lightPos), lastRay.dir - firstRay.dir);
+            float cosine = dot(norm(temp.pos - lightPos),
+                               lastRay.dir - firstRay.dir);
             if(cosine < minCosine) minCosine = cosine;
             if(cosine > maxCosine) maxCosine = cosine;
             result[j].texCoords = {cosine, 0.0f};
@@ -151,7 +139,7 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
                                                 result[1].position));
         umbralShader.setUniform("lightWidth", lightProperties.umbralRadius);
         umbralShader.setUniform("lightPos", sf::Glsl::Vec3(lightPos.x, lightPos.y, 0.0f));
-        umbralShader.setUniform("rayLength", effectiveRadius/sqrtf(square(shape.getPosition()-lightPos)));
+        umbralShader.setUniform("rayLength", effectiveRadius/sqrtf(Math::square(shape.getPosition()-lightPos)));
 
         shadowTexture.draw(result, &umbralShader);
 
