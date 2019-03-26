@@ -14,23 +14,15 @@ void constructFan(int index,
                   vec3 _lightPos,
                   float _rayLength)
 {
+    vec3 rayDir1 = worldPos[index] - lightPos;
+    vec3 rayDir2 = worldPos[index+1] - lightPos;
 
-    vec3 rayNorm1 = normalize(worldPos[index] - _lightPos);
-    vec3 rayNorm2 = normalize(worldPos[index+1] - _lightPos);
-
-    vec3 trapVectorNarrow = worldPos[index+1] - worldPos[index];
-    float trapNarrow = length(trapVectorNarrow);
-
-    vec3 normalToEdge = cross(trapVectorNarrow/trapNarrow, vec3(0.0, 0.0, -1.0));
-
-    float l1 = dot(rayNorm1, normalToEdge);
-    float l2 = dot(rayNorm2, normalToEdge);
-
-    vec3 newPos1 = worldPos[index] + rayNorm1*_rayLength;
-    vec3 newPos2 = worldPos[index+1] + rayNorm2*_rayLength*l1/l2;
+    vec3 newPos1 = worldPos[index] + _rayLength*rayDir1;
+    vec3 newPos2 = worldPos[index+1] + _rayLength*rayDir2;
 
     float trapWide = length(newPos2 - newPos1);
-
+    vec3 trapVectorNarrow = worldPos[index+1] - worldPos[index];
+    float trapNarrow = length(trapVectorNarrow);
 
     gl_Position = gl_in[index].gl_Position;
     TexCoord = trapNarrow * vec4(TexCoords[0].x, 0.0, 0.0, 1.0);

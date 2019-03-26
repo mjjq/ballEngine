@@ -19,7 +19,7 @@ void main() {
 
     vec3 pct = vec3(x3);
 
-    color = mix(colorA, colorB, pct);
+    //color = mix(colorA, colorB, pct);
 
     gl_FragColor = vec4(colorA, 1.0-pct);
     //y = pow(st.y, 1.0);// + distance(st.x, 0.5);

@@ -380,7 +380,7 @@ void SandboxScene::load()
                                              {"light.frag"},
                                              };
                     LightProperties lProperties = {{props._position.x, props._position.y, 10.0f}};
-                    lProperties.umbralRadius = spawnRadius;
+                    lProperties.umbralRadius = spawnRadius/20.0f;
                     projMan->addObject(new GameObject(new Renderable(props),
                                                       new Ball(props),
                                                       new LightSource(lProperties)));
