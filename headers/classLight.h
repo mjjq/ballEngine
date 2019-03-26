@@ -31,8 +31,6 @@ public:
 
 class LightSource : public Entity
 {
-    static std::string shadowShaderCode;
-    static sf::Shader* shadowShader;
     sf::Shader umbralShader;
 public:
     sf::RenderTexture umbralTexture;
@@ -45,8 +43,8 @@ public:
     LightSource(LightProperties properties);
     ~LightSource();
 
-    sf::VertexArray shadowStencil(sf::Shape &shape,
-                                  sf::RenderTexture &shadowTexture);
+    void shadowStencil(sf::Shape &shape,
+                      sf::RenderTexture &shadowTexture);
     void calcEffectiveRadius(float attFactor);
 };
 

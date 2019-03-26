@@ -14,26 +14,6 @@ LightSource::LightSource(LightProperties properties) :
                                  "./res/shaders/umbralgen.frag"))
         umbralShader.setUniform("lightWidth", 0.5f);
 
-    umbralTexture.create(500, 500);
-    sf::VertexArray uTVerts(sf::TriangleStrip, 4);
-    uTVerts[0].position = {0.0f, 0.0f};
-    uTVerts[0].texCoords = {0.0f, 0.0f};
-    uTVerts[1].position = {0.0f, 500.0f};
-    uTVerts[1].texCoords = {0.0f, 1.0f};
-    uTVerts[2].position = {500.0f, 0.0f};
-    uTVerts[2].texCoords = {1.0f, 0.0f};
-    uTVerts[3].position = {500.0f, 500.0f};
-    uTVerts[3].texCoords = {1.0f, 1.0f};
-    uTVerts[3].color = sf::Color::White;
-    umbralTexture.draw(uTVerts, &umbralShader);
-    umbralTexture.display();
-
-    if(shadowShader == nullptr)
-    {
-        shadowShader = new sf::Shader();
-        if(shadowShader->loadFromMemory(shadowShaderCode, sf::Shader::Fragment))
-            shadowShader->setUniform("umbralTexture", umbralTexture.getTexture());
-    }
     renderSubject.notify(*this, Event(EventType::New_LightSrc));
 }
 
@@ -42,8 +22,8 @@ LightSource::~LightSource()
     renderSubject.notify(*this, Event(EventType::Delete_LightSrc));
 }
 
-sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
-                                        sf::RenderTexture &shadowTexture)
+void LightSource::shadowStencil(sf::Shape &shape,
+                                sf::RenderTexture &shadowTexture)
 {
     using Math::orthogonal;
     using Math::dot;
@@ -139,12 +119,7 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
         umbralShader.setUniform("rayLength", effectiveRadius/sqrtf(Math::square(shape.getPosition()-lightPos)));
 
         shadowTexture.draw(result, &umbralShader);
-
-        return result;
     }
-
-    sf::VertexArray result(sf::Points, 1);
-    return result;
 }
 
 void LightSource::calcEffectiveRadius(float attFactor)
@@ -158,15 +133,3 @@ void LightSource::calcEffectiveRadius(float attFactor)
 }
 
 Subject LightSource::renderSubject;
-
-sf::Shader* LightSource::shadowShader = nullptr;
-
-std::string LightSource::shadowShaderCode = \
-    "uniform sampler2D umbralTexture;" \
-    "void main()" \
-    "{" \
-    " vec4 umbralColor = texture2D(umbralTexture, gl_TexCoord[0].xy);" \
-    " " \
-    " " \
-    " gl_FragColor = umbralColor;" \
-    "}";
