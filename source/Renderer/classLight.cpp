@@ -104,8 +104,6 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
 
     if(noStencilBounds == 2)
     {
-        sf::Vector2f paraLine = norm(shape.getPosition()-lightPos);
-        sf::Vector2f perpLine = orthogonal(paraLine, -1.0);
         float minCosine = 1e+15;
         float maxCosine = -minCosine;
         sf::VertexArray result(sf::LineStrip, stencilRays.size());
@@ -118,7 +116,6 @@ sf::VertexArray LightSource::shadowStencil(sf::Shape &shape,
         {
             Ray& temp = stencilRays[modulo(j+smallestKey, n)];
 
-            sf::Vector2f rayEnd = temp.pos + effectiveRadius*temp.dir;
             result[j].position = temp.pos;
 
             float cosine = dot(norm(temp.pos - lightPos),
