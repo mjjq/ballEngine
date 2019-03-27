@@ -70,8 +70,8 @@
 		</Linker>
 		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/GJK.h" />
+		<Unit filename="headers/Math.h" />
 		<Unit filename="headers/Observer.h" />
-		<Unit filename="headers/SpawnInterface.h" />
 		<Unit filename="headers/baseObject.h" />
 		<Unit filename="headers/characterWorldInterface.h" />
 		<Unit filename="headers/class2DMatrix.h" />
@@ -118,7 +118,6 @@
 		<Unit filename="headers/lightingEngine.h" />
 		<Unit filename="headers/resourceManager.h" />
 		<Unit filename="headers/sceneEnums.h" />
-		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
 		<Unit filename="headers/windowManager.h" />
