@@ -9,36 +9,10 @@ Renderer::Renderer()
     Renderable::renderSubject.addObserver(this);
     LightSource::renderSubject.addObserver(this);
 
-    loadShader(lightingEngine.getShaderName());
-    lightingEngine.setShader(&loadedShaders[lightingEngine.getShaderName()]);
+    std::string lightingName = lightingEngine.getShaderName();
+    resourceManager.loadShader(lightingName);
+    lightingEngine.setShader(resourceManager.getShader(lightingName));
     lightingEngine.resizeTextures(windowManager.getWindowSize());
-}
-
-bool Renderer::loadTexture(std::string textureName)
-{
-    if(loadedTextures.find(textureName) == loadedTextures.end() &&
-       textureName != Renderable::NULL_ID)
-    {
-        sf::Texture texture;
-        if(texture.loadFromFile(TEXTURE_PATH + textureName))
-        {
-            loadedTextures.insert({textureName, texture});
-            return true;
-        }
-    }
-
-    std::cout << "failed to load texture: " << textureName << "\n";
-    return false;
-}
-
-bool Renderer::textureIsLoaded(std::string textureName)
-{
-    if(loadedTextures.find(textureName) != loadedTextures.end() &&
-       textureName != Renderable::NULL_ID)
-        return true;
-
-    std::cout << "texture isn't loaded\n";
-    return false;
 }
 
 void Renderer::redrawAll(sf::RenderWindow &window)
@@ -56,9 +30,9 @@ void Renderer::redrawAll(sf::RenderWindow &window)
             float rotation = Math::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
             shader->setUniform("rotCosine", (float)cos(rotation));
             shader->setUniform("rotSine", (float)sin(rotation));
-            shader->setUniform("material.diffuseMap", loadedTextures[renderObjects[i]->material.diffuseID]);
-            shader->setUniform("material.normalMap", loadedTextures[renderObjects[i]->material.normalID]);
-            shader->setUniform("material.emissionMap", loadedTextures[renderObjects[i]->material.emissionID]);
+            shader->setUniform("material.diffuseMap", *resourceManager.getTexture(renderObjects[i]->material.diffuseID));
+            shader->setUniform("material.normalMap", *resourceManager.getTexture(renderObjects[i]->material.normalID));
+            shader->setUniform("material.emissionMap", *resourceManager.getTexture(renderObjects[i]->material.emissionID));
             shader->setUniform("material.diffuseStrength", renderObjects[i]->material.diffuseStrength);
             shader->setUniform("material.ambientStrength", renderObjects[i]->material.ambientStrength);
             shader->setUniform("material.specularStrength", renderObjects[i]->material.specularStrength);
@@ -77,25 +51,10 @@ void Renderer::onNotify(Entity& entity, Event event)
     {
         case(EventType::New_Renderable):
         {
-            Renderable* ren = (Renderable*)&entity;
-            if(ren->primShape != nullptr)
-            {
-                if(loadTexture(ren->material.diffuseID) || textureIsLoaded(ren->material.diffuseID))
-                {
-                    std::cout << "assigned texture\n";
-                    ren->primShape->setTexture(&loadedTextures[ren->material.diffuseID]);
-                    ren->primShape->setFillColor(sf::Color::White);
-                    ren->primShape->setOutlineThickness(0);
-                }
-            }
-            if(loadShader(ren->material.shaderID) || shaderIsLoaded(ren->material.shaderID))
-            {
-                ren->shader = &loadedShaders[ren->material.shaderID];
-            }
-            loadTexture(ren->material.normalID);
-            loadTexture(ren->material.emissionID);
+            Renderable& ren = (Renderable&)entity;
+            resourceManager.assignResources(ren);
 
-            renderObjects.push_back(ren);
+            renderObjects.push_back(&ren);
             break;
         }
         case(EventType::Delete_Renderable):
@@ -121,69 +80,6 @@ void Renderer::onNotify(Entity& entity, Event event)
         default:
             break;
     }
-}
-
-bool Renderer::loadShader(std::string shaderName)
-{
-    std::string filePath = SHADER_PATH + shaderName;
-
-    if(sf::Shader::isAvailable() &&
-       !shaderIsLoaded(shaderName) &&
-       shaderName != Renderable::NULL_ID)
-    {
-        bool isFrag = false;
-        bool isGeom = false;
-        bool isVert = false;
-
-        if(shaderName.find(FRAGMENT_EXTENSION) != std::string::npos)
-            isFrag = true;
-        else if(shaderName.find(GEOMETRY_EXTENSION) != std::string::npos)
-            isGeom = true;
-        else if(shaderName.find(VERT_EXTENSION) != std::string::npos)
-            isVert = true;
-
-        if(isFrag)
-        {
-            if(loadedShaders[shaderName].loadFromFile(filePath, sf::Shader::Fragment))
-                return true;
-        }
-        else if(isGeom)
-        {
-            if(loadedShaders[shaderName].loadFromFile(filePath, sf::Shader::Geometry))
-                return true;
-        }
-        else if(isVert)
-        {
-            if(loadedShaders[shaderName].loadFromFile(filePath, sf::Shader::Vertex))
-                return true;
-        }
-        else
-        {
-            std::string vertName = filePath + VERT_EXTENSION;
-            std::string fragName = filePath + FRAGMENT_EXTENSION;
-            std::string geomName = filePath + GEOMETRY_EXTENSION;
-
-            if(sf::Shader::isGeometryAvailable())
-            {
-                if(loadedShaders[shaderName].loadFromFile(vertName, geomName, fragName))
-                    return true;
-            }
-            else
-                std::cout << "geometry shaders unavailable\n";
-            if(loadedShaders[shaderName].loadFromFile(vertName, fragName))
-                return true;
-        }
-    }
-    std::cout << "failed to load shaders: " << shaderName << "\n";
-    return false;
-}
-
-bool Renderer::shaderIsLoaded(std::string shaderName)
-{
-    if(loadedShaders.find(shaderName) != loadedShaders.end())
-        return true;
-
-    return false;
 }
 
 void Renderer::resizeWindow(sf::Vector2u newSize)
