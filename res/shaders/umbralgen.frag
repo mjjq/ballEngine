@@ -3,18 +3,21 @@ vec3 colorB = vec3(1.0,1.0,1.0);
 
 in vec4 TexCoord;
 
-uniform float lightWidth;
+uniform float lightWidthL;
+uniform float lightWidthR;
 
 void main() {
     vec2 st = TexCoord/TexCoord.w;
     vec3 color = vec3(0.0);
 
     vec2 pos = vec2(1.0,0.0);
-    float width = lightWidth;
+    float widthL = lightWidthL;
+    float widthR = lightWidthR;
 
-    float y = width*pow(st.y, 1.0);
-    float x = smoothstep(pos.x-y, pos.x, st.x);
-    float x2 = smoothstep(pos.y+y, pos.y, st.x);
+    float yL = widthL*pow(st.y, 1.0);
+    float yR = widthR*pow(st.y, 1.0);
+    float x = smoothstep(pos.y+yL, pos.y, st.x);
+    float x2 = smoothstep(pos.x-yR, pos.x, st.x);
     float x3 = x+x2;
 
     vec3 pct = vec3(x3);

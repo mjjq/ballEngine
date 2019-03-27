@@ -91,7 +91,6 @@ void LightingEngine::shadowStencil(LightSource &lightSource,
         {
             if(dot(lightDir1, n1) > 0.00001)
             {
-
                 ++noStencilBounds;
                 stencilRays.insert({modulo(i-1, n), Ray(shapePos1, norm(lightDir1), 1.0f)});
             }
@@ -126,10 +125,11 @@ void LightingEngine::shadowStencil(LightSource &lightSource,
 
             result[j].position = temp.pos;
 
-            float cosine = dot(norm(temp.pos - lightPos),
+            float cosine = dot(Math::norm(temp.pos - lightPos),
                                lastRay.dir - firstRay.dir);
             if(cosine < minCosine) minCosine = cosine;
             if(cosine > maxCosine) maxCosine = cosine;
+
             result[j].texCoords = {cosine, 0.0f};
         }
 
@@ -140,9 +140,13 @@ void LightingEngine::shadowStencil(LightSource &lightSource,
                                         (maxCosine - minCosine);
         }
 
-        float shapeSize = sqrtf(Math::square(result[sRSize - 1].position -
-                                                result[1].position));
-        umbralShader->setUniform("lightWidth", lightSource.lightProperties.umbralRadius);
+        float distanceLeftSq = Math::square(firstRay.pos - lightPos);
+        float distanceRightSq = Math::square(lastRay.pos - lightPos);
+        float angularDiameter = lightSource.lightProperties.umbralRadius/
+                                acosf(Math::dot(firstRay.dir, lastRay.dir));
+
+        umbralShader->setUniform("lightWidthL", angularDiameter/sqrtf(distanceLeftSq));
+        umbralShader->setUniform("lightWidthR", angularDiameter/sqrtf(distanceRightSq));
         umbralShader->setUniform("lightPos", sf::Glsl::Vec3(lightPos.x, lightPos.y, 0.0f));
         umbralShader->setUniform("rayLength", lightSource.effectiveRadius/sqrtf(Math::square(shape.getPosition()-lightPos)));
 
