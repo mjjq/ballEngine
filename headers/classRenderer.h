@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "SFML/Graphics.hpp"
+#include "lightingEngine.h"
 #include "classRenderable.h"
 #include "classLight.h"
 #include "Observer.h"
@@ -17,21 +18,15 @@ class Renderer : public Observer
     const std::string GEOMETRY_EXTENSION = ".geom";
 
     std::vector<Renderable* > renderObjects;
-    std::vector<LightSource* > lights;
-    std::vector<sf::RenderTexture* > shadowTextures;
     std::map<std::string, sf::Texture> loadedTextures;
     std::map<std::string, sf::Shader > loadedShaders;
 
-    sf::Texture blankShadowTexture;
+    LightingEngine lightingEngine;
 
     bool loadTexture(std::string textureName);
     bool loadShader(std::string shaderName);
     bool textureIsLoaded(std::string textureName);
     bool shaderIsLoaded(std::string shaderName);
-
-    void clearShadowTextures();
-    void displayShadowTextures();
-    void generateShadowTextures(std::vector<Renderable* > const & _renderObjects);
 public:
     WindowManager windowManager;
 

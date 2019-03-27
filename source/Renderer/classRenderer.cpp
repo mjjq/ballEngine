@@ -8,6 +8,10 @@ Renderer::Renderer()
 {
     Renderable::renderSubject.addObserver(this);
     LightSource::renderSubject.addObserver(this);
+
+    loadShader(lightingEngine.getShaderName());
+    lightingEngine.setShader(&loadedShaders[lightingEngine.getShaderName()]);
+    lightingEngine.resizeTextures(windowManager.getWindowSize());
 }
 
 bool Renderer::loadTexture(std::string textureName)
@@ -39,45 +43,19 @@ bool Renderer::textureIsLoaded(std::string textureName)
 
 void Renderer::redrawAll(sf::RenderWindow &window)
 {
-    clearShadowTextures();
-    generateShadowTextures(renderObjects);
-    displayShadowTextures();
+    lightingEngine.clearShadowTextures(windowManager.getWindow().getView());
+    lightingEngine.generateShadowTextures(renderObjects);
+    lightingEngine.displayShadowTextures();
     for(int i=0; i<(int)renderObjects.size(); ++i)
     {
         if(renderObjects[i]->shader != nullptr)
         {
             sf::Shader* shader = renderObjects[i]->shader;
-            for(int j=0; j<10; ++j)
-            {
-                std::string lightVal = "lights[" + std::to_string(j) + "]";
-                std::string shadowVal = "shadowTextures[" + std::to_string(j) + "]";
-                if(j < (int)lights.size())
-                {
-                    shader->setUniform("light.color", lights[j]->lightProperties.color);
-                    shader->setUniform(lightVal + ".color", lights[j]->lightProperties.color);
-                    shader->setUniform(lightVal + ".position", lights[j]->position);
-                    shader->setUniform(lightVal + ".constant", lights[j]->lightProperties.constant);
-                    shader->setUniform(lightVal + ".linear", lights[j]->lightProperties.linear);
-                    shader->setUniform(lightVal + ".quadratic", lights[j]->lightProperties.quadratic);
-                    //shader->setUniform(shadowVal, &shadowTextures[j]->getTexture());
-                }
-                else
-                {
-                    shader->setUniform(lightVal + ".color", sf::Vector3f(0.0,0.0,0.0));
-                    shader->setUniform(lightVal + ".position", sf::Vector3f(0.0,0.0,0.0));
-                    shader->setUniform(lightVal + ".constant", 1.0f);
-                    shader->setUniform(lightVal + ".linear", 0.0f);
-                    shader->setUniform(lightVal + ".quadratic", 0.0f);
-                    //shader->setUniform(shadowVal, &blankShadowTexture);
-                }
-            }
-            if(shadowTextures.size() > 0)
-                shader->setUniform("shadowTexture", shadowTextures[0]->getTexture());
+            lightingEngine.setObjectShaderLightProps(*shader);
 
             float rotation = Math::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
             shader->setUniform("rotCosine", (float)cos(rotation));
             shader->setUniform("rotSine", (float)sin(rotation));
-
             shader->setUniform("material.diffuseMap", loadedTextures[renderObjects[i]->material.diffuseID]);
             shader->setUniform("material.normalMap", loadedTextures[renderObjects[i]->material.normalID]);
             shader->setUniform("material.emissionMap", loadedTextures[renderObjects[i]->material.emissionID]);
@@ -131,26 +109,13 @@ void Renderer::onNotify(Entity& entity, Event event)
         case(EventType::New_LightSrc):
         {
             LightSource* lSrc = (LightSource*)&entity;
-            lights.push_back(lSrc);
-
-            sf::Vector2u winSize = windowManager.getWindowSize();
-            sf::RenderTexture* texture = new sf::RenderTexture;
-            texture->create(winSize.x, winSize.y);
-            shadowTextures.push_back(std::move(texture));
+            lightingEngine.addLightSource(lSrc);
             break;
         }
         case(EventType::Delete_LightSrc):
         {
-            LightSource* obj = (LightSource*)&entity;
-            for(int i=0; i<(int)lights.size(); ++i)
-                if(lights[i] == obj)
-                {
-                    lights.erase(lights.begin() + i);
-
-                    sf::RenderTexture* tToDelete = shadowTextures[i];
-                    shadowTextures.erase(shadowTextures.begin() + i);
-                    delete tToDelete;
-                }
+            LightSource* lSrc = (LightSource*)&entity;
+            lightingEngine.removeLightSource(lSrc);
             break;
         }
         default:
@@ -221,55 +186,7 @@ bool Renderer::shaderIsLoaded(std::string shaderName)
     return false;
 }
 
-
-void Renderer::clearShadowTextures()
-{
-    sf::Vector2u winSize = windowManager.getWindowSize();
-    blankShadowTexture.create(winSize.x, winSize.y);
-    for(int i=0; i<(int)shadowTextures.size(); ++i)
-    {
-        shadowTextures[i]->setView(windowManager.getWindow().getView());
-        shadowTextures[i]->clear(sf::Color::White);
-    }
-}
-
-void Renderer::displayShadowTextures()
-{
-    for(int i=0; i<(int)shadowTextures.size(); ++i)
-        shadowTextures[i]->display();
-}
-
-void Renderer::generateShadowTextures(std::vector<Renderable* > const & _renderObjects)
-{
-    for(int i=0; i<(int)lights.size(); ++i)
-    {
-        for(int j=0; j<(int)_renderObjects.size(); ++j)
-        {
-
-            lights[i]->shadowStencil(*renderObjects[j]->primShape, *shadowTextures[i]);
-
-            std::string shadowTextureString = "shadowTextures[" + std::to_string(i) + "]";
-            if(_renderObjects[j]->shader != nullptr)
-                _renderObjects[j]->shader->setUniform(shadowTextureString,
-                                                      shadowTextures[i]->getTexture());
-        }
-    }
-
-    /*if(shadowTextures.size()>0)
-    {
-        sf::Sprite shape(shadowTextures[0]->getTexture());
-        sf::Sprite shape2(lights[0]->umbralTexture.getTexture());
-        shape2.setPosition({0.0f, 1000.0f});
-        windowManager.getWindow().draw(shape);
-        windowManager.getWindow().draw(shape2);
-    }*/
-}
-
 void Renderer::resizeWindow(sf::Vector2u newSize)
 {
-    for(int i=0; i<(int)shadowTextures.size(); ++i)
-    {
-        shadowTextures[i]->create(newSize.x, newSize.y);
-    }
-    clearShadowTextures();
+    lightingEngine.resizeTextures(newSize);
 }

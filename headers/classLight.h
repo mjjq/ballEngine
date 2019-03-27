@@ -43,8 +43,6 @@ public:
     LightSource(LightProperties properties);
     ~LightSource();
 
-    void shadowStencil(sf::Shape &shape,
-                      sf::RenderTexture &shadowTexture);
     void calcEffectiveRadius(float attFactor);
 };
 

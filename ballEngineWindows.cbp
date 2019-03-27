@@ -29,9 +29,11 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-std=c++14" />
+					<Add option="-pg" />
 					<Add option="-DSFML_STATIC" />
 				</Compiler>
 				<Linker>
+					<Add option="-pg -lgmon" />
 					<Add option="-static-libstdc++" />
 					<Add option="-static-libgcc" />
 					<Add option="-static" />
@@ -114,6 +116,7 @@
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/jsonParsing.h" />
+		<Unit filename="headers/lightingEngine.h" />
 		<Unit filename="headers/sceneEnums.h" />
 		<Unit filename="headers/sfVectorMath.h" />
 		<Unit filename="headers/stringConversion.h" />
@@ -140,6 +143,7 @@
 		<Unit filename="source/Renderer/classOGLWrap.cpp" />
 		<Unit filename="source/Renderer/classRenderable.cpp" />
 		<Unit filename="source/Renderer/classRenderer.cpp" />
+		<Unit filename="source/Renderer/lightingEngine.cpp" />
 		<Unit filename="source/Renderer/windowManager.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/GJK.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/classArbiter.cpp" />
