@@ -3,7 +3,10 @@
 
 namespace Math
 {
-    const float PI = 3.14159265359;
+    const float PI = 3.14159265359f;
+
+    float fastInvSqrt(float number);
+
     int dot(sf::Vector2i const & vec1,
             sf::Vector2i const & vec2);
 
@@ -20,6 +23,8 @@ namespace Math
     sf::Vector2f norm(sf::Vector2i const & vec1);
 
     sf::Vector2f norm(sf::Vector2f const & vec1);
+
+    sf::Vector2f fastNorm(sf::Vector2f const & vec1);
 
     sf::Vector3f norm(sf::Vector3f const & vec);
 

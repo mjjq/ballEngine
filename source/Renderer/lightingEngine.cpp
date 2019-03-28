@@ -54,7 +54,7 @@ void LightingEngine::shadowStencil(LightSource &lightSource,
 {
     using Math::orthogonal;
     using Math::dot;
-    using Math::norm;
+    using Math::fastNorm;
     using Math::modulo;
 
     std::map<int, Ray > stencilRays;
@@ -92,12 +92,12 @@ void LightingEngine::shadowStencil(LightSource &lightSource,
             if(dot(lightDir1, n1) > 0.00001)
             {
                 ++noStencilBounds;
-                stencilRays.insert({modulo(i-1, n), Ray(shapePos1, norm(lightDir1), 1.0f)});
+                stencilRays.insert({modulo(i-1, n), Ray(shapePos1, fastNorm(lightDir1), 1.0f)});
             }
             if(dot(lightDir3, n3) > 0.00001)
             {
                 ++noStencilBounds;
-                stencilRays.insert({i, Ray(shapePos2, norm(lightDir2), 1.0f)});
+                stencilRays.insert({i, Ray(shapePos2, fastNorm(lightDir2), 1.0f)});
 
                 if(i < smallestKey)
                     smallestKey = i;
@@ -105,7 +105,7 @@ void LightingEngine::shadowStencil(LightSource &lightSource,
         }
         else
         {
-            stencilRays.insert({i, Ray(shapePos2, norm(lightDir2), 1.0f)});
+            stencilRays.insert({i, Ray(shapePos2, fastNorm(lightDir2), 1.0f)});
         }
     }
 
@@ -125,7 +125,7 @@ void LightingEngine::shadowStencil(LightSource &lightSource,
 
             result[j].position = temp.pos;
 
-            float cosine = dot(Math::norm(temp.pos - lightPos),
+            float cosine = dot(Math::fastNorm(temp.pos - lightPos),
                                lastRay.dir - firstRay.dir);
             if(cosine < minCosine) minCosine = cosine;
             if(cosine > maxCosine) maxCosine = cosine;
