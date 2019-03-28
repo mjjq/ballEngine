@@ -31,9 +31,7 @@ public:
 
 class LightSource : public Entity
 {
-    sf::Shader umbralShader;
 public:
-    sf::RenderTexture umbralTexture;
     static Subject renderSubject;
     LightProperties lightProperties;
 

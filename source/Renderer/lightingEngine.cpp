@@ -148,10 +148,30 @@ void LightingEngine::shadowStencil(LightSource &lightSource,
         umbralShader->setUniform("lightWidthL", angularDiameter/sqrtf(distanceLeftSq));
         umbralShader->setUniform("lightWidthR", angularDiameter/sqrtf(distanceRightSq));
         umbralShader->setUniform("lightPos", sf::Glsl::Vec3(lightPos.x, lightPos.y, 0.0f));
-        umbralShader->setUniform("rayLength", lightSource.effectiveRadius/sqrtf(Math::square(shape.getPosition()-lightPos)));
+        umbralShader->setUniform("rayLength", lightSource.effectiveRadius/
+                                 sqrtf(Math::square(shape.getPosition()-lightPos)));
 
         shadowTexture.draw(result, umbralShader);
     }
+}
+
+bool LightingEngine::isShapeWithinRange(sf::Shape &shape, LightSource& lightSource)
+{
+    sf::Rect<float> shapeBounds = shape.getGlobalBounds();
+    sf::Vector2f lightPos = {lightSource.position.x, lightSource.position.y};
+    float lightRadiusSq = lightSource.effectiveRadius*
+                          lightSource.effectiveRadius;
+
+    if(Math::square(sf::Vector2f{shapeBounds.left, shapeBounds.top} - lightPos) < lightRadiusSq)
+       return true;
+    if(Math::square(sf::Vector2f{shapeBounds.left+shapeBounds.width, shapeBounds.top}-lightPos) < lightRadiusSq)
+       return true;
+    if(Math::square(sf::Vector2f{shapeBounds.left, shapeBounds.top+shapeBounds.height}-lightPos) < lightRadiusSq)
+       return true;
+    if(Math::square(sf::Vector2f{shapeBounds.left+shapeBounds.width, shapeBounds.top+shapeBounds.height}-lightPos) < lightRadiusSq)
+       return true;
+
+    return false;
 }
 
 void LightingEngine::addLightSource(LightSource* light)

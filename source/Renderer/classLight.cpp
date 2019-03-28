@@ -9,11 +9,6 @@ LightSource::LightSource(LightProperties properties) :
 {
     calcEffectiveRadius(5.0f/256.0f);
 
-    if(umbralShader.loadFromFile("./res/shaders/umbralgen.vert",
-                                 "./res/shaders/umbralgen.geom",
-                                 "./res/shaders/umbralgen.frag"))
-        umbralShader.setUniform("lightWidth", 0.5f);
-
     renderSubject.notify(*this, Event(EventType::New_LightSrc));
 }
 

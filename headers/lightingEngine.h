@@ -18,6 +18,7 @@ class LightingEngine
     void shadowStencil(LightSource &lightSource,
                        sf::Shape &shape,
                        sf::RenderTexture &shadowTexture);
+    bool isShapeWithinRange(sf::Shape &shape, LightSource& lightSource);
 public:
     LightingEngine();
 
