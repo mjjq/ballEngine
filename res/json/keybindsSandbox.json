@@ -1,0 +1,41 @@
+{
+	"SpawnMode" : {
+		"pauseGme" 	 	: ["Escape"],
+		"decSimStep" 	: ["Comma"],
+		"incSimStep" 	: ["Period"],
+		"clearSim"	 	: ["Delete"],
+		"zmToMse"	 	: ["Dash"],
+		"zmFromMse"	 	: ["Equal"],
+		"rstView"	 	: ["Num0"],
+		"tglSimPse"	 	: ["P"],
+		"viewPan"	 	: ["V"],
+		"incMass" 	 	: ["M"],
+		"decMass"	 	: ["LControl", "M"],
+		"incRad"	 	: ["R"],
+		"decRad"	 	: ["LControl", "R"],
+		"tglCols"	 	: ["LControl", "C"],
+		"tglForces"	 	: ["LControl", "F"],
+		"tglGrav"	 	: ["LControl", "G"],
+		"chgBColour" 	: ["LControl", "K"],
+		"undoBall"   	: ["LControl", "Z"],
+		"undoRect"   	: ["LAlt", "Z"],
+		"spwnSingle"	: ["LMB"],
+		"spwnSCirc"		: ["RMB"],
+		"spwnDAABB"		: ["LControl", "LMB"],
+		"spwnDPoly"		: ["LShift", "LMB"],
+		"spwnSPoly"		: ["LShift", "RMB"],
+		"spwnSys"		: ["LControl", "RMB"],
+		"spwnChar"		: ["X", "LMB"],
+		"spwnLight"		: ["L", "LMB"],
+		"mouseExp"		: ["E"],
+		"mouseSin"		: ["Q"],
+		"editMode"		: ["Tab"]
+	},
+	"EditObjectMode" : {
+		"pauseGme" 	 	 : ["Escape"],
+		"selObject"      : ["LMB"],
+		"mvObject"       : ["MMB"],
+		"delObject"      : ["Delete"],
+		"spwnMode"		 : ["Tab"]
+	}
+}

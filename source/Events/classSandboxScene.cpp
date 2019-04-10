@@ -27,6 +27,8 @@ void SandboxScene::load()
         adjustViewSize(window.getSize());
 
         buttonFuncMap = {
+            {"spwnMode",    [&]{switchControlMode("SpawnMode");}},
+            {"editMode",    [&]{switchControlMode("EditObjectMode");}},
             {"incMass",     [&]{spawnMass+=1;}},
             {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
             {"incRad",      [&]{spawnRadius+=1;}},
@@ -456,8 +458,8 @@ void SandboxScene::load()
             {"currFPS",     [&]{return std::to_string(currentFPS);}}
         };
 
-        loadUI("./json/sandboxsceneUI.json", container);
-        loadKeybinds("./json/keybinds.json", "SandboxScene");
+        loadUI("sandboxsceneUI.json", container);
+        loadKeybinds("keybindsSandbox.json", "SpawnMode");
 
         Collisions::setDebugWindow(window);
 

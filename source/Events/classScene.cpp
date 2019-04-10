@@ -34,13 +34,13 @@ void Scene::initBindings()
 
 }
 
-void Scene::loadUI(std::string filePath, UIContainer &_container)
+void Scene::loadUI(std::string fileName, UIContainer &_container)
 {
     using json = nlohmann::json;
-    std::ifstream initInput(filePath);
+    std::ifstream initInput(JSONFILEPATH + fileName);
     if(json::accept(initInput))
     {
-        std::ifstream input(filePath);
+        std::ifstream input(JSONFILEPATH + fileName);
         json j;
         input >> j;
         for(json &winJ : j["Windows"])
@@ -48,15 +48,25 @@ void Scene::loadUI(std::string filePath, UIContainer &_container)
     }
 }
 
-void Scene::loadKeybinds(std::string filePath, std::string sceneType)
+void Scene::loadKeybinds(std::string fileName,
+                         std::string sceneType)
 {
-    KeyBinds::loadKeybinds(filePath, sceneType, buttonFuncMap, keyBinds , stringKeyBinds);
-    KeyBinds::loadKeybinds(filePath, sceneType, buttonReleaseMap, releasedKeyBinds , relStrKeyBinds);
+    KeyBinds::loadKeybinds(JSONFILEPATH + fileName,
+                           sceneType, buttonFuncMap, keyBinds , stringKeyBinds);
+    KeyBinds::loadKeybinds(JSONFILEPATH + fileName,
+                           sceneType, buttonReleaseMap, releasedKeyBinds , relStrKeyBinds);
+    currentKeybindFilename = fileName;
 
     for(auto &value : stringKeyBinds)
     {
         textVarMap.insert( {value.first, [&]{return value.second;}} );
     }
+    std::cout << JSONFILEPATH + fileName << "\n";
+}
+
+void Scene::switchControlMode(std::string controlModeName)
+{
+    loadKeybinds(currentKeybindFilename, controlModeName);
 }
 
 void Scene::load()
