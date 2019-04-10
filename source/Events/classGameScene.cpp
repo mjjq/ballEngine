@@ -20,7 +20,7 @@
 #include "../../extern/json.hpp"
 
 #include "classGameScene.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 #include "jsonParsing.h"
 
@@ -75,8 +75,8 @@ sf::Vector2f GameScene::velocityFromMouse(sf::Vector2i _mousePosOnClick,
 
     /*float windowDiagSize = pow(windowSizeX*windowSizeX +
                                windowSizeY*windowSizeY, 0.5);*/
-    float worldDiagSize = sqrt(sfVectorMath::dot( ballSim.getWorldSize(),
-                                                  ballSim.getWorldSize() ));
+    float worldDiagSize = sqrt(Math::dot( ballSim->getWorldSize(),
+                                                  ballSim->getWorldSize() ));
 
     sf::Vector2f velocity = static_cast<sf::Vector2f>(scaledVector)/worldDiagSize;
     timeToNextSpawn = minTimeToNextSpawn;
@@ -182,7 +182,7 @@ void GameScene::checkForViewPan(sf::Vector2i initialPos)
 */
 void GameScene::focusOnBall(int ballIndex)
 {
-    sf::Vector2f relPos = ballSim.getObjPosition(ballIndex);
+    sf::Vector2f relPos = ballSim->getObjPosition(ballIndex);
     if(!std::isnan(relPos.x) && !std::isnan(relPos.y))
     {
         worldView.setCenter(relPos);
@@ -203,18 +203,18 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
         for(json &currJ : j["Ball"])
         {
             BallSpawnVals sVals;
-            if(beParser::checkBallJson(currJ, sVals))
-                ballSim.spawnNewBall({sVals.position+position,
+            /*if(beParser::checkBallJson(currJ, sVals))
+                ballSim->spawnNewBall({sVals.position+position,
                                      sVals.velocity+velocity,
                                      {sVals.radius, 0.0f},
                                      sVals.mass,
-                                     0.0f, 0.0f});
+                                     0.0f, 0.0f});*/
         }
         for(json &currJ : j["Ballgrid"])
         {
             BallGridSpawnVals sVals;
             if(beParser::checkBallGridJson(currJ, sVals))
-                ballSim.createBallGrid(sVals.dimensions.x,
+                ballSim->createBallGrid(sVals.dimensions.x,
                                        sVals.dimensions.y,
                                        sVals.spacing,
                                        sVals.position+position,
@@ -226,7 +226,7 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
         {
             AABBSpawnVals sVals;
             if(beParser::checkAABBJson(currJ, sVals))
-                ballSim.spawnStaticRect(sVals.position + position,
+                ballSim->spawnStaticRect(sVals.position + position,
                                      sVals.dimensions.x,
                                      sVals.dimensions.y, 0.0f);
         }
@@ -234,7 +234,7 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
         {
             AABBSpawnVals sVals;
             (if(beParser::checkAABBJson(currJ, sVals))
-                ballSim.spawnNewRect(sVals.position + position,
+                ballSim->spawnNewRect(sVals.position + position,
                                      sVals.dimensions.x,
                                      sVals.dimensions.y,
                                      {velocity},
@@ -278,7 +278,7 @@ void GameScene::adjustViewSize(sf::Vector2u newSize)
 void GameScene::resetCamera()
 {
     currentZoom = 1.0;
-    sf::Vector2i woSize = ballSim.getWorldSize();
+    sf::Vector2i woSize = ballSim->getWorldSize();
     worldView.setCenter(woSize.x/2,woSize.y/2);
     adjustViewSize({window.getSize().x, window.getSize().y});//, currentZoom);
 
@@ -441,14 +441,16 @@ void GameScene::unload()
 {
     isLoaded = false;
     container.destroyAllWindows();
-    ballSim.clearSimulation();
-
+    //ballSim->clearSimulation();
+    delete projMan;
+    delete charMan;
+    delete ballSim;
 }
 
 void GameScene::redraw(sf::RenderWindow &_window)
 {
-    ballSim.drawSampledPositions(_window);
-    ballSim.drawBalls(_window);
+    //ballSim->drawSampledPositions(_window);
+    //ballSim->drawBalls(_window);
     window.draw(boundaryRect);
 
     container.renderWindows(_window, GUIView, worldView);

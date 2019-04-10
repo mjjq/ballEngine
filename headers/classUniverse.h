@@ -21,7 +21,7 @@ enum class SpawnObjectType
     _Count,
 };
 
-class BallUniverse : public Entity
+class BallUniverse : public Observer
 {
 
     int worldSizeX;
@@ -75,31 +75,22 @@ class BallUniverse : public Entity
 
     Subject universeSub;
 public:
-    std::vector<std::unique_ptr<PhysicsObject> > dynamicObjects;
-    std::vector<std::unique_ptr<PhysicsObject> > staticObjects;
+    std::vector<PhysicsObject* > dynamicObjects;
+    std::vector<PhysicsObject* > staticObjects;
     std::map<ArbiterKey, Arbiter> arbiters;
     std::vector<Joint> joints;
 
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
+    ~BallUniverse();
 
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
     void updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2);
     void updateAllObjects(bool enableForces, float dt);
 
     void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
-    void spawnNewBall(ObjectProperties init);
-    /*void spawnNewRect(sf::Vector2f position,
-                      float width,
-                      float height,
-                      sf::Vector2f velocity,
-                      float mass,
-                      float rotation);
-    void spawnStaticRect(sf::Vector2f position, float width, float height, float rotation);*/
-    void spawnStaticBall(ObjectProperties init);
-    void spawnNewPoly(ObjectProperties init);
-    void spawnStaticPoly(ObjectProperties init);
-    void spawnNewObject(bool isStatic, SpawnObjectType type, ObjectProperties init);
-    void spawnNewObject(std::unique_ptr<PhysicsObject> obj);
+
+    void spawnNewObject(ObjectProperties init);
+    //void spawnNewObject(std::unique_ptr<PhysicsObject> obj);
 
     void removeBall(int index);
     void removeRect(int index);
@@ -151,6 +142,8 @@ public:
     void newJoint(int index1, int index2);
 
     void newObserver(Observer* obs);
+
+    void onNotify(Entity& entity, Event event);
 };
 
 #endif // CLASS_UNIVERSE_H

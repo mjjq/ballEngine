@@ -1,6 +1,6 @@
 #include "classProjectileWeapon.h"
 
-#include "sfVectorMath.h"
+#include "Math.h"
 
 ProjectileWeapon::ProjectileWeapon(WeaponType type) : Equipable()
 {
@@ -58,5 +58,5 @@ sf::Vector2f ProjectileWeapon::getLocalPosition()
 void ProjectileWeapon::changeAimAngle(float angle)
 {
     aimAngle = angle;
-    localMuzzlePos = sfVectorMath::rotate({muzzleLength, 0.0f}, angle);
+    localMuzzlePos = Math::rotate({muzzleLength, 0.0f}, angle);
 }

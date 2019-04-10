@@ -32,10 +32,12 @@
 		"spwnSPoly"		: ["LShift", "RMB"],
 		"spwnSys"		: ["LControl", "RMB"],
 		"spwnChar"		: ["X", "LMB"],
+		"spwnLight"		: ["L", "LMB"],
 		"equPrim"		: ["MMB"],
 		"nxtItem"		: ["Tab"],
 		"newJoint"		: ["LControl", "J"],
-		"mouseExp"		: ["E"]
+		"mouseExp"		: ["E"],
+		"mouseSin"		: ["Q"]
 	},
 	"SurvivalScene" : {
 		"mvPlrRgt"      : ["D"],

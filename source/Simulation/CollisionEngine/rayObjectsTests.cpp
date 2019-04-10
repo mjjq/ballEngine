@@ -7,7 +7,7 @@
 #include <cassert>
 
 #include "collisionDetection.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
@@ -67,9 +67,9 @@ float Collisions::rayAABBIntersect(sf::Vector2f rayStart,
 float Collisions::raySphereIntersect(sf::Vector2f rayOrigin, sf::Vector2f rayDir,
                                      sf::Vector2f sphereCentre, float sphereRadius)
 {
-    float a = sfVectorMath::square(rayDir);
-    float b = 2.0f*sfVectorMath::dot(rayDir, (rayOrigin-sphereCentre) );
-    float c = sfVectorMath::square( rayOrigin-sphereCentre )
+    float a = Math::square(rayDir);
+    float b = 2.0f*Math::dot(rayDir, (rayOrigin-sphereCentre) );
+    float c = Math::square( rayOrigin-sphereCentre )
                                                 - sphereRadius*sphereRadius;
     float discriminant = b*b - 4.0f*a*c;
     if(discriminant < 0)
@@ -161,10 +161,10 @@ float Collisions::rayEdgeIntersect(sf::Vector2f rayStart,
     sf::Vector2f d0 = rayDir;
     sf::Vector2f d1 = edge1.dir;
 
-    float t1 = sfVectorMath::cross(r0-r1, d0)/
-               sfVectorMath::cross(d1,d0);
-    float t0 = sfVectorMath::cross(r1-r0, d1)/
-               sfVectorMath::cross(d0,d1);
+    float t1 = Math::cross(r0-r1, d0)/
+               Math::cross(d1,d0);
+    float t0 = Math::cross(r1-r0, d1)/
+               Math::cross(d0,d1);
 
     if(t1 >= 0.0f && t1 <= 1.0f)
         return t0;

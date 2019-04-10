@@ -7,7 +7,7 @@
 #include <cassert>
 
 #include "collisionDetection.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 std::vector<sf::Vector2f > Collisions::edgesOf(std::vector<sf::Vertex > &vertices)
@@ -41,7 +41,7 @@ std::pair<bool, sf::Vector2f > Collisions::isSeparatingAxis(sf::Vector2f &orthog
 
     for(sf::Vertex &vert : obj1)
     {
-        float projection = sfVectorMath::dot(vert.position, orthog);
+        float projection = Math::dot(vert.position, orthog);
 
         min1 = std::min(min1, projection);
         max1 = std::max(max1, projection);
@@ -49,7 +49,7 @@ std::pair<bool, sf::Vector2f > Collisions::isSeparatingAxis(sf::Vector2f &orthog
 
     for(sf::Vertex &vert : obj2)
     {
-        float projection = sfVectorMath::dot(vert.position, orthog);
+        float projection = Math::dot(vert.position, orthog);
 
         min2 = std::min(min2, projection);
         max2 = std::max(max2, projection);
@@ -58,7 +58,7 @@ std::pair<bool, sf::Vector2f > Collisions::isSeparatingAxis(sf::Vector2f &orthog
     if(max1 >= min2 && max2 >= min1)
     {
         float d = std::min(max2 - min1, max1 - min2);
-        float dOSquared = d/sfVectorMath::dot(orthog, orthog) + 1e-10;
+        float dOSquared = d/Math::dot(orthog, orthog) + 1e-10;
 
         sf::Vector2f pv = dOSquared*orthog;
 
@@ -113,13 +113,13 @@ std::pair<bool, sf::Vector2f> Collisions::sepAxisTest(std::vector<sf::Vertex> &o
     sf::Vector2f mpv = {1e+15, 1e+15};
     for(sf::Vector2f &pv : pushVectors)
     {
-        if(sfVectorMath::dot(pv,pv) < sfVectorMath::dot(mpv, mpv))
+        if(Math::dot(pv,pv) < Math::dot(mpv, mpv))
             mpv = pv;
     }
 
     sf::Vector2f d = getCentre(obj1) - getCentre(obj2);
 
-    if(sfVectorMath::dot(d, mpv) < 0)
+    if(Math::dot(d, mpv) < 0)
         mpv = -mpv;
 
     return std::make_pair(true, mpv);

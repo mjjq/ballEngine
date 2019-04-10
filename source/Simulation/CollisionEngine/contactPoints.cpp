@@ -7,7 +7,7 @@
 #include <cassert>
 
 #include "collisionDetection.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 void Collisions::generateContacts(PhysicsObject* p1, PhysicsObject*p2,
@@ -44,8 +44,8 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
     bool flip = false;
     Edge refEdge;
     Edge incEdge;
-    if(std::abs(sfVectorMath::dot(edge1.dir, contactNormal)) <=
-       std::abs(sfVectorMath::dot(edge2.dir, contactNormal)))
+    if(std::abs(Math::dot(edge1.dir, contactNormal)) <=
+       std::abs(Math::dot(edge2.dir, contactNormal)))
     {
         refEdge = edge1;
         incEdge = edge2;
@@ -76,17 +76,17 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
     //debugWindow->draw(line2, 2, sf::Lines);
 
 
-    sf::Vector2f refDir = sfVectorMath::norm(refEdge.dir);
+    sf::Vector2f refDir = Math::norm(refEdge.dir);
     //std::cout << refDir <<" diredtion\n";
 
-    float o1 = sfVectorMath::dot(refDir, refEdge.v1);
+    float o1 = Math::dot(refDir, refEdge.v1);
 
     ClippedPoints cp = Collisions::clip(incEdge.v1, incEdge.v2, refDir, o1);
     if(cp.size() < 2)
         return ClippedPoints{};
 
         //std::cout << refDir << " refdir\n\n";
-    float o2 = sfVectorMath::dot(refDir, refEdge.v2);
+    float o2 = Math::dot(refDir, refEdge.v2);
     cp = clip(cp[0], cp[1], -refDir, -o2);
 
 
@@ -102,19 +102,19 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
     /*std::cout << refNorm << "\n";
     std::cout << refEdge.v1 << "\n";*/
 
-    float maxD = sfVectorMath::dot(refNorm, refEdge.max);
+    float maxD = Math::dot(refNorm, refEdge.max);
 
     /*std::cout << maxD << " maxD\n";
     std::cout << cp[0] << " " << cp[1] << "\n";*/
 
     ClippedPoints cpFinal;
 
-    if(sfVectorMath::dot(refNorm, cp[0]) - maxD > 0.0f)
+    if(Math::dot(refNorm, cp[0]) - maxD > 0.0f)
     {
         cpFinal.push_back(cp[0]);
         //std::cout << "cp0 true\n";
     }
-    if(sfVectorMath::dot(refNorm, cp[1]) - maxD > 0.0f)
+    if(Math::dot(refNorm, cp[1]) - maxD > 0.0f)
     {
         cpFinal.push_back(cp[1]);
         //std::cout << "cp1 true\n";
@@ -166,10 +166,10 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
    // std::cout << refEdge.v2 << " v2\n";
 
 
-    sf::Vector2f refDir = sfVectorMath::norm(refEdge.dir);
+    sf::Vector2f refDir = Math::norm(refEdge.dir);
     //std::cout << refDir <<" diredtion\n";
 
-    float o1 = 1.0f*sfVectorMath::dot(refDir, refEdge.v1);
+    float o1 = 1.0f*Math::dot(refDir, refEdge.v1);
 
     ClippedPoints cp = Collisions::getIntPoint(obj2, refEdge);
 
@@ -211,7 +211,7 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
     }
 
         //std::cout << refDir << " refdir\n\n";
-    float o2 = 1.0f*sfVectorMath::dot(refDir, refEdge.v2);
+    float o2 = 1.0f*Math::dot(refDir, refEdge.v2);
     cp = clip(cp[0], cp[1], -refDir, -o2);
 
 
@@ -224,9 +224,9 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
 ClippedPoints Collisions::getIntPoint(Ball &ball, Edge &edge)
 {
     sf::Vector2f relR = edge.v1 - ball.getPosition();// -sf::Vector2f{ball.getRadius(), ball.getRadius()};
-    float A = sfVectorMath::square(edge.dir);
-    float B = 2.0f*sfVectorMath::dot(edge.dir, relR);
-    float C = sfVectorMath::square(relR) -
+    float A = Math::square(edge.dir);
+    float B = 2.0f*Math::dot(edge.dir, relR);
+    float C = Math::square(relR) -
                 ball.getRadius()*ball.getRadius();
 
     float discriminant = B*B - 4*A*C;
@@ -284,7 +284,7 @@ Edge Collisions::getBestEdge(std::vector<sf::Vertex > &obj, sf::Vector2f normal)
     int c = obj.size();
     for (int i = 0; i < c; ++i)
     {
-      float projection = sfVectorMath::dot(normal, obj[i].position);
+      float projection = Math::dot(normal, obj[i].position);
       if (projection > max)
       {
         max = projection;
@@ -302,8 +302,8 @@ Edge Collisions::getBestEdge(std::vector<sf::Vertex > &obj, sf::Vector2f normal)
     else
         v0 = obj[index-1].position;
 
-    sf::Vector2f l = sfVectorMath::norm(v - v1);
-    sf::Vector2f r = sfVectorMath::norm(v - v0);
+    sf::Vector2f l = Math::norm(v - v1);
+    sf::Vector2f r = Math::norm(v - v0);
 
     /*(std::cout << normal << " " << index << "\n";
     std::cout << obj[index].position << "\n";
@@ -325,7 +325,7 @@ Edge Collisions::getBestEdge(std::vector<sf::Vertex > &obj, sf::Vector2f normal)
     debugWindow->draw(circ3);*/
 
 
-    if(sfVectorMath::dot(r, normal) <= sfVectorMath::dot(l, normal))
+    if(Math::dot(r, normal) <= Math::dot(l, normal))
     {
         return Edge{v0, v, v-v0, v};
     }
@@ -341,8 +341,8 @@ ClippedPoints Collisions::clip(sf::Vector2f v1,
 {
     ClippedPoints cp;
 
-    float d1 = sfVectorMath::dot(normal, v1) - o;
-    float d2 = sfVectorMath::dot(normal, v2) - o;
+    float d1 = Math::dot(normal, v1) - o;
+    float d2 = Math::dot(normal, v2) - o;
 
     if(d1 >= 0.0f) cp.push_back(v1);
     if(d2 >= 0.0f) cp.push_back(v2);
@@ -373,9 +373,9 @@ int Collisions::getClosestVertex(std::vector<sf::Vertex > &poly, sf::Vertex &int
     int result = 0;
     for(int i=0; i<(int)poly.size(); ++i)
     {
-        if(sfVectorMath::square(poly[i].position - intPoint.position) < minR)
+        if(Math::square(poly[i].position - intPoint.position) < minR)
         {
-            minR = sfVectorMath::square(poly[i].position - intPoint.position);
+            minR = Math::square(poly[i].position - intPoint.position);
             result = i;
         }
     }

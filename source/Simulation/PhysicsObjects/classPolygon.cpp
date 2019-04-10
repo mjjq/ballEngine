@@ -15,7 +15,7 @@
 #include <tuple>
 
 #include "classPolygon.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "integrators.h"
 #include "stringConversion.h"
 
@@ -46,7 +46,7 @@ PhysicsObject(init),
 
     for(sf::Vertex &vert : vertices)
     {
-        momentInertia += sfVectorMath::square(vert.position - centreOfMass);
+        momentInertia += Math::square(vert.position - centreOfMass);
     }
     momentInertia = momentInertia*init._mass/init._vertices.size();
 
@@ -56,20 +56,20 @@ PhysicsObject(init),
     for(unsigned int i=0; i<vertices.size(); ++i)
     {
         sf::Vector2f edge = vertices[(i+1)%vertices.size()].position - vertices[i].position;
-        edgeNorms.push_back(sfVectorMath::norm(sfVectorMath::orthogonal(edge, 1.0f)));
+        edgeNorms.push_back(Math::norm(Math::orthogonal(edge, 1.0f)));
     }
 
     sf::Vector2f norm1 = edgeNorms[0];
     sf::Vector2f norm2 = edgeNorms[edgeNorms.size()-1];
-    float denom = sqrt(0.5f*(1+sfVectorMath::dot(norm1, norm2)));
-    edgeTotals.push_back(sfVectorMath::norm(norm1+norm2)/denom);
+    float denom = sqrt(0.5f*(1+Math::dot(norm1, norm2)));
+    edgeTotals.push_back(Math::norm(norm1+norm2)/denom);
 
     for(unsigned int i=1; i<edgeNorms.size(); ++i)
     {
         norm1 = edgeNorms[i-1];
         norm2 = edgeNorms[i];
-        denom = sqrt(0.5f*(1+sfVectorMath::dot(norm1, norm2)));
-        edgeTotals.push_back(sfVectorMath::norm(norm1+norm2)/denom);
+        denom = sqrt(0.5f*(1+Math::dot(norm1, norm2)));
+        edgeTotals.push_back(Math::norm(norm1+norm2)/denom);
     }
 
     genBoundingOBB();
@@ -87,7 +87,7 @@ void Polygon::draw(sf::RenderWindow &_window)
     polygon.setPointCount(numVerts);
     for(int i=0; i<numVerts; ++i)
     {
-        sf::Vector2f vertPos = sfVectorMath::rotate(vertices.at(i).position, rotAngle) + position;
+        sf::Vector2f vertPos = Math::rotate(vertices.at(i).position, rotAngle) + position;
         polygon.setPoint(i, vertPos);
         //temp.push_back(sf::Vertex(vertPos));
     }
@@ -127,7 +127,7 @@ std::vector<sf::Vertex > Polygon::constructVerts()
     std::vector<sf::Vertex > tFormedVerts;
     for(sf::Vertex &vert : vertices)
     {
-        sf::Vector2f newPos = sfVectorMath::rotate(vert.position, rotAngle);
+        sf::Vector2f newPos = Math::rotate(vert.position, rotAngle);
         newPos += position;
         tFormedVerts.push_back(sf::Vertex(newPos));
     }
@@ -186,7 +186,7 @@ sf::Vertex Polygon::farthestPointInDir(sf::Vector2f direction)
     float maxProj = -1e15;
     for(unsigned int i=0; i<obbVerts.size(); ++i)
     {
-        float currProj = sfVectorMath::dot(obbVerts[i].position, direction);
+        float currProj = Math::dot(obbVerts[i].position, direction);
         if(currProj > maxProj)
         {
             maxProj = currProj;

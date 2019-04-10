@@ -1,11 +1,11 @@
 #include "classCharacter.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 #include <cmath>
 #include <iostream>
 
 float Character::MAX_SLOPE_ANGLE = 50.0f;
-float Character::MAX_SLOPE_COSINE = cosf(sfVectorMath::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
+float Character::MAX_SLOPE_COSINE = cosf(Math::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
 Character::Character(CharacterProperties init, Observer* obs, PhysicsObject* rigidBind) :
     properties{init}, collider{rigidBind}
@@ -25,11 +25,11 @@ void Character::moveSideWays(float input)
         {
             if(slopeOkay)
             {
-                sf::Vector2f direction = input*sfVectorMath::orthogonal(contactData[i].normal, 1.0f);
+                sf::Vector2f direction = input*Math::orthogonal(contactData[i].normal, 1.0f);
 
-                if(sfVectorMath::dot(direction, contactData[0].normal) <= 0.0f &&
-                   sfVectorMath::dot(direction, contactData[contactData.size()-1].normal) <= 0.0f &&
-                   sfVectorMath::dot(collider->getVelocity(), direction) < properties.movementSpeed)
+                if(Math::dot(direction, contactData[0].normal) <= 0.0f &&
+                   Math::dot(direction, contactData[contactData.size()-1].normal) <= 0.0f &&
+                   Math::dot(collider->getVelocity(), direction) < properties.movementSpeed)
                 {
                     collider->addSolvedVelocity(direction*properties.movementSpeed,
                                                 direction*properties.movementSpeed);
@@ -89,7 +89,7 @@ bool Character::updateState()
     for(int i=0; i<(int)contactData.size(); ++i)
     {
         touchingSurface = true;
-        float dProduct = sfVectorMath::dot(contactData[i].normal, {0.0f, 1.0f});
+        float dProduct = Math::dot(contactData[i].normal, {0.0f, 1.0f});
         if(dProduct < MAX_SLOPE_COSINE)
         {
             //collider->setCoefFriction(0.0f);

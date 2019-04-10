@@ -1,5 +1,5 @@
 #include "GJK.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 #include <cassert>
@@ -19,17 +19,17 @@ bool Simplex::contains(sf::Vector2f point)
         sf::Vector2f AB = b.position - a.position;
         sf::Vector2f AC = c.position - a.position;
 
-        sf::Vector2f abPerp = sfVectorMath::tripleProduct(AC, AB, AB);
-        sf::Vector2f acPerp = sfVectorMath::tripleProduct(AB, AC, AC);
+        sf::Vector2f abPerp = Math::tripleProduct(AC, AB, AB);
+        sf::Vector2f acPerp = Math::tripleProduct(AB, AC, AC);
 
-        if(sfVectorMath::dot(abPerp, AO) > 0.0f)
+        if(Math::dot(abPerp, AO) > 0.0f)
         {
             vertices.erase(vertices.begin() + 1);
             bestDirection = abPerp;
         }
         else
         {
-            if(sfVectorMath::dot(acPerp, AO) > 0.0f)
+            if(Math::dot(acPerp, AO) > 0.0f)
             {
                 vertices.erase(vertices.begin());
                 bestDirection = acPerp;
@@ -43,9 +43,9 @@ bool Simplex::contains(sf::Vector2f point)
         sf::Vertex b = vertices[0];
         sf::Vector2f AB = b.position - a.position;
 
-        sf::Vector2f abPerp = sfVectorMath::tripleProduct(AB, AO, AB);
-        if(sfVectorMath::square(abPerp) <= 0.0f)
-            abPerp = sfVectorMath::orthogonal(AB, 1.0f);
+        sf::Vector2f abPerp = Math::tripleProduct(AB, AO, AB);
+        if(Math::square(abPerp) <= 0.0f)
+            abPerp = Math::orthogonal(AB, 1.0f);
 
         bestDirection = abPerp;
     }
@@ -95,7 +95,7 @@ sf::Vertex GJK::farthestPointInDir(PolyVerts &p, sf::Vector2f direction)
     sf::Vertex farthestVertex;
     for(int i=0; i < (int)p.size(); ++i)
     {
-        float currProj = sfVectorMath::dot(p[i].position, direction);
+        float currProj = Math::dot(p[i].position, direction);
         if(currProj > maxProj)
         {
             maxProj = currProj;
@@ -136,14 +136,14 @@ SupportData GJK::supportData(PhysicsObject* p1, PhysicsObject* p2, sf::Vector2f 
 
 sf::Vertex GJK::closestPToOrigin(sf::Vector2f v1, sf::Vector2f v2)
 {
-    float A = sfVectorMath::square(v2 - v1);
-    float B = sfVectorMath::dot(v1, v2 - v1);
+    float A = Math::square(v2 - v1);
+    float B = Math::dot(v1, v2 - v1);
 
     float t;
 
     if(A <= 0)
     {
-        if(sfVectorMath::square(v1) < sfVectorMath::square(v2))
+        if(Math::square(v1) < Math::square(v2))
             return sf::Vertex(v1);
         else
             return sf::Vertex(v2);
@@ -175,7 +175,7 @@ bool GJK::isIntersecting(PhysicsObject* p1, PhysicsObject* p2)
     {
         simp.add(support(p1, p2, direction));
 
-        if(sfVectorMath::dot(simp.getLast().position, direction) <= 0.0f)
+        if(Math::dot(simp.getLast().position, direction) <= 0.0f)
         {
             return false;
         }
@@ -213,7 +213,7 @@ Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
     {
         direction = -direction;
 
-        if(sfVectorMath::square(direction) <= 0.0f)
+        if(Math::square(direction) <= 0.0f)
         {
             Q = {0.0f, 0.0f};
             break;
@@ -221,9 +221,9 @@ Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
 
         SupportData c = supportData(p1, p2, direction);
 
-        float dc = sfVectorMath::dot(c.difference.position, direction);
+        float dc = Math::dot(c.difference.position, direction);
 
-        float da = sfVectorMath::dot(simp.getSData(0).difference.position, direction);
+        float da = Math::dot(simp.getSData(0).difference.position, direction);
 
         if(dc - da < tolerance)
         {
@@ -236,7 +236,7 @@ Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
         sf::Vertex point2 = closestPToOrigin(c.difference.position,
                                          simp.getSData(1).difference.position);
 
-        if(sfVectorMath::square(point1.position) < sfVectorMath::square(point2.position))
+        if(Math::square(point1.position) < Math::square(point2.position))
         {
             simp.setSData(1, c);
             direction = point1.position;
@@ -253,8 +253,8 @@ Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
 
     sf::Vector2f L = simp.getSData(1).difference.position -
                     simp.getSData(0).difference.position;
-    float lambda2 = -sfVectorMath::dot(L, simp.getSData(0).difference.position) /
-                        sfVectorMath::square(L);
+    float lambda2 = -Math::dot(L, simp.getSData(0).difference.position) /
+                        Math::square(L);
     float lambda1 = 1.0f - lambda2;
 
     sf::Vertex As1 = simp.getSData(0).s1;
@@ -265,7 +265,7 @@ Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
     sf::Vector2f AClosest;
     sf::Vector2f BClosest;
 
-    if(sfVectorMath::square(L) <= 0.0f)
+    if(Math::square(L) <= 0.0f)
     {
         AClosest = As1.position;
         BClosest = As2.position;

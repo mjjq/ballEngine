@@ -1,6 +1,7 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
-#include "classPhysicsObject.h"
+
+#include <vector>
 
 enum class EventType
 {
@@ -10,6 +11,13 @@ enum class EventType
     Projectile_Contact,
     Deal_Damage,
     Gen_Explosion,
+    New_Renderable,
+    Delete_Renderable,
+    New_PhysicsObj,
+    Delete_PhysicsObj,
+    New_LightSrc,
+    Delete_LightSrc,
+    Update_Position,
     Count
 };
 
@@ -21,7 +29,12 @@ public:
     {}
 };
 
-class Observer
+class Entity
+{
+
+};
+
+class Observer : public Entity
 {
 public:
     virtual ~Observer() {}

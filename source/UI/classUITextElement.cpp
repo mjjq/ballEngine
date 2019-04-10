@@ -7,7 +7,7 @@
 #include <functional>
 
 #include "classTextElement.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 

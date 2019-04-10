@@ -1,7 +1,9 @@
 #include "classPhysicsObject.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "integrators.h"
 #include "stringConversion.h"
+
+Subject PhysicsObject::engineNotify;
 
 PhysicsObject::PhysicsObject(ObjectProperties init) :
                   coefRestitution{init._coefRest},
@@ -13,10 +15,16 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   rotRate{init._rotRate},
                   mass{init._mass},
                   bullet{init._bullet},
-                  ignoreGravity{init._ignoreGravity}
-                  {}
+                  ignoreGravity{init._ignoreGravity},
+                  isStatic{init._isStatic}
+{
+    engineNotify.notify(*this, Event(EventType::New_PhysicsObj));
+}
 
-PhysicsObject::~PhysicsObject() {}
+PhysicsObject::~PhysicsObject()
+{
+    engineNotify.notify(*this, Event(EventType::Delete_PhysicsObj));
+}
 
 
 
@@ -52,12 +60,14 @@ void PhysicsObject::updatePosition(float dt)
     //sf::Vector2f currPos = getPosition();
     pStepPosition = getPosition();
     setPosition(getPosition()+(cStepVelocity+cStepModVelocity)*dt);
-    rotAngle += rotRate*dt*180.0f/sfVectorMath::PI;
+    rotAngle += rotRate*dt*180.0f/Math::PI;
     //std::cout << rotRate << "\n";
     //std::cout << "Current: " << cStepVelocity << "\n";
     //std::cout << "Next:    " << nStepVelocity << "\n";
     cStepVelocity = nStepVelocity;
     cStepModVelocity = {0,0};
+
+    physSubject.notify(*this, Event(EventType::Update_Position));
 }
 
 /**
@@ -159,7 +169,7 @@ void PhysicsObject::addRotRate(float _rotRate)
 */
 float PhysicsObject::getKE()
 {
-    return 0.5*getMass()*sfVectorMath::dot(getVelocity(),getVelocity());
+    return 0.5*getMass()*Math::dot(getVelocity(),getVelocity());
 }
 
 
@@ -184,7 +194,7 @@ sf::Vector2f PhysicsObject::getMomentum()
 */
 float PhysicsObject::getSpeed()
 {
-    return pow(sfVectorMath::dot(getVelocity(),getVelocity()),0.5);
+    return pow(Math::dot(getVelocity(),getVelocity()),0.5);
 }
 
 bool PhysicsObject::isBullet()
@@ -197,6 +207,11 @@ bool PhysicsObject::ignoresGravity()
     return ignoreGravity;
 }
 
+bool PhysicsObject::getIsStatic()
+{
+    return isStatic;
+}
+
 /**
     Get the relative speed between this ball and another ball.
 
@@ -207,7 +222,7 @@ bool PhysicsObject::ignoresGravity()
 float PhysicsObject::getRelSpeed(PhysicsObject* otherObj)
 {
     sf::Vector2f relVelocity = getVelocity() - otherObj->getVelocity();
-    return pow(sfVectorMath::dot(relVelocity,relVelocity),0.5);
+    return pow(Math::dot(relVelocity,relVelocity),0.5);
 }
 
 
@@ -221,7 +236,7 @@ float PhysicsObject::getRelSpeed(PhysicsObject* otherObj)
 float PhysicsObject::getDistance(PhysicsObject* otherObj)
 {
     sf::Vector2f relPos = getPosition() - otherObj->getPosition();
-    return pow(sfVectorMath::dot(relPos,relPos),0.5);
+    return pow(Math::dot(relPos,relPos),0.5);
 }
 
 
@@ -358,4 +373,9 @@ float PhysicsObject::getCoefRestitution()
 float PhysicsObject::getCoefFriction()
 {
     return coefFriction;
+}
+
+float PhysicsObject::getRotAngle()
+{
+    return rotAngle;
 }

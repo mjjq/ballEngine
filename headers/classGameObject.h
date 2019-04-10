@@ -1,8 +1,10 @@
-#ifndef CLASS_PROJECTILE_H
-#define CLASS_PROJECTILE_H
+#ifndef CLASS_GAMEOBJECT_H
+#define CLASS_GAMEOBJECT_H
 
 #include "classBall.h"
 #include "Observer.h"
+#include "classRenderable.h"
+#include "classLight.h"
 
 enum class ProjectileType
 {
@@ -11,9 +13,13 @@ enum class ProjectileType
     _Count
 };
 
-class Projectile : public Entity
+class GameObject : public Observer
 {
-    PhysicsObject* collider;
+    Renderable* renderObj = nullptr;
+    PhysicsObject* collider = nullptr;
+    LightSource* lightSrc = nullptr;
+
+
     ObjectProperties projProperties;
     ProjectileType projType;
 
@@ -25,9 +31,15 @@ class Projectile : public Entity
     float damage = 0.0f;
     std::function<void()> onCollideLambda = [&]{};
 public:
-    Projectile(ProjectileType type,
+    GameObject(ProjectileType type,
                sf::Vector2f initPos,
                sf::Vector2f initDir);
+    GameObject(ObjectProperties objProps,
+               std::function<void()> onColl = [&]{});
+    GameObject(Renderable* _renderObj = nullptr,
+               PhysicsObject* _collider = nullptr,
+               LightSource* _lightSrc = nullptr);
+    ~GameObject();
     void onCollide();
 
     ObjectProperties getProjProps();
@@ -37,6 +49,8 @@ public:
     void addObserver(Observer* obs);
 
     float getDamage();
+
+    void onNotify(Entity& entity, Event event);
 };
 
 #endif // CLASS_PROJECTILE_H

@@ -8,36 +8,8 @@
 #include <thread>
 #include <limits>
 #include <tuple>
-
-enum class ObjectType
-{
-    Ball,
-    AABB,
-    OBB,
-    Polygon,
-    Capsule,
-    _Count,
-};
-
-struct ObjectProperties
-{
-    sf::Vector2f _position;
-    sf::Vector2f _velocity = {0.0f, 0.0f};
-    sf::Vector2f _size = {1.0f, 1.0f};
-    float _mass = 1.0f;
-    float _coefFric = 0.0f;
-    float _coefRest = 0.0f;
-    float _rotation = 0.0f;
-    float _rotRate = 0.0f;
-    std::vector<sf::Vertex > _vertices = {};
-    bool _bullet = false;
-    bool _ignoreGravity = false;
-};
-
-class Entity
-{
-
-};
+#include "Observer.h"
+#include "baseObject.h"
 
 class PhysicsObject : public Entity
 {
@@ -69,10 +41,14 @@ protected:
     bool isPlayer = false;
     bool bullet = false;
     bool ignoreGravity = false;
+    bool isStatic = false;
 
 public:
+    static Subject engineNotify;
+    Subject physSubject;
+
     PhysicsObject(ObjectProperties init);
-    ~PhysicsObject();
+    virtual ~PhysicsObject();
 
     virtual ObjectType type() const = 0;
     virtual void draw(sf::RenderWindow &_window) = 0;
@@ -89,6 +65,7 @@ public:
     sf::Vector2f getMomentum();
     bool isBullet();
     bool ignoresGravity();
+    bool getIsStatic();
 
     float getGPE(PhysicsObject* otherObj);
     float getDistance(PhysicsObject* otherObj);
@@ -124,6 +101,7 @@ public:
     void setMomentInertia(float i);
     float getRotRate();
     void setRotRate(float _rotRate);
+    float getRotAngle();
 
     float getCoefRestitution();
     float getCoefFriction();

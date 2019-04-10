@@ -6,111 +6,15 @@
 #include <tuple>
 
 #include "classUniverse.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
 typedef std::pair<ArbiterKey, Arbiter> ArbPair;
 typedef std::vector<std::unique_ptr<PhysicsObject> > PhysObjectArray;
 
-void BallUniverse::spawnNewBall(ObjectProperties init)
-{
-    sf::Vector2f position = init._position;
-    float radius = sqrtf(sfVectorMath::square(init._size));
-    if(!(position.x - radius < 0 ||
-         position.y - radius < 0 ||
-         position.x + radius > worldSizeX ||
-         position.y + radius > worldSizeY))
-    {
-        std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
 
-        dynamicObjects.push_back(std::move(newBall));
-        numOfBalls++;
-        //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
-        //setPlayer(dynamicObjects.size()-1);
-        //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        //staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        ////colliderArray.printMatrix();
-        if(enable_collisions)
-            calcCollTimes();
-    }
-}
-
-
-/*void BallUniverse::spawnNewRect(sf::Vector2f position,
-                                float width,
-                                float height,
-                                sf::Vector2f velocity,
-                                float mass,
-                                float rotation)
-{
-    if(!(position.x < 0 ||
-       position.y < 0 ||
-       position.x + width > worldSizeX ||
-       position.y + height > worldSizeY))
-    {
-        std::unique_ptr<OBB > newRect = std::make_unique<OBB >(sf::Vector2f{width,height},
-                                                                 mass,
-                                                                 sf::Vector2f{position.x,
-                                                                  position.y},
-                                                                 velocity, rotation, 0.0f);
-        dynamicObjects.push_back(std::move(newRect));
-
-        numOfBalls++;
-        //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
-        //setPlayer(dynamicObjects.size()-1);
-        //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        //staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        ////colliderArray.printMatrix();
-        if(enable_collisions)
-            calcCollTimes();
-    }
-}*/
-
-
-void BallUniverse::spawnStaticBall(ObjectProperties init)
-{
-    sf::Vector2f position = init._position;
-    float radius = sqrtf(sfVectorMath::square(init._size));
-    if(!(position.x - radius < 0 ||
-         position.y - radius < 0 ||
-         position.x + radius > worldSizeX ||
-         position.y + radius > worldSizeY))
-    {
-        init._mass = 1e+15;
-        std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
-        staticObjects.push_back(std::move(newBall));
-
-        //staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        if(enable_collisions)
-            calcCollTimes();
-    }
-}
-
-/*void BallUniverse::spawnStaticRect(sf::Vector2f position, float width, float height, float rotation)
-{
-    if(!(position.x < 0 ||
-       position.y < 0 ||
-       position.x + width > worldSizeX ||
-       position.y + height > worldSizeY))
-    {
-        std::unique_ptr<OBB > newRect = std::make_unique<OBB >(sf::Vector2f{width,height},
-                                                                 1000000000000.0f,
-                                                                 position+sf::Vector2f{width/2.0f, height/2.0f},
-                                                                 sf::Vector2f{0.0f,0.0f},
-                                                                 rotation, 0.0f);
-        staticObjects.push_back(std::move(newRect));
-
-        //staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        if(enable_collisions)
-            calcCollTimes();
-    }
-}*/
-
-
-void BallUniverse::spawnNewPoly(ObjectProperties init)
+/*void BallUniverse::spawnNewObject(ObjectProperties init)
 {
     sf::Vector2f position = init._position;
     if(!(position.x < 0 ||
@@ -118,67 +22,25 @@ void BallUniverse::spawnNewPoly(ObjectProperties init)
        position.x> worldSizeX ||
        position.y> worldSizeY))
     {
-        std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(init);
-        dynamicObjects.push_back(std::move(newPoly));
-
-        numOfBalls++;
-        //dynamicObjects.back()->setSamplePrevPosBool(enable_trajectories);
-        //setPlayer(dynamicObjects.size()-1);
-        //colliderArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        //colliderArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        //staticCollArray.insertRow(0, std::numeric_limits<float>::quiet_NaN());
-        ////colliderArray.printMatrix();
-        if(enable_collisions)
-            calcCollTimes();
-    }
-}
-
-
-void BallUniverse::spawnStaticPoly(ObjectProperties init)
-{
-    sf::Vector2f position = init._position;
-    if(!(position.x < 0 ||
-       position.y < 0 ||
-       position.x> worldSizeX ||
-       position.y> worldSizeY))
-    {
-        init._mass = 1e+15;
-        std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(init);
-
-        staticObjects.push_back(std::move(newPoly));
-        //staticCollArray.insertColumnQuick(std::numeric_limits<float>::quiet_NaN());
-        if(enable_collisions)
-            calcCollTimes();
-    }
-}
-
-void BallUniverse::spawnNewObject(bool isStatic, SpawnObjectType type, ObjectProperties init)
-{
-    sf::Vector2f position = init._position;
-    if(!(position.x < 0 ||
-       position.y < 0 ||
-       position.x> worldSizeX ||
-       position.y> worldSizeY))
-    {
-        if(!isStatic)
+        if(!init.isStatic)
         {
-            switch(type)
+            switch(init.type)
             {
-                case SpawnObjectType::Ball :
+                case ObjectType::Ball :
                 {
                     std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
                     dynamicObjects.push_back(std::move(newBall));
                     numOfBalls++;
                     break;
                 }
-                case SpawnObjectType::Polygon :
+                case ObjectType::Polygon :
                 {
                     std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(init);
                     dynamicObjects.push_back(std::move(newPoly));
                     numOfBalls++;
                     break;
                 }
-                case SpawnObjectType::Capsule :
+                case ObjectType::Capsule :
                 {
                     std::unique_ptr<Capsule > newCapsule = std::make_unique<Capsule >(init);
                     dynamicObjects.push_back(std::move(newCapsule));
@@ -192,21 +54,21 @@ void BallUniverse::spawnNewObject(bool isStatic, SpawnObjectType type, ObjectPro
         else
         {
             init._mass = 1e+15;
-            switch(type)
+            switch(init.type)
             {
-                case SpawnObjectType::Ball:
+                case ObjectType::Ball:
                 {
                     std::unique_ptr<Ball > newBall = std::make_unique<Ball >(init);
                     staticObjects.push_back(std::move(newBall));
                     break;
                 }
-                case SpawnObjectType::Polygon:
+                case ObjectType::Polygon:
                 {
                     std::unique_ptr<Polygon > newPoly = std::make_unique<Polygon >(init);
                     staticObjects.push_back(std::move(newPoly));
                     break;
                 }
-                case SpawnObjectType::Capsule:
+                case ObjectType::Capsule:
                 {
                     std::unique_ptr<Capsule > newCapsule = std::make_unique<Capsule >(init);
                     staticObjects.push_back(std::move(newCapsule));
@@ -217,13 +79,74 @@ void BallUniverse::spawnNewObject(bool isStatic, SpawnObjectType type, ObjectPro
             }
         }
     }
+}*/
+
+void BallUniverse::spawnNewObject(ObjectProperties init)
+{
+    sf::Vector2f position = init._position;
+    if(!(position.x < 0 ||
+       position.y < 0 ||
+       position.x> worldSizeX ||
+       position.y> worldSizeY))
+    {
+        if(!init._isStatic)
+        {
+            switch(init.type)
+            {
+                case ObjectType::Ball :
+                {
+                    dynamicObjects.push_back(new Ball(init));
+                    numOfBalls++;
+                    break;
+                }
+                case ObjectType::Polygon :
+                {
+                    dynamicObjects.push_back(new Polygon(init));
+                    numOfBalls++;
+                    break;
+                }
+                case ObjectType::Capsule :
+                {
+                    dynamicObjects.push_back(new Capsule(init));
+                    numOfBalls++;
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            init._mass = 1e+15;
+            switch(init.type)
+            {
+                case ObjectType::Ball:
+                {
+                    staticObjects.push_back(new Ball(init));
+                    break;
+                }
+                case ObjectType::Polygon:
+                {
+                    staticObjects.push_back(new Polygon(init));
+                    break;
+                }
+                case ObjectType::Capsule:
+                {
+                    staticObjects.push_back(new Capsule(init));
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
 }
 
-void BallUniverse::spawnNewObject(std::unique_ptr<PhysicsObject> obj)
+/*void BallUniverse::spawnNewObject(std::unique_ptr<PhysicsObject> obj)
 {
     dynamicObjects.emplace_back(std::move(obj));
     ++numOfBalls;
-}
+}*/
 
 
 //void resetAndCheckBounce(std::vector<Ball>)
@@ -238,7 +161,7 @@ void BallUniverse::spawnNewObject(std::unique_ptr<PhysicsObject> obj)
 void BallUniverse::updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2)
 {
     sf::Vector2f relVec = obj1->getPosition() + obj1->getCoM() - (obj2->getPosition() + obj2->getCoM());
-    float r2 = sfVectorMath::square(relVec);
+    float r2 = Math::square(relVec);
     float totalR = obj1->getMinSize()+obj2->getMinSize();
 
     if(r2 > totalR*totalR)
@@ -280,7 +203,7 @@ void BallUniverse::updateAllObjects(bool _enableForces, float _dt)
         for(auto iter1 = dynamicObjects.begin(); iter1 != dynamicObjects.end(); ++iter1)
             for(auto iter2 = dynamicObjects.begin(); iter2 != dynamicObjects.end(); ++iter2)
                 if(&iter1 != &iter2 && !(*iter1)->ignoresGravity() && !(*iter2)->ignoresGravity())
-                    updateFirstVelocity(intEnum, _dt, (*iter1).get(), (*iter2).get());
+                    updateFirstVelocity(intEnum, _dt, (*iter1), (*iter2));
 
     if(universalGravity==true)
         for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); iter++)
@@ -409,70 +332,19 @@ void BallUniverse::collTimeForBall(unsigned int index)
 }
 
 
-
-/*void BallUniverse::ballAbsorption(Ball &_firstBall, Ball &_secondBall)
-{
-    using namespace sfVectorMath;
-
-    float rad1 = _firstBall.getRadius();
-    float rad2 = _secondBall.getRadius();
-
-    float projVel = dot( _secondBall.getVelocity() - _firstBall.getVelocity(),
-                         norm(_firstBall.getPosition() - _secondBall.getPosition()) );
-
-    if(projVel > 0)
-    {
-        if(projVel < rad1 && projVel < rad2)
-        {
-            if(rad1 >= rad2)
-            {
-                rad2 -= projVel;
-                rad1 = pow(rad1*rad1 + projVel*projVel , 0.5);
-            }
-            else if(rad2 >= rad1)
-            {
-                rad1 -= projVel;
-                rad2 = pow(rad2*rad2 + projVel*projVel , 0.5);
-            }
-        }
-        else
-        {
-            if(rad1 >= rad2)
-            {
-                rad2 = 0;
-                rad1 = pow(rad1*rad1 + rad2*rad2 , 0.5);
-            }
-            else if(rad2 >= rad1)
-            {
-                rad1 = 0;
-                rad2 = pow(rad2*rad2 + rad1*rad1 , 0.5);
-            }
-        }
-        _firstBall.setRadius(rad1);
-        _firstBall.setOrigin({rad1,rad1});
-        _firstBall.setMass(3.14159265359*rad1*rad1*_firstBall.getDensity());
-        _secondBall.setRadius(rad2);
-        _secondBall.setOrigin({rad2,rad2});
-        _secondBall.setMass(3.14159265359*rad2*rad2*_secondBall.getDensity());
-    }
-
-
-    Collisions::ballCollision(_firstBall, _secondBall);
-}*/
-
 void BallUniverse::removeBall(int index)
 {
     if(std::abs(index) < (int)dynamicObjects.size())
     {
         if(index >=0)
         {
-            dynamicObjects.erase(dynamicObjects.begin() + index);
-
+            //dynamicObjects.erase(dynamicObjects.begin() + index);
+            delete dynamicObjects[index];
         }
         else if(index < 0)
         {
-
-            dynamicObjects.erase(dynamicObjects.end() + index + 1);
+            delete dynamicObjects[dynamicObjects.size() + index];
+            //dynamicObjects.erase(dynamicObjects.end() + index + 1);
         }
 
         numOfBalls--;
@@ -526,12 +398,12 @@ void BallUniverse::broadPhase()
     //float dtR = dt;
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
     {
-        PhysicsObject* obji = dynamicObjects[i].get();
+        PhysicsObject* obji = dynamicObjects[i];
 
         for(unsigned int j=i+1; j<dynamicObjects.size(); ++j)
         {
             //std::cout << i << " " << j << "\n";
-            PhysicsObject* objj = dynamicObjects[j].get();
+            PhysicsObject* objj = dynamicObjects[j];
 
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);
@@ -563,11 +435,11 @@ void BallUniverse::broadPhase()
 
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
     {
-        PhysicsObject* obji = dynamicObjects[i].get();
+        PhysicsObject* obji = dynamicObjects[i];
 
         for(unsigned int j=0; j<staticObjects.size(); ++j)
         {
-            PhysicsObject* objj = staticObjects[j].get();
+            PhysicsObject* objj = staticObjects[j];
 
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);
@@ -598,7 +470,7 @@ float BallUniverse::physicsLoop()
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
     {
         //dynamicObjects[i].resetToCollided();
-        checkForBounce(dynamicObjects[i].get());
+        checkForBounce(dynamicObjects[i]);
         //if( checkForBounce(dynamicObjects[i].get()) && enable_collisions)
             //collTimeForBall(i);
     }
@@ -635,82 +507,11 @@ float BallUniverse::physicsLoop()
 
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
     {
-        dynamicObjects[i].get()->updatePosition(dt);
+        dynamicObjects[i]->updatePosition(dt);
     }
 
     return dt;
 }
-
-/*float BallUniverse::physicsLoopAbsorb()
-{
-        float dtR = dt;
-        float epsilon = 1e-5;
-
-        pushBall(playerInput, currentPlayer);
-
-        for(unsigned int i=0; i<dynamicObjects.size(); ++i)
-        {
-            dynamicObjects[i].resetToCollided();
-            if( checkForBounce(dynamicObjects[i]) )
-                collTimeForBall(i);
-        }
-
-        if(enable_collisions==true)
-        {
-            if(hasCollided==false)
-                calcCollTimes();
-
-            else if(hasCollided==true)
-            {
-                collTimeForBall(collider2);
-                if(!collWithStatic)
-                    collTimeForBall(collider1);
-                hasCollided = false;
-            }
-
-            findShortestCollTime();
-        }
-
-        if(dt >= std::floor(1e+3*timeToNextColl)/1e+3)
-        {
-            hasCollided = true;
-            dtR = timeToNextColl;
-            if(std::abs(dtR) > epsilon)
-                updateAllObjects(enable_forces, std::floor(1e+3*dtR)/1e+3);
-
-            //colliderArray.addConstValue(-dtR);
-            //staticCollArray.addConstValue(-dtR);
-
-            if(collWithStatic)
-                Collisions::ballCollision(dynamicObjects[collider2], staticObjects[collider1]);
-
-            else if(collider1 != collider2)
-            {
-                ballAbsorption(dynamicObjects[collider1], dynamicObjects[collider2]);
-                if(dynamicObjects[collider1].getRadius() < 0.01f)
-                {
-                    hasCollided = false;
-                    removeBall(collider1);
-                    if(collider2 > collider1)
-                        collider2--;
-                }
-                if(dynamicObjects[collider2].getRadius() < 0.01f)
-                {
-                    hasCollided = false;
-                    removeBall(collider2);
-                    if(collider2 < collider1)
-                        collider1--;
-                }
-            }
-
-            timeToNextColl = 1e+15;
-        }
-        else
-            updateAllObjects(enable_forces, dt);
-
-        collAccumulator -= dtR;
-        return dtR;
-}*/
 
 void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
 {
@@ -843,15 +644,15 @@ void BallUniverse::createBallGrid(int numWide, int numHigh, float spacing, sf::V
         for(int i=-numWide/2; i<=numWide/2; ++i)
             for(int j=-numHigh/2; j<=numHigh/2; ++j)
             {
-                sf::Vector2f offsetPosition = {i*spacing,j*spacing};
-                spawnNewBall({centralPosition + offsetPosition,
+                //sf::Vector2f offsetPosition = {i*spacing,j*spacing};
+                /*spawnNewBall({centralPosition + offsetPosition,
                              init_velocity,
                              {ballRadius, 0.0f},
                              ballMass,
                              0.0f,
                              1.0f,
                              0.0f,
-                             0.0f});
+                             0.0f});*/
                 //std::cout << i << " " << j << "\n";
             }
     }
@@ -1033,7 +834,7 @@ std::string BallUniverse::getTotalMomentum()
 sf::Vector2f BallUniverse::getObjPosition(unsigned int i)
 {
     if(dynamicObjects.size()>i && i>=0)
-        return dynamicObjects.at(i).get()->getPosition();
+        return dynamicObjects.at(i)->getPosition();
     return sf::Vector2f{std::numeric_limits<float>::quiet_NaN(),
                         std::numeric_limits<float>::quiet_NaN()};
 }
@@ -1051,7 +852,7 @@ std::string BallUniverse::getUseRK4()
 std::string BallUniverse::getBallSpeed(unsigned int index)
 {
     if(index < dynamicObjects.size() && index >= 0)
-        return std::to_string(dynamicObjects.at(index).get()->getSpeed());
+        return std::to_string(dynamicObjects.at(index)->getSpeed());
 
     return "dynamicObjects index out of range";
 }
@@ -1059,7 +860,7 @@ std::string BallUniverse::getBallSpeed(unsigned int index)
 int BallUniverse::getNumTimesColld(unsigned int index)
 {
     if(index < dynamicObjects.size() && index >= 0)
-        return dynamicObjects.at(index).get()->getNumCollTimes();
+        return dynamicObjects.at(index)->getNumCollTimes();
 
     return -1;
 }
@@ -1071,13 +872,13 @@ void BallUniverse::toggleTrajectories()
     {
         enable_trajectories = false;
         for(int i=0; (unsigned)i<dynamicObjects.size(); ++i)
-            dynamicObjects.at(i).get()->setSamplePrevPosBool(false);
+            dynamicObjects.at(i)->setSamplePrevPosBool(false);
     }
     else
     {
         enable_trajectories = true;
         for(int i=0; (unsigned)i<dynamicObjects.size(); ++i)
-            dynamicObjects.at(i).get()->setSamplePrevPosBool(true);
+            dynamicObjects.at(i)->setSamplePrevPosBool(true);
     }
 }
 
@@ -1142,18 +943,25 @@ void BallUniverse::createExplosion(sf::Vector2f position,
         Polygon tempObject(tempProps);
         tempObject.setMomentInertia(1.0f);
 
-        Edge GJKResult = GJK::getClosestPoints(dynamicObjects[i].get(), &tempObject);
+        Edge GJKResult = GJK::getClosestPoints(dynamicObjects[i], &tempObject);
 
-        float distanceSq = sfVectorMath::square(GJKResult.v2 - GJKResult.v1);
-        if(distanceSq < radiusOfEffect*radiusOfEffect && distanceSq > 0.0f)
+        float distanceSq = Math::square(GJKResult.v2 - GJKResult.v1);
+
+        float minDistance = 0.0f;
+        if(strength < 0.0f)
+        {
+            minDistance = 1.0f;
+        }
+
+        if(distanceSq < radiusOfEffect*radiusOfEffect && distanceSq > minDistance)
         {
             float factor = std::min(strength, strength/sqrtf(distanceSq));
             sf::Vector2f sepVector = factor*(GJKResult.v2 - GJKResult.v1);
             tempObject.setVelocity(dynamicObjects[i]->getVelocity() - sepVector);
 
-            Arbiter tempArb{dynamicObjects[i].get(), &tempObject};
+            Arbiter tempArb{dynamicObjects[i], &tempObject};
             Contact tempContact;
-            tempContact.normal = sfVectorMath::norm(GJKResult.v1 - GJKResult.v2);
+            tempContact.normal = Math::norm(GJKResult.v1 - GJKResult.v2);
             tempContact.position = GJKResult.v1;
             tempContact.rA = tempContact.position - dynamicObjects[i]->getPosition();
             tempContact.rB = {0.0f, 0.0f};
@@ -1179,8 +987,8 @@ void BallUniverse::newJoint(int index1, int index2)
         //               dynamicObjects[index2].get());
         //joints.push_back(nJoint);
         int objSize = dynamicObjects.size();
-        Joint nJoint(dynamicObjects[objSize-2].get(),
-                       dynamicObjects[objSize-1].get());
+        Joint nJoint(dynamicObjects[objSize-2],
+                       dynamicObjects[objSize-1]);
         joints.push_back(nJoint);
     }
 }
@@ -1188,6 +996,52 @@ void BallUniverse::newJoint(int index1, int index2)
 void BallUniverse::newObserver(Observer* obs)
 {
     universeSub.addObserver(obs);
+}
+
+void BallUniverse::onNotify(Entity& entity, Event event)
+{
+    switch(event.type)
+    {
+        case(EventType::New_PhysicsObj):
+        {
+            PhysicsObject* obj = (PhysicsObject*)&entity;
+            if(!obj->getIsStatic())
+            {
+                dynamicObjects.push_back(obj);
+                numOfBalls++;
+            }
+            else
+            {
+                staticObjects.push_back(obj);
+            }
+            break;
+        }
+        case(EventType::Delete_PhysicsObj):
+        {
+            PhysicsObject* obj = (PhysicsObject*)&entity;
+            for(int i=0; i<(int)dynamicObjects.size(); ++i)
+            {
+                if(obj == dynamicObjects[i])
+                {
+                    dynamicObjects.erase(dynamicObjects.begin() + i);
+                    numOfBalls--;
+                    arbiters.clear();
+                }
+            }
+            for(int i=0; i<(int)staticObjects.size(); ++i)
+            {
+                if(obj == staticObjects[i])
+                {
+                    staticObjects.erase(staticObjects.begin() + i);
+                    arbiters.clear();
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+
 }
 
 BallUniverse::BallUniverse(int _worldSizeX,
@@ -1202,4 +1056,10 @@ enable_forces{_force},
 enable_collisions{_collision},
 dt{_dt}
 {
+    PhysicsObject::engineNotify.addObserver(this);
+}
+
+BallUniverse::~BallUniverse()
+{
+    PhysicsObject::engineNotify.removeObserver(this);
 }

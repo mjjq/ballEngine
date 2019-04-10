@@ -7,7 +7,7 @@
 #include <cassert>
 
 #include "collisionDetection.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 
 sf::Rect<float > Collisions::minkowskiDiff(AABB &rect1, AABB &rect2)

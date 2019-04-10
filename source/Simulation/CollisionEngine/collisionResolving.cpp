@@ -7,7 +7,7 @@
 #include <cassert>
 
 #include "collisionDetection.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 #include "constraintSolver.h"
 
@@ -73,7 +73,7 @@ std::vector<Contact> Collisions::resolveCollision(PhysicsObject* p1, PhysicsObje
 
 std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* secondBall)
 {
-    using namespace sfVectorMath;
+    using namespace Math;
 
     sf::Vector2f rhat = norm(secondBall->getPosition() - firstBall->getPosition());
 
@@ -83,7 +83,7 @@ std::vector<Contact> Collisions::collisionBallBall(Ball* firstBall, Ball* second
     std::vector<Contact> contResult;
     cp.push_back(firstBall->getPosition() + rhat*firstBall->getRadius());
 
-    float separation = sfVectorMath::dot(penetVector, rhat);
+    float separation = Math::dot(penetVector, rhat);
 
     if(separation <= 0.0f)
     {
@@ -168,7 +168,7 @@ std::vector<Contact> Collisions::collisionBallAABB(Ball* origBall, AABB* origAAB
             cornerPos = sf::Vector2f{rectBounds.left + rectBounds.width, rectBounds.top + rectBounds.height};
         }
 
-        contactNormal = sfVectorMath::norm(rBall - cornerPos);
+        contactNormal = Math::norm(rBall - cornerPos);
     }
 
     penetVector = Collisions::calcPenetVector(cornerPos, contactNormal, *origBall);
@@ -248,7 +248,7 @@ std::vector<Contact> Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
     }
 
     std::vector<Contact > result;
-    if(sfVectorMath::square(contactNormal)>1e-15)
+    if(Math::square(contactNormal)>1e-15)
     {
         sf::Vector2f penetVector = Collisions::calcPenetVector(*rect1, *rect2);
 
@@ -265,10 +265,10 @@ std::vector<Contact> Collisions::collisionBallOBB(Ball* ball, OBB* rect)
         float rotAngle = rect->getRotAngle();
         sf::Rect<float > rectBounds = rect->getGlobalBounds();
 
-        sf::Vector2f ballVelocity = sfVectorMath::rotate(ball->getVelocity(), -rotAngle);
-        sf::Vector2f rectVelocity = sfVectorMath::rotate(rect->getVelocity(), -rotAngle);
-        sf::Vector2f ballPosition = sfVectorMath::rotate(ball->getPosition(), -rotAngle);
-        sf::Vector2f rectPosition = sfVectorMath::rotate(rect->getPosition(), -rotAngle)
+        sf::Vector2f ballVelocity = Math::rotate(ball->getVelocity(), -rotAngle);
+        sf::Vector2f rectVelocity = Math::rotate(rect->getVelocity(), -rotAngle);
+        sf::Vector2f ballPosition = Math::rotate(ball->getPosition(), -rotAngle);
+        sf::Vector2f rectPosition = Math::rotate(rect->getPosition(), -rotAngle)
                                   - sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f};
 
 
@@ -289,7 +289,7 @@ std::vector<Contact> Collisions::collisionBallOBB(Ball* ball, OBB* rect)
 
         std::pair<sf::Vector2f, sf::Vector2f> contact = Collisions::getContactNormal(&ballInFrame, &obbInFrame);
 
-        sf::Vector2f contactNorm = sfVectorMath::rotate(contact.first, rotAngle);
+        sf::Vector2f contactNorm = Math::rotate(contact.first, rotAngle);
         //sf::Vector2f cornerPos = sfVectorMath::rotate(contact.second, rotAngle);
 
         //std::cout << contactNorm << " norm\n";
@@ -322,7 +322,7 @@ std::vector<Contact> Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
     debugWindow->draw(quad2);*/
 
     sf::Vector2f penetVector = Collisions::sepAxisTest(rect1Vert, rect2Vert).second;
-    sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
+    sf::Vector2f contactNorm = Math::norm(penetVector);
 
     //penetVector += 0.1f*contactNorm;
 
@@ -357,7 +357,7 @@ std::vector<Contact> Collisions::collisionOBBPoly(OBB *rect, Polygon *poly)
     debugWindow->draw(quad2);*/
 
     sf::Vector2f penetVector = Collisions::sepAxisTest(rectVert, polyVert).second;
-    sf::Vector2f contactNorm = sfVectorMath::norm(penetVector);
+    sf::Vector2f contactNorm = Math::norm(penetVector);
 
     penetVector += 0.1f*contactNorm;
 
@@ -402,7 +402,7 @@ std::vector<Contact> Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
 
     std::vector<Contact> contResult;
 
-    float separation = sfVectorMath::dot(penetVector, contactNorm);
+    float separation = Math::dot(penetVector, contactNorm);
     if(separation <= 0.0f)
         Collisions::generateContacts(ball, poly, contResult, cp, contactNorm, separation);
     return contResult;
@@ -439,7 +439,7 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
     if(sepAxis.first)
     {
         sf::Vector2f penetVector = sepAxis.second;
-        sf::Vector2f contactNorm = -sfVectorMath::norm(penetVector);
+        sf::Vector2f contactNorm = -Math::norm(penetVector);
 
         //std::cout << contactNorm << " hello\n";
         //float redMass = 1.0f/(1.0f/poly1->getMass() + 1.0f/poly2->getMass());
@@ -458,7 +458,7 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
         //debugWindow->draw(circ2);
         //debugWindow->draw(circ3);
 
-        float separation = sfVectorMath::dot(penetVector, contactNorm);
+        float separation = Math::dot(penetVector, contactNorm);
 
         for(int i=0; i<(int)cp.size(); ++i)
         {
@@ -481,14 +481,14 @@ std::vector<Contact> Collisions::collisionBallCaps(Ball* ball, Capsule* caps)
     Edge closestLine = GJK::getClosestPoints(ball, caps);
 
     float capsuleRadius = caps->getRadius();
-    float lineLengthSq = sfVectorMath::square(closestLine.dir);
+    float lineLengthSq = Math::square(closestLine.dir);
 
     std::vector<Contact > contResult;
     ClippedPoints cp;
 
     if(lineLengthSq <= capsuleRadius*capsuleRadius)
     {
-        sf::Vector2f contactNorm = sfVectorMath::norm(closestLine.dir);
+        sf::Vector2f contactNorm = Math::norm(closestLine.dir);
         float separation = sqrtf(lineLengthSq) - capsuleRadius;
         cp.push_back(closestLine.v1);
 
@@ -502,14 +502,14 @@ std::vector<Contact> Collisions::collisionPolyCaps(Polygon* poly, Capsule* caps)
     Edge closestLine = GJK::getClosestPoints(poly, caps);
 
     float capsuleRadius = caps->getRadius();
-    float lineLengthSq = sfVectorMath::square(closestLine.dir);
+    float lineLengthSq = Math::square(closestLine.dir);
 
     std::vector<Contact > contResult;
     ClippedPoints cp;
 
     if(lineLengthSq <= capsuleRadius*capsuleRadius)
     {
-        sf::Vector2f contactNorm = sfVectorMath::norm(closestLine.dir);
+        sf::Vector2f contactNorm = Math::norm(closestLine.dir);
         float separation = sqrtf(lineLengthSq) - capsuleRadius;
         cp.push_back(closestLine.v1);
 
@@ -526,14 +526,14 @@ std::vector<Contact> Collisions::collisionCapsCaps(Capsule* caps1, Capsule* caps
     float caps1Radius = caps1->getRadius();
     float caps2Radius = caps2->getRadius();
     float capsuleRadius = caps1Radius + caps2Radius;
-    float lineLengthSq = sfVectorMath::square(closestLine.dir);
+    float lineLengthSq = Math::square(closestLine.dir);
 
     std::vector<Contact > contResult;
     ClippedPoints cp;
 
     if(lineLengthSq <= capsuleRadius*capsuleRadius)
     {
-        sf::Vector2f contactNorm = sfVectorMath::norm(closestLine.dir);
+        sf::Vector2f contactNorm = Math::norm(closestLine.dir);
         float separation = sqrtf(lineLengthSq) - capsuleRadius;
         cp.push_back(closestLine.v1);
 

@@ -8,7 +8,7 @@
 
 #include "classUIButton.h"
 #include "classUIWindow.h"
-#include "sfVectorMath.h"
+#include "Math.h"
 #include "stringConversion.h"
 #include "structs.h"
 
