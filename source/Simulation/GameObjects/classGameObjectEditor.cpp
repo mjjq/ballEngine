@@ -13,7 +13,7 @@ GameObjectEditor::GameObjectEditor(GameObjectManager& manager,
 
     if(!selectionShader.loadFromMemory(indShader, sf::Shader::Fragment))
     {
-        "Editor: failed to load shader\n";
+        std::cout << "Editor: failed to load shader\n";
     }
 }
 
@@ -27,7 +27,6 @@ void GameObjectEditor::retrieveObject(sf::Vector2u const & position)
     for(int i=0; i<gameObjectManager.gameObjects.size(); ++i)
     {
         GameObject* currObj = gameObjectManager.gameObjects[i];
-        std::cout << currObj << " : " << i << "\n";
         float color = (float)((float)i/(float)gameObjectManager.gameObjects.size());
         selectionShader.setUniform("color", color);
         selectionTexture.draw(*currObj->renderObj->primDrawable, &selectionShader);
