@@ -18,6 +18,7 @@ void SandboxScene::load()
         ballSim = new BallUniverse{2000,2000,1.0f,false,false};
         charMan = new CharacterManager{};
         projMan = new GameObjectManager{};
+        objEditor = new GameObjectEditor{*projMan, window};
         charWorldInterface = ICharWorld{ballSim, charMan, projMan};
         ballSim->newObserver(&charWorldInterface);
 
@@ -27,6 +28,11 @@ void SandboxScene::load()
         adjustViewSize(window.getSize());
 
         buttonFuncMap = {
+            {"delObject",   [&]{objEditor->deleteObject();}},
+            {"selObject",   [&]{objEditor->retrieveObject((sf::Vector2u)sf::Mouse::getPosition(window));}},
+            {"mvObject",    [&]{objEditor->setObjectAttribute("position", window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+                                objEditor->setObjectAttribute("velocity", sf::Vector2f{0.0f, 0.0f});
+                                KeyBinds::isFuncContinuous = true;}},
             {"spwnMode",    [&]{switchControlMode("SpawnMode");}},
             {"editMode",    [&]{switchControlMode("EditObjectMode");}},
             {"incMass",     [&]{spawnMass+=1;}},

@@ -61,7 +61,6 @@ void Scene::loadKeybinds(std::string fileName,
     {
         textVarMap.insert( {value.first, [&]{return value.second;}} );
     }
-    std::cout << JSONFILEPATH + fileName << "\n";
 }
 
 void Scene::switchControlMode(std::string controlModeName)

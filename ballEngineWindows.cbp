@@ -83,6 +83,7 @@
 		<Unit filename="headers/classCharacterManager.h" />
 		<Unit filename="headers/classEquipable.h" />
 		<Unit filename="headers/classGameObject.h" />
+		<Unit filename="headers/classGameObjectEditor.h" />
 		<Unit filename="headers/classGameObjectManager.h" />
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classInventory.h" />
@@ -159,6 +160,7 @@
 		<Unit filename="source/Simulation/GameObjects/classCharacterManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classEquipable.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classGameObject.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classGameObjectEditor.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classGameObjectManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classInventory.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classProjectileComponent.cpp" />

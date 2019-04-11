@@ -6,6 +6,7 @@
 #include "classUniverse.h"
 #include "classCharacterManager.h"
 #include "classGameObjectManager.h"
+#include "classGameObjectEditor.h"
 #include "characterWorldInterface.h"
 #include "classUIContainer.h"
 
@@ -55,6 +56,7 @@ protected:
     BallUniverse* ballSim = nullptr;//{2000, 2000, 1.0f, false, false};
     CharacterManager* charMan = nullptr;
     GameObjectManager* projMan = nullptr;
+    GameObjectEditor* objEditor = nullptr;
     ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
     sf::RectangleShape boundaryRect;
 

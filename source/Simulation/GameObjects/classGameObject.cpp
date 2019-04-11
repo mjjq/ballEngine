@@ -65,11 +65,11 @@ PhysicsObject* GameObject::getColliderAddress()
     return collider;
 }
 
-void GameObject::setColliderAddress(PhysicsObject* object)
+/*void GameObject::setColliderAddress(PhysicsObject* object)
 {
     collider = object;
     collider->physSubject.addObserver(this);
-}
+}*/
 
 ObjectProperties GameObject::getProjProps()
 {
@@ -135,6 +135,29 @@ void GameObject::addObserver(Observer* obs)
 float GameObject::getDamage()
 {
     return damage;
+}
+
+void GameObject::setPosition(sf::Vector2f const & position)
+{
+    if(collider != nullptr)
+    {
+        collider->setPosition(position);
+    }
+    if(renderObj != nullptr)
+    {
+        renderObj->updatePosition(position);
+    }
+    if(lightSrc != nullptr)
+    {
+        lightSrc->position.x = position.x;
+        lightSrc->position.y = position.y;
+    }
+}
+
+void GameObject::setVelocity(sf::Vector2f const & velocity)
+{
+    if(collider != nullptr)
+        collider->setVelocity(velocity);
 }
 
 void GameObject::onNotify(Entity& entity, Event event)

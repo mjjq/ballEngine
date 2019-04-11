@@ -15,9 +15,6 @@ enum class ProjectileType
 
 class GameObject : public Observer
 {
-    Renderable* renderObj = nullptr;
-    PhysicsObject* collider = nullptr;
-    LightSource* lightSrc = nullptr;
 
 
     ObjectProperties projProperties;
@@ -31,6 +28,10 @@ class GameObject : public Observer
     float damage = 0.0f;
     std::function<void()> onCollideLambda = [&]{};
 public:
+    Renderable* renderObj = nullptr;
+    PhysicsObject* collider = nullptr;
+    LightSource* lightSrc = nullptr;
+
     GameObject(ProjectileType type,
                sf::Vector2f initPos,
                sf::Vector2f initDir);
@@ -44,11 +45,13 @@ public:
 
     ObjectProperties getProjProps();
     PhysicsObject* getColliderAddress();
-    void setColliderAddress(PhysicsObject* object);
 
     void addObserver(Observer* obs);
 
     float getDamage();
+
+    void setPosition(sf::Vector2f const & position);
+    void setVelocity(sf::Vector2f const & velocity);
 
     void onNotify(Entity& entity, Event event);
 };
