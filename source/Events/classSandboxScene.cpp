@@ -19,6 +19,7 @@ void SandboxScene::load()
         charMan = new CharacterManager{};
         projMan = new GameObjectManager{};
         objEditor = new GameObjectEditor{*projMan, window};
+        skeletonMan = new Skeleton2DManager{};
         charWorldInterface = ICharWorld{ballSim, charMan, projMan};
         ballSim->newObserver(&charWorldInterface);
 
@@ -191,6 +192,24 @@ void SandboxScene::load()
                                               2.5f,
                                               9.0f
                                               });*/
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             {0.0f, 0.0f},
+                                             {spawnRadius, 0.0f},
+                                             spawnMass,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             spawnRotRate,
+                                             false, false, false,
+                                             ObjectType::Ball,
+                                             {},
+                                             {"phong",
+                                             "red.jpg",
+                                             "normal2.png"}};
+                    projMan->addObject(new GameObject(new Renderable(props),
+                                                        new Ball(props),
+                                                        nullptr,
+                                                        new Skeleton2DWrap("example3.json")));
                     drawLine = false;
                 }
             }
@@ -512,6 +531,8 @@ void SandboxScene::update(sf::RenderWindow &_window)
     mousePosOnPan = sf::Mouse::getPosition(window);
 
     ballSim->universeLoop(currentFrameTime, targetFrameTime);
+
+    skeletonMan->updateAll(0.01f);
 
     charMan->setAimAngle(0, window.mapPixelToCoords(mousePosOnPan));
 

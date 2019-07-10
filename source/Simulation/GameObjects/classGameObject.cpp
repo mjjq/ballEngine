@@ -36,13 +36,30 @@ GameObject::GameObject(ObjectProperties objProps,
 
 GameObject::GameObject(Renderable* _renderObj,
                        PhysicsObject* _collider,
-                       LightSource* _lightSrc) :
+                       LightSource* _lightSrc,
+                       Skeleton2DWrap* _skeleton) :
                            renderObj{_renderObj},
                            collider{_collider},
-                           lightSrc{_lightSrc}
+                           lightSrc{_lightSrc},
+                           skeleton{_skeleton}
 {
     if(collider != nullptr)
         collider->physSubject.addObserver(this);
+
+    if(skeleton != nullptr)
+    {
+        skeleton->skelSubject.addObserver(this);
+
+        std::vector<sf::Vector2f > jointPositions = skeleton->getJointPositions();
+
+        ObjectProperties tempProps;
+
+        for(int i=0; i<jointPositions.size(); ++i)
+        {
+            tempProps._position = jointPositions[i];
+            skeletonDebugJoints.push_back(new Renderable(tempProps));
+        }
+    }
 }
 
 GameObject::~GameObject()
@@ -53,6 +70,15 @@ GameObject::~GameObject()
         delete renderObj;
     if(lightSrc != nullptr)
         delete lightSrc;
+    if(skeleton != nullptr)
+    {
+        delete skeleton;
+        for(int i=0; i<skeletonDebugJoints.size(); ++i)
+        {
+            delete skeletonDebugJoints[i];
+        }
+        skeletonDebugJoints.clear();
+    }
 }
 
 void GameObject::onCollide()
@@ -177,7 +203,20 @@ void GameObject::onNotify(Entity& entity, Event event)
                 lightSrc->position.x = collpos.x;
                 lightSrc->position.y = collpos.y;
             }
+            if(skeleton != nullptr)
+            {
+                skeleton->setRootPosition(collider->getPosition());
+            }
             break;
+        }
+        case(EventType::Skel_Animate):
+        {
+            std::vector<sf::Vector2f > jointPositions = skeleton->getJointPositions();
+
+            for(int i=0; i<jointPositions.size(); ++i)
+            {
+                skeletonDebugJoints[i]->updatePosition( jointPositions[i] );
+            }
         }
         default:
             break;

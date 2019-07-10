@@ -9,6 +9,7 @@
 #include "classGameObjectEditor.h"
 #include "characterWorldInterface.h"
 #include "classUIContainer.h"
+#include "classSkeleton2DManager.h"
 
 class GameScene : public Scene
 {
@@ -57,6 +58,7 @@ protected:
     CharacterManager* charMan = nullptr;
     GameObjectManager* projMan = nullptr;
     GameObjectEditor* objEditor = nullptr;
+    Skeleton2DManager* skeletonMan = nullptr;
     ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
     sf::RectangleShape boundaryRect;
 

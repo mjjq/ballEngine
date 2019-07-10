@@ -313,7 +313,7 @@ void KeyBinds::loadKeybinds(std::string filePath,
         json j;
         input >> j;
         keyMap = KeyBinds::createMapFromJSON(j["Default"], sfMap);
-        KeyFuncMap sceneMap   = KeyBinds::createMapFromJSON(j[sceneType], sfMap);
+        KeyFuncMap sceneMap = KeyBinds::createMapFromJSON(j[sceneType], sfMap);
         keyMap.insert(sceneMap.begin(), sceneMap.end());
 
         stringMap = KeyBinds::stringMapFromJSON(j["Default"], sfMap);

@@ -5,6 +5,7 @@
 #include "Observer.h"
 #include "classRenderable.h"
 #include "classLight.h"
+#include "classSkeleton2DWrap.h"
 
 enum class ProjectileType
 {
@@ -27,10 +28,13 @@ class GameObject : public Observer
 
     float damage = 0.0f;
     std::function<void()> onCollideLambda = [&]{};
+
+    std::vector<Renderable* > skeletonDebugJoints;
 public:
     Renderable* renderObj = nullptr;
     PhysicsObject* collider = nullptr;
     LightSource* lightSrc = nullptr;
+    Skeleton2DWrap* skeleton = nullptr;
 
     GameObject(ProjectileType type,
                sf::Vector2f initPos,
@@ -39,7 +43,8 @@ public:
                std::function<void()> onColl = [&]{});
     GameObject(Renderable* _renderObj = nullptr,
                PhysicsObject* _collider = nullptr,
-               LightSource* _lightSrc = nullptr);
+               LightSource* _lightSrc = nullptr,
+               Skeleton2DWrap* _skeleton = nullptr);
     ~GameObject();
     void onCollide();
 
