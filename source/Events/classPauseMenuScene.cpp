@@ -34,8 +34,8 @@ void PauseMenuScene::load()
         {"mainMenu", [&]{requestScene(SceneEnum::SCENE_MENU);}}
     };
 
-    loadUI("./json/pausemenusceneUI.json", container);
-    loadKeybinds("./json/keybinds.json", "PauseScene");
+    loadUI("pausemenusceneUI.json", container);
+    loadKeybinds("keybinds.json", "PauseScene");
 
 }
 

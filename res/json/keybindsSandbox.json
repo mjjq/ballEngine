@@ -1,0 +1,42 @@
+{
+	"Default" : {
+		"pauseGme" 	 	: ["Escape"],
+		"tglSimPse"	 	: ["P"],
+		"viewPan"	 	: ["V"],
+		"zmToMse"	 	: ["Dash"],
+		"zmFromMse"	 	: ["Equal"],
+		"rstView"	 	: ["Num0"],
+		"decSimStep" 	: ["Comma"],
+		"incSimStep" 	: ["Period"],
+		"tglCols"	 	: ["LControl", "C"],
+		"tglForces"	 	: ["LControl", "F"],
+		"tglGrav"	 	: ["LControl", "G"],
+		"mouseExp"		: ["E"],
+		"mouseSin"		: ["Q"]
+	},
+	"SpawnMode" : {
+		"clearSim"	 	: ["Delete"],
+		"incMass" 	 	: ["M"],
+		"decMass"	 	: ["LControl", "M"],
+		"incRad"	 	: ["R"],
+		"decRad"	 	: ["LControl", "R"],
+		"chgBColour" 	: ["LControl", "K"],
+		"undoBall"   	: ["LControl", "Z"],
+		"undoRect"   	: ["LAlt", "Z"],
+		"spwnSingle"	: ["LMB"],
+		"spwnSCirc"		: ["RMB"],
+		"spwnDAABB"		: ["LControl", "LMB"],
+		"spwnDPoly"		: ["LShift", "LMB"],
+		"spwnSPoly"		: ["LShift", "RMB"],
+		"spwnSys"		: ["LControl", "RMB"],
+		"spwnChar"		: ["X", "LMB"],
+		"spwnLight"		: ["L", "LMB"],
+		"editMode"		: ["Tab"]
+	},
+	"EditObjectMode" : {
+		"selObject"      : ["LMB"],
+		"mvObject"       : ["MMB"],
+		"delObject"      : ["Delete"],
+		"spwnMode"		 : ["Tab"]
+	}
+}

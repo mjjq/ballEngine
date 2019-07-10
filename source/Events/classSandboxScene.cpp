@@ -18,6 +18,8 @@ void SandboxScene::load()
         ballSim = new BallUniverse{2000,2000,1.0f,false,false};
         charMan = new CharacterManager{};
         projMan = new GameObjectManager{};
+        objEditor = new GameObjectEditor{*projMan, window};
+        skeletonMan = new Skeleton2DManager{};
         charWorldInterface = ICharWorld{ballSim, charMan, projMan};
         ballSim->newObserver(&charWorldInterface);
 
@@ -27,6 +29,13 @@ void SandboxScene::load()
         adjustViewSize(window.getSize());
 
         buttonFuncMap = {
+            {"delObject",   [&]{objEditor->deleteObject();}},
+            {"selObject",   [&]{objEditor->retrieveObject((sf::Vector2u)sf::Mouse::getPosition(window));}},
+            {"mvObject",    [&]{objEditor->setObjectAttribute("position", window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+                                objEditor->setObjectAttribute("velocity", sf::Vector2f{0.0f, 0.0f});
+                                KeyBinds::isFuncContinuous = true;}},
+            {"spwnMode",    [&]{switchControlMode("SpawnMode");}},
+            {"editMode",    [&]{switchControlMode("EditObjectMode");}},
             {"incMass",     [&]{spawnMass+=1;}},
             {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
             {"incRad",      [&]{spawnRadius+=1;}},
@@ -183,6 +192,24 @@ void SandboxScene::load()
                                               2.5f,
                                               9.0f
                                               });*/
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             {0.0f, 0.0f},
+                                             {spawnRadius, 0.0f},
+                                             spawnMass,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             spawnRotRate,
+                                             false, false, false,
+                                             ObjectType::Ball,
+                                             {},
+                                             {"phong",
+                                             "red.jpg",
+                                             "normal2.png"}};
+                    projMan->addObject(new GameObject(new Renderable(props),
+                                                        new Ball(props),
+                                                        nullptr,
+                                                        new Skeleton2DWrap("example3.json")));
                     drawLine = false;
                 }
             }
@@ -456,8 +483,8 @@ void SandboxScene::load()
             {"currFPS",     [&]{return std::to_string(currentFPS);}}
         };
 
-        loadUI("./json/sandboxsceneUI.json", container);
-        loadKeybinds("./json/keybinds.json", "SandboxScene");
+        loadUI("sandboxsceneUI.json", container);
+        loadKeybinds("keybindsSandbox.json", "SpawnMode");
 
         Collisions::setDebugWindow(window);
 
@@ -504,6 +531,8 @@ void SandboxScene::update(sf::RenderWindow &_window)
     mousePosOnPan = sf::Mouse::getPosition(window);
 
     ballSim->universeLoop(currentFrameTime, targetFrameTime);
+
+    skeletonMan->updateAll(0.01f);
 
     charMan->setAimAngle(0, window.mapPixelToCoords(mousePosOnPan));
 

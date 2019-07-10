@@ -10,6 +10,9 @@ class Scene
 {
     SceneEnum nextScene = SceneEnum::LAST;
 
+    const std::string JSONFILEPATH = "./res/json/";
+    std::string currentKeybindFilename;
+
 protected:
     SceneEnum prevScene = SceneEnum::LAST;
 
@@ -52,9 +55,10 @@ public:
     virtual void redraw(sf::RenderWindow &_window);
     virtual void initBindings();
 
-    void loadUI(std::string filePath, UIContainer &_container);
-    void loadKeybinds(std::string filePath,
-                      std::string sceneType);
+    void loadUI(std::string fileName, UIContainer &_container);
+    void loadKeybinds(std::string fileName,
+                     std::string sceneType);
+    void switchControlMode(std::string controlModeName);
 
     virtual void load();
     virtual void unload();

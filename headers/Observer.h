@@ -18,6 +18,9 @@ enum class EventType
     New_LightSrc,
     Delete_LightSrc,
     Update_Position,
+    New_SkelObj,
+    Delete_SkelObj,
+    Skel_Animate,
     Count
 };
 

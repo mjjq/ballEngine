@@ -34,8 +34,8 @@ void MainMenuScene::load()
         {"exit",        [&]{window.close();}}
     };
 
-    loadUI("./json/menusceneUI.json", container);
-    loadKeybinds("./json/keybinds.json", "MenuScene");
+    loadUI("menusceneUI.json", container);
+    loadKeybinds("keybinds.json", "MenuScene");
 
 }
 

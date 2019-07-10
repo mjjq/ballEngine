@@ -147,8 +147,8 @@ void SurvivalScene::load()
             {"playSpd",     [&]{return ballSim->getBallSpeed(0);}}
         };
 
-        loadKeybinds("./json/keybinds.json", "SurvivalScene");
-        loadUI("./json/survivalsceneUI.json", container);
+        loadKeybinds("keybinds.json", "SurvivalScene");
+        loadUI("survivalsceneUI.json", container);
 
         container.setWindowIsVisible(1, false);
         container.setWindowIsVisible(2, false);
