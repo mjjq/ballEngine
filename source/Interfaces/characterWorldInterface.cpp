@@ -109,7 +109,7 @@ void ICharWorld::spawnNewProjectile(ObjectProperties objProps)
 
 void ICharWorld::charContactData()
 {
-    for(int i=0; i<(int)charMan->characters.size(); ++i)
+    /*for(int i=0; i<(int)charMan->characters.size(); ++i)
     {
         Character* char1 = charMan->characters[i];
         char1->clearContactData();
@@ -141,7 +141,7 @@ void ICharWorld::charContactData()
                     it->second.coefFriction = 0.0f;
             }
         }
-    }
+    }*/
 }
 
 void ICharWorld::projContactData()
@@ -167,7 +167,7 @@ void ICharWorld::projContactData()
 
 Character* ICharWorld::getProjCharCollision(GameObject& proj)
 {
-    PhysicsObject* projectileObj = proj.getColliderAddress();
+    /*PhysicsObject* projectileObj = proj.getColliderAddress();
 
     for(int i=0; i<(int)charMan->characters.size(); ++i)
     {
@@ -182,7 +182,7 @@ Character* ICharWorld::getProjCharCollision(GameObject& proj)
             return charI;
         }
     }
-    return nullptr;
+    return nullptr;*/
 }
 
 void ICharWorld::dealDamage(GameObject& proj)

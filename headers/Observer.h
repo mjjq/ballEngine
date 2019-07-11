@@ -9,6 +9,7 @@ enum class EventType
     Destroy_Projectile,
     Character_Contact,
     Projectile_Contact,
+    PhysicsObj_OnContact,
     Deal_Damage,
     Gen_Explosion,
     New_Renderable,

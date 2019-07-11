@@ -9,9 +9,6 @@
 #include "Math.h"
 #include "stringConversion.h"
 
-typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
-typedef std::pair<ArbiterKey, Arbiter> ArbPair;
-typedef std::vector<std::unique_ptr<PhysicsObject> > PhysObjectArray;
 
 
 /*void BallUniverse::spawnNewObject(ObjectProperties init)
@@ -365,7 +362,7 @@ void BallUniverse::removeBall(int index)
         ////staticCollArray.removeEndRow();
     }
 
-    arbiters.clear();
+    clearArbiters();
     //broadPhase();
 }
 
@@ -389,7 +386,7 @@ void BallUniverse::removeRect(int index)
         //staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
     }
 
-    arbiters.clear();
+    clearArbiters();
     broadPhase();
 }
 
@@ -415,7 +412,8 @@ void BallUniverse::broadPhase()
 
                 if(iter == arbiters.end())
                 {
-                    arbiters.insert(ArbPair(key, newArb));
+                    addArbiter(ArbPair(key, newArb));
+                    //obji->contactData.insert(objj)
                 }
                 else
                     iter->second.update();
@@ -428,7 +426,7 @@ void BallUniverse::broadPhase()
                     //if(newDt < dtR)
                 }
                 else
-                    arbiters.erase(key);
+                    eraseArbiter(key);
             }
         }
     }
@@ -450,13 +448,13 @@ void BallUniverse::broadPhase()
 
                 if(iter == arbiters.end())
                 {
-                    arbiters.insert(ArbPair(key, newArb));
+                    addArbiter(ArbPair(key, newArb));
                 }
                 else
                     iter->second.update();
             }
             else
-                arbiters.erase(key);
+                eraseArbiter(key);
         }
     }
 }
@@ -786,7 +784,7 @@ void BallUniverse::clearSimulation()
     //colliderArray.clearMatrix();
     //staticCollArray.clearMatrix();
     numOfBalls = 0;
-    arbiters.clear();
+    clearArbiters();
     joints.clear();
 }
 
@@ -1025,7 +1023,7 @@ void BallUniverse::onNotify(Entity& entity, Event event)
                 {
                     dynamicObjects.erase(dynamicObjects.begin() + i);
                     numOfBalls--;
-                    arbiters.clear();
+                    clearArbiters();
                 }
             }
             for(int i=0; i<(int)staticObjects.size(); ++i)
@@ -1033,7 +1031,7 @@ void BallUniverse::onNotify(Entity& entity, Event event)
                 if(obj == staticObjects[i])
                 {
                     staticObjects.erase(staticObjects.begin() + i);
-                    arbiters.clear();
+                    clearArbiters();
                 }
             }
             break;
@@ -1042,6 +1040,39 @@ void BallUniverse::onNotify(Entity& entity, Event event)
             break;
     }
 
+}
+
+void BallUniverse::addArbiter(ArbPair const & arbPair)
+{
+    arbiters.insert(arbPair);
+
+    std::pair<PhysicsObject* , Contact > contactDataPair;
+
+    contactDataPair.first = arbPair.first.obj2;
+    contactDataPair.second = arbPair.second.contacts[0];
+    arbPair.first.obj1->addContactData(contactDataPair);
+
+    contactDataPair.first = arbPair.first.obj1;
+    contactDataPair.second = -arbPair.second.contacts[0];
+    arbPair.first.obj2->addContactData(contactDataPair);
+}
+
+void BallUniverse::clearArbiters()
+{
+    for(auto it = arbiters.begin(); it != arbiters.end(); ++it)
+    {
+        it->first.obj1->clearContactData();
+        it->first.obj2->clearContactData();
+    }
+    arbiters.clear();
+}
+
+void BallUniverse::eraseArbiter(ArbiterKey const & key)
+{
+    key.obj1->removeContactData(key.obj2);
+    key.obj2->removeContactData(key.obj1);
+
+    arbiters.erase(key);
 }
 
 BallUniverse::BallUniverse(int _worldSizeX,

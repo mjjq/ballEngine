@@ -1,26 +1,9 @@
 #ifndef CLASS_ARBITER_H
 #define CLASS_ARBITER_H
 #include <SFML/Graphics.hpp>
-#include "classPhysicsObject.h"
+#include "contactData.h"
 #include "constraintSolver.h"
-
-struct Contact
-{
-	sf::Vector2f position;
-	sf::Vector2f normal;
-	sf::Vector2f tangent;
-	sf::Vector2f rA, rB;
-
-	CStructs::Constraint jacobianN;
-	CStructs::Constraint jacobianF;
-
-	float bias;
-
-	float lambdaN = 0.0f;
-	float lambdaT = 0.0f;
-
-	float separation;
-};
+#include "classPhysicsObject.h"
 
 struct Arbiter
 {

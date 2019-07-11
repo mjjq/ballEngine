@@ -34,8 +34,8 @@ class Character : public Entity
     static float MAX_SLOPE_ANGLE;
     static float MAX_SLOPE_COSINE;
     CharacterProperties properties;
-    PhysicsObject* collider;
-    void moveSideWays(float input);
+
+    void moveSideWays(float input, PhysicsObject* collider);
     std::vector<ContactData > contactData;
 
     bool slopeOkay = true;
@@ -43,7 +43,7 @@ class Character : public Entity
 
     Inventory characterItems{};
 public:
-    Character(CharacterProperties init, Observer* obs = nullptr, PhysicsObject* rigidBind = nullptr);
+    Character(CharacterProperties init, Observer* obs = nullptr);
 
     void moveLeft();
     void moveRight();
@@ -52,7 +52,6 @@ public:
     void clearContactData();
     bool updateState();
     bool getSlopeState();
-    PhysicsObject* getColliderAddress();
 
     void equipablePrimary();
     sf::Vector2f getPosition();

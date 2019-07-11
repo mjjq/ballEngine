@@ -7,16 +7,16 @@
 float Character::MAX_SLOPE_ANGLE = 50.0f;
 float Character::MAX_SLOPE_COSINE = cosf(Math::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
-Character::Character(CharacterProperties init, Observer* obs, PhysicsObject* rigidBind) :
-    properties{init}, collider{rigidBind}
+Character::Character(CharacterProperties init, Observer* obs) :
+    properties{init}
 {
     charSubject.addObserver(obs);
     //equippedItem->addObserver(obs);
-    collider->setMomentInertia(1e+15);
+    //collider->setMomentInertia(1e+15);
     characterItems.addObserver(obs);
 }
 
-void Character::moveSideWays(float input)
+void Character::moveSideWays(float input, PhysicsObject* collider)
 {
     std::cout << contactData.size() << "\n";
     if(contactData.size() > 0)
@@ -54,19 +54,19 @@ void Character::moveSideWays(float input)
 
 void Character::moveLeft()
 {
-    moveSideWays(-1.0f);
+    //moveSideWays(-1.0f);
 }
 
 void Character::moveRight()
 {
-    moveSideWays(1.0f);
+    //moveSideWays(1.0f);
 }
 
 void Character::jump()
 {
-    if(touchingSurface && (slopeOkay || contactData.size()==2))
+    /*if(touchingSurface && (slopeOkay || contactData.size()==2))
         collider->addSolvedVelocity({0.0f, -properties.jumpPower},
-                                {0.0f, -properties.jumpPower});
+                                {0.0f, -properties.jumpPower});*/
 }
 
 void Character::addContactData(ContactData &data)
@@ -105,10 +105,10 @@ bool Character::getSlopeState()
     return slopeOkay;
 }
 
-PhysicsObject* Character::getColliderAddress()
-{
-    return collider;
-}
+//PhysicsObject* Character::getColliderAddress()
+//{
+    //return collider;
+//}
 
 /*Equipable* Character::getEquippedItem()
 {
@@ -117,8 +117,8 @@ PhysicsObject* Character::getColliderAddress()
 
 void Character::equipablePrimary()
 {
-    characterItems.updateEquippedPos(collider->getPosition());
-    characterItems.firePrimary();
+    //characterItems.updateEquippedPos(collider->getPosition());
+    //characterItems.firePrimary();
     //equippedItem->updateParentPos(collider->getPosition());
     //equippedItem->primaryFunc();
     //charSubject.notify(*this, Event{EventType::Fire_Bullet});
@@ -131,7 +131,7 @@ void Character::equipablePrimary()
 
 sf::Vector2f Character::getPosition()
 {
-    return collider->getPosition();
+    //return collider->getPosition();
 }
 
 void Character::changeAimAngle(float angle)

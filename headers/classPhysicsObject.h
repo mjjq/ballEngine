@@ -10,9 +10,12 @@
 #include <tuple>
 #include "Observer.h"
 #include "baseObject.h"
+#include "contactData.h"
 
 class PhysicsObject : public Entity
 {
+    typedef std::pair<PhysicsObject*, Contact > ContactDataPair;
+
     float coefRestitution = 0.0f;
     float coefFriction = 1.0f;
 protected:
@@ -44,6 +47,12 @@ protected:
     bool isStatic = false;
 
 public:
+    void addContactData(ContactDataPair const & contactPair);
+    void removeContactData(PhysicsObject* key);
+    void clearContactData();
+
+    std::map<PhysicsObject*, Contact > contactData;
+
     static Subject engineNotify;
     Subject physSubject;
 

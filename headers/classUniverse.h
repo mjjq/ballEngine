@@ -24,6 +24,10 @@ enum class SpawnObjectType
 class BallUniverse : public Observer
 {
 
+    typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
+    typedef std::pair<ArbiterKey, Arbiter> ArbPair;
+    typedef std::vector<std::unique_ptr<PhysicsObject> > PhysObjectArray;
+
     int worldSizeX;
     int worldSizeY;
     int numOfBalls = 0;
@@ -74,6 +78,10 @@ class BallUniverse : public Observer
     void broadPhase();
 
     Subject universeSub;
+
+    void addArbiter(ArbPair const & arbPair);
+    void clearArbiters();
+    void eraseArbiter(ArbiterKey const & key);
 public:
     std::vector<PhysicsObject* > dynamicObjects;
     std::vector<PhysicsObject* > staticObjects;

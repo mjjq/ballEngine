@@ -27,6 +27,22 @@ PhysicsObject::~PhysicsObject()
 }
 
 
+void PhysicsObject::addContactData(ContactDataPair const & contactPair)
+{
+    contactData.insert(contactPair);
+    physSubject.notify(*this, Event{EventType::PhysicsObj_OnContact});
+}
+
+void PhysicsObject::removeContactData(PhysicsObject* key)
+{
+    contactData.erase(key);
+}
+
+void PhysicsObject::clearContactData()
+{
+    contactData.clear();
+}
+
 
 sf::Vector2f PhysicsObject::getPosition() {return position;}
 void PhysicsObject::setPosition(sf::Vector2f newPosition) {position = newPosition;}
