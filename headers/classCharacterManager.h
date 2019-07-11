@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include <vector>
-#include "classCharacter.h"
 #include "Observer.h"
+#include "classCharacter.h"
 
-class CharacterManager
+class CharacterManager : public Observer
 {
     Subject subCharMan;
 public:
@@ -19,6 +19,8 @@ public:
     void setAimAngle(int index, sf::Vector2f targetPos);
     void switchNextItem(int charIndex);
     CharacterProperties getCharacterProperties(int index);
+
+    virtual void onNotify(Entity& entity, Event event);
 };
 
 #endif // CLASS_CHAR_MANAGER_H

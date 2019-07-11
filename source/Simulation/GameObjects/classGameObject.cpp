@@ -6,10 +6,12 @@
 GameObject::GameObject(Renderable* _renderObj,
                        PhysicsObject* _collider,
                        LightSource* _lightSrc,
+                       Character* _character,
                        Skeleton2DWrap* _skeleton) :
                            renderObj{_renderObj},
                            collider{_collider},
                            lightSrc{_lightSrc},
+                           character{_character},
                            skeleton{_skeleton}
 {
     if(collider != nullptr)
@@ -27,6 +29,15 @@ GameObject::GameObject(Renderable* _renderObj,
         {
             tempProps._position = jointPositions[i];
             skeletonDebugJoints.push_back(new Renderable(tempProps));
+        }
+    }
+
+    if(character != nullptr)
+    {
+        character->charSubject.addObserver(this);
+        if(collider != nullptr)
+        {
+            character->setCollider(collider);
         }
     }
 }
@@ -116,6 +127,14 @@ void GameObject::onNotify(Entity& entity, Event event)
             for(int i=0; i<jointPositions.size(); ++i)
             {
                 skeletonDebugJoints[i]->updatePosition( jointPositions[i] );
+            }
+            break;
+        }
+        case(EventType::Projectile_Contact):
+        {
+            if(character != nullptr)
+            {
+                character->updateState();
             }
         }
         default:

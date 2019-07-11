@@ -43,6 +43,11 @@ void PhysicsObject::clearContactData()
     contactData.clear();
 }
 
+const std::map<PhysicsObject*, Contact > & PhysicsObject::getContactData()
+{
+    return contactData;
+}
+
 
 sf::Vector2f PhysicsObject::getPosition() {return position;}
 void PhysicsObject::setPosition(sf::Vector2f newPosition) {position = newPosition;}

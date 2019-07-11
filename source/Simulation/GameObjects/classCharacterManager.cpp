@@ -73,3 +73,14 @@ CharacterProperties CharacterManager::getCharacterProperties(int index)
 
     return CharacterProperties{};
 }
+
+void CharacterManager::onNotify(Entity& entity, Event event)
+{
+    switch(event.type)
+    {
+        case(EventType::New_Character) :
+        {
+            characters.push_back((Character*)(&entity));
+        }
+    }
+}

@@ -209,6 +209,7 @@ void SandboxScene::load()
                     projMan->addObject(new GameObject(new Renderable(props),
                                                         new Ball(props),
                                                         nullptr,
+                                                        nullptr,
                                                         new Skeleton2DWrap("example3.json")));
                     drawLine = false;
                 }

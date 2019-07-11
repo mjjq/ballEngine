@@ -4,31 +4,36 @@
 #include <cmath>
 #include <iostream>
 
+Subject Character::engineNotify;
+
 float Character::MAX_SLOPE_ANGLE = 50.0f;
 float Character::MAX_SLOPE_COSINE = cosf(Math::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
-Character::Character(CharacterProperties init, Observer* obs) :
+Character::Character(CharacterProperties init) :
     properties{init}
 {
-    charSubject.addObserver(obs);
-    //equippedItem->addObserver(obs);
-    //collider->setMomentInertia(1e+15);
-    characterItems.addObserver(obs);
+    engineNotify.notify(*this, Event(EventType::New_Character));
 }
 
-void Character::moveSideWays(float input, PhysicsObject* collider)
+Character::~Character()
 {
-    std::cout << contactData.size() << "\n";
+    engineNotify.notify(*this, Event(EventType::Delete_Character));
+}
+
+void Character::moveSideWays(float input)
+{
+    //std::cout << contactData.size() << "\n";
+    const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
     if(contactData.size() > 0)
     {
-        for(int i=0; i<(int)contactData.size(); ++i)
+        for(auto it = contactData.begin(); it != contactData.end(); ++it)
         {
             if(slopeOkay)
             {
-                sf::Vector2f direction = input*Math::orthogonal(contactData[i].normal, 1.0f);
+                sf::Vector2f direction = input*Math::orthogonal(it->second.normal, 1.0f);
 
-                if(Math::dot(direction, contactData[0].normal) <= 0.0f &&
-                   Math::dot(direction, contactData[contactData.size()-1].normal) <= 0.0f &&
+                if(Math::dot(direction, contactData.begin()->second.normal) <= 0.0f &&
+                   Math::dot(direction, (contactData.end())->second.normal) <= 0.0f &&
                    Math::dot(collider->getVelocity(), direction) < properties.movementSpeed)
                 {
                     collider->addSolvedVelocity(direction*properties.movementSpeed,
@@ -44,10 +49,10 @@ void Character::moveSideWays(float input, PhysicsObject* collider)
         //std::cout << slopeOkay << "\n ";
         //std::cout << contactData.size() << " sii\n\n ";
         if(input*collider->getVelocity().x < properties.movementSpeed)
-            {
-                collider->addSolvedVelocity({0.1f*input*properties.movementSpeed, 0.0f},
-                                        {0.1f*input*properties.movementSpeed, 0.0f});
-            }
+        {
+            collider->addSolvedVelocity({0.1f*input*properties.movementSpeed, 0.0f},
+                                    {0.1f*input*properties.movementSpeed, 0.0f});
+        }
     }
 
 }
@@ -69,27 +74,21 @@ void Character::jump()
                                 {0.0f, -properties.jumpPower});*/
 }
 
-void Character::addContactData(ContactData &data)
+void Character::setCollider(PhysicsObject* _collider)
 {
-    contactData.push_back(data);
-}
-
-void Character::clearContactData()
-{
-    contactData.clear();
-    slopeOkay = true;
-    touchingSurface = false;
+    collider = _collider;
+    collider->setMomentInertia(1e+15f);
 }
 
 bool Character::updateState()
 {
     //slopeOkay = true;
     //collider->setCoefFriction(properties.coefFriction);
-
-    for(int i=0; i<(int)contactData.size(); ++i)
+    const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
+    for(auto it = contactData.begin(); it != contactData.end(); ++it)
     {
         touchingSurface = true;
-        float dProduct = Math::dot(contactData[i].normal, {0.0f, 1.0f});
+        float dProduct = Math::dot(it->second.normal, {0.0f, 1.0f});
         if(dProduct < MAX_SLOPE_COSINE)
         {
             //collider->setCoefFriction(0.0f);

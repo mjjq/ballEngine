@@ -50,6 +50,7 @@ public:
     void addContactData(ContactDataPair const & contactPair);
     void removeContactData(PhysicsObject* key);
     void clearContactData();
+    const std::map<PhysicsObject*, Contact > & getContactData();
 
     std::map<PhysicsObject*, Contact > contactData;
 

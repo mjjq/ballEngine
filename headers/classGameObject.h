@@ -6,6 +6,7 @@
 #include "classRenderable.h"
 #include "classLight.h"
 #include "classSkeleton2DWrap.h"
+#include "classCharacter.h"
 
 
 class GameObject : public Observer
@@ -17,11 +18,13 @@ public:
     Renderable* renderObj = nullptr;
     PhysicsObject* collider = nullptr;
     LightSource* lightSrc = nullptr;
+    Character* character = nullptr;
     Skeleton2DWrap* skeleton = nullptr;
 
     GameObject(Renderable* _renderObj = nullptr,
                PhysicsObject* _collider = nullptr,
                LightSource* _lightSrc = nullptr,
+               Character* _character = nullptr,
                Skeleton2DWrap* _skeleton = nullptr);
     ~GameObject();
     void onCollide();

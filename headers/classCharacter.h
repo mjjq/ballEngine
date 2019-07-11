@@ -30,26 +30,30 @@ struct CharacterProperties
 
 class Character : public Entity
 {
-    Subject charSubject;
     static float MAX_SLOPE_ANGLE;
     static float MAX_SLOPE_COSINE;
     CharacterProperties properties;
 
-    void moveSideWays(float input, PhysicsObject* collider);
-    std::vector<ContactData > contactData;
+    void moveSideWays(float input);
+
+    PhysicsObject* collider;
 
     bool slopeOkay = true;
     bool touchingSurface = false;
 
     Inventory characterItems{};
 public:
-    Character(CharacterProperties init, Observer* obs = nullptr);
+    Character(CharacterProperties init);
+    ~Character();
+
+    static Subject engineNotify;
+    Subject charSubject;
+
+    void setCollider(PhysicsObject* _collider);
 
     void moveLeft();
     void moveRight();
     void jump();
-    void addContactData(ContactData &data);
-    void clearContactData();
     bool updateState();
     bool getSlopeState();
 
