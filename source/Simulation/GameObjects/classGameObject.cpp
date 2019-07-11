@@ -50,6 +50,8 @@ GameObject::~GameObject()
         delete renderObj;
     if(lightSrc != nullptr)
         delete lightSrc;
+    if(character != nullptr)
+        delete character;
     if(skeleton != nullptr)
     {
         delete skeleton;

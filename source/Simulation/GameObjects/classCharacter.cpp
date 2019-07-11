@@ -23,6 +23,7 @@ Character::~Character()
 void Character::moveSideWays(float input)
 {
     //std::cout << contactData.size() << "\n";
+    updateState();
     const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
     if(contactData.size() > 0)
     {
@@ -33,7 +34,7 @@ void Character::moveSideWays(float input)
                 sf::Vector2f direction = input*Math::orthogonal(it->second.normal, 1.0f);
 
                 if(Math::dot(direction, contactData.begin()->second.normal) <= 0.0f &&
-                   Math::dot(direction, (contactData.end())->second.normal) <= 0.0f &&
+                   Math::dot(direction, (std::prev(contactData.end()))->second.normal) <= 0.0f &&
                    Math::dot(collider->getVelocity(), direction) < properties.movementSpeed)
                 {
                     collider->addSolvedVelocity(direction*properties.movementSpeed,
@@ -59,19 +60,19 @@ void Character::moveSideWays(float input)
 
 void Character::moveLeft()
 {
-    //moveSideWays(-1.0f);
+    moveSideWays(-1.0f);
 }
 
 void Character::moveRight()
 {
-    //moveSideWays(1.0f);
+    moveSideWays(1.0f);
 }
 
 void Character::jump()
 {
-    /*if(touchingSurface && (slopeOkay || contactData.size()==2))
+    if(touchingSurface && (slopeOkay || collider->getContactData().size()==2))
         collider->addSolvedVelocity({0.0f, -properties.jumpPower},
-                                {0.0f, -properties.jumpPower});*/
+                                {0.0f, -properties.jumpPower});
 }
 
 void Character::setCollider(PhysicsObject* _collider)
@@ -82,20 +83,26 @@ void Character::setCollider(PhysicsObject* _collider)
 
 bool Character::updateState()
 {
-    //slopeOkay = true;
+    slopeOkay = true;
+    touchingSurface = false;
     //collider->setCoefFriction(properties.coefFriction);
+    std::cout << "update state\n";
     const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
+
+    int badSlopeCount = 0;
+
     for(auto it = contactData.begin(); it != contactData.end(); ++it)
     {
         touchingSurface = true;
         float dProduct = Math::dot(it->second.normal, {0.0f, 1.0f});
         if(dProduct < MAX_SLOPE_COSINE)
         {
-            //collider->setCoefFriction(0.0f);
-            slopeOkay = false;
-            return false;
+            ++badSlopeCount;
         }
     }
+    if(badSlopeCount == contactData.size())
+        slopeOkay = false;
+
     return true;
 }
 

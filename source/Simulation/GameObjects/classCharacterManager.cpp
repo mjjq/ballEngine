@@ -1,6 +1,16 @@
 #include "classCharacterManager.h"
 #include "Math.h"
 
+CharacterManager::CharacterManager()
+{
+    Character::engineNotify.addObserver(this);
+}
+
+CharacterManager::~CharacterManager()
+{
+    Character::engineNotify.removeObserver(this);
+}
+
 void CharacterManager::addCharacter(CharacterProperties init)
 {
     Character* newChar = new Character{init};
@@ -81,6 +91,21 @@ void CharacterManager::onNotify(Entity& entity, Event event)
         case(EventType::New_Character) :
         {
             characters.push_back((Character*)(&entity));
+            std::cout << "new character\n";
+            break;
         }
+        case(EventType::Delete_Character) :
+        {
+            Character* character = (Character*)(&entity);
+            for(int i=0; i<characters.size(); ++i)
+            {
+                if(characters[i] == character)
+                    characters.erase(characters.begin() + i);
+            }
+            std::cout << "delete character\n";
+            break;
+        }
+        default:
+            break;
     }
 }

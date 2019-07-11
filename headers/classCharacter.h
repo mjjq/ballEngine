@@ -16,13 +16,8 @@ struct ContactData
 
 struct CharacterProperties
 {
-    sf::Vector2f position;
-    sf::Vector2f velocity;
-    sf::Vector2f size;
-    float mass;
-    float movementSpeed;
-    float jumpPower;
-    ObjectType bodyType = ObjectType::Capsule;
+    float movementSpeed = 1.0f;
+    float jumpPower = 10.0f;
     float coefFriction = 4.0f;
     float maxHealth = 10.0f;
     float currentHealth = maxHealth;

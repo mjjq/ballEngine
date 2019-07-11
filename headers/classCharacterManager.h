@@ -10,6 +10,9 @@ class CharacterManager : public Observer
 {
     Subject subCharMan;
 public:
+    CharacterManager();
+    ~CharacterManager();
+
     std::vector<Character* > characters;
     void addCharacter(CharacterProperties init);
     void addCharacter(Character* newChar);

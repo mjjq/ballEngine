@@ -37,6 +37,12 @@
 		"selObject"      : ["LMB"],
 		"mvObject"       : ["MMB"],
 		"delObject"      : ["Delete"],
-		"spwnMode"		 : ["Tab"]
+		"charMode"		 : ["Tab"]
+	},
+	"CharacterMode" : {
+		"mvPlrLft" 		: ["A"],
+		"mvPlrRgt" 		: ["D"],
+		"plrJump" 		: ["Space"],
+		"spwnMode" 		: ["Tab"]
 	}
 }

@@ -34,8 +34,9 @@ void SandboxScene::load()
             {"mvObject",    [&]{objEditor->setObjectAttribute("position", window.mapPixelToCoords(sf::Mouse::getPosition(window)));
                                 objEditor->setObjectAttribute("velocity", sf::Vector2f{0.0f, 0.0f});
                                 KeyBinds::isFuncContinuous = true;}},
-            {"spwnMode",    [&]{switchControlMode("SpawnMode");}},
-            {"editMode",    [&]{switchControlMode("EditObjectMode");}},
+            {"spwnMode",    [&]{switchControlMode("SpawnMode"); std::cout << "spawnmode\n";}},
+            {"editMode",    [&]{switchControlMode("EditObjectMode"); std::cout << "editmode\n";}},
+            {"charMode",    [&]{switchControlMode("CharacterMode"); std::cout << "charmode\n";}},
             {"incMass",     [&]{spawnMass+=1;}},
             {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
             {"incRad",      [&]{spawnRadius+=1;}},
@@ -206,11 +207,12 @@ void SandboxScene::load()
                                              {"phong",
                                              "red.jpg",
                                              "normal2.png"}};
+                    CharacterProperties init;
                     projMan->addObject(new GameObject(new Renderable(props),
                                                         new Ball(props),
                                                         nullptr,
-                                                        nullptr,
-                                                        new Skeleton2DWrap("example3.json")));
+                                                        new Character(init),
+                                                        nullptr));//new Skeleton2DWrap("example3.json")));
                     drawLine = false;
                 }
             }
@@ -316,6 +318,7 @@ void SandboxScene::load()
                     {
                         vert.position.x = 30.0f * vert.position.x * velocity.x;
                         vert.position.y = 30.0f * vert.position.y * velocity.y;
+                        vert.position = Math::rotate(vert.position, spawnRotation);
                     }
                     ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
                                              {0.0f, 0.0f},
@@ -323,7 +326,7 @@ void SandboxScene::load()
                                              1e+15f,
                                              spawnCoefFriction,
                                              spawnCoefRest,
-                                             spawnRotation,
+                                             0.0f,
                                              0.0f,
                                              true, false, false,
                                              ObjectType::Polygon,
