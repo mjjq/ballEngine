@@ -2,7 +2,6 @@
 #define CLASS_PROJWEAPON_H
 
 #include "classEquipable.h"
-#include "classGameObject.h"
 
 enum class WeaponType
 {
@@ -25,7 +24,6 @@ public:
     const EquipableType MY_TYPE = EquipableType::PWeapon;
     EquipableType type() const override;
 
-    ProjectileType PROJ_TYPE = ProjectileType::Bomb;
 
     void primaryFunc();
     void secondaryFunc();

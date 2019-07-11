@@ -28,14 +28,14 @@ EquipableType ProjectileWeapon::type() const { return MY_TYPE; }
 void ProjectileWeapon::initialiseRifle()
 {
     muzzleLength = 20.0f;
-    PROJ_TYPE = ProjectileType::Bullet;
+    //PROJ_TYPE = ProjectileType::Bullet;
     remainingAmmo = 10;
 }
 
 void ProjectileWeapon::initialiseGrenLaunch()
 {
     muzzleLength = 20.0f;
-    PROJ_TYPE = ProjectileType::Bomb;
+    //PROJ_TYPE = ProjectileType::Bomb;
     remainingAmmo = 10;
 }
 

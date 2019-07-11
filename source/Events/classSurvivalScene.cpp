@@ -35,7 +35,7 @@ void SurvivalScene::spawnRandomBalls(int nOBalls,
         sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
         sf::Vector2f newVelocity = {velocityX, velocityY};
 
-        charWorldInterface.spawnNewProjectile(ProjectileType::Bullet, newPos, newVelocity);
+        //charWorldInterface.spawnNewProjectile(ProjectileType::Bullet, newPos, newVelocity);
     }
 }
 
