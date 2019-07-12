@@ -84,6 +84,7 @@
 		<Unit filename="headers/classCapsule.h" />
 		<Unit filename="headers/classCharacter.h" />
 		<Unit filename="headers/classCharacterManager.h" />
+		<Unit filename="headers/classCharacterState.h" />
 		<Unit filename="headers/classEquipable.h" />
 		<Unit filename="headers/classGameObject.h" />
 		<Unit filename="headers/classGameObjectEditor.h" />
@@ -118,6 +119,7 @@
 		<Unit filename="headers/classUniverse.h" />
 		<Unit filename="headers/collisionDetection.h" />
 		<Unit filename="headers/constraintSolver.h" />
+		<Unit filename="headers/contactData.h" />
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/jsonParsing.h" />

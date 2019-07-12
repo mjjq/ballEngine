@@ -156,6 +156,10 @@ void SandboxScene::load()
             },
         };
         buttonReleaseMap = {
+            {"mvPlrRgt",    [&]{charMan->handleInput(Input::Idle, 0);}
+                                },
+            {"mvPlrLft",    [&]{charMan->handleInput(Input::Idle, 0);}
+                                },
             {"spwnSingle",  [&]{
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
@@ -212,7 +216,7 @@ void SandboxScene::load()
                                                         new Ball(props),
                                                         nullptr,
                                                         new Character(init),
-                                                        nullptr));//new Skeleton2DWrap("example3.json")));
+                                                        new Skeleton2DWrap("example3.json")));
                     drawLine = false;
                 }
             }
@@ -514,7 +518,7 @@ void SandboxScene::load()
                                  "white.png",
                                  "blankN.jpg"}
                                              };
-        projMan->addObject(new GameObject(new Renderable(props)));
+        //projMan->addObject(new GameObject(new Renderable(props)));
     }
 }
 

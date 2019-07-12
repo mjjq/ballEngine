@@ -12,6 +12,7 @@ float Character::MAX_SLOPE_COSINE = cosf(Math::PI * Character::MAX_SLOPE_ANGLE /
 Character::Character(CharacterProperties init) :
     properties{init}
 {
+    currentState = new IdleState();
     engineNotify.notify(*this, Event(EventType::New_Character));
 }
 
@@ -23,13 +24,13 @@ Character::~Character()
 void Character::moveSideWays(float input)
 {
     //std::cout << contactData.size() << "\n";
-    updateState();
     const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
     if(contactData.size() > 0)
     {
         for(auto it = contactData.begin(); it != contactData.end(); ++it)
         {
-            if(slopeOkay)
+            float dProduct = Math::dot(it->second.normal, {0.0f, 1.0f});
+            if(dProduct >= MAX_SLOPE_COSINE)
             {
                 sf::Vector2f direction = input*Math::orthogonal(it->second.normal, 1.0f);
 
@@ -37,6 +38,7 @@ void Character::moveSideWays(float input)
                    Math::dot(direction, (std::prev(contactData.end()))->second.normal) <= 0.0f &&
                    Math::dot(collider->getVelocity(), direction) < properties.movementSpeed)
                 {
+                    std::cout << "movement " << direction.x << " " << direction.y << "\n";
                     collider->addSolvedVelocity(direction*properties.movementSpeed,
                                                 direction*properties.movementSpeed);
                 }
@@ -58,16 +60,6 @@ void Character::moveSideWays(float input)
 
 }
 
-void Character::moveLeft()
-{
-    moveSideWays(-1.0f);
-}
-
-void Character::moveRight()
-{
-    moveSideWays(1.0f);
-}
-
 void Character::jump()
 {
     if(touchingSurface && (slopeOkay || collider->getContactData().size()==2))
@@ -83,10 +75,11 @@ void Character::setCollider(PhysicsObject* _collider)
 
 bool Character::updateState()
 {
+    if(currentState != nullptr)
+        currentState->update(*this);
+
     slopeOkay = true;
     touchingSurface = false;
-    //collider->setCoefFriction(properties.coefFriction);
-    std::cout << "update state\n";
     const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
 
     int badSlopeCount = 0;
@@ -104,6 +97,17 @@ bool Character::updateState()
         slopeOkay = false;
 
     return true;
+}
+
+void Character::handleInput(Input input)
+{
+    CharacterState* newState = currentState->handleInput(*this, input);
+
+    if(newState != nullptr)
+    {
+        delete currentState;
+        currentState = newState;
+    }
 }
 
 bool Character::getSlopeState()
@@ -168,4 +172,9 @@ CharacterProperties Character::getProperties()
 void Character::switchNextItem()
 {
     characterItems.nextItem();
+}
+
+void Character::setAnimation(std::string const & animationName)
+{
+
 }

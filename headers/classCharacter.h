@@ -6,6 +6,9 @@
 #include "Observer.h"
 #include "classInventory.h"
 
+class CharacterState;
+enum class Input;
+
 struct ContactData
 {
 	sf::Vector2f position;
@@ -29,7 +32,6 @@ class Character : public Entity
     static float MAX_SLOPE_COSINE;
     CharacterProperties properties;
 
-    void moveSideWays(float input);
 
     PhysicsObject* collider;
 
@@ -37,7 +39,10 @@ class Character : public Entity
     bool touchingSurface = false;
 
     Inventory characterItems{};
+
+    CharacterState* currentState;
 public:
+    void moveSideWays(float input);
     Character(CharacterProperties init);
     ~Character();
 
@@ -46,11 +51,11 @@ public:
 
     void setCollider(PhysicsObject* _collider);
 
-    void moveLeft();
-    void moveRight();
     void jump();
     bool updateState();
     bool getSlopeState();
+
+    void handleInput(Input input);
 
     void equipablePrimary();
     sf::Vector2f getPosition();
@@ -61,6 +66,11 @@ public:
     CharacterProperties getProperties();
 
     void switchNextItem();
+
+    void setAnimation(std::string const & animationName);
 };
+
+
+#include "classCharacterState.h"
 
 #endif // CLASS_CHAR_H

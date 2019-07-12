@@ -29,13 +29,21 @@ void CharacterManager::moveCharacter(sf::Vector2f direction, int characterIndex)
         if(Math::dot(direction, {0.0f, 1.0f}) <= 0)
         {
             if(Math::dot(direction, {1.0f, 0.0f}) > 0.0f)
-                characters[characterIndex]->moveRight();
+                characters[characterIndex]->handleInput(Input::WalkRight);
             else
-                characters[characterIndex]->moveLeft();
+                characters[characterIndex]->handleInput(Input::WalkLeft);
         }
         else
             characters[characterIndex]->jump();
     }
+}
+
+void CharacterManager::handleInput(Input input, int characterIndex)
+{
+    if((int)characters.size()>characterIndex)
+        characters[characterIndex]->handleInput(input);
+
+    std::cout << "release\n";
 }
 
 void CharacterManager::equipablePrimary(int charIndex)

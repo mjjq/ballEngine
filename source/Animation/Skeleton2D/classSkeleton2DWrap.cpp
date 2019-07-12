@@ -9,7 +9,7 @@ Subject Skeleton2DWrap::engineNotify;
 Skeleton2DWrap::Skeleton2DWrap(std::string const & filename)
 {
     skeleton = JSONSkeletonReader::readFromFile(filename);
-    skeleton.setAnimation("walk", AnimationSet::TransitionType::Immediate);
+    skeleton.setAnimation("idle", AnimationSet::TransitionType::Immediate);
     engineNotify.notify(*this, Event(EventType::New_SkelObj));
 }
 

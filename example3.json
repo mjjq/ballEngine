@@ -120,6 +120,10 @@
 
 
 "animations": {
+	"idle": {
+	
+	},
+	
 	"walk": {
 		"bones": {
 			"left upper leg": {

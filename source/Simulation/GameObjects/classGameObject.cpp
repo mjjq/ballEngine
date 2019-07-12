@@ -120,6 +120,10 @@ void GameObject::onNotify(Entity& entity, Event event)
             {
                 skeleton->setRootPosition(collider->getPosition());
             }
+            if(character != nullptr)
+            {
+                character->updateState();
+            }
             break;
         }
         case(EventType::Skel_Animate):
