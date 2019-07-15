@@ -142,6 +142,15 @@ void GameObject::onNotify(Entity& entity, Event event)
             {
                 character->updateState();
             }
+            break;
+        }
+        case(EventType::Set_Animation):
+        {
+            if(skeleton != nullptr)
+            {
+                std::string name = ((DataContainer<std::string>&)entity).data;
+                skeleton->setAnimation(name);
+            }
         }
         default:
             break;

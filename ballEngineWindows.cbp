@@ -167,6 +167,7 @@
 		<Unit filename="source/Simulation/CollisionEngine/sepAxisTests.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacter.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacterManager.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classCharacterState.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classEquipable.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classGameObject.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classGameObjectEditor.cpp" />

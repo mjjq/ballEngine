@@ -18,6 +18,8 @@ public:
     void animate(float deltaTime);
     void setRootPosition(sf::Vector2f const & position);
 
+    void setAnimation(std::string const & animationName);
+
     std::vector<sf::Vector2f > getJointPositions();
 };
 

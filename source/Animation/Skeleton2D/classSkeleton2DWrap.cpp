@@ -34,3 +34,8 @@ void Skeleton2DWrap::setRootPosition(sf::Vector2f const & position)
     skeleton.setTarget(position, "root", 0);
     skelSubject.notify(*this, Event{EventType::Skel_Animate});
 }
+
+void Skeleton2DWrap::setAnimation(std::string const & animationName)
+{
+    skeleton.setAnimation(animationName, AnimationSet::TransitionType::Immediate);
+}

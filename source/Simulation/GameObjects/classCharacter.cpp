@@ -107,6 +107,7 @@ void Character::handleInput(Input input)
     {
         delete currentState;
         currentState = newState;
+        currentState->enterState(*this);
     }
 }
 
@@ -176,5 +177,6 @@ void Character::switchNextItem()
 
 void Character::setAnimation(std::string const & animationName)
 {
-
+    DataContainer<std::string > message{animationName};
+    charSubject.notify(message, Event{EventType::Set_Animation});
 }

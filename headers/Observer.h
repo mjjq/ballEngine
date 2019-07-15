@@ -24,6 +24,7 @@ enum class EventType
     Delete_Character,
     Delete_SkelObj,
     Skel_Animate,
+    Set_Animation,
     Count
 };
 
@@ -38,6 +39,15 @@ public:
 class Entity
 {
 
+};
+
+template <typename T>
+class DataContainer : public Entity
+{
+public:
+    DataContainer() {};
+    DataContainer(T _data) : data{_data} {};
+    T data;
 };
 
 class Observer : public Entity

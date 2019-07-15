@@ -12,6 +12,21 @@ CharacterState* WalkState::handleInput(Character& character, Input input)
     {
         case(Input::Idle):
             return new IdleState();
+
+        case(Input::WalkLeft):
+        {
+            if(direction > 0.0f)
+                return new IdleState();
+
+            break;
+        }
+        case(Input::WalkRight):
+        {
+            if(direction < 0.0f)
+                return new IdleState();
+
+            break;
+        }
     }
 
     return nullptr;
