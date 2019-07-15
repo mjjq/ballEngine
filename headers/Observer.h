@@ -25,6 +25,7 @@ enum class EventType
     Delete_SkelObj,
     Skel_Animate,
     Set_Animation,
+    Character_SetTarget,
     Count
 };
 

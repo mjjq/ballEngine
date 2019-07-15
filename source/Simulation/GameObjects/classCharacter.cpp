@@ -116,10 +116,6 @@ bool Character::getSlopeState()
     return slopeOkay;
 }
 
-//PhysicsObject* Character::getColliderAddress()
-//{
-    //return collider;
-//}
 
 /*Equipable* Character::getEquippedItem()
 {
@@ -139,11 +135,6 @@ void Character::equipablePrimary()
 {
     return equippedItem->getLocalPosition() + collider->getPosition();
 }*/
-
-sf::Vector2f Character::getPosition()
-{
-    //return collider->getPosition();
-}
 
 void Character::changeAimAngle(float angle)
 {
@@ -179,4 +170,12 @@ void Character::setAnimation(std::string const & animationName)
 {
     DataContainer<std::string > message{animationName};
     charSubject.notify(message, Event{EventType::Set_Animation});
+}
+
+void Character::setTarget(sf::Vector2f const & target)
+{
+    sf::Vector2f realTarget = target;//Math::orthogonal(target, 1.0);
+    DataContainer<sf::Vector2f > message{realTarget};
+    charSubject.notify(message,
+                       Event{EventType::Character_SetTarget});
 }

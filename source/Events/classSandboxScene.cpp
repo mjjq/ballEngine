@@ -62,7 +62,7 @@ void SandboxScene::load()
                 KeyBinds::isFuncContinuous = true;
                     }},
             {"aimChar",     [&]{
-                charMan->setAimAngle(0, (sf::Vector2f)mousePosOnPan);
+                charMan->setTarget((sf::Vector2f)mousePosOnPan, 0);
                 KeyBinds::isFuncContinuous = true;
                     }},
             {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
@@ -83,12 +83,12 @@ void SandboxScene::load()
                                 KeyBinds::isFuncContinuous = true;}},
             {"equPrim",     [&]{charMan->equipablePrimary(0);}},
             {"nxtItem",     [&]{charMan->switchNextItem(0);}},
-            {"plrJump",     [&]{charMan->moveCharacter({0,1}, 0);
+            {"plrJump",     [&]{charMan->handleInput(Input::Jump, 0);
                                 KeyBinds::isFuncContinuous = false;}},
-            {"mvPlrRgt",    [&]{charMan->moveCharacter({1,0}, 0);
+            {"mvPlrRgt",    [&]{charMan->handleInput(Input::WalkRight, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
-            {"mvPlrLft",    [&]{charMan->moveCharacter({-1,0}, 0);
+            {"mvPlrLft",    [&]{charMan->handleInput(Input::WalkLeft, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
             {"spwnSingle",  [&]{
@@ -199,21 +199,21 @@ void SandboxScene::load()
                                               });*/
                     ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
                                              {0.0f, 0.0f},
-                                             {spawnRadius, 0.0f},
+                                             {spawnRadius, spawnRadius*2.0f},
                                              spawnMass,
                                              spawnCoefFriction,
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
                                              false, false, false,
-                                             ObjectType::Ball,
+                                             ObjectType::Capsule,
                                              {},
                                              {"phong",
                                              "red.jpg",
                                              "normal2.png"}};
                     CharacterProperties init;
                     projMan->addObject(new GameObject(new Renderable(props),
-                                                        new Ball(props),
+                                                        new Capsule(props),
                                                         nullptr,
                                                         new Character(init),
                                                         new Skeleton2DWrap("example3.json")));
@@ -541,8 +541,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
     ballSim->universeLoop(currentFrameTime, targetFrameTime);
 
     skeletonMan->updateAll(0.01f);
-
-    charMan->setAimAngle(0, window.mapPixelToCoords(mousePosOnPan));
+    charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
 
     timeToNextSpawn -= currentFrameTime;
 }

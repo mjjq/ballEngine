@@ -127,10 +127,10 @@ void SurvivalScene::load()
                                 KeyBinds::isFuncContinuous = true;}},
             {"mvPlrLft",    [&]{if(gameLogic.allowPlayerMovement)ballSim->playerInFunc({0.2,0});
                                 KeyBinds::isFuncContinuous = true;}},*/
-            {"mvPlrRgt",    [&]{charMan->moveCharacter({1,0}, 0);
+            {"mvPlrRgt",    [&]{charMan->handleInput(Input::WalkRight, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
-            {"mvPlrLft",    [&]{charMan->moveCharacter({-1,0}, 0);
+            {"mvPlrLft",    [&]{charMan->handleInput(Input::WalkLeft, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
             {"startGme",    [&]{startGame();}},

@@ -39,3 +39,9 @@ void Skeleton2DWrap::setAnimation(std::string const & animationName)
 {
     skeleton.setAnimation(animationName, AnimationSet::TransitionType::Immediate);
 }
+
+void Skeleton2DWrap::setTarget(sf::Vector2f const & target)
+{
+    skeleton.setTarget(target, "torso", -1,false, true, Skeleton2DBone::RelativeTo::Orthogonal);
+    skelSubject.notify(*this, Event{EventType::Skel_Animate});
+}

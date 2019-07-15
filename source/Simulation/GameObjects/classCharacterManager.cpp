@@ -22,28 +22,10 @@ void CharacterManager::addCharacter(Character* newChar)
     characters.push_back(std::move(newChar));
 }
 
-void CharacterManager::moveCharacter(sf::Vector2f direction, int characterIndex)
-{
-    if((int)characters.size()>characterIndex && Math::square(direction)>0.0f)
-    {
-        if(Math::dot(direction, {0.0f, 1.0f}) <= 0)
-        {
-            if(Math::dot(direction, {1.0f, 0.0f}) > 0.0f)
-                characters[characterIndex]->handleInput(Input::WalkRight);
-            else
-                characters[characterIndex]->handleInput(Input::WalkLeft);
-        }
-        else
-            characters[characterIndex]->jump();
-    }
-}
-
 void CharacterManager::handleInput(Input input, int characterIndex)
 {
     if((int)characters.size()>characterIndex)
         characters[characterIndex]->handleInput(input);
-
-    std::cout << "release\n";
 }
 
 void CharacterManager::equipablePrimary(int charIndex)
@@ -57,20 +39,11 @@ void CharacterManager::newObserver(Observer* obs)
     subCharMan.addObserver(obs);
 }
 
-void CharacterManager::setAimAngle(int index, sf::Vector2f targetPos)
+void CharacterManager::setTarget(sf::Vector2f targetPos, int characterIndex)
 {
-    if(index < (int)characters.size())
+    if(characterIndex < (int)characters.size())
     {
-        Character* currChar = characters[index];
-        sf::Vector2f relPos = targetPos - currChar->getPosition();
-
-        float angle = 0.0f;
-        if(Math::square(relPos) > 0.0f)
-        {
-            angle = atan2(relPos.y, relPos.x);
-        }
-        //std::cout << 180.0f * angle / sfVectorMath::PI << "\n";
-        currChar->changeAimAngle(180.0f * angle / Math::PI);
+        characters[characterIndex]->setTarget(targetPos);
     }
 }
 
@@ -99,7 +72,6 @@ void CharacterManager::onNotify(Entity& entity, Event event)
         case(EventType::New_Character) :
         {
             characters.push_back((Character*)(&entity));
-            std::cout << "new character\n";
             break;
         }
         case(EventType::Delete_Character) :
@@ -110,7 +82,6 @@ void CharacterManager::onNotify(Entity& entity, Event event)
                 if(characters[i] == character)
                     characters.erase(characters.begin() + i);
             }
-            std::cout << "delete character\n";
             break;
         }
         default:

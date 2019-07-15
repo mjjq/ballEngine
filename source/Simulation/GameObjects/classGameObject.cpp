@@ -151,6 +151,16 @@ void GameObject::onNotify(Entity& entity, Event event)
                 std::string name = ((DataContainer<std::string>&)entity).data;
                 skeleton->setAnimation(name);
             }
+            break;
+        }
+        case(EventType::Character_SetTarget):
+        {
+            if(skeleton != nullptr)
+            {
+                sf::Vector2f target = ((DataContainer<sf::Vector2f >&)(entity)).data;
+                skeleton->setTarget(target);
+                std::cout << target.x << ", " << target.y << "new thing\n";
+            }
         }
         default:
             break;

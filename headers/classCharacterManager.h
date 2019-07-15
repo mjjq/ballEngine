@@ -16,11 +16,10 @@ public:
     std::vector<Character* > characters;
     void addCharacter(CharacterProperties init);
     void addCharacter(Character* newChar);
-    void moveCharacter(sf::Vector2f direction, int characterIndex);
     void handleInput(Input input, int characterIndex);
     void equipablePrimary(int charIndex);
     void newObserver(Observer* obs);
-    void setAimAngle(int index, sf::Vector2f targetPos);
+    void setTarget(sf::Vector2f targetPos, int characterIndex);
     void switchNextItem(int charIndex);
     CharacterProperties getCharacterProperties(int index);
 

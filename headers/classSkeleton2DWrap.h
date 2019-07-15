@@ -21,6 +21,8 @@ public:
     void setAnimation(std::string const & animationName);
 
     std::vector<sf::Vector2f > getJointPositions();
+
+    void setTarget(sf::Vector2f const & target);
 };
 
 #endif // SKEL_2D_WRAP_H

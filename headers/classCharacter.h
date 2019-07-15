@@ -58,7 +58,6 @@ public:
     void handleInput(Input input);
 
     void equipablePrimary();
-    sf::Vector2f getPosition();
     void changeAimAngle(float angle);
 
     void setHealth(float health);
@@ -68,6 +67,8 @@ public:
     void switchNextItem();
 
     void setAnimation(std::string const & animationName);
+
+    void setTarget(sf::Vector2f const & target);
 };
 
 
