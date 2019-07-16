@@ -96,6 +96,13 @@ bool Character::updateState()
     if(badSlopeCount == contactData.size())
         slopeOkay = false;
 
+    if(collider->getVelocity().y > 0.0f && !touchingSurface)
+    {
+        handleInput(Input::Fall);
+    }
+    if(touchingSurface)
+        handleInput(Input::Land);
+
     return true;
 }
 
@@ -108,6 +115,18 @@ void Character::handleInput(Input input)
         delete currentState;
         currentState = newState;
         currentState->enterState(*this);
+    }
+
+    switch(input)
+    {
+        case Input::EnableTarget:
+            properties.aimingAtTarget = true;
+            break;
+        case Input::DisableTarget:
+            properties.aimingAtTarget = false;
+            break;
+        default:
+            break;
     }
 }
 
@@ -170,11 +189,14 @@ void Character::setAnimation(std::string const & animationName)
 {
     DataContainer<std::string > message{animationName};
     charSubject.notify(message, Event{EventType::Set_Animation});
+    if(properties.aimingAtTarget == true)
+        setTarget(properties.target);
 }
 
 void Character::setTarget(sf::Vector2f const & target)
 {
     sf::Vector2f realTarget = target;//Math::orthogonal(target, 1.0);
+    properties.target = realTarget;
     DataContainer<sf::Vector2f > message{realTarget};
     charSubject.notify(message,
                        Event{EventType::Character_SetTarget});

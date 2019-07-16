@@ -62,7 +62,8 @@ void SandboxScene::load()
                 KeyBinds::isFuncContinuous = true;
                     }},
             {"aimChar",     [&]{
-                charMan->setTarget((sf::Vector2f)mousePosOnPan, 0);
+                charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
+                charMan->handleInput(Input::EnableTarget, 0);
                 KeyBinds::isFuncContinuous = true;
                     }},
             {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
@@ -460,7 +461,11 @@ void SandboxScene::load()
                     drawLine = false;
                 }
             }
-            }
+            },
+
+            {"aimChar",     [&]{
+                charMan->handleInput(Input::DisableTarget, 0);
+            }},
         };
 
         sliderFuncMap = {
@@ -533,6 +538,8 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     window.setMouseCursorVisible(true);
 
+    skeletonMan->updateAll(0.01f);
+
     KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
     KeyBinds::exeReleasedKey(pressedKeyStack, releasedKeyStack, releasedKeyBinds);
 
@@ -540,8 +547,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     ballSim->universeLoop(currentFrameTime, targetFrameTime);
 
-    skeletonMan->updateAll(0.01f);
-    charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
+    //charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
 
     timeToNextSpawn -= currentFrameTime;
 }

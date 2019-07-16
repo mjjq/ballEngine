@@ -27,6 +27,11 @@ CharacterState* WalkState::handleInput(Character& character, Input input)
 
             break;
         }
+        case(Input::Jump):
+        {
+            return new JumpState();
+            break;
+        }
     }
 
     return nullptr;
@@ -50,6 +55,50 @@ CharacterState* IdleState::handleInput(Character& character, Input input)
             return new WalkState(-1.0f);
         case(Input::WalkRight):
             return new WalkState(1.0f);
+        case(Input::Jump):
+        {
+            return new JumpState();
+            break;
+        }
+
+        break;
+    }
+
+    return nullptr;
+}
+
+void JumpState::enterState(Character& character)
+{
+    character.setAnimation("jump");
+    character.jump();
+}
+
+CharacterState* JumpState::handleInput(Character& character, Input input)
+{
+    switch(input)
+    {
+        //case(Input::Land):
+        //    return new IdleState();
+        case(Input::Fall):
+            return new FallState();
+
+        break;
+    }
+
+    return nullptr;
+}
+
+void FallState::enterState(Character& character)
+{
+    character.setAnimation("idle");
+}
+
+CharacterState* FallState::handleInput(Character& character, Input input)
+{
+    switch(input)
+    {
+        case(Input::Land):
+            return new IdleState();
 
         break;
     }

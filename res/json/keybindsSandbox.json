@@ -43,6 +43,7 @@
 		"mvPlrLft" 		: ["A"],
 		"mvPlrRgt" 		: ["D"],
 		"plrJump" 		: ["Space"],
-		"spwnMode" 		: ["Tab"]
+		"spwnMode" 		: ["Tab"],
+		"aimChar"		: ["RMB"]
 	}
 }

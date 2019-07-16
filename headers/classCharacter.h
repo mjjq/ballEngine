@@ -24,6 +24,8 @@ struct CharacterProperties
     float coefFriction = 4.0f;
     float maxHealth = 10.0f;
     float currentHealth = maxHealth;
+    bool aimingAtTarget = false;
+    sf::Vector2f target = {0.0f, 0.0f};
 };
 
 class Character : public Entity
@@ -51,11 +53,10 @@ public:
 
     void setCollider(PhysicsObject* _collider);
 
+    void handleInput(Input input);
     void jump();
     bool updateState();
     bool getSlopeState();
-
-    void handleInput(Input input);
 
     void equipablePrimary();
     void changeAimAngle(float angle);

@@ -6,7 +6,11 @@ enum class Input
     Idle,
     WalkLeft,
     WalkRight,
-    Jump
+    Jump,
+    Land,
+    Fall,
+    EnableTarget,
+    DisableTarget
 };
 
 class Character;
@@ -38,6 +42,22 @@ class IdleState : public CharacterState
 {
 public:
 
+    virtual void enterState(Character& character);
+
+    virtual CharacterState* handleInput(Character& character, Input input);
+};
+
+class JumpState : public CharacterState
+{
+public:
+    virtual void enterState(Character& character);
+
+    virtual CharacterState* handleInput(Character& character, Input input);
+};
+
+class FallState : public CharacterState
+{
+public:
     virtual void enterState(Character& character);
 
     virtual CharacterState* handleInput(Character& character, Input input);
