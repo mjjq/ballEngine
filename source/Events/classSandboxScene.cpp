@@ -82,7 +82,7 @@ void SandboxScene::load()
                                                         200.0f,
                                                         -1.0f);
                                 KeyBinds::isFuncContinuous = true;}},
-            {"equPrim",     [&]{charMan->equipablePrimary(0);}},
+            {"equPrim",     [&]{charMan->handleInput(Input::Equip_Primary, 0);}},
             {"nxtItem",     [&]{charMan->switchNextItem(0);}},
             {"plrJump",     [&]{charMan->handleInput(Input::Jump, 0);
                                 KeyBinds::isFuncContinuous = false;}},
@@ -180,8 +180,8 @@ void SandboxScene::load()
                                              {"phong",
                                              "red.jpg",
                                              "normal2.png"}};
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Ball(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Ball(props));
                     drawLine = false;
                 }
             }
@@ -200,7 +200,7 @@ void SandboxScene::load()
                                               });*/
                     ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
                                              {0.0f, 0.0f},
-                                             {spawnRadius, spawnRadius*2.0f},
+                                             {50.0f, 100.0f},
                                              spawnMass,
                                              spawnCoefFriction,
                                              spawnCoefRest,
@@ -213,11 +213,11 @@ void SandboxScene::load()
                                              "red.jpg",
                                              "normal2.png"}};
                     CharacterProperties init;
-                    projMan->addObject(new GameObject(new Renderable(props),
+                    GameObject* obj = new GameObject(nullptr,//new Renderable(props),
                                                         new Capsule(props),
                                                         nullptr,
                                                         new Character(init),
-                                                        new Skeleton2DWrap("example3.json")));
+                                                        new Skeleton2DWrap("example3.json"));
                     drawLine = false;
                 }
             }
@@ -258,8 +258,8 @@ void SandboxScene::load()
                                              true, false, false,
                                              ObjectType::Ball};
 
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Ball(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Ball(props));
                     drawLine = false;
                 }
             }
@@ -292,8 +292,8 @@ void SandboxScene::load()
                                              {"phong",
                                               "red.jpg",
                                               "pyramidN.png"}};
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Polygon(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Polygon(props));
                     drawLine = false;
                 }
             }
@@ -337,8 +337,8 @@ void SandboxScene::load()
                                              ObjectType::Polygon,
                                              verts};
 
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Polygon(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Polygon(props));
                     drawLine = false;
                 }
             }
@@ -377,8 +377,8 @@ void SandboxScene::load()
                                              "red.jpg",
                                              "normal.jpg",
                                              "spiro.jpg"}};
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Polygon(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Polygon(props));
                     drawLine = false;
                 }
             }
@@ -417,9 +417,9 @@ void SandboxScene::load()
                                              };
                     LightProperties lProperties = {{props._position.x, props._position.y, 5.0f}};
                     lProperties.umbralRadius = spawnRadius;
-                    projMan->addObject(new GameObject(new Renderable(props),
+                    GameObject* obj = new GameObject(new Renderable(props),
                                                       new Ball(props),
-                                                      new LightSource(lProperties)));
+                                                      new LightSource(lProperties));
                     drawLine = false;
                 }
             }

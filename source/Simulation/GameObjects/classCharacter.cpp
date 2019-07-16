@@ -78,6 +78,8 @@ bool Character::updateState()
     if(currentState != nullptr)
         currentState->update(*this);
 
+    characterItems.updateEquippedPos(collider->getPosition());
+
     slopeOkay = true;
     touchingSurface = false;
     const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
@@ -124,6 +126,9 @@ void Character::handleInput(Input input)
             break;
         case Input::DisableTarget:
             properties.aimingAtTarget = false;
+            break;
+        case Input::Equip_Primary:
+            characterItems.firePrimary();
             break;
         default:
             break;

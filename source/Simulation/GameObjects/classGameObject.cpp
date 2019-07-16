@@ -2,6 +2,7 @@
 #include "classGameObject.h"
 #include "Math.h"
 
+Subject GameObject::engineNotify;
 
 GameObject::GameObject(Renderable* _renderObj,
                        PhysicsObject* _collider,
@@ -40,6 +41,8 @@ GameObject::GameObject(Renderable* _renderObj,
             character->setCollider(collider);
         }
     }
+
+    engineNotify.notify(*this, Event(EventType::New_GameObject));
 }
 
 GameObject::~GameObject()
@@ -61,6 +64,8 @@ GameObject::~GameObject()
         }
         skeletonDebugJoints.clear();
     }
+
+    engineNotify.notify(*this, Event(EventType::Delete_GameObject));
 }
 
 

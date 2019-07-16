@@ -10,6 +10,7 @@ enum class Input
     Land,
     Fall,
     EnableTarget,
+    Equip_Primary,
     DisableTarget
 };
 

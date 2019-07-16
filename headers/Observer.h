@@ -23,6 +23,8 @@ enum class EventType
     New_Character,
     Delete_Character,
     Delete_SkelObj,
+    New_GameObject,
+    Delete_GameObject,
     Skel_Animate,
     Set_Animation,
     Character_SetTarget,

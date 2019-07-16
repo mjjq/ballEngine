@@ -15,6 +15,8 @@ class GameObject : public Observer
 
     std::vector<Renderable* > skeletonDebugJoints;
 public:
+    static Subject engineNotify;
+
     Renderable* renderObj = nullptr;
     PhysicsObject* collider = nullptr;
     LightSource* lightSrc = nullptr;

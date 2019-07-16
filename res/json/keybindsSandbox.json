@@ -44,6 +44,7 @@
 		"mvPlrRgt" 		: ["D"],
 		"plrJump" 		: ["Space"],
 		"spwnMode" 		: ["Tab"],
-		"aimChar"		: ["RMB"]
+		"aimChar"		: ["RMB"],
+		"equPrim"		: ["MMB"]
 	}
 }

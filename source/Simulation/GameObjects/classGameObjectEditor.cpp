@@ -53,7 +53,8 @@ void GameObjectEditor::deleteObject()
 {
     if(currentObject != nullptr)
     {
-        gameObjectManager.removeObject(currentObject);
+        //gameObjectManager.removeObject(currentObject);
+        delete currentObject;
         releaseObject();
     }
 }

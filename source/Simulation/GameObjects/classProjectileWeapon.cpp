@@ -1,6 +1,7 @@
 #include "classProjectileWeapon.h"
 
 #include "Math.h"
+#include "classGameObject.h"
 
 ProjectileWeapon::ProjectileWeapon(WeaponType type) : Equipable()
 {
@@ -41,7 +42,21 @@ void ProjectileWeapon::initialiseGrenLaunch()
 
 void ProjectileWeapon::primaryFunc()
 {
-    wepSub.notify(*this, Event{EventType::Fire_Weapon});
+    //wepSub.notify(*this, Event{EventType::Fire_Weapon});
+    ObjectProperties objProps;
+    objProps._ignoreGravity = true;
+    objProps._size = {10.0f, 10.0f};
+    objProps._position = parentPosition + sf::Vector2f{muzzleLength, 0.0f};
+    objProps._velocity = {10.0f, 0.0f};
+    objProps.material = {"phong",
+                                             "red.jpg",
+                                             "normal2.png"};
+    GameObject* obj = new GameObject(new Renderable(objProps),
+                   new Ball(objProps),
+                   nullptr,
+                   nullptr,
+                   nullptr);
+    std::cout << "primary\n";
 }
 
 void ProjectileWeapon::secondaryFunc()
