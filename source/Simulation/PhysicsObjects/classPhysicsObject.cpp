@@ -88,7 +88,10 @@ void PhysicsObject::updatePosition(float dt)
     cStepVelocity = nStepVelocity;
     cStepModVelocity = {0,0};
 
-    physSubject.notify(*this, Event(EventType::Update_Position));
+    DataContainer<sf::Vector2f > dataPos(getPosition());
+    DataContainer<float > dataRot(getRotAngle());
+    physSubject.notify(dataPos, Event(EventType::Update_Position));
+    physSubject.notify(dataRot, Event(EventType::Update_Rotation));
 }
 
 /**

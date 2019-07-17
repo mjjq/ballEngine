@@ -1,4 +1,5 @@
 #include "classSandboxScene.h"
+#include "jsonParsing.h"
 
 SandboxScene::SandboxScene(sf::RenderWindow &_window,
                            sf::Time &_targetFTime,
@@ -303,7 +304,17 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+                    //spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+
+                    ObjectProperties props;
+                    props._position = (sf::Vector2f )(mousePosOnClick);
+                    props._velocity = velocity;
+                    nlohmann::json j = beParser::loadJsonFromFile("./res/json/square.json");
+                    beParser::checkObjectPropertyParams(j, props);
+
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                     new Polygon(props));
+
                     drawLine = false;
                 }
             }

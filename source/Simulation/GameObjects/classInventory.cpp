@@ -1,5 +1,5 @@
 #include "classInventory.h"
-
+#include "classGameObject.h"
 
 Inventory::Inventory()
 {
@@ -10,6 +10,8 @@ void Inventory::initialiseDefault()
 {
     equipableItems.emplace_back(new ProjectileWeapon{WeaponType::Rifle});
     equipableItems.emplace_back(new ProjectileWeapon{WeaponType::GrenLauncher});
+
+    //GameObject* obj1 = new GameObject(new Renderable())
 }
 
 void Inventory::updateEquippedPos(sf::Vector2f position)

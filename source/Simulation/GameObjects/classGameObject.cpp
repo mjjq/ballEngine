@@ -8,12 +8,14 @@ GameObject::GameObject(Renderable* _renderObj,
                        PhysicsObject* _collider,
                        LightSource* _lightSrc,
                        Character* _character,
-                       Skeleton2DWrap* _skeleton) :
+                       Skeleton2DWrap* _skeleton,
+                       Equipable* _equipable) :
                            renderObj{_renderObj},
                            collider{_collider},
                            lightSrc{_lightSrc},
                            character{_character},
-                           skeleton{_skeleton}
+                           skeleton{_skeleton},
+                           equipable{_equipable}
 {
     if(collider != nullptr)
         collider->physSubject.addObserver(this);
@@ -64,6 +66,8 @@ GameObject::~GameObject()
         }
         skeletonDebugJoints.clear();
     }
+    if(equipable != nullptr)
+        delete equipable;
 
     engineNotify.notify(*this, Event(EventType::Delete_GameObject));
 }
@@ -110,24 +114,37 @@ void GameObject::onNotify(Entity& entity, Event event)
     {
         case(EventType::Update_Position):
         {
+            sf::Vector2f position = ((DataContainer<sf::Vector2f >& )(entity)).data;
             if(renderObj != nullptr)
             {
-                renderObj->updatePosition(collider->getPosition());
-                renderObj->updateOrientation(collider->getRotAngle());
+                renderObj->updatePosition(position);
+                //renderObj->updateOrientation(collider->getRotAngle());
             }
             if(lightSrc != nullptr)
             {
-                sf::Vector2f collpos = collider->getPosition();
-                lightSrc->position.x = collpos.x;
-                lightSrc->position.y = collpos.y;
+                lightSrc->position.x = position.x;
+                lightSrc->position.y = position.y;
             }
             if(skeleton != nullptr)
             {
-                skeleton->setRootPosition(collider->getPosition());
+                skeleton->setRootPosition(position);
             }
             if(character != nullptr)
             {
                 character->updateState();
+            }
+            if(equipable != nullptr)
+            {
+                equipable->updateParentPos(position);
+            }
+            break;
+        }
+        case(EventType::Update_Rotation):
+        {
+            float rotation = ((DataContainer<float >& )(entity)).data;
+            if(renderObj != nullptr)
+            {
+                renderObj->updateOrientation(rotation);
             }
             break;
         }

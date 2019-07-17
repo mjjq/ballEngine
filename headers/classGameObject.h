@@ -22,12 +22,14 @@ public:
     LightSource* lightSrc = nullptr;
     Character* character = nullptr;
     Skeleton2DWrap* skeleton = nullptr;
+    Equipable* equipable = nullptr;
 
     GameObject(Renderable* _renderObj = nullptr,
                PhysicsObject* _collider = nullptr,
                LightSource* _lightSrc = nullptr,
                Character* _character = nullptr,
-               Skeleton2DWrap* _skeleton = nullptr);
+               Skeleton2DWrap* _skeleton = nullptr,
+               Equipable* _equipable = nullptr);
     ~GameObject();
     void onCollide();
 

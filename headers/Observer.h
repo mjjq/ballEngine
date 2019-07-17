@@ -19,6 +19,7 @@ enum class EventType
     New_LightSrc,
     Delete_LightSrc,
     Update_Position,
+    Update_Rotation,
     New_SkelObj,
     New_Character,
     Delete_Character,

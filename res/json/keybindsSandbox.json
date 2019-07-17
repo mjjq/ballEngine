@@ -30,6 +30,7 @@
 		"spwnSPoly"		: ["LShift", "RMB"],
 		"spwnSys"		: ["LControl", "RMB"],
 		"spwnChar"		: ["X", "LMB"],
+		"spwnJson"		: ["J", "LMB"],
 		"spwnLight"		: ["L", "LMB"],
 		"editMode"		: ["Tab"]
 	},
