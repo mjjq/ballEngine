@@ -32,6 +32,20 @@ enum class EventType
     Count
 };
 
+class Container
+{
+
+};
+
+template <typename T>
+class DataContainer : public Container
+{
+public:
+    T data;
+    DataContainer() {};
+    DataContainer(T _data) : data{_data} {};
+};
+
 class Event
 {
 public:
@@ -40,25 +54,17 @@ public:
     {}
 };
 
-class Entity
+class Component
 {
 
 };
 
-template <typename T>
-class DataContainer : public Entity
-{
-public:
-    DataContainer() {};
-    DataContainer(T _data) : data{_data} {};
-    T data;
-};
 
-class Observer : public Entity
+class Observer : public Component
 {
 public:
     virtual ~Observer() {}
-    virtual void onNotify(Entity& entity, Event event) = 0;
+    virtual void onNotify(Component& entity, Event event, Container* data = nullptr) = 0;
 };
 
 class Subject
@@ -67,7 +73,7 @@ class Subject
     int numObservers_ = 0;
 
 public:
-    void notify(Entity& entity, Event event);
+    void notify(Component& entity, Event event, Container* data = nullptr);
 
     void addObserver(Observer* observer);
 

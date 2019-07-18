@@ -45,7 +45,7 @@ void Renderer::redrawAll(sf::RenderWindow &window)
 
 }
 
-void Renderer::onNotify(Entity& entity, Event event)
+void Renderer::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {

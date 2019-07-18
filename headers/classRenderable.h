@@ -5,7 +5,7 @@
 #include "Observer.h"
 #include "baseObject.h"
 
-class Renderable : public Entity
+class Renderable : public Component
 {
     void generateDrawables(ObjectProperties objProps);
 

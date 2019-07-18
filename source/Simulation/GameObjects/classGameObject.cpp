@@ -113,13 +113,13 @@ void GameObject::setVelocity(sf::Vector2f const & velocity)
         collider->setVelocity(velocity);
 }
 
-void GameObject::onNotify(Entity& entity, Event event)
+void GameObject::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {
         case(EventType::Update_Position):
         {
-            sf::Vector2f position = ((DataContainer<sf::Vector2f >& )(entity)).data;
+            sf::Vector2f position = ((DataContainer<sf::Vector2f >& )(*data)).data;
             if(renderObj != nullptr)
             {
                 renderObj->updatePosition(position);
@@ -146,7 +146,7 @@ void GameObject::onNotify(Entity& entity, Event event)
         }
         case(EventType::Update_Rotation):
         {
-            float rotation = ((DataContainer<float >& )(entity)).data;
+            float rotation = ((DataContainer<float >& )(*data)).data;
             if(renderObj != nullptr)
             {
                 renderObj->updateOrientation(rotation);
@@ -179,7 +179,7 @@ void GameObject::onNotify(Entity& entity, Event event)
         {
             if(skeleton != nullptr)
             {
-                std::string name = ((DataContainer<std::string>&)entity).data;
+                std::string name = ((DataContainer<std::string>&)*data).data;
                 skeleton->setAnimation(name);
             }
             break;
@@ -188,7 +188,7 @@ void GameObject::onNotify(Entity& entity, Event event)
         {
             if(skeleton != nullptr)
             {
-                sf::Vector2f target = ((DataContainer<sf::Vector2f >&)(entity)).data;
+                sf::Vector2f target = ((DataContainer<sf::Vector2f >&)(*data)).data;
                 skeleton->setTarget(target);
                 std::cout << target.x << ", " << target.y << "new thing\n";
             }

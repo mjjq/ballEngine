@@ -4,7 +4,7 @@
 #include "Skeleton2D.h"
 #include "Observer.h"
 
-class Skeleton2DWrap : public Entity
+class Skeleton2DWrap : public Component
 {
     Skeleton2D skeleton;
 

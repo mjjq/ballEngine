@@ -17,7 +17,7 @@ public:
     void removeSkeleton(int index);
     void clearAll();
 
-    void onNotify(Entity& entity, Event event);
+    void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CLASS_SKEL_2D_MAN_H

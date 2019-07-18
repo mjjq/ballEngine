@@ -12,7 +12,7 @@
 #include "baseObject.h"
 #include "contactData.h"
 
-class PhysicsObject : public Entity
+class PhysicsObject : public Component
 {
     typedef std::pair<PhysicsObject*, Contact > ContactDataPair;
 

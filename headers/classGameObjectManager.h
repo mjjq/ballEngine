@@ -13,7 +13,7 @@ public:
     std::vector<GameObject* > gameObjects;
     void removeObject(int index);
     void clearAll();
-    void onNotify(Entity& entity, Event event);
+    void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CLASS_GAMEOBJECTMAN_H

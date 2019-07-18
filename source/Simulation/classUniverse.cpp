@@ -1008,7 +1008,7 @@ void BallUniverse::newObserver(Observer* obs)
     universeSub.addObserver(obs);
 }
 
-void BallUniverse::onNotify(Entity& entity, Event event)
+void BallUniverse::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {

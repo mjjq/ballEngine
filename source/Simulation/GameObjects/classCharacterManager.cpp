@@ -65,7 +65,7 @@ CharacterProperties CharacterManager::getCharacterProperties(int index)
     return CharacterProperties{};
 }
 
-void CharacterManager::onNotify(Entity& entity, Event event)
+void CharacterManager::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {

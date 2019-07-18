@@ -151,7 +151,7 @@ public:
 
     void newObserver(Observer* obs);
 
-    void onNotify(Entity& entity, Event event);
+    void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CLASS_UNIVERSE_H

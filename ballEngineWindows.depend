@@ -591,7 +591,7 @@
 	"classGameScene.h"
 	"characterWorldInterface.h"
 
-1562753158 i:\users\marcus\my documents\github\ballengine_latest\headers\classgamescene.h
+1563472918 i:\users\marcus\my documents\github\ballengine_latest\headers\classgamescene.h
 	"classScene.h"
 	"classUniverse.h"
 	"classCharacterManager.h"
@@ -601,7 +601,7 @@
 	"classUIContainer.h"
 	"classSkeleton2DManager.h"
 
-1562862065 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
+1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
 	"integrators.h"
 	"collisionDetection.h"
 	"classPhysicsObject.h"
@@ -625,7 +625,7 @@
 	"classArbiter.h"
 	"GJK.h"
 
-1563445747 i:\users\marcus\my documents\github\ballengine_latest\headers\classphysicsobject.h
+1563469396 i:\users\marcus\my documents\github\ballengine_latest\headers\classphysicsobject.h
 	<deque>
 	<iostream>
 	<SFML/Graphics.hpp>
@@ -678,7 +678,7 @@
 	"SFML/Graphics.hpp"
 	"classPhysicsObject.h"
 
-1563284503 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
+1563469396 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
 	"classCapsule.h"
 	"classProjectileWeapon.h"
 	"Observer.h"
@@ -688,11 +688,11 @@
 1563379034 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectileweapon.h
 	"classEquipable.h"
 
-1563447207 i:\users\marcus\my documents\github\ballengine_latest\headers\classequipable.h
+1563469396 i:\users\marcus\my documents\github\ballengine_latest\headers\classequipable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 
-1563366012 i:\users\marcus\my documents\github\ballengine_latest\headers\observer.h
+1563480183 i:\users\marcus\my documents\github\ballengine_latest\headers\observer.h
 	<vector>
 
 1552053549 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectile.h
@@ -716,7 +716,7 @@
 	"classPhysicsObject.h"
 	"constraintSolver.h"
 
-1562865150 i:\users\marcus\my documents\github\ballengine_latest\headers\characterworldinterface.h
+1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\characterworldinterface.h
 	"classUniverse.h"
 	"classCharacterManager.h"
 	"classGameObjectManager.h"
@@ -724,7 +724,7 @@
 	"classProjectileWeapon.h"
 	"Observer.h"
 
-1563205434 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharactermanager.h
+1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharactermanager.h
 	<iostream>
 	<vector>
 	"Observer.h"
@@ -823,7 +823,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1563445851 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1563473090 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 
@@ -843,10 +843,10 @@
 	<numeric>
 	"classSceneManager.h"
 
-1563202102 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsurvivalscene.cpp
+1563473100 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsurvivalscene.cpp
 	"classSurvivalScene.h"
 
-1562865211 source:i:\users\marcus\my documents\github\ballengine_latest\source\interfaces\characterworldinterface.cpp
+1563473058 source:i:\users\marcus\my documents\github\ballengine_latest\source\interfaces\characterworldinterface.cpp
 	"characterWorldInterface.h"
 	"Math.h"
 
@@ -863,7 +863,7 @@
 	<fstream>
 	"jsonParsing.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\observer.cpp
+1563480180 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\observer.cpp
 	"Observer.h"
 
 1553731379 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\sfvectormath.cpp
@@ -885,7 +885,7 @@
 	<SFML/Graphics.hpp>
 	"structs.h"
 
-1563445731 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
+1563473058 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1008,18 +1008,18 @@
 	"Math.h"
 	"stringConversion.h"
 
-1563468905 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1563480246 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
 	<cmath>
 	<iostream>
 
-1563205406 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharactermanager.cpp
+1563473058 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharactermanager.cpp
 	"classCharacterManager.h"
 	"Math.h"
 
-1563447106 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classequipable.cpp
+1563468968 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classequipable.cpp
 	"classEquipable.h"
 
 1563447125 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classinventory.cpp
@@ -1112,7 +1112,7 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1563445452 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classphysicsobject.cpp
+1563480719 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classphysicsobject.cpp
 	"classPhysicsObject.h"
 	"Math.h"
 	"integrators.h"
@@ -1226,24 +1226,24 @@
 	"classUIGroup.h"
 	"structs.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
+1563469396 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
 	"classRenderable.h"
 	<cmath>
 	"Math.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
+1563469396 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 	"baseObject.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderer.cpp
+1563473058 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderer.cpp
 	"classRenderer.h"
 	<iostream>
 	<cmath>
 	"Math.h"
 	<SFML/OpenGL.hpp>
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderer.h
+1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderer.h
 	<vector>
 	"SFML/Graphics.hpp"
 	"lightingEngine.h"
@@ -1255,7 +1255,7 @@
 
 1563445404 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
 
-1563365679 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
+1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
 	"classBall.h"
 	"Observer.h"
 	"classRenderable.h"
@@ -1263,15 +1263,15 @@
 	"classSkeleton2DWrap.h"
 	"classCharacter.h"
 
-1563300578 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjectmanager.h
+1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjectmanager.h
 	"classGameObject.h"
 
-1563468868 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
+1563480631 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
 	<iostream>
 	"classGameObject.h"
 	"Math.h"
 
-1563300866 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjectmanager.cpp
+1563473058 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjectmanager.cpp
 	"classGameObjectManager.h"
 
 1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectilecomponent.cpp
@@ -1279,7 +1279,7 @@
 
 1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectilecomponent.h
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classlight.h
+1563469396 i:\users\marcus\my documents\github\ballengine_latest\headers\classlight.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 
@@ -1353,10 +1353,10 @@
 1563300354 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjecteditor.cpp
 	"classGameObjectEditor.h"
 
-1562753158 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dmanager.cpp
+1563473058 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dmanager.cpp
 	"classSkeleton2DManager.h"
 
-1562753158 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dmanager.h
+1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dmanager.h
 	"classSkeleton2DWrap.h"
 
 1562712614 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2d.h
@@ -1398,7 +1398,7 @@
 	"JSONSkeletonReader.h"
 	<iostream>
 
-1563204809 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
+1563469396 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
 	"Skeleton2D.h"
 	"Observer.h"
 

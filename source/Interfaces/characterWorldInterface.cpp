@@ -12,7 +12,7 @@ ICharWorld::ICharWorld(BallUniverse* _world,
 
 
 
-void ICharWorld::onNotify(Entity& entity, Event event)
+void ICharWorld::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {

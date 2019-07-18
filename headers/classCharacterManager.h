@@ -23,7 +23,7 @@ public:
     void switchNextItem(int charIndex);
     CharacterProperties getCharacterProperties(int index);
 
-    virtual void onNotify(Entity& entity, Event event);
+    virtual void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CLASS_CHAR_MANAGER_H

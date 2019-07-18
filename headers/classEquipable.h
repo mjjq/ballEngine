@@ -11,7 +11,7 @@ enum class EquipableType
     _Count
 };
 
-class Equipable : public Entity
+class Equipable : public Component
 {
 protected:
     float aimAngle = 0.0f;

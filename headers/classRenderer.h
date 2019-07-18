@@ -21,7 +21,7 @@ public:
 
     Renderer();
     void redrawAll(sf::RenderWindow& window);
-    void onNotify(Entity& entity, Event event);
+    void onNotify(Component& entity, Event event, Container* data = nullptr);
     void resizeWindow(sf::Vector2u newSize);
 };
 

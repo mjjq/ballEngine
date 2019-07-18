@@ -4,7 +4,7 @@
 #include "Math.h"
 
 Renderable::Renderable(std::string _texID,
-               std::vector<sf::Drawable* > _primitives) : Entity()
+               std::vector<sf::Drawable* > _primitives) : Component()
 {
     material.diffuseID = _texID;
     //primitives = _primitives;

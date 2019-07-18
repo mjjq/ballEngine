@@ -21,8 +21,8 @@ void SandboxScene::load()
         projMan = new GameObjectManager{};
         objEditor = new GameObjectEditor{*projMan, window};
         skeletonMan = new Skeleton2DManager{};
-        charWorldInterface = ICharWorld{ballSim, charMan, projMan};
-        ballSim->newObserver(&charWorldInterface);
+        //charWorldInterface = ICharWorld{ballSim, charMan, projMan};
+        //ballSim->newObserver(&charWorldInterface);
 
         wSize = ballSim->getWorldSize();
         changeBoundaryRect(wSize);

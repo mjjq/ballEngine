@@ -41,7 +41,7 @@ public:
     void setPosition(sf::Vector2f const & position);
     void setVelocity(sf::Vector2f const & velocity);
 
-    void onNotify(Entity& entity, Event event);
+    void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CLASS_PROJECTILE_H

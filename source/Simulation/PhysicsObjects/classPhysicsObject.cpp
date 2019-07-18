@@ -91,8 +91,8 @@ void PhysicsObject::updatePosition(float dt)
 
     DataContainer<sf::Vector2f > dataPos(getPosition());
     DataContainer<float > dataRot(getRotAngle());
-    physSubject.notify(dataPos, Event(EventType::Update_Position));
-    physSubject.notify(dataRot, Event(EventType::Update_Rotation));
+    physSubject.notify(*this, Event(EventType::Update_Position), &dataPos);
+    physSubject.notify(*this, Event(EventType::Update_Rotation), &dataRot);
 }
 
 /**

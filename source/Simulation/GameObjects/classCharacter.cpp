@@ -193,7 +193,7 @@ void Character::switchNextItem()
 void Character::setAnimation(std::string const & animationName)
 {
     DataContainer<std::string > message{animationName};
-    charSubject.notify(message, Event{EventType::Set_Animation});
+    charSubject.notify(*this, Event{EventType::Set_Animation}, &message);
     if(properties.aimingAtTarget == true)
         setTarget(properties.target);
 }
@@ -203,8 +203,9 @@ void Character::setTarget(sf::Vector2f const & target)
     sf::Vector2f realTarget = target;//Math::orthogonal(target, 1.0);
     properties.target = realTarget;
     DataContainer<sf::Vector2f > message{realTarget};
-    charSubject.notify(message,
-                       Event{EventType::Character_SetTarget});
+    charSubject.notify(*this,
+                       Event{EventType::Character_SetTarget},
+                       &message);
     //characterItems.updateEquippedPos(collider->getPosition());
 
     sf::Vector2f relVector = target - collider->getPosition();

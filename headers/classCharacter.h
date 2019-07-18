@@ -28,7 +28,7 @@ struct CharacterProperties
     sf::Vector2f target = {0.0f, 0.0f};
 };
 
-class Character : public Entity
+class Character : public Component
 {
     static float MAX_SLOPE_ANGLE;
     static float MAX_SLOPE_COSINE;

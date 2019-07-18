@@ -70,7 +70,7 @@ void GameObjectManager::clearAll()
     gameObjects.clear();
 }
 
-void GameObjectManager::onNotify(Entity& entity, Event event)
+void GameObjectManager::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {

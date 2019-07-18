@@ -28,7 +28,7 @@ public:
     //void projContactData();
     //Character* getProjCharCollision(GameObject& proj);
     //void dealDamage(GameObject& proj);
-    virtual void onNotify(Entity& entity, Event event);
+    virtual void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CHARWORLDINT_H
