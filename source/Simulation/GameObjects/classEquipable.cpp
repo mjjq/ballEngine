@@ -1,6 +1,6 @@
 #include "classEquipable.h"
 
-void Equipable::changeAimAngle(float angle)
+void Equipable::setAimAngle(float angle)
 {
     aimAngle = angle;
 }
@@ -18,6 +18,11 @@ sf::Vector2f Equipable::getLocalPosition()
 void Equipable::updateParentPos(sf::Vector2f pos)
 {
     parentPosition = pos;
+}
+
+void Equipable::updateParentVelocity(sf::Vector2f const & vel)
+{
+    parentVelocity = vel;
 }
 
 sf::Vector2f Equipable::getParentPos()

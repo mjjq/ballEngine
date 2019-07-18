@@ -1,6 +1,9 @@
 #include "classInventory.h"
 #include "classGameObject.h"
 
+#include "jsonParsing.h"
+#include "classPolygon.h"
+
 Inventory::Inventory()
 {
     initialiseDefault();
@@ -8,9 +11,20 @@ Inventory::Inventory()
 
 void Inventory::initialiseDefault()
 {
-    equipableItems.emplace_back(new ProjectileWeapon{WeaponType::Rifle});
-    equipableItems.emplace_back(new ProjectileWeapon{WeaponType::GrenLauncher});
+    ProjectileWeapon* rifle = new ProjectileWeapon{WeaponType::Rifle};
 
+    equipableItems.emplace_back(rifle);
+
+    ObjectProperties props;
+    props._position = {100.0f, 100.0f};
+    nlohmann::json j = beParser::loadJsonFromFile("./res/json/gun.json");
+    beParser::checkObjectPropertyParams(j, props);
+    GameObject* obj1 = new GameObject(new Renderable(props),
+                                      new Polygon(props),
+                                      nullptr,
+                                      nullptr,
+                                      nullptr,
+                                      rifle);
     //GameObject* obj1 = new GameObject(new Renderable())
 }
 

@@ -14,10 +14,11 @@ enum class EquipableType
 class Equipable : public Entity
 {
 protected:
-    Subject wepSub;
     float aimAngle = 0.0f;
     sf::Vector2f parentPosition;
+    sf::Vector2f parentVelocity;
 public:
+    Subject wepSub;
     bool executePrimary = false;
     bool executeSecondary = false;
 
@@ -25,10 +26,11 @@ public:
     virtual void primaryFunc() = 0;
     virtual void secondaryFunc() = 0;
     virtual sf::Vector2f getLocalPosition();
-    virtual void changeAimAngle(float angle);
+    virtual void setAimAngle(float angle);
     float getAimAngle();
     void addObserver(Observer* obs);
     void updateParentPos(sf::Vector2f pos);
+    void updateParentVelocity(sf::Vector2f const & vel);
     sf::Vector2f getParentPos();
 };
 

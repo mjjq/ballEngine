@@ -45,6 +45,7 @@ protected:
     bool bullet = false;
     bool ignoreGravity = false;
     bool isStatic = false;
+    bool enableCollision = true;
 
 public:
     void addContactData(ContactDataPair const & contactPair);
@@ -102,6 +103,9 @@ public:
 
     bool getIsPlayer();
     void setIsPlayer(bool value);
+
+    bool getCollisionsEnabled() {return enableCollision;}
+    void setCollisionsEnabled(bool value) {enableCollision = value;}
 
     void incTimesCollided();
     int getNumCollTimes();

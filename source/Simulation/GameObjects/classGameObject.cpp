@@ -44,6 +44,11 @@ GameObject::GameObject(Renderable* _renderObj,
         }
     }
 
+    if(equipable != nullptr)
+    {
+        equipable->wepSub.addObserver(this);
+    }
+
     engineNotify.notify(*this, Event(EventType::New_GameObject));
 }
 
@@ -145,6 +150,10 @@ void GameObject::onNotify(Entity& entity, Event event)
             if(renderObj != nullptr)
             {
                 renderObj->updateOrientation(rotation);
+            }
+            if(equipable != nullptr)
+            {
+                equipable->setAimAngle(rotation);
             }
             break;
         }

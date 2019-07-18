@@ -38,6 +38,7 @@ struct ObjectProperties
     bool _isStatic = false;
     bool _bullet = false;
     bool _ignoreGravity = false;
+    bool _enableCollision = true;
     ObjectType type = ObjectType::Ball;
     std::vector<sf::Vertex > _vertices = {};
     Material material;

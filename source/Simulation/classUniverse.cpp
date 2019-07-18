@@ -397,11 +397,15 @@ void BallUniverse::broadPhase()
     {
         PhysicsObject* obji = dynamicObjects[i];
 
+        if(obji->getCollisionsEnabled())
+        {
         for(unsigned int j=i+1; j<dynamicObjects.size(); ++j)
         {
             //std::cout << i << " " << j << "\n";
             PhysicsObject* objj = dynamicObjects[j];
 
+            if(objj->getCollisionsEnabled())
+            {
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);
 
@@ -428,6 +432,8 @@ void BallUniverse::broadPhase()
                 else
                     eraseArbiter(key);
             }
+            }
+        }
         }
     }
 
@@ -435,10 +441,14 @@ void BallUniverse::broadPhase()
     {
         PhysicsObject* obji = dynamicObjects[i];
 
+        if(obji->getCollisionsEnabled())
+        {
         for(unsigned int j=0; j<staticObjects.size(); ++j)
         {
             PhysicsObject* objj = staticObjects[j];
 
+            if(objj->getCollisionsEnabled())
+            {
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);
 
@@ -455,6 +465,8 @@ void BallUniverse::broadPhase()
             }
             else
                 eraseArbiter(key);
+            }
+        }
         }
     }
 }

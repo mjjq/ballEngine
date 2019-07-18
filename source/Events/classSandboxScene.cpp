@@ -175,7 +175,7 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Ball,
                                              {},
                                              {"phong",
@@ -207,7 +207,7 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Capsule,
                                              {},
                                              {"phong",
@@ -237,7 +237,7 @@ void SandboxScene::load()
                                          spawnCoefRest,
                                          spawnRotation,
                                          spawnRotRate,
-                                         false, false, false,
+                                         false, false, false, true,
                                          ObjectType::Capsule});
                     drawLine = false;
                 }
@@ -256,7 +256,7 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              0.0f,
-                                             true, false, false,
+                                             true, false, false, true,
                                              ObjectType::Ball};
 
                     GameObject* obj = new GameObject(new Renderable(props),
@@ -287,7 +287,7 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Polygon,
                                              verts,
                                              {"phong",
@@ -344,7 +344,7 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              0.0f,
                                              0.0f,
-                                             true, false, false,
+                                             true, false, false, true,
                                              ObjectType::Polygon,
                                              verts};
 
@@ -381,7 +381,7 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Polygon,
                                              verts,
                                              {"phong",
@@ -421,7 +421,7 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Ball,
                                              verts,
                                              {"light.frag"},
@@ -466,7 +466,7 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             true, false, false,
+                                             true, false, false, true,
                                              ObjectType::Polygon,
                                              verts});
                     drawLine = false;
@@ -527,7 +527,7 @@ void SandboxScene::load()
                                  spawnCoefRest,
                                  spawnRotation,
                                  spawnRotRate,
-                                 false, false, false,
+                                 false, false, false, true,
                                  ObjectType::Polygon,
                                  verts,
                                  {"phong",

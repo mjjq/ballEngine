@@ -254,6 +254,11 @@ bool beParser::checkVertexParams(json &j, std::vector<sf::Vertex > &_vertices)
 {
     if(j["vertices"].is_null())
         return false;
+
+    float scale = 1.0f;
+    if(!j["scale"].is_null())
+        scale = j["scale"];
+
     sf::Vertex tempVert;
     for(json& jVerts : j["vertices"])
     {
@@ -262,6 +267,7 @@ bool beParser::checkVertexParams(json &j, std::vector<sf::Vertex > &_vertices)
 
         tempVert.position.x = jVerts["x"];
         tempVert.position.y = jVerts["y"];
+        tempVert.position *= scale;
         _vertices.push_back(tempVert);
     }
 
@@ -331,6 +337,11 @@ bool beParser::checkObjectPropertyParams(json &j, ObjectProperties& props)
     if(!j2["ignoreGravity"].is_null())
     {
     props._ignoreGravity = j2["ignoreGravity"];
+    }
+
+    if(!j2["enableCollisions"].is_null())
+    {
+    props._enableCollision = j2["enableCollisions"];
     }
 
     if(!j2["objectType"].is_null())

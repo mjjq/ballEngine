@@ -28,7 +28,7 @@ public:
     void primaryFunc();
     void secondaryFunc();
 
-    virtual void changeAimAngle(float angle);
+    virtual void setAimAngle(float angle);
     virtual sf::Vector2f getLocalPosition();
 };
 

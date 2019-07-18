@@ -16,7 +16,8 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   mass{init._mass},
                   bullet{init._bullet},
                   ignoreGravity{init._ignoreGravity},
-                  isStatic{init._isStatic}
+                  isStatic{init._isStatic},
+                  enableCollision{init._enableCollision}
 {
     engineNotify.notify(*this, Event(EventType::New_PhysicsObj));
 }

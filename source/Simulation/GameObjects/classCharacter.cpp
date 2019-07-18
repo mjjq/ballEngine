@@ -162,7 +162,7 @@ void Character::equipablePrimary()
 
 void Character::changeAimAngle(float angle)
 {
-    characterItems.getEquippedItem().changeAimAngle(angle);
+    characterItems.getEquippedItem().setAimAngle(angle);
 }
 
 void Character::setHealth(float health)
@@ -205,4 +205,8 @@ void Character::setTarget(sf::Vector2f const & target)
     DataContainer<sf::Vector2f > message{realTarget};
     charSubject.notify(message,
                        Event{EventType::Character_SetTarget});
+    //characterItems.updateEquippedPos(collider->getPosition());
+
+    sf::Vector2f relVector = target - collider->getPosition();
+    //characterItems.updateEquippedAngle(atan2(relVector.x, relVector.y));
 }

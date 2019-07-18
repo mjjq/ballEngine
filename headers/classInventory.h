@@ -17,6 +17,10 @@ public:
     void firePrimary();
     void fireSecondary();
     void updateEquippedPos(sf::Vector2f position);
+    void updateEquippedAngle(float angle)
+    {
+        equipableItems[equippedIndex]->setAimAngle(angle);
+    }
     void switchTo(int index);
     void nextItem();
     Equipable& getEquippedItem();

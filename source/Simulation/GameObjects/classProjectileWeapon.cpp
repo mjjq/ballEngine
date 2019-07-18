@@ -28,7 +28,7 @@ EquipableType ProjectileWeapon::type() const { return MY_TYPE; }
 
 void ProjectileWeapon::initialiseRifle()
 {
-    muzzleLength = 20.0f;
+    muzzleLength = 100.0f;
     //PROJ_TYPE = ProjectileType::Bullet;
     remainingAmmo = 10;
 }
@@ -46,8 +46,8 @@ void ProjectileWeapon::primaryFunc()
     ObjectProperties objProps;
     objProps._ignoreGravity = true;
     objProps._size = {10.0f, 10.0f};
-    objProps._position = parentPosition + sf::Vector2f{muzzleLength, 0.0f};
-    objProps._velocity = {10.0f, 0.0f};
+    objProps._position = parentPosition + localMuzzlePos;
+    objProps._velocity = parentVelocity + 10.0f*Math::norm(localMuzzlePos);
     objProps.material = {"phong",
                                              "red.jpg",
                                              "normal2.png"};
@@ -70,7 +70,7 @@ sf::Vector2f ProjectileWeapon::getLocalPosition()
 }
 
 
-void ProjectileWeapon::changeAimAngle(float angle)
+void ProjectileWeapon::setAimAngle(float angle)
 {
     aimAngle = angle;
     localMuzzlePos = Math::rotate({muzzleLength, 0.0f}, angle);
