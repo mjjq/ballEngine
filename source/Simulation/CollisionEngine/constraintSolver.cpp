@@ -140,8 +140,6 @@ CStructs::Constraint Constraints::makeAngularConstraint(float objectAngle,
 
     c.bias = 0.01f*(objectAngle - targetAngle);
 
-    std::cout << c.bias << "\n";
-
     c.lambdaMax = 1000.0f;
     c.lambdaMin = -1000.0f;
 

@@ -990,7 +990,6 @@ void BallUniverse::newJoint(int index1, sf::Vector2f const & position)
 {
     if(index1 < (int)dynamicObjects.size())
     {
-        std::cout << "new Joint\n";
         joints.emplace_back(new PositionJoint({dynamicObjects[index1]}, position));
     }
 }
