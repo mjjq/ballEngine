@@ -91,8 +91,18 @@ void PositionJoint::ApplyImpulse()
                                 objects[i]->getRotRate()};
     }
 
-    CStructs::Constraint jacobian = (Constraints::makePositionConstraint(*objects[0],
-                                   position));
+    CStructs::Constraint jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().x,
+                                    position.x, 'x'));
+
+    Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+
+    jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().y,
+                                    position.y, 'y'));
+
+    Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+
+    jacobian = (Constraints::makeAngularConstraint(objects[0]->getRotAngle(),
+                                    40.0f));
 
     Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
 

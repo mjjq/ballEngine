@@ -107,6 +107,47 @@ CStructs::Constraint Constraints::makePositionConstraint(PhysicsObject &p,
     return c;
 }
 
+CStructs::Constraint Constraints::makePositionConstraint(float objectPos,
+                                                         float targetPos,
+                                                         char direction)
+{
+    CStructs::Constraint c;
+
+    if(direction == 'x')
+    {
+        c.constraintPairs.push_back({{1.0f, 0.0}, 0.0f});
+    }
+    else if(direction == 'y')
+    {
+        c.constraintPairs.push_back({{0.0f, 1.0}, 0.0f});
+    }
+
+
+    c.bias = 0.05f*(objectPos - targetPos);
+
+    c.lambdaMax = 1000.0f;
+    c.lambdaMin = -1000.0f;
+
+    return c;
+}
+
+CStructs::Constraint Constraints::makeAngularConstraint(float objectAngle,
+                                                        float targetAngle)
+{
+    CStructs::Constraint c;
+
+    c.constraintPairs.push_back({{0.0f, 0.0}, 1.0f});
+
+    c.bias = 0.01f*(objectAngle - targetAngle);
+
+    std::cout << c.bias << "\n";
+
+    c.lambdaMax = 1000.0f;
+    c.lambdaMin = -1000.0f;
+
+    return c;
+}
+
 
 void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
                                 CStructs::Constraint &j,

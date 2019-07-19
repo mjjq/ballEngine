@@ -68,6 +68,13 @@ public:
     static CStructs::Constraint makePositionConstraint(PhysicsObject &p,
                                                        sf::Vector2f const & position);
 
+    static CStructs::Constraint makePositionConstraint(float objectPos,
+                                                         float targetPos,
+                                                         char direction);
+
+    static CStructs::Constraint makeAngularConstraint(float objectAngle,
+                                                        float targetAngle);
+
     static void solveConstraints(CStructs::PairWiseVel &returnVel,
                                 CStructs::Constraint &j,
                                 CStructs::PairWiseMass &pwm,
