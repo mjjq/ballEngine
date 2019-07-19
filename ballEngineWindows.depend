@@ -601,7 +601,7 @@
 	"classUIContainer.h"
 	"classSkeleton2DManager.h"
 
-1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
+1563542321 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
 	"integrators.h"
 	"collisionDetection.h"
 	"classPhysicsObject.h"
@@ -668,7 +668,7 @@
 	"constraintSolver.h"
 	"classPhysicsObject.h"
 
-1563537768 i:\users\marcus\my documents\github\ballengine_latest\headers\constraintsolver.h
+1563540336 i:\users\marcus\my documents\github\ballengine_latest\headers\constraintsolver.h
 	<SFML/Graphics.hpp>
 	"classPhysicsObject.h"
 
@@ -711,7 +711,7 @@
 1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\stringconversion.h
 	"integrators.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\classjoint.h
+1563542024 i:\users\marcus\my documents\github\ballengine_latest\headers\classjoint.h
 	<SFML/Graphics.hpp>
 	"classPhysicsObject.h"
 	"constraintSolver.h"
@@ -823,7 +823,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1563473090 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1563542412 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 
@@ -885,7 +885,7 @@
 	<SFML/Graphics.hpp>
 	"structs.h"
 
-1563473058 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
+1563542522 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -905,7 +905,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1563536806 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjoint.cpp
+1563542578 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjoint.cpp
 	"classJoint.h"
 	"stringConversion.h"
 
@@ -934,13 +934,12 @@
 	"stringConversion.h"
 	"constraintSolver.h"
 
-1563539356 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\constraintsolver.cpp
+1563552807 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\constraintsolver.cpp
 	<iostream>
 	<cmath>
 	"constraintSolver.h"
 	"Math.h"
 	"stringConversion.h"
-	<cassert>
 
 1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\contactpoints.cpp
 	<iostream>

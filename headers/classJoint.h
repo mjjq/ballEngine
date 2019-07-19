@@ -5,24 +5,35 @@
 #include "classPhysicsObject.h"
 #include "constraintSolver.h"
 
-struct Joint
+class Joint
 {
+protected:
+	float lambda = 0.0f;
+
+	std::vector<PhysicsObject* > objects;
+
+	CStructs::PairWiseVel pwv;
+    CStructs::PairWiseMass pwm;
     enum {MAX_POINTS = 2};
 
-	Joint(PhysicsObject* p1, PhysicsObject* p2);
+public:
+	Joint(std::vector<PhysicsObject* > _objects);
 
 	void update();
 
 	void PreStep(float inv_dt);
-	void ApplyImpulse();
+	virtual void ApplyImpulse();
+};
 
-	float lambda = 0.0f;
+class PositionJoint : public Joint
+{
+    sf::Vector2f position;
+public:
+    PositionJoint(std::vector<PhysicsObject * > _objects,
+                  sf::Vector2f const & _position) :
+                    Joint{_objects}, position{_position} {}
 
-	PhysicsObject* obj1;
-	PhysicsObject* obj2;
-
-	CStructs::PairWiseVel pwv;
-    CStructs::PairWiseMass pwm;
+    virtual void ApplyImpulse();
 };
 
 #endif // CLASS_JOINT_H

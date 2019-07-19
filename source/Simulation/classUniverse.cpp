@@ -498,7 +498,7 @@ float BallUniverse::physicsLoop()
     }
     for(auto jointIt = joints.begin(); jointIt != joints.end(); ++jointIt)
     {
-        jointIt->PreStep(1.0f/dt);
+        (*jointIt)->PreStep(1.0f/dt);
     }
 
     for (int i = 0; i < 10; ++i)
@@ -509,7 +509,7 @@ float BallUniverse::physicsLoop()
         }
         for(auto jointIt = joints.begin(); jointIt != joints.end(); ++jointIt)
         {
-            jointIt->ApplyImpulse();
+            (*jointIt)->ApplyImpulse();
         }
     }
     //std::cout << "hello\n";
@@ -986,20 +986,12 @@ void BallUniverse::createExplosion(sf::Vector2f position,
     }
 }
 
-void BallUniverse::newJoint(int index1, int index2)
+void BallUniverse::newJoint(int index1, sf::Vector2f const & position)
 {
-    if(index1 < (int)dynamicObjects.size() &&
-       index2 < (int)dynamicObjects.size() &&
-       index1 != index2)
+    if(index1 < (int)dynamicObjects.size())
     {
-        //std::cout << "joint created\n";
-        //Joint nJoint(dynamicObjects[index1].get(),
-        //               dynamicObjects[index2].get());
-        //joints.push_back(nJoint);
-        int objSize = dynamicObjects.size();
-        Joint nJoint(dynamicObjects[objSize-2],
-                       dynamicObjects[objSize-1]);
-        joints.push_back(nJoint);
+        std::cout << "new Joint\n";
+        joints.emplace_back(new PositionJoint({dynamicObjects[index1]}, position));
     }
 }
 

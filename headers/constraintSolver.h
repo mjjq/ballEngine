@@ -65,6 +65,9 @@ public:
     static CStructs::Constraint makeDistanceConstraint(PhysicsObject &p1,
                                                        PhysicsObject &p2);
 
+    static CStructs::Constraint makePositionConstraint(PhysicsObject &p,
+                                                       sf::Vector2f const & position);
+
     static void solveConstraints(CStructs::PairWiseVel &returnVel,
                                 CStructs::Constraint &j,
                                 CStructs::PairWiseMass &pwm,

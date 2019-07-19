@@ -32,6 +32,7 @@
 		"spwnChar"		: ["X", "LMB"],
 		"spwnJson"		: ["J", "LMB"],
 		"spwnLight"		: ["L", "LMB"],
+		"newJoint"		: ["LAlt", "Q"],
 		"editMode"		: ["Tab"]
 	},
 	"EditObjectMode" : {

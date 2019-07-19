@@ -86,7 +86,7 @@ public:
     std::vector<PhysicsObject* > dynamicObjects;
     std::vector<PhysicsObject* > staticObjects;
     std::map<ArbiterKey, Arbiter> arbiters;
-    std::vector<Joint> joints;
+    std::vector<Joint*> joints;
 
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
     ~BallUniverse();
@@ -147,7 +147,7 @@ public:
                          float radiusOfEffect,
                          float strength);
 
-    void newJoint(int index1, int index2);
+    void newJoint(int index1, sf::Vector2f const & position);
 
     void newObserver(Observer* obs);
 

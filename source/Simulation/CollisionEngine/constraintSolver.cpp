@@ -89,6 +89,24 @@ CStructs::Constraint Constraints::makeDistanceConstraint(PhysicsObject &p1,
     return c;
 }
 
+CStructs::Constraint Constraints::makePositionConstraint(PhysicsObject &p,
+                                                         sf::Vector2f const & position)
+{
+    CStructs::Constraint c;
+
+    sf::Vector2f relPos = p.getPosition() - position;
+
+    c.constraintPairs.push_back({relPos, 0.0f});
+
+    c.bias = 0.05f*(Math::square(relPos));
+
+    std::cout << c.bias << " bias\n";
+    c.lambdaMax = 1000.0f;
+    c.lambdaMin = -1000.0f;
+
+    return c;
+}
+
 
 void Constraints::solveConstraints(CStructs::PairWiseVel &returnVel,
                                 CStructs::Constraint &j,

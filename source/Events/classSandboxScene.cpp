@@ -75,7 +75,7 @@ void SandboxScene::load()
             {"chgBColour",  [&]{ballSim->changeBallColour();}},
             {"undoBall",    [&]{projMan->removeObject(-1);}},
             {"undoRect",    [&]{ballSim->removeRect(-1);}},
-            {"newJoint",    [&]{ballSim->newJoint(0, 1);}},
+            {"newJoint",    [&]{ballSim->newJoint(0, window.mapPixelToCoords(sf::Mouse::getPosition(window)));}},
             {"mouseExp",    [&]{ballSim->createExplosion(window.mapPixelToCoords(sf::Mouse::getPosition(window)),
                                                         200.0f,
                                                         25.0f);}},
