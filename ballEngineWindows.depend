@@ -601,7 +601,7 @@
 	"classUIContainer.h"
 	"classSkeleton2DManager.h"
 
-1563542321 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
+1563566464 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
 	"integrators.h"
 	"collisionDetection.h"
 	"classPhysicsObject.h"
@@ -614,6 +614,7 @@
 	"classArbiter.h"
 	"classJoint.h"
 	"Observer.h"
+	"classJointManager.h"
 
 1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\collisiondetection.h
 	"classPhysicsObject.h"
@@ -692,7 +693,7 @@
 	"SFML/Graphics.hpp"
 	"Observer.h"
 
-1563480183 i:\users\marcus\my documents\github\ballengine_latest\headers\observer.h
+1563565964 i:\users\marcus\my documents\github\ballengine_latest\headers\observer.h
 	<vector>
 
 1552053549 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectile.h
@@ -711,10 +712,11 @@
 1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\stringconversion.h
 	"integrators.h"
 
-1563542024 i:\users\marcus\my documents\github\ballengine_latest\headers\classjoint.h
+1563566305 i:\users\marcus\my documents\github\ballengine_latest\headers\classjoint.h
 	<SFML/Graphics.hpp>
 	"classPhysicsObject.h"
 	"constraintSolver.h"
+	"Observer.h"
 
 1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\characterworldinterface.h
 	"classUniverse.h"
@@ -885,7 +887,7 @@
 	<SFML/Graphics.hpp>
 	"structs.h"
 
-1563560424 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
+1563567036 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -905,7 +907,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1563554910 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjoint.cpp
+1563566316 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjoint.cpp
 	"classJoint.h"
 	"stringConversion.h"
 
@@ -1553,4 +1555,11 @@
 1563284858 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
 	"classCharacterState.h"
 	"classCharacter.h"
+
+1563567357 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjointmanager.cpp
+	"classJointManager.h"
+
+1563567559 i:\users\marcus\my documents\github\ballengine_latest\headers\classjointmanager.h
+	"Observer.h"
+	"classJoint.h"
 

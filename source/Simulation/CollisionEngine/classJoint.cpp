@@ -1,8 +1,11 @@
 #include "classJoint.h"
 #include "stringConversion.h"
 
+Subject Joint::engineNotify;
+
 Joint::Joint(std::vector<PhysicsObject* > _objects) : objects{_objects}
 {
+    engineNotify.notify(*this, Event{EventType::New_Joint});
     /*if (p1 < p2)
         {
             obj1 = p1;

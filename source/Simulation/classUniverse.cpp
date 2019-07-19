@@ -496,10 +496,8 @@ float BallUniverse::physicsLoop()
     {
         arb->second.PreStep(1.0f/dt);
     }
-    for(auto jointIt = joints.begin(); jointIt != joints.end(); ++jointIt)
-    {
-        (*jointIt)->PreStep(1.0f/dt);
-    }
+
+    jointManager.preStep(1.0f/dt);
 
     for (int i = 0; i < 10; ++i)
     {
@@ -507,10 +505,8 @@ float BallUniverse::physicsLoop()
         {
             arb->second.ApplyImpulse();
         }
-        for(auto jointIt = joints.begin(); jointIt != joints.end(); ++jointIt)
-        {
-            (*jointIt)->ApplyImpulse();
-        }
+
+        jointManager.applyImpulse();
     }
     //std::cout << "hello\n";
     //std::cout << arbiters.size() <<"\n";
@@ -797,7 +793,7 @@ void BallUniverse::clearSimulation()
     //staticCollArray.clearMatrix();
     numOfBalls = 0;
     clearArbiters();
-    joints.clear();
+    jointManager.clear();
 }
 
 const int& BallUniverse::getWorldSizeX()
@@ -990,7 +986,7 @@ void BallUniverse::newJoint(int index1, sf::Vector2f const & position)
 {
     if(index1 < (int)dynamicObjects.size())
     {
-        joints.emplace_back(new PositionJoint({dynamicObjects[index1]}, position));
+        Joint* newJoint = new PositionJoint({dynamicObjects[index1]}, position);
     }
 }
 

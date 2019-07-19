@@ -29,6 +29,8 @@ enum class EventType
     Skel_Animate,
     Set_Animation,
     Character_SetTarget,
+    New_Joint,
+    Delete_Joint,
     Count
 };
 

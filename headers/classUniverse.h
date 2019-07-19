@@ -12,6 +12,7 @@
 #include "classArbiter.h"
 #include "classJoint.h"
 #include "Observer.h"
+#include "classJointManager.h"
 
 enum class SpawnObjectType
 {
@@ -86,7 +87,8 @@ public:
     std::vector<PhysicsObject* > dynamicObjects;
     std::vector<PhysicsObject* > staticObjects;
     std::map<ArbiterKey, Arbiter> arbiters;
-    std::vector<Joint*> joints;
+    //std::vector<Joint*> joints;
+    JointManager jointManager;
 
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
     ~BallUniverse();
