@@ -192,6 +192,7 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
                 skeleton->setTarget(target);
                 std::cout << target.x << ", " << target.y << "new thing\n";
             }
+            break;
         }
         default:
             break;

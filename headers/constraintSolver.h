@@ -6,12 +6,27 @@
 
 namespace CStructs
 {
+    struct ConstraintPair
+    {
+        sf::Vector2f c;
+        float cw;
+    };
+
+    struct VelocityPair
+    {
+        sf::Vector2f v;
+        float w;
+    };
+
+    struct MassInertiaPair
+    {
+        float m;
+        float i;
+    };
+
     struct Constraint
     {
-        sf::Vector2f c1;
-        float cw1;
-        sf::Vector2f c2;
-        float cw2;
+        std::vector<ConstraintPair > constraintPairs;
         float lambdaMin = -1e+15;
         float lambdaMax = -lambdaMin;
         float bias;
@@ -19,18 +34,12 @@ namespace CStructs
 
     struct PairWiseVel
     {
-        sf::Vector2f v1;
-        float w1;
-        sf::Vector2f v2;
-        float w2;
+        std::vector<VelocityPair > velocityPairs;
     };
 
     struct PairWiseMass
     {
-        float m1;
-        float i1;
-        float m2;
-        float i2;
+        std::vector<MassInertiaPair > massInertiaPairs;
     };
 }
 
@@ -39,13 +48,6 @@ class Constraints
 public:
     static float multiply(CStructs::Constraint &c, CStructs::PairWiseVel &v);
     static float getDenom(CStructs::Constraint &c, CStructs::PairWiseMass &m);
-
-    static CStructs::Constraint makeContactConstraint(PhysicsObject &p1,
-                                                    PhysicsObject &p2,
-                                                     sf::Vector2f contactPoint,
-                                                     sf::Vector2f normal,
-                                                     sf::Vector2f penetVector,
-                                                     sf::Vector2f relVel);
 
     static CStructs::Constraint makeContactConstraint(PhysicsObject &p1,
                                                         PhysicsObject &p2,

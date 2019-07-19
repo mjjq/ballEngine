@@ -14,34 +14,26 @@ Joint::Joint(PhysicsObject* p1, PhysicsObject* p2)
             obj2 = p1;
         }
 
-        pwm.m1 = obj1->getMass();
-        pwm.m2 = obj2->getMass();
-        pwm.i1 = obj1->getMomentInertia();
-        pwm.i2 = obj2->getMomentInertia();
+        pwm.massInertiaPairs.push_back({obj1->getMass(), obj1->getMomentInertia()});
+        pwm.massInertiaPairs.push_back({obj2->getMass(), obj2->getMomentInertia()});
 
-        pwv.v1 = obj1->getVelocity();
-        pwv.v2 = obj2->getVelocity();
-        pwv.w1 = obj1->getRotRate();
-        pwv.w2 = obj2->getRotRate();
+        pwv.velocityPairs.push_back({obj1->getVelocity(), obj1->getRotRate()});
+        pwv.velocityPairs.push_back({obj2->getVelocity(), obj2->getRotRate()});
 }
 
 void Joint::update()
 {
 
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    pwv.velocityPairs[0] = {obj1->getVelocity(), obj1->getRotRate()};
+    pwv.velocityPairs[1] = {obj2->getVelocity(), obj2->getRotRate()};
 
 }
 
 void Joint::PreStep(float inv_dt)
 {
 
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    pwv.velocityPairs[0] = {obj1->getVelocity(), obj1->getRotRate()};
+    pwv.velocityPairs[1] = {obj2->getVelocity(), obj2->getRotRate()};
 
     /*for(Contact &tempCont : contacts)
     {
@@ -63,10 +55,8 @@ void Joint::PreStep(float inv_dt)
 
 void Joint::ApplyImpulse()
 {
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    pwv.velocityPairs[0] = {obj1->getVelocity(), obj1->getRotRate()};
+    pwv.velocityPairs[1] = {obj2->getVelocity(), obj2->getRotRate()};
 
     //std::cout << pwv.v1 << "\n";
     //std::cout << pwv.v2 << "\n";
@@ -77,8 +67,8 @@ void Joint::ApplyImpulse()
     //std::cout << pwv.v1 << "\n";
     //std::cout << pwv.v2 << "\n\n";
 
-    obj1->setVelocity(pwv.v1);
-    obj1->setRotRate(pwv.w1);
-    obj2->setVelocity(pwv.v2);
-    obj2->setRotRate(pwv.w2);
+    obj1->setVelocity(pwv.velocityPairs[0].v);
+    obj1->setRotRate(pwv.velocityPairs[0].w);
+    obj2->setVelocity(pwv.velocityPairs[1].v);
+    obj2->setRotRate(pwv.velocityPairs[1].w);
 }

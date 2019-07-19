@@ -36,7 +36,7 @@ Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
         coefRestitution = std::max(obj1->getCoefRestitution(),
                                obj2->getCoefRestitution());
 
-        pwm.m1 = obj1->getMass();
+        /*pwm.m1 = obj1->getMass();
         pwm.m2 = obj2->getMass();
         pwm.i1 = obj1->getMomentInertia();
         pwm.i2 = obj2->getMomentInertia();
@@ -44,7 +44,13 @@ Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
         pwv.v1 = obj1->getVelocity();
         pwv.v2 = obj2->getVelocity();
         pwv.w1 = obj1->getRotRate();
-        pwv.w2 = obj2->getRotRate();
+        pwv.w2 = obj2->getRotRate();*/
+
+        pwm.massInertiaPairs.push_back({obj1->getMass(), obj1->getMomentInertia()});
+        pwm.massInertiaPairs.push_back({obj2->getMass(), obj2->getMomentInertia()});
+
+        pwv.velocityPairs.push_back({obj1->getVelocity(), obj1->getRotRate()});
+        pwv.velocityPairs.push_back({obj2->getVelocity(), obj2->getRotRate()});
 }
 
 void Arbiter::update()
@@ -64,29 +70,30 @@ void Arbiter::update()
         numContacts = 0;
     }*/
 
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    pwv.velocityPairs[0] = {obj1->getVelocity(), obj1->getRotRate()};
+    pwv.velocityPairs[1] = {obj2->getVelocity(), obj2->getRotRate()};
 
 }
 
 void Arbiter::PreStep(float inv_dt)
 {
 
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    pwv.velocityPairs[0] = {obj1->getVelocity(), obj1->getRotRate()};
+    pwv.velocityPairs[1] = {obj2->getVelocity(), obj2->getRotRate()};
 
     for(Contact &tempCont : contacts)
     {
         tempCont.tangent = Math::orthogonal(tempCont.normal, 1.0f);
 
-        sf::Vector2f relVel = pwv.v2 - pwv.v1;
+        sf::Vector2f v1 = pwv.velocityPairs[0].v;
+        sf::Vector2f v2 = pwv.velocityPairs[1].v;
+        float w1 = pwv.velocityPairs[0].w;
+        float w2 = pwv.velocityPairs[1].w;
 
-        relVel -= Collisions::orthogonal(tempCont.rA, pwv.w1) -
-                    Collisions::orthogonal(tempCont.rB, pwv.w2);
+        sf::Vector2f relVel = v2 - v1;
+
+        relVel -= Collisions::orthogonal(tempCont.rA, w1) -
+                    Collisions::orthogonal(tempCont.rB, w2);
 
         float restitution = coefRestitution * Math::dot(relVel, tempCont.normal);
 
@@ -99,10 +106,8 @@ void Arbiter::PreStep(float inv_dt)
 
 void Arbiter::ApplyImpulse()
 {
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    pwv.velocityPairs[0] = {obj1->getVelocity(), obj1->getRotRate()};
+    pwv.velocityPairs[1] = {obj2->getVelocity(), obj2->getRotRate()};
 
     for(Contact &tempCont : contacts)
     {
@@ -122,8 +127,8 @@ void Arbiter::ApplyImpulse()
         Constraints::solveConstraints(pwv, jacobian, pwm, tempCont.lambdaT);
     }
 
-    obj1->setVelocity(pwv.v1);
-    obj1->setRotRate(pwv.w1);
-    obj2->setVelocity(pwv.v2);
-    obj2->setRotRate(pwv.w2);
+    obj1->setVelocity(pwv.velocityPairs[0].v);
+    obj1->setRotRate(pwv.velocityPairs[0].w);
+    obj2->setVelocity(pwv.velocityPairs[1].v);
+    obj2->setRotRate(pwv.velocityPairs[1].w);
 }

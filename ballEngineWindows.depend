@@ -668,7 +668,7 @@
 	"constraintSolver.h"
 	"classPhysicsObject.h"
 
-1562781506 i:\users\marcus\my documents\github\ballengine_latest\headers\constraintsolver.h
+1563537768 i:\users\marcus\my documents\github\ballengine_latest\headers\constraintsolver.h
 	<SFML/Graphics.hpp>
 	"classPhysicsObject.h"
 
@@ -896,7 +896,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
+1563539415 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
 	<iostream>
 	<cmath>
 	"classArbiter.h"
@@ -905,7 +905,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1551625342 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjoint.cpp
+1563536806 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjoint.cpp
 	"classJoint.h"
 	"stringConversion.h"
 
@@ -934,12 +934,13 @@
 	"stringConversion.h"
 	"constraintSolver.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\constraintsolver.cpp
+1563539356 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\constraintsolver.cpp
 	<iostream>
 	<cmath>
 	"constraintSolver.h"
 	"Math.h"
 	"stringConversion.h"
+	<cassert>
 
 1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\contactpoints.cpp
 	<iostream>
@@ -1266,7 +1267,7 @@
 1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjectmanager.h
 	"classGameObject.h"
 
-1563480631 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
+1563481205 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
 	<iostream>
 	"classGameObject.h"
 	"Math.h"
