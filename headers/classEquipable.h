@@ -18,6 +18,7 @@ protected:
     sf::Vector2f parentPosition;
     sf::Vector2f parentVelocity;
 public:
+    virtual ~Equipable() {}
     Subject wepSub;
     bool executePrimary = false;
     bool executeSecondary = false;

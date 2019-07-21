@@ -22,7 +22,7 @@ public:
     Subject jointSubject;
 
     Joint() { engineNotify.notify(*this, Event{EventType::New_Joint}); }
-    ~Joint() { engineNotify.notify(*this, Event{EventType::Delete_Joint}); }
+    virtual ~Joint() { engineNotify.notify(*this, Event{EventType::Delete_Joint}); }
 
 	Joint(std::vector<PhysicsObject* > _objects);
 

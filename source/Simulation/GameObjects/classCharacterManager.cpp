@@ -77,7 +77,7 @@ void CharacterManager::onNotify(Component& entity, Event event, Container* data)
         case(EventType::Delete_Character) :
         {
             Character* character = (Character*)(&entity);
-            for(int i=0; i<characters.size(); ++i)
+            for(int i=0; i<(int)characters.size(); ++i)
             {
                 if(characters[i] == character)
                     characters.erase(characters.begin() + i);

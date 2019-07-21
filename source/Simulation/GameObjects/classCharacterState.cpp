@@ -32,6 +32,8 @@ CharacterState* WalkState::handleInput(Character& character, Input input)
             return new JumpState();
             break;
         }
+        default:
+            break;
     }
 
     return nullptr;
@@ -60,8 +62,8 @@ CharacterState* IdleState::handleInput(Character& character, Input input)
             return new JumpState();
             break;
         }
-
-        break;
+        default:
+            break;
     }
 
     return nullptr;
@@ -81,8 +83,8 @@ CharacterState* JumpState::handleInput(Character& character, Input input)
         //    return new IdleState();
         case(Input::Fall):
             return new FallState();
-
-        break;
+        default:
+            break;
     }
 
     return nullptr;
@@ -99,7 +101,8 @@ CharacterState* FallState::handleInput(Character& character, Input input)
     {
         case(Input::Land):
             return new IdleState();
-
+        default:
+            break;
         break;
     }
 

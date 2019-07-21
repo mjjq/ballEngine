@@ -22,18 +22,18 @@ void SurvivalScene::spawnRandomBalls(int nOBalls,
 
     for(int i=0; i<nOBalls; ++i)
     {
-        float relativePosX = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
-        float relativePosY = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
-        float velocityX = ( (std::rand()-RAND_MAX/2.0f)/RAND_MAX )*maxSpeed;
+        //float relativePosX = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
+        //float relativePosY = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
+        /*float velocityX = ( (std::rand()-RAND_MAX/2.0f)/RAND_MAX )*maxSpeed;
 
         float plusMinusOne = 1.0f;
         if(std::rand()-RAND_MAX/2.0f < 0)
-            plusMinusOne = -1.0f;
+            plusMinusOne = -1.0f;*/
 
-        float velocityY = plusMinusOne*sqrt(maxSpeed*maxSpeed - velocityX*velocityX);
+        //float velocityY = plusMinusOne*sqrt(maxSpeed*maxSpeed - velocityX*velocityX);
 
-        sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
-        sf::Vector2f newVelocity = {velocityX, velocityY};
+        //sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
+        //sf::Vector2f newVelocity = {velocityX, velocityY};
 
         //charWorldInterface.spawnNewProjectile(ProjectileType::Bullet, newPos, newVelocity);
     }

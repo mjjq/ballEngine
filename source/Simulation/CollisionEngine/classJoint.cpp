@@ -17,7 +17,7 @@ Joint::Joint(std::vector<PhysicsObject* > _objects) : objects{_objects}
             obj2 = p1;
         }*/
 
-        for(int i=0; i<objects.size(); ++i)
+        for(int i=0; i<(int)objects.size(); ++i)
         {
             pwm.massInertiaPairs.push_back({objects[i]->getMass(), objects[i]->getMomentInertia()});
             pwv.velocityPairs.push_back({objects[i]->getVelocity(), objects[i]->getRotRate()});
@@ -27,7 +27,7 @@ Joint::Joint(std::vector<PhysicsObject* > _objects) : objects{_objects}
 void Joint::update()
 {
 
-    for(int i=0; i<objects.size(); ++i)
+    for(int i=0; i<(int)objects.size(); ++i)
     {
         pwv.velocityPairs[i] = {objects[i]->getVelocity(),
                                 objects[i]->getRotRate()};
@@ -38,7 +38,7 @@ void Joint::update()
 void Joint::PreStep(float inv_dt)
 {
 
-    for(int i=0; i<objects.size(); ++i)
+    for(int i=0; i<(int)objects.size(); ++i)
     {
         pwv.velocityPairs[i] = {objects[i]->getVelocity(),
                                 objects[i]->getRotRate()};
@@ -64,7 +64,7 @@ void Joint::PreStep(float inv_dt)
 
 void Joint::ApplyImpulse()
 {
-    for(int i=0; i<objects.size(); ++i)
+    for(int i=0; i<(int)objects.size(); ++i)
     {
         pwv.velocityPairs[i] = {objects[i]->getVelocity(),
                                 objects[i]->getRotRate()};
@@ -79,7 +79,7 @@ void Joint::ApplyImpulse()
     //std::cout << pwv.v1 << "\n";
     //std::cout << pwv.v2 << "\n\n";
 
-    for(int i=0; i<objects.size(); ++i)
+    for(int i=0; i<(int)objects.size(); ++i)
     {
         objects[i]->setVelocity(pwv.velocityPairs[i].v);
         objects[i]->setRotRate(pwv.velocityPairs[i].w);
@@ -88,28 +88,28 @@ void Joint::ApplyImpulse()
 
 void PositionJoint::ApplyImpulse()
 {
-    for(int i=0; i<objects.size(); ++i)
+    for(int i=0; i<(int)objects.size(); ++i)
     {
         pwv.velocityPairs[i] = {objects[i]->getVelocity(),
                                 objects[i]->getRotRate()};
     }
 
-    CStructs::Constraint jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().x,
+    /*CStructs::Constraint jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().x,
                                     position.x, 'x'));
 
-    Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+    Constraints::solveConstraints(pwv, jacobian, pwm, lambda);*/
 
-    jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().y,
+    CStructs::Constraint jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().y,
                                     position.y, 'y'));
 
     Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
 
     jacobian = (Constraints::makeAngularConstraint(objects[0]->getRotAngle(),
-                                    40.0f));
+                                    0.0f));
 
     Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
 
-    for(int i=0; i<objects.size(); ++i)
+    for(int i=0; i<(int)objects.size(); ++i)
     {
         objects[i]->setVelocity(pwv.velocityPairs[i].v);
         objects[i]->setRotRate(pwv.velocityPairs[i].w);

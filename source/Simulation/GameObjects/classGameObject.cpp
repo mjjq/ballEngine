@@ -9,13 +9,15 @@ GameObject::GameObject(Renderable* _renderObj,
                        LightSource* _lightSrc,
                        Character* _character,
                        Skeleton2DWrap* _skeleton,
-                       Equipable* _equipable) :
+                       Equipable* _equipable,
+                       Joint* _joint) :
                            renderObj{_renderObj},
                            collider{_collider},
                            lightSrc{_lightSrc},
                            character{_character},
                            skeleton{_skeleton},
-                           equipable{_equipable}
+                           equipable{_equipable},
+                           joint{_joint}
 {
     if(collider != nullptr)
         collider->physSubject.addObserver(this);
@@ -28,7 +30,7 @@ GameObject::GameObject(Renderable* _renderObj,
 
         ObjectProperties tempProps;
 
-        for(int i=0; i<jointPositions.size(); ++i)
+        for(int i=0; i<(int)jointPositions.size(); ++i)
         {
             tempProps._position = jointPositions[i];
             skeletonDebugJoints.push_back(new Renderable(tempProps));
@@ -65,7 +67,7 @@ GameObject::~GameObject()
     if(skeleton != nullptr)
     {
         delete skeleton;
-        for(int i=0; i<skeletonDebugJoints.size(); ++i)
+        for(int i=0; i<(int)skeletonDebugJoints.size(); ++i)
         {
             delete skeletonDebugJoints[i];
         }
@@ -73,6 +75,8 @@ GameObject::~GameObject()
     }
     if(equipable != nullptr)
         delete equipable;
+    if(joint != nullptr)
+        delete joint;
 
     engineNotify.notify(*this, Event(EventType::Delete_GameObject));
 }
@@ -161,7 +165,7 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
         {
             std::vector<sf::Vector2f > jointPositions = skeleton->getJointPositions();
 
-            for(int i=0; i<jointPositions.size(); ++i)
+            for(int i=0; i<(int)jointPositions.size(); ++i)
             {
                 skeletonDebugJoints[i]->updatePosition( jointPositions[i] );
             }
@@ -194,6 +198,14 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
             }
             break;
         }
+        /*case(EventType::Joint_PosUpdate):
+        {
+            if(joint != nullptr)
+            {
+                sf::Vector2f jointPos = ((DataContainer<sf::Vector2f >&)(*data)).data;
+                joint->
+            }
+        }*/
         default:
             break;
     }

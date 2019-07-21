@@ -200,16 +200,16 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
         json j;
         input >> j;
 
-        for(json &currJ : j["Ball"])
+        /*for(json &currJ : j["Ball"])
         {
             BallSpawnVals sVals;
-            /*if(beParser::checkBallJson(currJ, sVals))
+            if(beParser::checkBallJson(currJ, sVals))
                 ballSim->spawnNewBall({sVals.position+position,
                                      sVals.velocity+velocity,
                                      {sVals.radius, 0.0f},
                                      sVals.mass,
-                                     0.0f, 0.0f});*/
-        }
+                                     0.0f, 0.0f});
+        }*/
         for(json &currJ : j["Ballgrid"])
         {
             BallGridSpawnVals sVals;

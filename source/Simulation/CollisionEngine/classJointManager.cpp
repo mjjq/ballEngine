@@ -17,7 +17,7 @@ void JointManager::onNotify(Component& entity,
         {
             std::cout << "delete joint\n";
             Joint* joint = (Joint*)(&entity);
-            for(int i=0; i<joints.size(); ++i)
+            for(int i=0; i<(int)joints.size(); ++i)
             {
                 if(joints[i] == joint)
                     joints.erase(joints.begin() + i);
@@ -32,12 +32,12 @@ void JointManager::onNotify(Component& entity,
 
 void JointManager::preStep(float invDt)
 {
-    for(int i=0; i<joints.size(); ++i)
+    for(int i=0; i<(int)joints.size(); ++i)
         joints[i]->PreStep(invDt);
 }
 
 void JointManager::applyImpulse()
 {
-    for(int i=0; i<joints.size(); ++i)
+    for(int i=0; i<(int)joints.size(); ++i)
         joints[i]->ApplyImpulse();
 }

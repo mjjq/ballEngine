@@ -7,6 +7,7 @@
 #include "classLight.h"
 #include "classSkeleton2DWrap.h"
 #include "classCharacter.h"
+#include "classJoint.h"
 
 
 class GameObject : public Observer
@@ -23,13 +24,15 @@ public:
     Character* character = nullptr;
     Skeleton2DWrap* skeleton = nullptr;
     Equipable* equipable = nullptr;
+    Joint* joint = nullptr;
 
     GameObject(Renderable* _renderObj = nullptr,
                PhysicsObject* _collider = nullptr,
                LightSource* _lightSrc = nullptr,
                Character* _character = nullptr,
                Skeleton2DWrap* _skeleton = nullptr,
-               Equipable* _equipable = nullptr);
+               Equipable* _equipable = nullptr,
+               Joint* _joint = nullptr);
     ~GameObject();
     void onCollide();
 

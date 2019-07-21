@@ -95,7 +95,7 @@ bool Character::updateState()
             ++badSlopeCount;
         }
     }
-    if(badSlopeCount == contactData.size())
+    if(badSlopeCount == (int)contactData.size())
         slopeOkay = false;
 
     if(collider->getVelocity().y > 0.0f && !touchingSurface)
@@ -208,6 +208,6 @@ void Character::setTarget(sf::Vector2f const & target)
                        &message);
     //characterItems.updateEquippedPos(collider->getPosition());
 
-    sf::Vector2f relVector = target - collider->getPosition();
+    //sf::Vector2f relVector = target - collider->getPosition();
     //characterItems.updateEquippedAngle(atan2(relVector.x, relVector.y));
 }

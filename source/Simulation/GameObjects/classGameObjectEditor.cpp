@@ -24,7 +24,7 @@ void GameObjectEditor::retrieveObject(sf::Vector2u const & position)
     selectionTexture.display();
     selectionTexture.clear({0, 0, 0, 0});
 
-    for(int i=0; i<gameObjectManager.gameObjects.size(); ++i)
+    for(int i=0; i<(int)gameObjectManager.gameObjects.size(); ++i)
     {
         GameObject* currObj = gameObjectManager.gameObjects[i];
         float color = (float)((float)i/(float)gameObjectManager.gameObjects.size());

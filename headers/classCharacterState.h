@@ -21,7 +21,7 @@ class CharacterState
 public:
     virtual ~CharacterState() {};
     virtual void enterState(Character& character) {};
-    virtual CharacterState* handleInput(Character& character, Input input) {};
+    virtual CharacterState* handleInput(Character& character, Input input) = 0;
     virtual void update(Character& character) {};
 };
 
