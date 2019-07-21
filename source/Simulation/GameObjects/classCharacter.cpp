@@ -14,6 +14,8 @@ Character::Character(CharacterProperties init) :
 {
     currentState = new IdleState();
     engineNotify.notify(*this, Event(EventType::New_Character));
+
+    characterItems = Inventory([&]{return collider->getPosition();}, nullptr);
 }
 
 Character::~Character()

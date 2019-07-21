@@ -40,7 +40,7 @@ class Character : public Component
     bool slopeOkay = true;
     bool touchingSurface = false;
 
-    Inventory characterItems{};
+    Inventory characterItems;
 
     CharacterState* currentState;
 public:

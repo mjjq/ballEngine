@@ -123,7 +123,7 @@ CStructs::Constraint Constraints::makePositionConstraint(float objectPos,
     }
 
 
-    c.bias = 0.05f*(objectPos - targetPos);
+    c.bias = 0.5f*(objectPos - targetPos);
 
     c.lambdaMax = 1000.0f;
     c.lambdaMin = -1000.0f;

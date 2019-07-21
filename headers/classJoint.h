@@ -34,11 +34,14 @@ public:
 
 class PositionJoint : public Joint
 {
-    sf::Vector2f position;
+    std::function<sf::Vector2f() > getPosition;
+    std::function<float() > getRotation;
 public:
     PositionJoint(std::vector<PhysicsObject * > _objects,
-                  sf::Vector2f const & _position) :
-                    Joint{_objects}, position{_position} {}
+                  std::function<sf::Vector2f() > _getPosition,
+                  std::function<float() > _getRotation) :
+                    Joint{_objects}, getPosition{_getPosition},
+                    getRotation{_getRotation} {}
 
     virtual void ApplyImpulse();
 };

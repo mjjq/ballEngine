@@ -516,6 +516,7 @@ float BallUniverse::physicsLoop()
         dynamicObjects[i]->updatePosition(dt);
     }
 
+    currentTime += dt;
     return dt;
 }
 
@@ -986,7 +987,9 @@ void BallUniverse::newJoint(int index1, sf::Vector2f const & position)
 {
     if(index1 < (int)dynamicObjects.size())
     {
-        Joint* newJoint = new PositionJoint({dynamicObjects[index1]}, position);
+        Joint* newJoint = new PositionJoint({dynamicObjects[index1]},
+                                             [position, this](){return sf::Vector2f{position.x + 300.0f*sinf(0.01f*currentTime), position.y};},
+                                              [](){return 0.0f;});
     }
 }
 

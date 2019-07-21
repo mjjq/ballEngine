@@ -47,7 +47,7 @@ class BallUniverse : public Observer
     bool hasCollided = false;
     bool collWithStatic = false;
 
-    float currentTime = 0;
+    float currentTime = 0.0f;
     float dt;
     float accumulator = 0.0f;
     sf::Clock thresholdTimer;

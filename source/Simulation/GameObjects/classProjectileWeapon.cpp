@@ -45,7 +45,7 @@ void ProjectileWeapon::primaryFunc()
     //wepSub.notify(*this, Event{EventType::Fire_Weapon});
     ObjectProperties objProps;
     objProps._ignoreGravity = true;
-    objProps._size = {10.0f, 10.0f};
+    objProps._size = {3.0f, 3.0f};
     objProps._position = parentPosition + localMuzzlePos;
     objProps._velocity = parentVelocity + 10.0f*Math::norm(localMuzzlePos);
     objProps.material = {"phong",

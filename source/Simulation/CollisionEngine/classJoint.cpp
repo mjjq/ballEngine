@@ -94,20 +94,29 @@ void PositionJoint::ApplyImpulse()
                                 objects[i]->getRotRate()};
     }
 
-    /*CStructs::Constraint jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().x,
-                                    position.x, 'x'));
+    CStructs::Constraint jacobian;
 
-    Constraints::solveConstraints(pwv, jacobian, pwm, lambda);*/
+    if(getPosition != nullptr)
+    {
+        jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().x,
+                                    getPosition().x, 'x'));
 
-    CStructs::Constraint jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().y,
-                                    position.y, 'y'));
+        Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
 
-    Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+        jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().y,
+                                        getPosition().y, 'y'));
 
-    jacobian = (Constraints::makeAngularConstraint(objects[0]->getRotAngle(),
-                                    0.0f));
+        Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+    }
 
-    Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+    if(getRotation != nullptr)
+    {
+        jacobian = (Constraints::makeAngularConstraint(objects[0]->getRotAngle(),
+                                        getRotation()));
+
+        Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+
+    }
 
     for(int i=0; i<(int)objects.size(); ++i)
     {

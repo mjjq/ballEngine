@@ -2,6 +2,7 @@
 #define CLASS_INVENTORY_H
 
 #include <vector>
+#include <functional>
 #include "classProjectileWeapon.h"
 
 class Inventory
@@ -12,8 +13,12 @@ class Inventory
     int money = 0;
 
     void initialiseDefault();
+
+    std::function<sf::Vector2f() > getParentPosition;
+    std::function<float() > getParentRotation;
 public:
-    Inventory();
+    Inventory(std::function<sf::Vector2f() > _getParentPosition = nullptr,
+              std::function<float() > _getParentRotation = nullptr);
     void firePrimary();
     void fireSecondary();
     void updateEquippedPos(sf::Vector2f position);
