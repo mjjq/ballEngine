@@ -87,6 +87,12 @@ void Renderable::updateOrientation(float angle)
         primTransformable->setRotation(angle);
 }
 
+void Renderable::setScale(sf::Vector2f const & scale)
+{
+    if(primTransformable != nullptr)
+        primTransformable->setScale(scale);
+}
+
 Subject Renderable::renderSubject;
 
 const std::string Renderable::NULL_ID = "";

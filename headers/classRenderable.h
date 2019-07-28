@@ -30,6 +30,7 @@ public:
 
     void updatePosition(sf::Vector2f position);
     void updateOrientation(float angle);
+    void setScale(sf::Vector2f const & scale);
 };
 
 #endif // CLASS_RENDERABLE_H

@@ -31,6 +31,7 @@ enum class EventType
     Character_SetTarget,
     New_Joint,
     Delete_Joint,
+    Set_Scale,
     Count
 };
 

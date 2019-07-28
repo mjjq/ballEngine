@@ -220,6 +220,14 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
                 joint->
             }
         }*/
+        case(EventType::Set_Scale):
+        {
+            if(renderObj != nullptr)
+            {
+                sf::Vector2f scale = ((DataContainer<sf::Vector2f >& )(*data)).data;
+                renderObj->setScale(scale);
+            }
+        }
         default:
             break;
     }

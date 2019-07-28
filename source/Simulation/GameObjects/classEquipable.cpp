@@ -38,4 +38,15 @@ void Equipable::addObserver(Observer* obs)
 void Equipable::setFlippedState(bool _flipped)
 {
     flipped = _flipped;
+
+    if(_flipped == false)
+    {
+        DataContainer<sf::Vector2f > scaleData{{1.0f, 1.0f}};
+        wepSub.notify(*this, Event{EventType::Set_Scale}, &scaleData);
+    }
+    else
+    {
+        DataContainer<sf::Vector2f > scaleData{{-1.0f, 1.0f}};
+        wepSub.notify(*this, Event{EventType::Set_Scale}, &scaleData);
+    }
 }
