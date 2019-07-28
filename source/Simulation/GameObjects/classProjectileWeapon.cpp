@@ -73,5 +73,9 @@ sf::Vector2f ProjectileWeapon::getLocalPosition()
 void ProjectileWeapon::setAimAngle(float angle)
 {
     aimAngle = angle;
-    localMuzzlePos = Math::rotate({muzzleLength, 0.0f}, angle);
+
+    if(!flipped)
+        localMuzzlePos = Math::rotate({muzzleLength, 0.0f}, angle);
+    else
+        localMuzzlePos = Math::rotate({-muzzleLength, 0.0f}, angle);
 }

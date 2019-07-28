@@ -24,14 +24,14 @@ void Skeleton2DWrap::animate(float deltaTime)
     skelSubject.notify(*this, Event{EventType::Skel_Animate});
 }
 
-std::vector<sf::Vector2f > Skeleton2DWrap::getJointPositions()
+std::map<std::string, BoneData > Skeleton2DWrap::getBoneData()
 {
-    return skeleton.getJointPositions();
+    return skeleton.getBoneData();
 }
 
 void Skeleton2DWrap::setRootPosition(sf::Vector2f const & position)
 {
-    skeleton.setTarget(position, "root", 0);
+    skeleton.externalSetTarget(position, "root", 0);
     skelSubject.notify(*this, Event{EventType::Skel_Animate});
 }
 
@@ -42,6 +42,16 @@ void Skeleton2DWrap::setAnimation(std::string const & animationName)
 
 void Skeleton2DWrap::setTarget(sf::Vector2f const & target)
 {
-    skeleton.setTarget(target, "torso", -1,false, true, Skeleton2DBone::RelativeTo::Orthogonal);
+    skeleton.externalSetTarget(target, "torso", -1,false, true, Skeleton2DBone::RelativeTo::Orthogonal);
     skelSubject.notify(*this, Event{EventType::Skel_Animate});
+}
+
+void Skeleton2DWrap::setScale(sf::Vector2f const & scale)
+{
+    skeleton.setScale(scale);
+}
+
+BoneData Skeleton2DWrap::getBoneData(std::string const & boneName)
+{
+    return skeleton.getBoneData(boneName);
 }

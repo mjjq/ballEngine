@@ -5,6 +5,7 @@
 #include "classProjectileWeapon.h"
 #include "Observer.h"
 #include "classInventory.h"
+#include "classSkeleton2DWrap.h"
 
 class CharacterState;
 enum class Input;
@@ -26,6 +27,7 @@ struct CharacterProperties
     float currentHealth = maxHealth;
     bool aimingAtTarget = false;
     sf::Vector2f target = {0.0f, 0.0f};
+    bool flipped = false;
 };
 
 class Character : public Component
@@ -36,13 +38,18 @@ class Character : public Component
 
 
     PhysicsObject* collider;
+    Skeleton2DWrap* skeleton;
 
     bool slopeOkay = true;
     bool touchingSurface = false;
 
     Inventory characterItems;
+    sf::Vector2f equipablePosition;
+    float equipableRotation;
 
     CharacterState* currentState;
+
+    void flipCharacter(bool & _isflipped);
 public:
     void moveSideWays(float input);
     Character(CharacterProperties init);
@@ -52,6 +59,7 @@ public:
     Subject charSubject;
 
     void setCollider(PhysicsObject* _collider);
+    void setSkeleton(Skeleton2DWrap* _skeleton);
 
     void handleInput(Input input);
     void jump();
@@ -70,6 +78,9 @@ public:
     void setAnimation(std::string const & animationName);
 
     void setTarget(sf::Vector2f const & target);
+
+    void updateEquipablePosData(sf::Vector2f const & position,
+                                sf::Vector2f const & parentPosition);
 };
 
 

@@ -26,13 +26,19 @@ GameObject::GameObject(Renderable* _renderObj,
     {
         skeleton->skelSubject.addObserver(this);
 
-        std::vector<sf::Vector2f > jointPositions = skeleton->getJointPositions();
+        std::map<std::string, BoneData > jointData = skeleton->getBoneData();
 
         ObjectProperties tempProps;
+        tempProps._size = {5.0f, 0.0f};
 
-        for(int i=0; i<(int)jointPositions.size(); ++i)
+        for(auto it = jointData.begin(); it != jointData.end(); ++it)
         {
-            tempProps._position = jointPositions[i];
+            BoneData tempData = it->second;
+
+            tempProps._position = tempData.position;
+            skeletonDebugJoints.push_back(new Renderable(tempProps));
+
+            tempProps._position = tempData.position + tempData.length * tempData.orientation;
             skeletonDebugJoints.push_back(new Renderable(tempProps));
         }
     }
@@ -44,6 +50,8 @@ GameObject::GameObject(Renderable* _renderObj,
         {
             character->setCollider(collider);
         }
+        if(skeleton != nullptr)
+            character->setSkeleton(skeleton);
     }
 
     if(equipable != nullptr)
@@ -163,11 +171,18 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
         }
         case(EventType::Skel_Animate):
         {
-            std::vector<sf::Vector2f > jointPositions = skeleton->getJointPositions();
+            std::map<std::string, BoneData > jointData = skeleton->getBoneData();
 
-            for(int i=0; i<(int)jointPositions.size(); ++i)
+            int i=0;
+            for(auto it = jointData.begin(); it != jointData.end(); ++it)
             {
-                skeletonDebugJoints[i]->updatePosition( jointPositions[i] );
+                BoneData tempData = it->second;
+
+                skeletonDebugJoints.at(i)->updatePosition( tempData.position );
+                skeletonDebugJoints.at(i+1)->updatePosition( tempData.position +
+                                                       tempData.length * tempData.orientation );
+
+                i+=2;
             }
             break;
         }
@@ -190,12 +205,11 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
         }
         case(EventType::Character_SetTarget):
         {
-            if(skeleton != nullptr)
+            /*if(skeleton != nullptr)
             {
                 sf::Vector2f target = ((DataContainer<sf::Vector2f >&)(*data)).data;
                 skeleton->setTarget(target);
-                std::cout << target.x << ", " << target.y << "new thing\n";
-            }
+            }*/
             break;
         }
         /*case(EventType::Joint_PosUpdate):

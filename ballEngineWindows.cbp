@@ -92,6 +92,7 @@
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classInventory.h" />
 		<Unit filename="headers/classJoint.h" />
+		<Unit filename="headers/classJointManager.h" />
 		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classLight.h" />
 		<Unit filename="headers/classMainMenuScene.h" />
@@ -157,6 +158,7 @@
 		<Unit filename="source/Simulation/CollisionEngine/GJK.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/classArbiter.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/classJoint.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/classJointManager.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/collisionDetection.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/collisionResolving.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/constraintSolver.cpp" />

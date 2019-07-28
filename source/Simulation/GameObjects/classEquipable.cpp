@@ -34,3 +34,8 @@ void Equipable::addObserver(Observer* obs)
 {
     wepSub.addObserver(obs);
 }
+
+void Equipable::setFlippedState(bool _flipped)
+{
+    flipped = _flipped;
+}

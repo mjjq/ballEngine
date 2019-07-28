@@ -20,9 +20,13 @@ public:
 
     void setAnimation(std::string const & animationName);
 
-    std::vector<sf::Vector2f > getJointPositions();
+    std::map<std::string, BoneData > getBoneData();
 
     void setTarget(sf::Vector2f const & target);
+
+    void setScale(sf::Vector2f const & scale);
+
+    BoneData getBoneData(std::string const & boneName);
 };
 
 #endif // SKEL_2D_WRAP_H

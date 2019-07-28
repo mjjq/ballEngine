@@ -12,13 +12,13 @@ class Inventory
 
     int money = 0;
 
-    void initialiseDefault();
 
     std::function<sf::Vector2f() > getParentPosition;
     std::function<float() > getParentRotation;
 public:
     Inventory(std::function<sf::Vector2f() > _getParentPosition = nullptr,
               std::function<float() > _getParentRotation = nullptr);
+    void initialiseDefault();
     void firePrimary();
     void fireSecondary();
     void updateEquippedPos(sf::Vector2f position);

@@ -679,17 +679,18 @@
 	"SFML/Graphics.hpp"
 	"classPhysicsObject.h"
 
-1563742685 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
+1564341071 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
 	"classCapsule.h"
 	"classProjectileWeapon.h"
 	"Observer.h"
 	"classInventory.h"
+	"classSkeleton2DWrap.h"
 	"classCharacterState.h"
 
 1563379034 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectileweapon.h
 	"classEquipable.h"
 
-1563733035 i:\users\marcus\my documents\github\ballengine_latest\headers\classequipable.h
+1564343128 i:\users\marcus\my documents\github\ballengine_latest\headers\classequipable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 
@@ -701,7 +702,7 @@
 	"Observer.h"
 	"classRenderable.h"
 
-1563742576 i:\users\marcus\my documents\github\ballengine_latest\headers\classinventory.h
+1563743619 i:\users\marcus\my documents\github\ballengine_latest\headers\classinventory.h
 	<vector>
 	<functional>
 	"classProjectileWeapon.h"
@@ -937,7 +938,7 @@
 	"stringConversion.h"
 	"constraintSolver.h"
 
-1563742947 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\constraintsolver.cpp
+1563745012 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\constraintsolver.cpp
 	<iostream>
 	<cmath>
 	"constraintSolver.h"
@@ -1011,7 +1012,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1563742784 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1564343490 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
@@ -1022,10 +1023,10 @@
 	"classCharacterManager.h"
 	"Math.h"
 
-1563468968 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classequipable.cpp
+1564343256 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classequipable.cpp
 	"classEquipable.h"
 
-1563742524 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classinventory.cpp
+1563743578 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classinventory.cpp
 	"classInventory.h"
 	"classGameObject.h"
 	"jsonParsing.h"
@@ -1039,7 +1040,7 @@
 1552053549 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectilemanager.cpp
 	"classProjectileManager.h"
 
-1563379287 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectileweapon.cpp
+1564343534 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectileweapon.cpp
 	"classProjectileWeapon.h"
 	"Math.h"
 	"classGameObject.h"
@@ -1270,7 +1271,7 @@
 1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjectmanager.h
 	"classGameObject.h"
 
-1563732942 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
+1564336614 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
 	<iostream>
 	"classGameObject.h"
 	"Math.h"
@@ -1363,7 +1364,7 @@
 1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dmanager.h
 	"classSkeleton2DWrap.h"
 
-1562712614 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2d.h
+1564261403 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2d.h
 	"SkeletonNode.h"
 	"Skeleton2DBone.h"
 	"SkeletonAnimation.h"
@@ -1381,13 +1382,13 @@
 
 1553734919 i:\users\marcus\my documents\github\inversekinematics\headers\math.h
 
-1563220075 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2dbone.h
+1564259132 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2dbone.h
 	<iostream>
 	<SFML/Graphics.hpp>
 	<assert.h>
 	"SkeletonNode.h"
 
-1562495035 i:\users\marcus\my documents\github\inversekinematics\headers\skeletonanimation.h
+1564156516 i:\users\marcus\my documents\github\inversekinematics\headers\skeletonanimation.h
 	"BoneAnimation.h"
 
 1562495763 i:\users\marcus\my documents\github\inversekinematics\headers\boneanimation.h
@@ -1397,12 +1398,12 @@
 1562582530 i:\users\marcus\my documents\github\inversekinematics\headers\animationset.h
 	"SkeletonAnimation.h"
 
-1563220108 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dwrap.cpp
+1564335798 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dwrap.cpp
 	"classSkeleton2DWrap.h"
 	"JSONSkeletonReader.h"
 	<iostream>
 
-1563469396 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
+1564335776 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
 	"Skeleton2D.h"
 	"Observer.h"
 

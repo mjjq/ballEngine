@@ -9,7 +9,6 @@ Inventory::Inventory(std::function<sf::Vector2f() > _getParentPosition,
                          getParentPosition{_getParentPosition},
                          getParentRotation{_getParentRotation}
 {
-    initialiseDefault();
 }
 
 void Inventory::initialiseDefault()

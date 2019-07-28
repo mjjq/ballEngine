@@ -17,6 +17,7 @@ protected:
     float aimAngle = 0.0f;
     sf::Vector2f parentPosition;
     sf::Vector2f parentVelocity;
+    bool flipped = false;
 public:
     virtual ~Equipable() {}
     Subject wepSub;
@@ -33,6 +34,7 @@ public:
     void updateParentPos(sf::Vector2f pos);
     void updateParentVelocity(sf::Vector2f const & vel);
     sf::Vector2f getParentPos();
+    void setFlippedState(bool _flipped);
 };
 
 #endif // CLASS_EQUIPABLE_H

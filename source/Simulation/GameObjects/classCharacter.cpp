@@ -15,7 +15,9 @@ Character::Character(CharacterProperties init) :
     currentState = new IdleState();
     engineNotify.notify(*this, Event(EventType::New_Character));
 
-    characterItems = Inventory([&]{return collider->getPosition();}, nullptr);
+    characterItems = Inventory([&]{return equipablePosition;},
+                               [&]{return equipableRotation;});
+    characterItems.initialiseDefault();
 }
 
 Character::~Character()
@@ -75,12 +77,15 @@ void Character::setCollider(PhysicsObject* _collider)
     collider->setMomentInertia(1e+15f);
 }
 
+void Character::setSkeleton(Skeleton2DWrap* _skeleton)
+{
+    skeleton = _skeleton;
+}
+
 bool Character::updateState()
 {
     if(currentState != nullptr)
         currentState->update(*this);
-
-    characterItems.updateEquippedPos(collider->getPosition());
 
     slopeOkay = true;
     touchingSurface = false;
@@ -106,6 +111,13 @@ bool Character::updateState()
     }
     if(touchingSurface)
         handleInput(Input::Land);
+
+    if(skeleton != nullptr)
+    {
+        BoneData torsoData = skeleton->getBoneData("torso");
+        std::cout << torsoData.orientation.x << " parentOri\n";
+        updateEquipablePosData(torsoData.position, torsoData.parentPosition);
+    }
 
     return true;
 }
@@ -204,12 +216,47 @@ void Character::setTarget(sf::Vector2f const & target)
 {
     sf::Vector2f realTarget = target;//Math::orthogonal(target, 1.0);
     properties.target = realTarget;
-    DataContainer<sf::Vector2f > message{realTarget};
-    charSubject.notify(*this,
+    //DataContainer<sf::Vector2f > message{realTarget};
+    /*charSubject.notify(*this,
                        Event{EventType::Character_SetTarget},
-                       &message);
+                       &message);*/
+    if(skeleton != nullptr)
+    {
+        skeleton->setTarget(realTarget);
+        BoneData rootData = skeleton->getBoneData("root");
+        sf::Vector2f relPos = target - rootData.position;
+        if(Math::dot(rootData.orientation, relPos) < 0.0f)
+            flipCharacter(properties.flipped);
+    }
     //characterItems.updateEquippedPos(collider->getPosition());
 
     //sf::Vector2f relVector = target - collider->getPosition();
     //characterItems.updateEquippedAngle(atan2(relVector.x, relVector.y));
+}
+
+void Character::updateEquipablePosData(sf::Vector2f const & position,
+                                sf::Vector2f const & parentPosition)
+{
+    equipablePosition = parentPosition + 0.4f*(position - parentPosition);
+
+    sf::Vector2f targetDirection = (position - parentPosition);
+    std::cout << position.x << "\n";
+    equipableRotation = -180.0f/Math::PI * atan2f(targetDirection.x, targetDirection.y);
+}
+
+void Character::flipCharacter(bool & _isflipped)
+{
+    if(skeleton != nullptr)
+    {
+        if(_isflipped)
+        {
+            skeleton->setScale({1.0f, 1.0f});
+        }
+        else
+            skeleton->setScale({-1.0f, 1.0f});
+    }
+
+    _isflipped = !_isflipped;
+
+    characterItems.getEquippedItem().setFlippedState(_isflipped);
 }
