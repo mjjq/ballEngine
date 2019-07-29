@@ -24,6 +24,13 @@ public:
 
     void setTarget(sf::Vector2f const & target);
 
+    void setTarget(sf::Vector2f const & target,
+                   std::string const & chainName,
+                   int chainNode,
+                   bool applyOffset = false,
+                   bool inheritOrientation = true,
+                   Skeleton2DBone::RelativeTo relativeTo = Skeleton2DBone::RelativeTo::World);
+
     void setScale(sf::Vector2f const & scale);
 
     BoneData getBoneData(std::string const & boneName);

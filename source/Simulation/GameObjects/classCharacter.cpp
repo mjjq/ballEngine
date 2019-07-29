@@ -115,8 +115,8 @@ bool Character::updateState()
     if(skeleton != nullptr)
     {
         BoneData torsoData = skeleton->getBoneData("torso");
-        std::cout << torsoData.orientation.x << " parentOri\n";
-        updateEquipablePosData(torsoData.position, torsoData.parentPosition);
+        updateEquipablePosData(torsoData.position, torsoData.orientation);
+        updateEquippedAnchorPoints();
     }
 
     return true;
@@ -214,12 +214,9 @@ void Character::setAnimation(std::string const & animationName)
 
 void Character::setTarget(sf::Vector2f const & target)
 {
-    sf::Vector2f realTarget = target;//Math::orthogonal(target, 1.0);
+    sf::Vector2f realTarget = target;
+
     properties.target = realTarget;
-    //DataContainer<sf::Vector2f > message{realTarget};
-    /*charSubject.notify(*this,
-                       Event{EventType::Character_SetTarget},
-                       &message);*/
     if(skeleton != nullptr)
     {
         skeleton->setTarget(realTarget);
@@ -235,13 +232,25 @@ void Character::setTarget(sf::Vector2f const & target)
 }
 
 void Character::updateEquipablePosData(sf::Vector2f const & position,
-                                sf::Vector2f const & parentPosition)
+                                sf::Vector2f const & orientation)
 {
-    equipablePosition = parentPosition + 0.4f*(position - parentPosition);
+    /*sf::Vector2f targetDirection = (position - parentPosition);
+    sf::Vector2f orthogonalDir = Math::orthogonal(targetDirection, 1.0f);
 
-    sf::Vector2f targetDirection = (position - parentPosition);
-    std::cout << position.x << "\n";
-    equipableRotation = -180.0f/Math::PI * atan2f(targetDirection.x, targetDirection.y);
+    equipablePosition = parentPosition + 0.5f*targetDirection + 1.0f*orthogonalDir;
+
+
+    equipableRotation = -180.0f/Math::PI * atan2f(targetDirection.x, targetDirection.y);*/
+
+    sf::Vector2f orthogonalDir = Math::orthogonal(orientation, 1.0f);
+    sf::Vector2f itemOffset = characterItems.getEquippedItem().getLocalOffset();
+
+    equipablePosition = position + itemOffset.y * orientation + itemOffset.x * orthogonalDir;
+
+    std::cout << orientation.x << ", " << orientation.y << "\n";
+
+    equipableRotation = 90.0f+180.0f/Math::PI * atan2f(orientation.y, orientation.x);
+
 }
 
 void Character::flipCharacter(bool & _isflipped)
@@ -259,4 +268,21 @@ void Character::flipCharacter(bool & _isflipped)
     _isflipped = !_isflipped;
 
     characterItems.getEquippedItem().setFlippedState(_isflipped);
+}
+
+void Character::updateEquippedAnchorPoints()
+{
+    if(skeleton != nullptr)
+    {
+        std::map<std::string, sf::Vector2f > anchorPoints =
+                characterItems.getEquippedItem().getAnchorPoints();
+
+        for(auto it = anchorPoints.begin(); it != anchorPoints.end(); ++it)
+        {
+            if(it->first == "grip")
+                skeleton->setTarget(it->second, "right limb", -1);
+            else if(it->first == "handle")
+                skeleton->setTarget(it->second, "left limb", -1);
+        }
+    }
 }

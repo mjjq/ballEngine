@@ -1,4 +1,6 @@
 #include "classEquipable.h"
+#include "Math.h"
+#include <iostream>
 
 void Equipable::setAimAngle(float angle)
 {
@@ -49,4 +51,17 @@ void Equipable::setFlippedState(bool _flipped)
         DataContainer<sf::Vector2f > scaleData{{-1.0f, 1.0f}};
         wepSub.notify(*this, Event{EventType::Set_Scale}, &scaleData);
     }
+}
+
+std::map<std::string, sf::Vector2f > Equipable::getAnchorPoints()
+{
+    std::map<std::string, sf::Vector2f > transformedPoints(anchorPoints);
+
+    for(auto it = transformedPoints.begin(); it != transformedPoints.end(); ++it)
+    {
+        it->second = Math::rotate(it->second, aimAngle);
+        it->second += parentPosition;
+    }
+
+    return transformedPoints;
 }

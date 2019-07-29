@@ -80,7 +80,9 @@ public:
     void setTarget(sf::Vector2f const & target);
 
     void updateEquipablePosData(sf::Vector2f const & position,
-                                sf::Vector2f const & parentPosition);
+                                sf::Vector2f const & orientation);
+
+    void updateEquippedAnchorPoints();
 };
 
 

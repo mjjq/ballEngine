@@ -36,8 +36,12 @@ GameObject::GameObject(Renderable* _renderObj,
             BoneData tempData = it->second;
 
             tempProps._position = tempData.position;
-            skeletonDebugJoints.push_back(new Renderable(tempProps));
+            tempProps.material.diffuseID = "red.jpg";
+            //skeletonDebugJoints.push_back(new Renderable(tempProps));
 
+
+            tempProps.material.diffuseID = "red.jpg";
+            if(it->first == "left hand" || it->first == "right hand") tempProps.material.diffuseID = "blankN.jpg";
             tempProps._position = tempData.position + tempData.length * tempData.orientation;
             skeletonDebugJoints.push_back(new Renderable(tempProps));
         }
@@ -178,11 +182,11 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
             {
                 BoneData tempData = it->second;
 
-                skeletonDebugJoints.at(i)->updatePosition( tempData.position );
-                skeletonDebugJoints.at(i+1)->updatePosition( tempData.position +
+                //skeletonDebugJoints.at(i)->updatePosition( tempData.position );
+                skeletonDebugJoints.at(i)->updatePosition( tempData.position +
                                                        tempData.length * tempData.orientation );
 
-                i+=2;
+                i+=1;
             }
             break;
         }

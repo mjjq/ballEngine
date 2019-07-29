@@ -46,6 +46,21 @@ void Skeleton2DWrap::setTarget(sf::Vector2f const & target)
     skelSubject.notify(*this, Event{EventType::Skel_Animate});
 }
 
+void Skeleton2DWrap::setTarget(sf::Vector2f const & target,
+                   std::string const & chainName,
+                   int chainNode,
+                   bool applyOffset,
+                   bool inheritOrientation,
+                   Skeleton2DBone::RelativeTo relativeTo)
+{
+    skeleton.externalSetTarget(target,
+                               chainName,
+                               chainNode,
+                               applyOffset,
+                               inheritOrientation,
+                               relativeTo);
+}
+
 void Skeleton2DWrap::setScale(sf::Vector2f const & scale)
 {
     skeleton.setScale(scale);

@@ -31,6 +31,11 @@ void ProjectileWeapon::initialiseRifle()
     muzzleLength = 100.0f;
     //PROJ_TYPE = ProjectileType::Bullet;
     remainingAmmo = 10;
+
+    localOffset = {40.0f, 90.0f};
+
+    anchorPoints.insert({"handle", {-20.0f, -3.0f}});
+    //anchorPoints.insert({"grip", {50.0f, -3.0f}});
 }
 
 void ProjectileWeapon::initialiseGrenLaunch()
@@ -44,6 +49,7 @@ void ProjectileWeapon::primaryFunc()
 {
     //wepSub.notify(*this, Event{EventType::Fire_Weapon});
     ObjectProperties objProps;
+    objProps._mass = 0.1f;
     objProps._ignoreGravity = true;
     objProps._size = {3.0f, 3.0f};
     objProps._position = parentPosition + localMuzzlePos;
