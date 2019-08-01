@@ -4,10 +4,7 @@
 #include "jsonParsing.h"
 #include "classPolygon.h"
 
-Inventory::Inventory(std::function<sf::Vector2f() > _getParentPosition,
-                     std::function<float() > _getParentRotation) :
-                         getParentPosition{_getParentPosition},
-                         getParentRotation{_getParentRotation}
+Inventory::Inventory()
 {
 }
 
@@ -22,8 +19,8 @@ void Inventory::initialiseDefault()
 
     PhysicsObject* collider = new Polygon(props);
     PositionJoint* joint = new PositionJoint({collider},
-                                             getParentPosition,
-                                             getParentRotation);
+                                             [&]{return intendedEqPosition;},
+                                             [&]{return intendedEqRotation;});
 
 
     GameObject* obj1 = new GameObject(new Renderable(props),
@@ -41,17 +38,35 @@ void Inventory::initialiseDefault()
 
 void Inventory::updateEquippedPos(sf::Vector2f position)
 {
-    equipableItems[equippedIndex]->updateParentPos(position);
+    sf::Vector2f equippedOffset = {0.0f, 0.0f};
+
+    if(getEquippedItem() != nullptr)
+        equippedOffset = equipableItems[equippedIndex]->getLocalOffset();
+
+    sf::Vector2f orthogonal = Math::orthogonal(intendedEqOrientation, 1.0f);
+
+    sf::Vector2f newPosition = position + equippedOffset.y * intendedEqOrientation
+                                + equippedOffset.x * orthogonal;
+
+    intendedEqPosition = newPosition;
+}
+
+void Inventory::updateEquippedAngle(sf::Vector2f orientation)
+{
+    intendedEqOrientation = orientation;
+    intendedEqRotation = 90.0f+180.0f/Math::PI * atan2f(orientation.y, orientation.x);
 }
 
 void Inventory::firePrimary()
 {
-    equipableItems[equippedIndex]->primaryFunc();
+    if(getEquippedItem() != nullptr)
+        getEquippedItem()->primaryFunc();
 }
 
 void Inventory::fireSecondary()
 {
-    equipableItems[equippedIndex]->secondaryFunc();
+    if(getEquippedItem() != nullptr)
+        getEquippedItem()->secondaryFunc();
 }
 
 void Inventory::switchTo(int index)
@@ -64,10 +79,20 @@ void Inventory::nextItem()
     switchTo(equippedIndex + 1);
 }
 
-Equipable& Inventory::getEquippedItem()
+void Inventory::setFlippedState(bool isFlipped)
 {
-    return *equipableItems[equippedIndex];
+    if(getEquippedItem() != nullptr)
+        getEquippedItem()->setFlippedState(isFlipped);
 }
+
+std::map<std::string, sf::Vector2f > Inventory::getAnchorPoints()
+{
+    if(getEquippedItem() == nullptr)
+        return {};
+
+    return getEquippedItem()->getAnchorPoints();
+}
+
 
 void Inventory::addObserver(Observer* obs)
 {

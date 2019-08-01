@@ -12,24 +12,31 @@ class Inventory
 
     int money = 0;
 
+    sf::Vector2f intendedEqPosition;
+    sf::Vector2f intendedEqOrientation;
+    float intendedEqRotation;
 
-    std::function<sf::Vector2f() > getParentPosition;
-    std::function<float() > getParentRotation;
+    Equipable* getEquippedItem()
+    {
+        if(equipableItems.size() <= 0)
+            return nullptr;
+
+        return equipableItems[equippedIndex];
+    }
+
 public:
-    Inventory(std::function<sf::Vector2f() > _getParentPosition = nullptr,
-              std::function<float() > _getParentRotation = nullptr);
+    Inventory();
     void initialiseDefault();
     void firePrimary();
     void fireSecondary();
     void updateEquippedPos(sf::Vector2f position);
-    void updateEquippedAngle(float angle)
-    {
-        equipableItems[equippedIndex]->setAimAngle(angle);
-    }
+    void updateEquippedAngle(sf::Vector2f orientation);
     void switchTo(int index);
     void nextItem();
-    Equipable& getEquippedItem();
     void addObserver(Observer* obs);
+    void setFlippedState(bool isFlipped);
+    std::map<std::string, sf::Vector2f > getAnchorPoints();
+
 };
 
 #endif // CLASS_INVENTORY_H
