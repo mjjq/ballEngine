@@ -13,7 +13,7 @@ void Inventory::initialiseDefault()
     ProjectileWeapon* rifle = new ProjectileWeapon{WeaponType::Rifle};
 
     ObjectProperties props;
-    props._position = {100.0f, 100.0f};
+    props._position = {00.0f, 20.0f};
     nlohmann::json j = beParser::loadJsonFromFile("./res/json/gun.json");
     beParser::checkObjectPropertyParams(j, props);
 
@@ -54,7 +54,11 @@ void Inventory::updateEquippedPos(sf::Vector2f position)
 void Inventory::updateEquippedAngle(sf::Vector2f orientation)
 {
     intendedEqOrientation = orientation;
-    intendedEqRotation = 90.0f+180.0f/Math::PI * atan2f(orientation.y, orientation.x);
+    intendedEqRotation = 180.0f/Math::PI * atan2f(orientation.y, orientation.x);
+
+    if(getEquippedItem() != nullptr)
+        if(getEquippedItem()->getFlippedState() == true)
+            intendedEqRotation += 180.0f;
 }
 
 void Inventory::firePrimary()

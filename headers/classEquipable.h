@@ -38,6 +38,7 @@ public:
     void updateParentVelocity(sf::Vector2f const & vel);
     sf::Vector2f getParentPos();
     void setFlippedState(bool _flipped);
+    bool getFlippedState() {return flipped;}
     sf::Vector2f getLocalOffset()
     {
         sf::Vector2f newOffset = localOffset;

@@ -16,7 +16,7 @@ Character::Character(CharacterProperties init) :
     engineNotify.notify(*this, Event(EventType::New_Character));
 
     characterItems = Inventory();
-    //characterItems.initialiseDefault();
+    characterItems.initialiseDefault();
 }
 
 Character::~Character()
@@ -113,7 +113,7 @@ bool Character::updateState()
 
     if(skeleton != nullptr)
     {
-        BoneData torsoData = skeleton->getBoneData("torso");
+        BoneData torsoData = skeleton->getBoneData("right arm");
         updateEquipablePosData(torsoData.position, torsoData.orientation);
         updateEquippedAnchorPoints();
     }
@@ -184,16 +184,13 @@ void Character::setTarget(sf::Vector2f const & target)
     properties.target = realTarget;
     if(skeleton != nullptr)
     {
-        skeleton->setTarget(realTarget);
+        skeleton->setTarget(realTarget, "right limb", -1);
+        skeleton->setTarget(realTarget, "neck", -1, false, true, Skeleton2DBone::RelativeTo::Orthogonal);
         BoneData rootData = skeleton->getBoneData("root");
         sf::Vector2f relPos = target - rootData.position;
         if(Math::dot(rootData.orientation, relPos) < 0.0f)
             flipCharacter(properties.flipped);
     }
-    //characterItems.updateEquippedPos(collider->getPosition());
-
-    //sf::Vector2f relVector = target - collider->getPosition();
-    //characterItems.updateEquippedAngle(atan2(relVector.x, relVector.y));
 }
 
 void Character::updateEquipablePosData(sf::Vector2f const & position,
@@ -228,12 +225,12 @@ void Character::updateEquippedAnchorPoints()
         std::map<std::string, sf::Vector2f > anchorPoints =
                 characterItems.getAnchorPoints();
 
-        for(auto it = anchorPoints.begin(); it != anchorPoints.end(); ++it)
+        /*for(auto it = anchorPoints.begin(); it != anchorPoints.end(); ++it)
         {
             if(it->first == "grip")
                 skeleton->setTarget(it->second, "right limb", -1);
             else if(it->first == "handle")
                 skeleton->setTarget(it->second, "left limb", -1);
-        }
+        }*/
     }
 }
