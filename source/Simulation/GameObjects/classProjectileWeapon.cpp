@@ -32,7 +32,7 @@ void ProjectileWeapon::initialiseRifle()
     //PROJ_TYPE = ProjectileType::Bullet;
     remainingAmmo = 10;
 
-    localOffset = {40.0f, 90.0f};
+    localOffset = {90.0f, 40.0f};
 
     anchorPoints.insert({"handle", {-20.0f, -3.0f}});
     //anchorPoints.insert({"grip", {50.0f, -3.0f}});

@@ -3,11 +3,15 @@
 
 #include "Skeleton2D.h"
 #include "Observer.h"
+#include "classRenderable.h"
 
 class Skeleton2DWrap : public Component
 {
     Skeleton2D skeleton;
+    std::map<std::string, std::pair<SkinData, Renderable* > > skinRenderables;
 
+    void generateRenderables();
+    void updateRenderables();
 public:
     static Subject engineNotify;
     Subject skelSubject;

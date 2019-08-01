@@ -247,7 +247,7 @@ void Character::updateEquipablePosData(sf::Vector2f const & position,
 
     equipablePosition = position + itemOffset.y * orientation + itemOffset.x * orthogonalDir;
 
-    std::cout << orientation.x << ", " << orientation.y << "\n";
+    //std::cout << orientation.x << ", " << orientation.y << "\n";
 
     equipableRotation = 90.0f+180.0f/Math::PI * atan2f(orientation.y, orientation.x);
 
