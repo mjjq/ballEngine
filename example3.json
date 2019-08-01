@@ -70,7 +70,7 @@
 			"left-arm": { "x": 15.11, "y": -0.44, "rotation": 33.84, "width": 35, "height": 29 }
 		},
 		"left hand": {
-			"left-hand": { "x": 0.75, "y": 1.86, "rotation": 31.14, "width": 35, "height": 38 }
+			"left-hand": { "x": 0.75, "y": 1.86, "rotation": 71.14, "width": 35, "height": 38 }
 		},
 		"left foot": {
 			"left-foot": { "x": 24.35, "y": 8.88, "rotation": 3.32, "width": 65, "height": 30 }

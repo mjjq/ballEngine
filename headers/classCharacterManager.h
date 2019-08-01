@@ -17,10 +17,8 @@ public:
     void addCharacter(CharacterProperties init);
     void addCharacter(Character* newChar);
     void handleInput(Input input, int characterIndex);
-    void equipablePrimary(int charIndex);
     void newObserver(Observer* obs);
     void setTarget(sf::Vector2f targetPos, int characterIndex);
-    void switchNextItem(int charIndex);
     CharacterProperties getCharacterProperties(int index);
 
     virtual void onNotify(Component& entity, Event event, Container* data = nullptr);

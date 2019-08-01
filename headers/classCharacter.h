@@ -64,16 +64,10 @@ public:
     void handleInput(Input input);
     void jump();
     bool updateState();
-    bool getSlopeState();
-
-    void equipablePrimary();
-    void changeAimAngle(float angle);
 
     void setHealth(float health);
     float getHealth();
     CharacterProperties getProperties();
-
-    void switchNextItem();
 
     void setAnimation(std::string const & animationName);
 

@@ -84,7 +84,7 @@ void SandboxScene::load()
                                                         -1.0f);
                                 KeyBinds::isFuncContinuous = true;}},
             {"equPrim",     [&]{charMan->handleInput(Input::Equip_Primary, 0);}},
-            {"nxtItem",     [&]{charMan->switchNextItem(0);}},
+            //{"nxtItem",     [&]{charMan->switchNextItem(0);}},
             {"plrJump",     [&]{charMan->handleInput(Input::Jump, 0);
                                 KeyBinds::isFuncContinuous = false;}},
             {"mvPlrRgt",    [&]{charMan->handleInput(Input::WalkRight, 0);

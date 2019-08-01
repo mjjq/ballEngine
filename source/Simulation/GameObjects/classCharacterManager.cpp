@@ -28,12 +28,6 @@ void CharacterManager::handleInput(Input input, int characterIndex)
         characters[characterIndex]->handleInput(input);
 }
 
-void CharacterManager::equipablePrimary(int charIndex)
-{
-    if(charIndex < (int)characters.size())
-        characters[charIndex]->equipablePrimary();
-}
-
 void CharacterManager::newObserver(Observer* obs)
 {
     subCharMan.addObserver(obs);
@@ -44,14 +38,6 @@ void CharacterManager::setTarget(sf::Vector2f targetPos, int characterIndex)
     if(characterIndex < (int)characters.size())
     {
         characters[characterIndex]->setTarget(targetPos);
-    }
-}
-
-void CharacterManager::switchNextItem(int charIndex)
-{
-    if(charIndex < (int)characters.size())
-    {
-        characters[charIndex]->switchNextItem();
     }
 }
 

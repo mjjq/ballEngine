@@ -148,20 +148,6 @@ void Character::handleInput(Input input)
     }
 }
 
-bool Character::getSlopeState()
-{
-    return slopeOkay;
-}
-
-
-void Character::equipablePrimary()
-{
-    //characterItems.updateEquippedPos(collider->getPosition());
-    //characterItems.firePrimary();
-    //equippedItem->updateParentPos(collider->getPosition());
-    //equippedItem->primaryFunc();
-    //charSubject.notify(*this, Event{EventType::Fire_Bullet});
-}
 
 void Character::setHealth(float health)
 {
@@ -181,11 +167,6 @@ float Character::getHealth()
 CharacterProperties Character::getProperties()
 {
     return properties;
-}
-
-void Character::switchNextItem()
-{
-    characterItems.nextItem();
 }
 
 void Character::setAnimation(std::string const & animationName)
