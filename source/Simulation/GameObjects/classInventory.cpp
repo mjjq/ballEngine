@@ -10,11 +10,14 @@ Inventory::Inventory()
 
 void Inventory::initialiseDefault()
 {
-    ProjectileWeapon* rifle = new ProjectileWeapon{WeaponType::Rifle};
+    nlohmann::json j = beParser::loadJsonFromFile("./res/json/gun.json");
+
+    EquipableData data;
+    beParser::checkEquipableParams(j, data);
+    ProjectileWeapon* rifle = new ProjectileWeapon{data, WeaponType::Rifle};
 
     ObjectProperties props;
     props._position = {00.0f, 20.0f};
-    nlohmann::json j = beParser::loadJsonFromFile("./res/json/gun.json");
     beParser::checkObjectPropertyParams(j, props);
 
     PhysicsObject* collider = new Polygon(props);

@@ -354,3 +354,34 @@ bool beParser::checkObjectPropertyParams(json &j, ObjectProperties& props)
 
     return true;
 }
+
+bool beParser::checkEquipableParams(json &j, EquipableData& data)
+{
+    if(j["equipableProperties"].is_null())
+    {
+        return false;
+    }
+
+    json j2 = j["equipableProperties"];
+
+    if(!j2["offset"].is_null())
+    {
+        data.localOffset.x = j2["offset"].value("x", 0.0f);
+        data.localOffset.y = j2["offset"].value("y", 0.0f);
+    }
+
+    if(!j2["anchorPoints"].is_null())
+    {
+        for(json jAnchor : j2["anchorPoints"])
+        {
+            std::pair<std::string, sf::Vector2f> anchorPoint;
+            anchorPoint.first = jAnchor.value("name", "");
+            anchorPoint.second.x = jAnchor.value("x", 0.0f);
+            anchorPoint.second.y = jAnchor.value("y", 0.0f);
+
+            data.anchorPoints.insert(anchorPoint);
+        }
+    }
+
+    return true;
+}

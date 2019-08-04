@@ -11,17 +11,23 @@ enum class EquipableType
     _Count
 };
 
+struct EquipableData
+{
+    sf::Vector2f localOffset;
+    std::map<std::string, sf::Vector2f > anchorPoints;
+};
+
 class Equipable : public Component
 {
 protected:
     float aimAngle = 0.0f;
     sf::Vector2f parentPosition;
     sf::Vector2f parentVelocity;
-    sf::Vector2f localOffset = {0.0f, 0.0f};
     bool flipped = false;
 
-    std::map<std::string, sf::Vector2f > anchorPoints;
+    EquipableData data;
 public:
+    Equipable(EquipableData _data) : data{_data} {}
     virtual ~Equipable() {}
     Subject wepSub;
     bool executePrimary = false;
@@ -41,7 +47,7 @@ public:
     bool getFlippedState() {return flipped;}
     sf::Vector2f getLocalOffset()
     {
-        sf::Vector2f newOffset = localOffset;
+        sf::Vector2f newOffset = data.localOffset;
         if(!flipped) newOffset.x *= -1.0f;
         return newOffset;
     }

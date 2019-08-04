@@ -687,10 +687,10 @@
 	"classSkeleton2DWrap.h"
 	"classCharacterState.h"
 
-1563379034 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectileweapon.h
+1564699315 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectileweapon.h
 	"classEquipable.h"
 
-1564689858 i:\users\marcus\my documents\github\ballengine_latest\headers\classequipable.h
+1564694073 i:\users\marcus\my documents\github\ballengine_latest\headers\classequipable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 
@@ -773,11 +773,12 @@
 
 1553422057 i:\users\marcus\my documents\github\ballengine_latest\headers\sfvectormath.h
 
-1563373813 i:\users\marcus\my documents\github\ballengine_latest\headers\jsonparsing.h
+1564699565 i:\users\marcus\my documents\github\ballengine_latest\headers\jsonparsing.h
 	<map>
 	"structs.h"
 	"../extern/json.hpp"
 	"baseObject.h"
+	"classEquipable.h"
 
 1562753158 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classkeybinds.cpp
 	"classKeyBinds.h"
@@ -861,7 +862,7 @@
 	<algorithm>
 	<cmath>
 
-1563445929 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\jsonparsing.cpp
+1564702121 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\jsonparsing.cpp
 	<iostream>
 	<map>
 	<fstream>
@@ -1012,7 +1013,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1564689385 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1564690673 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
@@ -1023,12 +1024,12 @@
 	"classCharacterManager.h"
 	"Math.h"
 
-1564349069 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classequipable.cpp
+1564693973 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classequipable.cpp
 	"classEquipable.h"
 	"Math.h"
 	<iostream>
 
-1564690009 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classinventory.cpp
+1564700094 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classinventory.cpp
 	"classInventory.h"
 	"classGameObject.h"
 	"jsonParsing.h"
@@ -1042,7 +1043,7 @@
 1552053549 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectilemanager.cpp
 	"classProjectileManager.h"
 
-1564689282 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectileweapon.cpp
+1564700651 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectileweapon.cpp
 	"classProjectileWeapon.h"
 	"Math.h"
 	"classGameObject.h"

@@ -55,7 +55,7 @@ void Equipable::setFlippedState(bool _flipped)
 
 std::map<std::string, sf::Vector2f > Equipable::getAnchorPoints()
 {
-    std::map<std::string, sf::Vector2f > transformedPoints(anchorPoints);
+    std::map<std::string, sf::Vector2f > transformedPoints(data.anchorPoints);
 
     for(auto it = transformedPoints.begin(); it != transformedPoints.end(); ++it)
     {

@@ -17,7 +17,7 @@ class ProjectileWeapon : public Equipable
     void initialiseRifle();
     void initialiseGrenLaunch();
 public:
-    ProjectileWeapon(WeaponType type);
+    ProjectileWeapon(EquipableData _data, WeaponType type);
     float muzzleLength = 20.0f;
     sf::Vector2f localMuzzlePos = {0.0f, 0.0f};
 

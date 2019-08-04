@@ -3,7 +3,8 @@
 #include "Math.h"
 #include "classGameObject.h"
 
-ProjectileWeapon::ProjectileWeapon(WeaponType type) : Equipable()
+ProjectileWeapon::ProjectileWeapon(EquipableData _data,
+                                   WeaponType type) : Equipable(_data)
 {
     switch(type)
     {
@@ -31,10 +32,6 @@ void ProjectileWeapon::initialiseRifle()
     muzzleLength = 100.0f;
     //PROJ_TYPE = ProjectileType::Bullet;
     remainingAmmo = 10;
-
-    localOffset = {00.0f, 40.0f};
-
-    anchorPoints.insert({"handle", {-20.0f, -3.0f}});
     //anchorPoints.insert({"grip", {50.0f, -3.0f}});
 }
 

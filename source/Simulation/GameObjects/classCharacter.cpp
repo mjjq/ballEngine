@@ -225,12 +225,12 @@ void Character::updateEquippedAnchorPoints()
         std::map<std::string, sf::Vector2f > anchorPoints =
                 characterItems.getAnchorPoints();
 
-        /*for(auto it = anchorPoints.begin(); it != anchorPoints.end(); ++it)
+        for(auto it = anchorPoints.begin(); it != anchorPoints.end(); ++it)
         {
-            if(it->first == "grip")
-                skeleton->setTarget(it->second, "right limb", -1);
-            else if(it->first == "handle")
+            //if(it->first == "grip")
+            //    skeleton->setTarget(it->second, "right limb", -1);
+            if(it->first == "handle")
                 skeleton->setTarget(it->second, "left limb", -1);
-        }*/
+        }
     }
 }

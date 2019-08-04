@@ -5,6 +5,7 @@
 #include "structs.h"
 #include "../extern/json.hpp"
 #include "baseObject.h"
+#include "classEquipable.h"
 
 namespace beParser
 {
@@ -26,6 +27,7 @@ bool checkTParamsJson(json &j, TextElParams &tParams,
 bool checkMaterialParams(json &j, Material& material);
 bool checkVertexParams(json &j, std::vector<sf::Vertex > &_vertices);
 bool checkObjectPropertyParams(json &j, ObjectProperties& props);
+bool checkEquipableParams(json &j, EquipableData& data);
 
 }
 
