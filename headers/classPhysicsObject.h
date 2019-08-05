@@ -116,6 +116,7 @@ public:
     float getRotRate();
     void setRotRate(float _rotRate);
     float getRotAngle();
+    void setRotAngle(float _rotAngle) {rotAngle = _rotAngle;}
 
     float getCoefRestitution();
     float getCoefFriction();

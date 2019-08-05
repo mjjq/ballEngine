@@ -57,6 +57,7 @@ void Inventory::updateEquippedPos(sf::Vector2f position)
 void Inventory::updateEquippedAngle(sf::Vector2f orientation)
 {
     intendedEqOrientation = orientation;
+
     intendedEqRotation = 180.0f/Math::PI * atan2f(orientation.y, orientation.x);
 
     if(getEquippedItem() != nullptr)

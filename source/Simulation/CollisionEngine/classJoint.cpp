@@ -111,6 +111,11 @@ void PositionJoint::ApplyImpulse()
 
     if(getRotation != nullptr)
     {
+        if(std::abs(objects[0]->getRotAngle() - getRotation()) >= 180.0f)
+        {
+            objects[0]->setRotAngle(getRotation());
+        }
+
         jacobian = (Constraints::makeAngularConstraint(objects[0]->getRotAngle(),
                                         getRotation()));
 
