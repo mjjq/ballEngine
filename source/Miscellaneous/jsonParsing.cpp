@@ -349,6 +349,11 @@ bool beParser::checkObjectPropertyParams(json &j, ObjectProperties& props)
     props.type = j2["objectType"];
     }
 
+    if(!j2["zPosition"].is_null())
+    {
+        props._zPosition = j2["zPosition"];
+    }
+
     checkVertexParams(j2, props._vertices);
     checkMaterialParams(j2, props.material);
 

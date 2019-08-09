@@ -42,6 +42,7 @@ struct ObjectProperties
     ObjectType type = ObjectType::Ball;
     std::vector<sf::Vertex > _vertices = {};
     Material material;
+    float _zPosition = 0.0f;
 };
 
 #endif // BASE_OBJECT_H

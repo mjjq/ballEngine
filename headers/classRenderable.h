@@ -7,6 +7,8 @@
 
 class Renderable : public Component
 {
+    float zPosition = 0.0f;
+
     void generateDrawables(ObjectProperties objProps);
 
 public:
@@ -31,6 +33,8 @@ public:
     void updatePosition(sf::Vector2f position);
     void updateOrientation(float angle);
     void setScale(sf::Vector2f const & scale);
+
+    float getZPosition() { return zPosition; }
 };
 
 #endif // CLASS_RENDERABLE_H

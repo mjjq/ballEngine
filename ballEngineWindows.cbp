@@ -145,6 +145,7 @@
 		<Unit filename="headers/lightingEngine.h" />
 		<Unit filename="headers/resourceManager.h" />
 		<Unit filename="headers/sceneEnums.h" />
+		<Unit filename="headers/sort.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
 		<Unit filename="headers/windowManager.h" />

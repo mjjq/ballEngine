@@ -17,6 +17,7 @@ Renderable::Renderable(ObjectProperties objProps)
     generateDrawables(objProps);
     //primShape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(1, 1)));
     renderSubject.notify(*this, Event(EventType::New_Renderable));
+    zPosition = objProps._zPosition;
 }
 
 Renderable::~Renderable()

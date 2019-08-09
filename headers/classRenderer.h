@@ -16,6 +16,8 @@ class Renderer : public Observer
 
     LightingEngine lightingEngine;
     ResourceManager resourceManager;
+
+    void sortByZ(std::vector<Renderable* > & objects);
 public:
     WindowManager windowManager;
 
