@@ -184,7 +184,7 @@ void Character::setTarget(sf::Vector2f const & target)
     properties.target = realTarget;
     if(skeleton != nullptr)
     {
-        skeleton->setTarget(realTarget, "right limb", -1);
+        skeleton->setTarget(realTarget, "right limb", 0);
         skeleton->setTarget(realTarget, "neck", -1, false, true, Skeleton2DBone::RelativeTo::Orthogonal);
         BoneData rootData = skeleton->getBoneData("root");
         sf::Vector2f relPos = target - rootData.position;

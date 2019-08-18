@@ -42,19 +42,19 @@
 
 "ik": [
    {
-      "name": "left limb",
+      "name": "right limb",
       "order": 2,
-      "bones": [ "left shoulder", "left arm" ],
-      "target": "left hand",
+      "bones": [ "right shoulder", "right arm" ],
+      "target": "right limb",
       "mix": 0.5,
       "bendPositive": false,
       "compress": true
    },
    {
-      "name": "right limb",
+      "name": "left limb",
       "order": 2,
-      "bones": [ "right shoulder", "right arm" ],
-      "target": "right hand",
+      "bones": [ "left shoulder", "left arm" ],
+      "target": "left limb",
       "mix": 0.5,
       "bendPositive": false,
       "compress": true
