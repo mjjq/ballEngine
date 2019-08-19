@@ -51,6 +51,7 @@ void Skeleton2DWrap::generateRenderables()
                 properties._position = attachedBone.position + skinData[j].offset;
                 properties.type = ObjectType::Polygon;
                 properties.material.diffuseID = skinData[j].name + ".png";
+                properties.material.shaderID = "phong";
                 properties._zPosition = (float)i / (float)slotData.size();
                 std::cout << properties._zPosition << " zPos\n";
 

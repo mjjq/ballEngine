@@ -23,6 +23,7 @@ struct Material
     float specularStrength = 0.5f;
     float emissionStrength = 0.3f;
     float shininess = 32.0f;
+    bool castShadow = false;
 };
 
 struct ObjectProperties

@@ -89,6 +89,6 @@ void main() {
 
     vec3 emission = material.emissionStrength * emitTexel.xyz;
 
-    //gl_FragColor = vec4(lightColor + emission, 1.0);
-    gl_FragColor = vec4(diffTexel);
+    gl_FragColor = vec4(lightColor + emission, diffTexel.w);
+    //gl_FragColor = vec4(diffTexel);
 }
