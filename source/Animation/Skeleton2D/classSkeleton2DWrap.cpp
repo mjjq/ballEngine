@@ -30,6 +30,9 @@ void Skeleton2DWrap::generateRenderables()
     std::vector<SlotData > slotData = skeleton.getSlotData();
     std::vector<SkinData > skinData = skeleton.getSkinData();
 
+    GeneralData pathData = skeleton.getGeneralData();
+    std::cout << pathData.imageSubfolder << " subfolder\n";
+
     ObjectProperties properties;
 
     for(int i=0; i<slotData.size(); ++i)
@@ -50,7 +53,7 @@ void Skeleton2DWrap::generateRenderables()
 
                 properties._position = attachedBone.position + skinData[j].offset;
                 properties.type = ObjectType::Polygon;
-                properties.material.diffuseID = skinData[j].name + ".png";
+                properties.material.diffuseID = pathData.imageSubfolder + skinData[j].name + ".png";
                 //properties.material.shaderID = "phong";
                 properties._zPosition = (float)i / (float)slotData.size();
                 std::cout << properties._zPosition << " zPos\n";

@@ -218,7 +218,7 @@ void SandboxScene::load()
                                                         new Capsule(props),
                                                         nullptr,
                                                         new Character(init),
-                                                        new Skeleton2DWrap("example3.json"));
+                                                        new Skeleton2DWrap("./res/json/example3.json"));
                     drawLine = false;
                 }
             }
