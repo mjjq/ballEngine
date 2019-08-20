@@ -99,6 +99,9 @@
 		"head": {
 			"head": { "x": 53.94, "y": -5.75, "rotation": -86.9, "width": 121, "height": 132 }
 		},
+		"eyes": {
+			"eyes": { "x": 28.94, "y": -32.92, "rotation": -86.9, "width": 34, "height": 27 }
+		},
 		"right shoulder": {
 			"right-shoulder": { "x": 25.86, "y": 0.03, "rotation": 134.44, "width": 52, "height": 51 }
 		},

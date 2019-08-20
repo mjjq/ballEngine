@@ -5,10 +5,17 @@
 #include "Observer.h"
 #include "classRenderable.h"
 
+struct SkinDataRenderable
+{
+    std::string boneName;
+    SkinData data;
+    Renderable* renderObj;
+};
+
 class Skeleton2DWrap : public Component
 {
     Skeleton2D skeleton;
-    std::map<std::string, std::pair<SkinData, Renderable* > > skinRenderables;
+    std::vector<SkinDataRenderable > skinRenderables;
 
     void generateRenderables();
     void updateRenderables();

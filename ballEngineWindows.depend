@@ -1330,7 +1330,7 @@
 
 1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\math.h
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\lightingengine.cpp
+1566213946 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\lightingengine.cpp
 	"lightingEngine.h"
 	"math.h"
 	<cmath>
@@ -1401,12 +1401,12 @@
 1562582530 i:\users\marcus\my documents\github\inversekinematics\headers\animationset.h
 	"SkeletonAnimation.h"
 
-1566213664 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dwrap.cpp
+1566303795 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dwrap.cpp
 	"classSkeleton2DWrap.h"
 	"JSONSkeletonReader.h"
 	<iostream>
 
-1564423274 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
+1566304341 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
 	"Skeleton2D.h"
 	"Observer.h"
 	"classRenderable.h"

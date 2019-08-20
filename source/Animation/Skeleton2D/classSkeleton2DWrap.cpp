@@ -16,9 +16,9 @@ Skeleton2DWrap::Skeleton2DWrap(std::string const & filename)
 
 Skeleton2DWrap::~Skeleton2DWrap()
 {
-    for(auto it = skinRenderables.begin(); it != skinRenderables.end(); ++it)
+    for(auto& skin : skinRenderables)
     {
-        delete it->second.second;
+        delete skin.renderObj;
     }
     skinRenderables.clear();
 
@@ -51,11 +51,11 @@ void Skeleton2DWrap::generateRenderables()
                 properties._position = attachedBone.position + skinData[j].offset;
                 properties.type = ObjectType::Polygon;
                 properties.material.diffuseID = skinData[j].name + ".png";
-                properties.material.shaderID = "phong";
+                //properties.material.shaderID = "phong";
                 properties._zPosition = (float)i / (float)slotData.size();
                 std::cout << properties._zPosition << " zPos\n";
 
-                skinRenderables.insert({attachedBone.name, {skinData[j], new Renderable(properties)}});
+                skinRenderables.push_back({attachedBone.name, skinData[j], new Renderable(properties)});
 
                 std::cout << attachedBone.name << "\n";
             }
@@ -66,12 +66,12 @@ void Skeleton2DWrap::generateRenderables()
 
 void Skeleton2DWrap::updateRenderables()
 {
-    for(auto it = skinRenderables.begin(); it != skinRenderables.end(); ++it)
+    for(auto& skin : skinRenderables)
     {
-        BoneData bone = skeleton.getBoneData(it->first);
+        BoneData bone = skeleton.getBoneData(skin.boneName);
 
-        SkinData data = it->second.first;
-        Renderable* tempRend = it->second.second;
+        SkinData data = skin.data;
+        Renderable* tempRend = skin.renderObj;
 
         float xScale = skeleton.getScale().x;
 
@@ -136,9 +136,9 @@ void Skeleton2DWrap::setScale(sf::Vector2f const & scale)
 {
     skeleton.setScale(scale);
 
-    for(auto it = skinRenderables.begin(); it != skinRenderables.end(); ++it)
+    for(auto& skin : skinRenderables)
     {
-        it->second.second->setScale(scale);
+        skin.renderObj->setScale(scale);
     }
 }
 
