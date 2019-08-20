@@ -4,35 +4,47 @@
 #include <cmath>
 #include <iostream>
 
+Subject Character::engineNotify;
+
 float Character::MAX_SLOPE_ANGLE = 50.0f;
 float Character::MAX_SLOPE_COSINE = cosf(Math::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
-Character::Character(CharacterProperties init, Observer* obs, PhysicsObject* rigidBind) :
-    properties{init}, collider{rigidBind}
+Character::Character(CharacterProperties init) :
+    properties{init}
 {
-    charSubject.addObserver(obs);
-    //equippedItem->addObserver(obs);
-    collider->setMomentInertia(1e+15);
-    characterItems.addObserver(obs);
+    currentState = new IdleState();
+    engineNotify.notify(*this, Event(EventType::New_Character));
+
+    characterItems = Inventory();
+    characterItems.initialiseDefault();
+}
+
+Character::~Character()
+{
+    engineNotify.notify(*this, Event(EventType::Delete_Character));
 }
 
 void Character::moveSideWays(float input)
 {
-    std::cout << contactData.size() << "\n";
+    //std::cout << contactData.size() << "\n";
+    const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
     if(contactData.size() > 0)
     {
-        for(int i=0; i<(int)contactData.size(); ++i)
+        for(auto it = contactData.begin(); it != contactData.end(); ++it)
         {
-            if(slopeOkay)
+            float dProduct = Math::dot(it->second.normal, {0.0f, 1.0f});
+            if(dProduct >= MAX_SLOPE_COSINE)
             {
-                sf::Vector2f direction = input*Math::orthogonal(contactData[i].normal, 1.0f);
+                sf::Vector2f direction = input*Math::orthogonal(it->second.normal, 1.0f);
 
-                if(Math::dot(direction, contactData[0].normal) <= 0.0f &&
-                   Math::dot(direction, contactData[contactData.size()-1].normal) <= 0.0f &&
+                if(Math::dot(direction, contactData.begin()->second.normal) <= 0.0f &&
+                   Math::dot(direction, (std::prev(contactData.end()))->second.normal) <= 0.0f &&
                    Math::dot(collider->getVelocity(), direction) < properties.movementSpeed)
                 {
                     collider->addSolvedVelocity(direction*properties.movementSpeed,
                                                 direction*properties.movementSpeed);
+
+
                 }
             }
         }
@@ -44,100 +56,99 @@ void Character::moveSideWays(float input)
         //std::cout << slopeOkay << "\n ";
         //std::cout << contactData.size() << " sii\n\n ";
         if(input*collider->getVelocity().x < properties.movementSpeed)
-            {
-                collider->addSolvedVelocity({0.1f*input*properties.movementSpeed, 0.0f},
-                                        {0.1f*input*properties.movementSpeed, 0.0f});
-            }
+        {
+            collider->addSolvedVelocity({0.1f*input*properties.movementSpeed, 0.0f},
+                                    {0.1f*input*properties.movementSpeed, 0.0f});
+        }
     }
 
-}
-
-void Character::moveLeft()
-{
-    moveSideWays(-1.0f);
-}
-
-void Character::moveRight()
-{
-    moveSideWays(1.0f);
 }
 
 void Character::jump()
 {
-    if(touchingSurface && (slopeOkay || contactData.size()==2))
+    if(touchingSurface && (slopeOkay || collider->getContactData().size()==2))
         collider->addSolvedVelocity({0.0f, -properties.jumpPower},
                                 {0.0f, -properties.jumpPower});
 }
 
-void Character::addContactData(ContactData &data)
+void Character::setCollider(PhysicsObject* _collider)
 {
-    contactData.push_back(data);
+    collider = _collider;
+    collider->setMomentInertia(1e+15f);
 }
 
-void Character::clearContactData()
+void Character::setSkeleton(Skeleton2DWrap* _skeleton)
 {
-    contactData.clear();
-    slopeOkay = true;
-    touchingSurface = false;
+    skeleton = _skeleton;
 }
 
 bool Character::updateState()
 {
-    //slopeOkay = true;
-    //collider->setCoefFriction(properties.coefFriction);
+    if(currentState != nullptr)
+        currentState->update(*this);
 
-    for(int i=0; i<(int)contactData.size(); ++i)
+    slopeOkay = true;
+    touchingSurface = false;
+    const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
+
+    int badSlopeCount = 0;
+
+    for(auto it = contactData.begin(); it != contactData.end(); ++it)
     {
         touchingSurface = true;
-        float dProduct = Math::dot(contactData[i].normal, {0.0f, 1.0f});
+        float dProduct = Math::dot(it->second.normal, {0.0f, 1.0f});
         if(dProduct < MAX_SLOPE_COSINE)
         {
-            //collider->setCoefFriction(0.0f);
-            slopeOkay = false;
-            return false;
+            ++badSlopeCount;
         }
     }
+    if(badSlopeCount == (int)contactData.size())
+        slopeOkay = false;
+
+    if(collider->getVelocity().y > 0.0f && !touchingSurface)
+    {
+        handleInput(Input::Fall);
+    }
+    if(touchingSurface)
+        handleInput(Input::Land);
+
+    if(skeleton != nullptr)
+    {
+        BoneData torsoData = skeleton->getBoneData("right arm");
+        updateEquipablePosData(torsoData.position, torsoData.orientation);
+        updateEquippedAnchorPoints();
+    }
+
     return true;
 }
 
-bool Character::getSlopeState()
+void Character::handleInput(Input input)
 {
-    return slopeOkay;
+    CharacterState* newState = currentState->handleInput(*this, input);
+
+    if(newState != nullptr)
+    {
+        delete currentState;
+        currentState = newState;
+        currentState->enterState(*this);
+    }
+
+    switch(input)
+    {
+        case Input::EnableTarget:
+            properties.aimingAtTarget = true;
+            break;
+        case Input::DisableTarget:
+            properties.aimingAtTarget = false;
+            break;
+        case Input::Equip_Primary:
+            characterItems.firePrimary();
+            break;
+        default:
+            break;
+    }
 }
 
-PhysicsObject* Character::getColliderAddress()
-{
-    return collider;
-}
-
-/*Equipable* Character::getEquippedItem()
-{
-    return nullptr;
-}*/
-
-void Character::equipablePrimary()
-{
-    characterItems.updateEquippedPos(collider->getPosition());
-    characterItems.firePrimary();
-    //equippedItem->updateParentPos(collider->getPosition());
-    //equippedItem->primaryFunc();
-    //charSubject.notify(*this, Event{EventType::Fire_Bullet});
-}
-
-/*sf::Vector2f Character::getEquipablePosition()
-{
-    return equippedItem->getLocalPosition() + collider->getPosition();
-}*/
-
-sf::Vector2f Character::getPosition()
-{
-    return collider->getPosition();
-}
-
-void Character::changeAimAngle(float angle)
-{
-    characterItems.getEquippedItem().changeAimAngle(angle);
-}
 
 void Character::setHealth(float health)
 {
@@ -159,7 +170,74 @@ CharacterProperties Character::getProperties()
     return properties;
 }
 
-void Character::switchNextItem()
+void Character::setAnimation(std::string const & animationName)
 {
-    characterItems.nextItem();
+    DataContainer<std::string > message{animationName};
+    charSubject.notify(*this, Event{EventType::Set_Animation}, &message);
+    if(properties.aimingAtTarget == true)
+        setTarget(properties.target);
+}
+
+void Character::setAnimationSpeed(float speed)
+{
+    if(skeleton != nullptr)
+        skeleton->setAnimationSpeed(speed);
+}
+
+void Character::setTarget(sf::Vector2f const & target)
+{
+    sf::Vector2f realTarget = target;
+
+    properties.target = realTarget;
+    if(skeleton != nullptr)
+    {
+        skeleton->setTarget(realTarget, "right limb", 0);
+        skeleton->setTarget(realTarget, "neck", -1, false, true, Skeleton2DBone::RelativeTo::Orthogonal);
+        BoneData rootData = skeleton->getBoneData("root");
+        sf::Vector2f relPos = target - rootData.position;
+        if(Math::dot(rootData.orientation, relPos) < 0.0f)
+            flipCharacter(properties.flipped);
+    }
+}
+
+void Character::updateEquipablePosData(sf::Vector2f const & position,
+                                sf::Vector2f const & orientation)
+{
+    characterItems.updateEquippedPos(position);
+    characterItems.updateEquippedAngle(orientation);
+
+}
+
+void Character::flipCharacter(bool & _isflipped)
+{
+    if(skeleton != nullptr)
+    {
+        if(_isflipped)
+        {
+            skeleton->setScale({1.0f, 1.0f});
+        }
+        else
+            skeleton->setScale({-1.0f, 1.0f});
+    }
+
+    _isflipped = !_isflipped;
+
+    characterItems.setFlippedState(_isflipped);
+}
+
+void Character::updateEquippedAnchorPoints()
+{
+    if(skeleton != nullptr)
+    {
+        std::map<std::string, sf::Vector2f > anchorPoints =
+                characterItems.getAnchorPoints();
+
+        for(auto it = anchorPoints.begin(); it != anchorPoints.end(); ++it)
+        {
+            //if(it->first == "grip")
+            //    skeleton->setTarget(it->second, "right limb", -1);
+            if(it->first == "handle")
+                skeleton->setTarget(it->second, "left limb", -1);
+        }
+    }
 }

@@ -3,22 +3,25 @@
 
 #include <iostream>
 #include <vector>
-#include "classCharacter.h"
 #include "Observer.h"
+#include "classCharacter.h"
 
-class CharacterManager
+class CharacterManager : public Observer
 {
     Subject subCharMan;
 public:
+    CharacterManager();
+    ~CharacterManager();
+
     std::vector<Character* > characters;
     void addCharacter(CharacterProperties init);
     void addCharacter(Character* newChar);
-    void moveCharacter(sf::Vector2f direction, int characterIndex);
-    void equipablePrimary(int charIndex);
+    void handleInput(Input input, int characterIndex);
     void newObserver(Observer* obs);
-    void setAimAngle(int index, sf::Vector2f targetPos);
-    void switchNextItem(int charIndex);
+    void setTarget(sf::Vector2f targetPos, int characterIndex);
     CharacterProperties getCharacterProperties(int index);
+
+    virtual void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CLASS_CHAR_MANAGER_H

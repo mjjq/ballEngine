@@ -19,6 +19,7 @@
 					<Add library="sfml-graphics" />
 					<Add library="sfml-window" />
 					<Add library="sfml-system" />
+					<Add library="InverseKinematics" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -45,6 +46,24 @@
 					<Add library="gdi32" />
 					<Add library="freetype" />
 					<Add library="jpeg" />
+				</Linker>
+			</Target>
+			<Target title="Profiler">
+				<Option output="bin/Profiler/ballEngine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Profiler/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++14" />
+					<Add option="-pg" />
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg -lgmon" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+					<Add library="InverseKinematics" />
 				</Linker>
 			</Target>
 		</Build>
@@ -83,6 +102,7 @@
 		<Unit filename="headers/classCapsule.h" />
 		<Unit filename="headers/classCharacter.h" />
 		<Unit filename="headers/classCharacterManager.h" />
+		<Unit filename="headers/classCharacterState.h" />
 		<Unit filename="headers/classEquipable.h" />
 		<Unit filename="headers/classGameObject.h" />
 		<Unit filename="headers/classGameObjectEditor.h" />
@@ -90,6 +110,7 @@
 		<Unit filename="headers/classGameScene.h" />
 		<Unit filename="headers/classInventory.h" />
 		<Unit filename="headers/classJoint.h" />
+		<Unit filename="headers/classJointManager.h" />
 		<Unit filename="headers/classKeyBinds.h" />
 		<Unit filename="headers/classLight.h" />
 		<Unit filename="headers/classMainMenuScene.h" />
@@ -117,12 +138,14 @@
 		<Unit filename="headers/classUniverse.h" />
 		<Unit filename="headers/collisionDetection.h" />
 		<Unit filename="headers/constraintSolver.h" />
+		<Unit filename="headers/contactData.h" />
 		<Unit filename="headers/forces.h" />
 		<Unit filename="headers/integrators.h" />
 		<Unit filename="headers/jsonParsing.h" />
 		<Unit filename="headers/lightingEngine.h" />
 		<Unit filename="headers/resourceManager.h" />
 		<Unit filename="headers/sceneEnums.h" />
+		<Unit filename="headers/sort.h" />
 		<Unit filename="headers/stringConversion.h" />
 		<Unit filename="headers/structs.h" />
 		<Unit filename="headers/windowManager.h" />
@@ -154,6 +177,7 @@
 		<Unit filename="source/Simulation/CollisionEngine/GJK.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/classArbiter.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/classJoint.cpp" />
+		<Unit filename="source/Simulation/CollisionEngine/classJointManager.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/collisionDetection.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/collisionResolving.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/constraintSolver.cpp" />
@@ -164,6 +188,7 @@
 		<Unit filename="source/Simulation/CollisionEngine/sepAxisTests.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacter.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacterManager.cpp" />
+		<Unit filename="source/Simulation/GameObjects/classCharacterState.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classEquipable.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classGameObject.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classGameObjectEditor.cpp" />

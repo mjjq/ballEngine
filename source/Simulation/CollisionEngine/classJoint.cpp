@@ -1,9 +1,12 @@
 #include "classJoint.h"
 #include "stringConversion.h"
 
-Joint::Joint(PhysicsObject* p1, PhysicsObject* p2)
+Subject Joint::engineNotify;
+
+Joint::Joint(std::vector<PhysicsObject* > _objects) : objects{_objects}
 {
-    if (p1 < p2)
+    engineNotify.notify(*this, Event{EventType::New_Joint});
+    /*if (p1 < p2)
         {
             obj1 = p1;
             obj2 = p2;
@@ -12,36 +15,34 @@ Joint::Joint(PhysicsObject* p1, PhysicsObject* p2)
         {
             obj1 = p2;
             obj2 = p1;
+        }*/
+
+        for(int i=0; i<(int)objects.size(); ++i)
+        {
+            pwm.massInertiaPairs.push_back({objects[i]->getMass(), objects[i]->getMomentInertia()});
+            pwv.velocityPairs.push_back({objects[i]->getVelocity(), objects[i]->getRotRate()});
         }
-
-        pwm.m1 = obj1->getMass();
-        pwm.m2 = obj2->getMass();
-        pwm.i1 = obj1->getMomentInertia();
-        pwm.i2 = obj2->getMomentInertia();
-
-        pwv.v1 = obj1->getVelocity();
-        pwv.v2 = obj2->getVelocity();
-        pwv.w1 = obj1->getRotRate();
-        pwv.w2 = obj2->getRotRate();
 }
 
 void Joint::update()
 {
 
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    for(int i=0; i<(int)objects.size(); ++i)
+    {
+        pwv.velocityPairs[i] = {objects[i]->getVelocity(),
+                                objects[i]->getRotRate()};
+    }
 
 }
 
 void Joint::PreStep(float inv_dt)
 {
 
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    for(int i=0; i<(int)objects.size(); ++i)
+    {
+        pwv.velocityPairs[i] = {objects[i]->getVelocity(),
+                                objects[i]->getRotRate()};
+    }
 
     /*for(Contact &tempCont : contacts)
     {
@@ -63,22 +64,68 @@ void Joint::PreStep(float inv_dt)
 
 void Joint::ApplyImpulse()
 {
-    pwv.v1 = obj1->getVelocity();
-    pwv.v2 = obj2->getVelocity();
-    pwv.w1 = obj1->getRotRate();
-    pwv.w2 = obj2->getRotRate();
+    for(int i=0; i<(int)objects.size(); ++i)
+    {
+        pwv.velocityPairs[i] = {objects[i]->getVelocity(),
+                                objects[i]->getRotRate()};
+    }
 
     //std::cout << pwv.v1 << "\n";
     //std::cout << pwv.v2 << "\n";
-        CStructs::Constraint jacobian = (Constraints::makeDistanceConstraint(*obj1,
-                                   *obj2));
+        CStructs::Constraint jacobian = (Constraints::makeDistanceConstraint(*objects[0],
+                                   *objects[1]));
 
         Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
     //std::cout << pwv.v1 << "\n";
     //std::cout << pwv.v2 << "\n\n";
 
-    obj1->setVelocity(pwv.v1);
-    obj1->setRotRate(pwv.w1);
-    obj2->setVelocity(pwv.v2);
-    obj2->setRotRate(pwv.w2);
+    for(int i=0; i<(int)objects.size(); ++i)
+    {
+        objects[i]->setVelocity(pwv.velocityPairs[i].v);
+        objects[i]->setRotRate(pwv.velocityPairs[i].w);
+    }
+}
+
+void PositionJoint::ApplyImpulse()
+{
+    for(int i=0; i<(int)objects.size(); ++i)
+    {
+        pwv.velocityPairs[i] = {objects[i]->getVelocity(),
+                                objects[i]->getRotRate()};
+    }
+
+    CStructs::Constraint jacobian;
+
+    if(getPosition != nullptr)
+    {
+        jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().x,
+                                    getPosition().x, 'x'));
+
+        Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+
+        jacobian = (Constraints::makePositionConstraint(objects[0]->getPosition().y,
+                                        getPosition().y, 'y'));
+
+        Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+    }
+
+    if(getRotation != nullptr)
+    {
+        if(std::abs(objects[0]->getRotAngle() - getRotation()) >= 180.0f)
+        {
+            objects[0]->setRotAngle(getRotation());
+        }
+
+        jacobian = (Constraints::makeAngularConstraint(objects[0]->getRotAngle(),
+                                        getRotation()));
+
+        Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+
+    }
+
+    for(int i=0; i<(int)objects.size(); ++i)
+    {
+        objects[i]->setVelocity(pwv.velocityPairs[i].v);
+        objects[i]->setRotRate(pwv.velocityPairs[i].w);
+    }
 }

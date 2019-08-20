@@ -4,25 +4,46 @@
 #include <SFML/Graphics.hpp>
 #include "classPhysicsObject.h"
 #include "constraintSolver.h"
+#include "Observer.h"
 
-struct Joint
+class Joint : public Component
 {
+protected:
+	float lambda = 0.0f;
+
+	std::vector<PhysicsObject* > objects;
+
+	CStructs::PairWiseVel pwv;
+    CStructs::PairWiseMass pwm;
     enum {MAX_POINTS = 2};
 
-	Joint(PhysicsObject* p1, PhysicsObject* p2);
+public:
+    static Subject engineNotify;
+    Subject jointSubject;
+
+    Joint() { engineNotify.notify(*this, Event{EventType::New_Joint}); }
+    virtual ~Joint() { engineNotify.notify(*this, Event{EventType::Delete_Joint}); }
+
+	Joint(std::vector<PhysicsObject* > _objects);
 
 	void update();
 
 	void PreStep(float inv_dt);
-	void ApplyImpulse();
+	virtual void ApplyImpulse();
+};
 
-	float lambda = 0.0f;
+class PositionJoint : public Joint
+{
+    std::function<sf::Vector2f() > getPosition;
+    std::function<float() > getRotation;
+public:
+    PositionJoint(std::vector<PhysicsObject * > _objects,
+                  std::function<sf::Vector2f() > _getPosition,
+                  std::function<float() > _getRotation) :
+                    Joint{_objects}, getPosition{_getPosition},
+                    getRotation{_getRotation} {}
 
-	PhysicsObject* obj1;
-	PhysicsObject* obj2;
-
-	CStructs::PairWiseVel pwv;
-    CStructs::PairWiseMass pwm;
+    virtual void ApplyImpulse();
 };
 
 #endif // CLASS_JOINT_H

@@ -30,13 +30,23 @@
 		"spwnSPoly"		: ["LShift", "RMB"],
 		"spwnSys"		: ["LControl", "RMB"],
 		"spwnChar"		: ["X", "LMB"],
+		"spwnJson"		: ["J", "LMB"],
 		"spwnLight"		: ["L", "LMB"],
+		"newJoint"		: ["LAlt", "Q"],
 		"editMode"		: ["Tab"]
 	},
 	"EditObjectMode" : {
 		"selObject"      : ["LMB"],
 		"mvObject"       : ["MMB"],
 		"delObject"      : ["Delete"],
-		"spwnMode"		 : ["Tab"]
+		"charMode"		 : ["Tab"]
+	},
+	"CharacterMode" : {
+		"mvPlrLft" 		: ["A"],
+		"mvPlrRgt" 		: ["D"],
+		"plrJump" 		: ["Space"],
+		"spwnMode" 		: ["Tab"],
+		"aimChar"		: ["RMB"],
+		"equPrim"		: ["MMB"]
 	}
 }

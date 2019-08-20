@@ -17,18 +17,18 @@ public:
     ICharWorld(BallUniverse* _world,
                CharacterManager* _cMang,
                GameObjectManager* _pMang);
-    void checkEquippedWeapon();
-    void equipablePrimary(Equipable* item, Character* character);
+    //void checkEquippedWeapon();
+    //void equipablePrimary(Equipable* item, Character* character);
     //void spawnNewCharacter(CharacterProperties init);
-    void spawnNewProjectile(ProjectileType type,
-                            sf::Vector2f position,
-                            sf::Vector2f velocity);
-    void spawnNewProjectile(ObjectProperties objProps);
-    void charContactData();
-    void projContactData();
-    Character* getProjCharCollision(GameObject& proj);
-    void dealDamage(GameObject& proj);
-    virtual void onNotify(Entity& entity, Event event);
+    //void spawnNewProjectile(ProjectileType type,
+    //                        sf::Vector2f position,
+    //                        sf::Vector2f velocity);
+    //void spawnNewProjectile(ObjectProperties objProps);
+    //void charContactData();
+    //void projContactData();
+    //Character* getProjCharCollision(GameObject& proj);
+    //void dealDamage(GameObject& proj);
+    virtual void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CHARWORLDINT_H

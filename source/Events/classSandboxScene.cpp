@@ -1,4 +1,5 @@
 #include "classSandboxScene.h"
+#include "jsonParsing.h"
 
 SandboxScene::SandboxScene(sf::RenderWindow &_window,
                            sf::Time &_targetFTime,
@@ -20,8 +21,8 @@ void SandboxScene::load()
         projMan = new GameObjectManager{};
         objEditor = new GameObjectEditor{*projMan, window};
         skeletonMan = new Skeleton2DManager{};
-        charWorldInterface = ICharWorld{ballSim, charMan, projMan};
-        ballSim->newObserver(&charWorldInterface);
+        //charWorldInterface = ICharWorld{ballSim, charMan, projMan};
+        //ballSim->newObserver(&charWorldInterface);
 
         wSize = ballSim->getWorldSize();
         changeBoundaryRect(wSize);
@@ -34,8 +35,9 @@ void SandboxScene::load()
             {"mvObject",    [&]{objEditor->setObjectAttribute("position", window.mapPixelToCoords(sf::Mouse::getPosition(window)));
                                 objEditor->setObjectAttribute("velocity", sf::Vector2f{0.0f, 0.0f});
                                 KeyBinds::isFuncContinuous = true;}},
-            {"spwnMode",    [&]{switchControlMode("SpawnMode");}},
-            {"editMode",    [&]{switchControlMode("EditObjectMode");}},
+            {"spwnMode",    [&]{switchControlMode("SpawnMode"); std::cout << "spawnmode\n";}},
+            {"editMode",    [&]{switchControlMode("EditObjectMode"); std::cout << "editmode\n";}},
+            {"charMode",    [&]{switchControlMode("CharacterMode"); std::cout << "charmode\n";}},
             {"incMass",     [&]{spawnMass+=1;}},
             {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
             {"incRad",      [&]{spawnRadius+=1;}},
@@ -61,7 +63,8 @@ void SandboxScene::load()
                 KeyBinds::isFuncContinuous = true;
                     }},
             {"aimChar",     [&]{
-                charMan->setAimAngle(0, (sf::Vector2f)mousePosOnPan);
+                charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
+                charMan->handleInput(Input::EnableTarget, 0);
                 KeyBinds::isFuncContinuous = true;
                     }},
             {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
@@ -72,7 +75,7 @@ void SandboxScene::load()
             {"chgBColour",  [&]{ballSim->changeBallColour();}},
             {"undoBall",    [&]{projMan->removeObject(-1);}},
             {"undoRect",    [&]{ballSim->removeRect(-1);}},
-            {"newJoint",    [&]{ballSim->newJoint(0, 1);}},
+            {"newJoint",    [&]{ballSim->newJoint(0, window.mapPixelToCoords(sf::Mouse::getPosition(window)));}},
             {"mouseExp",    [&]{ballSim->createExplosion(window.mapPixelToCoords(sf::Mouse::getPosition(window)),
                                                         200.0f,
                                                         25.0f);}},
@@ -80,14 +83,14 @@ void SandboxScene::load()
                                                         200.0f,
                                                         -1.0f);
                                 KeyBinds::isFuncContinuous = true;}},
-            {"equPrim",     [&]{charMan->equipablePrimary(0);}},
-            {"nxtItem",     [&]{charMan->switchNextItem(0);}},
-            {"plrJump",     [&]{charMan->moveCharacter({0,1}, 0);
+            {"equPrim",     [&]{charMan->handleInput(Input::Equip_Primary, 0);}},
+            //{"nxtItem",     [&]{charMan->switchNextItem(0);}},
+            {"plrJump",     [&]{charMan->handleInput(Input::Jump, 0);
                                 KeyBinds::isFuncContinuous = false;}},
-            {"mvPlrRgt",    [&]{charMan->moveCharacter({1,0}, 0);
+            {"mvPlrRgt",    [&]{charMan->handleInput(Input::WalkRight, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
-            {"mvPlrLft",    [&]{charMan->moveCharacter({-1,0}, 0);
+            {"mvPlrLft",    [&]{charMan->handleInput(Input::WalkLeft, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
             {"spwnSingle",  [&]{
@@ -155,6 +158,10 @@ void SandboxScene::load()
             },
         };
         buttonReleaseMap = {
+            {"mvPlrRgt",    [&]{charMan->handleInput(Input::Idle, 0);}
+                                },
+            {"mvPlrLft",    [&]{charMan->handleInput(Input::Idle, 0);}
+                                },
             {"spwnSingle",  [&]{
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
@@ -168,14 +175,14 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Ball,
                                              {},
                                              {"phong",
                                              "red.jpg",
                                              "normal2.png"}};
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Ball(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Ball(props));
                     drawLine = false;
                 }
             }
@@ -194,22 +201,24 @@ void SandboxScene::load()
                                               });*/
                     ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
                                              {0.0f, 0.0f},
-                                             {spawnRadius, 0.0f},
+                                             {50.0f, 100.0f},
                                              spawnMass,
                                              spawnCoefFriction,
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
-                                             ObjectType::Ball,
+                                             false, false, false, true,
+                                             ObjectType::Capsule,
                                              {},
                                              {"phong",
                                              "red.jpg",
                                              "normal2.png"}};
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                        new Ball(props),
+                    CharacterProperties init;
+                    GameObject* obj = new GameObject(nullptr,//new Renderable(props),
+                                                        new Capsule(props),
                                                         nullptr,
-                                                        new Skeleton2DWrap("example3.json")));
+                                                        new Character(init),
+                                                        new Skeleton2DWrap("./res/json/example3.json"));
                     drawLine = false;
                 }
             }
@@ -228,7 +237,7 @@ void SandboxScene::load()
                                          spawnCoefRest,
                                          spawnRotation,
                                          spawnRotRate,
-                                         false, false, false,
+                                         false, false, false, true,
                                          ObjectType::Capsule});
                     drawLine = false;
                 }
@@ -247,11 +256,11 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              0.0f,
-                                             true, false, false,
+                                             true, false, false, true,
                                              ObjectType::Ball};
 
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Ball(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Ball(props));
                     drawLine = false;
                 }
             }
@@ -278,14 +287,14 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Polygon,
                                              verts,
                                              {"phong",
                                               "red.jpg",
                                               "pyramidN.png"}};
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Polygon(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Polygon(props));
                     drawLine = false;
                 }
             }
@@ -295,7 +304,17 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+                    //spawnFromJson(static_cast<sf::Vector2f>(mousePosOnClick),velocity);
+
+                    ObjectProperties props;
+                    props._position = (sf::Vector2f )(mousePosOnClick);
+                    props._velocity = velocity;
+                    nlohmann::json j = beParser::loadJsonFromFile("./res/json/square.json");
+                    beParser::checkObjectPropertyParams(j, props);
+
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                     new Polygon(props));
+
                     drawLine = false;
                 }
             }
@@ -315,6 +334,7 @@ void SandboxScene::load()
                     {
                         vert.position.x = 30.0f * vert.position.x * velocity.x;
                         vert.position.y = 30.0f * vert.position.y * velocity.y;
+                        vert.position = Math::rotate(vert.position, spawnRotation);
                     }
                     ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
                                              {0.0f, 0.0f},
@@ -322,14 +342,14 @@ void SandboxScene::load()
                                              1e+15f,
                                              spawnCoefFriction,
                                              spawnCoefRest,
-                                             spawnRotation,
                                              0.0f,
-                                             true, false, false,
+                                             0.0f,
+                                             true, false, false, true,
                                              ObjectType::Polygon,
                                              verts};
 
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Polygon(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Polygon(props));
                     drawLine = false;
                 }
             }
@@ -361,15 +381,15 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Polygon,
                                              verts,
                                              {"phong",
                                              "red.jpg",
                                              "normal.jpg",
                                              "spiro.jpg"}};
-                    projMan->addObject(new GameObject(new Renderable(props),
-                                                      new Polygon(props)));
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Polygon(props));
                     drawLine = false;
                 }
             }
@@ -401,16 +421,16 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             false, false, false,
+                                             false, false, false, true,
                                              ObjectType::Ball,
                                              verts,
                                              {"light.frag"},
                                              };
                     LightProperties lProperties = {{props._position.x, props._position.y, 5.0f}};
                     lProperties.umbralRadius = spawnRadius;
-                    projMan->addObject(new GameObject(new Renderable(props),
+                    GameObject* obj = new GameObject(new Renderable(props),
                                                       new Ball(props),
-                                                      new LightSource(lProperties)));
+                                                      new LightSource(lProperties));
                     drawLine = false;
                 }
             }
@@ -446,13 +466,17 @@ void SandboxScene::load()
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
-                                             true, false, false,
+                                             true, false, false, true,
                                              ObjectType::Polygon,
                                              verts});
                     drawLine = false;
                 }
             }
-            }
+            },
+
+            {"aimChar",     [&]{
+                charMan->handleInput(Input::DisableTarget, 0);
+            }},
         };
 
         sliderFuncMap = {
@@ -503,14 +527,14 @@ void SandboxScene::load()
                                  spawnCoefRest,
                                  spawnRotation,
                                  spawnRotRate,
-                                 false, false, false,
+                                 false, false, false, true,
                                  ObjectType::Polygon,
                                  verts,
                                  {"phong",
                                  "white.png",
                                  "blankN.jpg"}
                                              };
-        projMan->addObject(new GameObject(new Renderable(props)));
+        //projMan->addObject(new GameObject(new Renderable(props)));
     }
 }
 
@@ -525,6 +549,8 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     window.setMouseCursorVisible(true);
 
+    skeletonMan->updateAll(0.01f);
+
     KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
     KeyBinds::exeReleasedKey(pressedKeyStack, releasedKeyStack, releasedKeyBinds);
 
@@ -532,9 +558,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     ballSim->universeLoop(currentFrameTime, targetFrameTime);
 
-    skeletonMan->updateAll(0.01f);
-
-    charMan->setAimAngle(0, window.mapPixelToCoords(mousePosOnPan));
+    //charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
 
     timeToNextSpawn -= currentFrameTime;
 }

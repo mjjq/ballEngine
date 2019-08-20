@@ -1,30 +1,80 @@
 #include "classInventory.h"
+#include "classGameObject.h"
 
+#include "jsonParsing.h"
+#include "classPolygon.h"
 
 Inventory::Inventory()
 {
-    initialiseDefault();
 }
 
 void Inventory::initialiseDefault()
 {
-    equipableItems.emplace_back(new ProjectileWeapon{WeaponType::Rifle});
-    equipableItems.emplace_back(new ProjectileWeapon{WeaponType::GrenLauncher});
+    nlohmann::json j = beParser::loadJsonFromFile("./res/json/gun.json");
+
+    EquipableData data;
+    beParser::checkEquipableParams(j, data);
+    ProjectileWeapon* rifle = new ProjectileWeapon{data, WeaponType::Rifle};
+
+    ObjectProperties props;
+    props._position = {00.0f, 20.0f};
+    beParser::checkObjectPropertyParams(j, props);
+
+    PhysicsObject* collider = new Polygon(props);
+    PositionJoint* joint = new PositionJoint({collider},
+                                             [&]{return intendedEqPosition;},
+                                             [&]{return intendedEqRotation;});
+
+
+    GameObject* obj1 = new GameObject(new Renderable(props),
+                                      collider,
+                                      nullptr,
+                                      nullptr,
+                                      nullptr,
+                                      rifle,
+                                      joint);
+
+
+    equipableItems.emplace_back(rifle);
+    //GameObject* obj1 = new GameObject(new Renderable())
 }
 
 void Inventory::updateEquippedPos(sf::Vector2f position)
 {
-    equipableItems[equippedIndex]->updateParentPos(position);
+    sf::Vector2f equippedOffset = {0.0f, 0.0f};
+
+    if(getEquippedItem() != nullptr)
+        equippedOffset = equipableItems[equippedIndex]->getLocalOffset();
+
+    sf::Vector2f orthogonal = Math::orthogonal(intendedEqOrientation, 1.0f);
+
+    sf::Vector2f newPosition = position + equippedOffset.y * intendedEqOrientation
+                                + equippedOffset.x * orthogonal;
+
+    intendedEqPosition = newPosition;
+}
+
+void Inventory::updateEquippedAngle(sf::Vector2f orientation)
+{
+    intendedEqOrientation = orientation;
+
+    intendedEqRotation = 180.0f/Math::PI * atan2f(orientation.y, orientation.x);
+
+    if(getEquippedItem() != nullptr)
+        if(getEquippedItem()->getFlippedState() == true)
+            intendedEqRotation += 180.0f;
 }
 
 void Inventory::firePrimary()
 {
-    equipableItems[equippedIndex]->primaryFunc();
+    if(getEquippedItem() != nullptr)
+        getEquippedItem()->primaryFunc();
 }
 
 void Inventory::fireSecondary()
 {
-    equipableItems[equippedIndex]->secondaryFunc();
+    if(getEquippedItem() != nullptr)
+        getEquippedItem()->secondaryFunc();
 }
 
 void Inventory::switchTo(int index)
@@ -37,10 +87,20 @@ void Inventory::nextItem()
     switchTo(equippedIndex + 1);
 }
 
-Equipable& Inventory::getEquippedItem()
+void Inventory::setFlippedState(bool isFlipped)
 {
-    return *equipableItems[equippedIndex];
+    if(getEquippedItem() != nullptr)
+        getEquippedItem()->setFlippedState(isFlipped);
 }
+
+std::map<std::string, sf::Vector2f > Inventory::getAnchorPoints()
+{
+    if(getEquippedItem() == nullptr)
+        return {};
+
+    return getEquippedItem()->getAnchorPoints();
+}
+
 
 void Inventory::addObserver(Observer* obs)
 {

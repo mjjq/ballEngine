@@ -16,12 +16,14 @@ class Renderer : public Observer
 
     LightingEngine lightingEngine;
     ResourceManager resourceManager;
+
+    void sortByZ(std::vector<Renderable* > & objects);
 public:
     WindowManager windowManager;
 
     Renderer();
     void redrawAll(sf::RenderWindow& window);
-    void onNotify(Entity& entity, Event event);
+    void onNotify(Component& entity, Event event, Container* data = nullptr);
     void resizeWindow(sf::Vector2u newSize);
 };
 

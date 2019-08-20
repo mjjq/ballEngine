@@ -4,7 +4,7 @@
 #include "Math.h"
 
 Renderable::Renderable(std::string _texID,
-               std::vector<sf::Drawable* > _primitives) : Entity()
+               std::vector<sf::Drawable* > _primitives) : Component()
 {
     material.diffuseID = _texID;
     //primitives = _primitives;
@@ -17,6 +17,7 @@ Renderable::Renderable(ObjectProperties objProps)
     generateDrawables(objProps);
     //primShape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(1, 1)));
     renderSubject.notify(*this, Event(EventType::New_Renderable));
+    zPosition = objProps._zPosition;
 }
 
 Renderable::~Renderable()
@@ -85,6 +86,12 @@ void Renderable::updateOrientation(float angle)
 {
     if(primTransformable != nullptr)
         primTransformable->setRotation(angle);
+}
+
+void Renderable::setScale(sf::Vector2f const & scale)
+{
+    if(primTransformable != nullptr)
+        primTransformable->setScale(scale);
 }
 
 Subject Renderable::renderSubject;

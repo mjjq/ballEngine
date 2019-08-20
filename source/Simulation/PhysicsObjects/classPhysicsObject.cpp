@@ -16,7 +16,8 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   mass{init._mass},
                   bullet{init._bullet},
                   ignoreGravity{init._ignoreGravity},
-                  isStatic{init._isStatic}
+                  isStatic{init._isStatic},
+                  enableCollision{init._enableCollision}
 {
     engineNotify.notify(*this, Event(EventType::New_PhysicsObj));
 }
@@ -26,6 +27,27 @@ PhysicsObject::~PhysicsObject()
     engineNotify.notify(*this, Event(EventType::Delete_PhysicsObj));
 }
 
+
+void PhysicsObject::addContactData(ContactDataPair const & contactPair)
+{
+    contactData.insert(contactPair);
+    physSubject.notify(*this, Event{EventType::PhysicsObj_OnContact});
+}
+
+void PhysicsObject::removeContactData(PhysicsObject* key)
+{
+    contactData.erase(key);
+}
+
+void PhysicsObject::clearContactData()
+{
+    contactData.clear();
+}
+
+const std::map<PhysicsObject*, Contact > & PhysicsObject::getContactData()
+{
+    return contactData;
+}
 
 
 sf::Vector2f PhysicsObject::getPosition() {return position;}
@@ -67,7 +89,10 @@ void PhysicsObject::updatePosition(float dt)
     cStepVelocity = nStepVelocity;
     cStepModVelocity = {0,0};
 
-    physSubject.notify(*this, Event(EventType::Update_Position));
+    DataContainer<sf::Vector2f > dataPos(getPosition());
+    DataContainer<float > dataRot(getRotAngle());
+    physSubject.notify(*this, Event(EventType::Update_Position), &dataPos);
+    physSubject.notify(*this, Event(EventType::Update_Rotation), &dataRot);
 }
 
 /**

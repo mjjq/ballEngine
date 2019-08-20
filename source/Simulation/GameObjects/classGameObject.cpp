@@ -2,46 +2,22 @@
 #include "classGameObject.h"
 #include "Math.h"
 
-GameObject::GameObject(ProjectileType type,
-                       sf::Vector2f initPos,
-                       sf::Vector2f initDir)
-{
-    projType = type;
-    switch(type)
-    {
-        case(ProjectileType::Bullet) :
-        {
-            initialiseBullet(initPos, initDir);
-            break;
-        }
-        case(ProjectileType::Bomb) :
-        {
-            initialiseBomb(initPos, initDir);
-            break;
-        }
-        default :
-            break;
-    }
-}
-
-GameObject::GameObject(ObjectProperties objProps,
-               std::function<void()> onColl)
-{
-    projType = ProjectileType::_Count;
-    projProperties = objProps;
-    renderObj = new Renderable(objProps);
-    collider = new Ball(objProps);
-    collider->physSubject.addObserver(this);
-}
+Subject GameObject::engineNotify;
 
 GameObject::GameObject(Renderable* _renderObj,
                        PhysicsObject* _collider,
                        LightSource* _lightSrc,
-                       Skeleton2DWrap* _skeleton) :
+                       Character* _character,
+                       Skeleton2DWrap* _skeleton,
+                       Equipable* _equipable,
+                       Joint* _joint) :
                            renderObj{_renderObj},
                            collider{_collider},
                            lightSrc{_lightSrc},
-                           skeleton{_skeleton}
+                           character{_character},
+                           skeleton{_skeleton},
+                           equipable{_equipable},
+                           joint{_joint}
 {
     if(collider != nullptr)
         collider->physSubject.addObserver(this);
@@ -50,16 +26,44 @@ GameObject::GameObject(Renderable* _renderObj,
     {
         skeleton->skelSubject.addObserver(this);
 
-        std::vector<sf::Vector2f > jointPositions = skeleton->getJointPositions();
+        std::map<std::string, BoneData > jointData = skeleton->getBoneData();
 
         ObjectProperties tempProps;
+        tempProps._size = {5.0f, 0.0f};
 
-        for(int i=0; i<jointPositions.size(); ++i)
+        for(auto it = jointData.begin(); it != jointData.end(); ++it)
         {
-            tempProps._position = jointPositions[i];
+            BoneData tempData = it->second;
+
+            tempProps._position = tempData.position;
+            tempProps.material.diffuseID = "red.jpg";
+            //skeletonDebugJoints.push_back(new Renderable(tempProps));
+
+
+            tempProps.material.diffuseID = "red.jpg";
+            if(it->first == "left hand" || it->first == "right hand") tempProps.material.diffuseID = "blankN.jpg";
+            tempProps._position = tempData.position + tempData.length * tempData.orientation;
             skeletonDebugJoints.push_back(new Renderable(tempProps));
         }
     }
+
+    if(character != nullptr)
+    {
+        character->charSubject.addObserver(this);
+        if(collider != nullptr)
+        {
+            character->setCollider(collider);
+        }
+        if(skeleton != nullptr)
+            character->setSkeleton(skeleton);
+    }
+
+    if(equipable != nullptr)
+    {
+        equipable->wepSub.addObserver(this);
+    }
+
+    engineNotify.notify(*this, Event(EventType::New_GameObject));
 }
 
 GameObject::~GameObject()
@@ -70,98 +74,37 @@ GameObject::~GameObject()
         delete renderObj;
     if(lightSrc != nullptr)
         delete lightSrc;
+    if(character != nullptr)
+        delete character;
     if(skeleton != nullptr)
     {
         delete skeleton;
-        for(int i=0; i<skeletonDebugJoints.size(); ++i)
+        for(int i=0; i<(int)skeletonDebugJoints.size(); ++i)
         {
             delete skeletonDebugJoints[i];
         }
         skeletonDebugJoints.clear();
     }
+    if(equipable != nullptr)
+        delete equipable;
+    if(joint != nullptr)
+        delete joint;
+
+    engineNotify.notify(*this, Event(EventType::Delete_GameObject));
 }
 
-void GameObject::onCollide()
-{
-    onCollideLambda();
-}
 
 PhysicsObject* GameObject::getColliderAddress()
 {
     return collider;
 }
 
-/*void GameObject::setColliderAddress(PhysicsObject* object)
-{
-    collider = object;
-    collider->physSubject.addObserver(this);
-}*/
-
-ObjectProperties GameObject::getProjProps()
-{
-    return projProperties;
-}
-
-
-void GameObject::initialiseBullet(sf::Vector2f initPos, sf::Vector2f initDir)
-{
-    float bulletSpeed = 1.0f;
-    float bulletMass = 5.0f;
-    float bulletRadius = 5.5f;
-    damage = 2.0f;
-
-    ObjectProperties init;
-    init._position = initPos;
-    if(Math::square(initDir) > 0.0f)
-        init._velocity = bulletSpeed * Math::norm(initDir);
-    else
-    init._velocity = {bulletSpeed, 0.0f};
-    init._mass = bulletMass;
-    init._ignoreGravity = true;
-    init._size = {bulletRadius, bulletRadius};
-
-    projProperties = init;
-
-    onCollideLambda = [&]{
-        projSub.notify(*this, Event{EventType::Deal_Damage});
-        projSub.notify(*this, Event{EventType::Destroy_Projectile});
-    };
-}
-
-void GameObject::initialiseBomb(sf::Vector2f initPos, sf::Vector2f initDir)
-{
-    float bulletSpeed = 5.0f;
-    float bulletMass = 5.0f;
-    float bulletRadius = 5.0f;
-    damage = 1.0f;
-
-    ObjectProperties init;
-    init._position = initPos;
-    if(Math::square(initDir) > 0.0f)
-        init._velocity = bulletSpeed * Math::norm(initDir);
-    else
-    init._velocity = {bulletSpeed, 0.0f};
-    init._mass = bulletMass;
-    init._ignoreGravity = false;
-    init._size = {bulletRadius, bulletRadius};
-
-    projProperties = init;
-
-    onCollideLambda = [&]{
-        projSub.notify(*this, Event{EventType::Deal_Damage});
-        projSub.notify(*this, Event{EventType::Gen_Explosion});
-    };
-}
 
 void GameObject::addObserver(Observer* obs)
 {
     projSub.addObserver(obs);
 }
 
-float GameObject::getDamage()
-{
-    return damage;
-}
 
 void GameObject::setPosition(sf::Vector2f const & position)
 {
@@ -186,36 +129,107 @@ void GameObject::setVelocity(sf::Vector2f const & velocity)
         collider->setVelocity(velocity);
 }
 
-void GameObject::onNotify(Entity& entity, Event event)
+void GameObject::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {
         case(EventType::Update_Position):
         {
+            sf::Vector2f position = ((DataContainer<sf::Vector2f >& )(*data)).data;
             if(renderObj != nullptr)
             {
-                renderObj->updatePosition(collider->getPosition());
-                renderObj->updateOrientation(collider->getRotAngle());
+                renderObj->updatePosition(position);
+                //renderObj->updateOrientation(collider->getRotAngle());
             }
             if(lightSrc != nullptr)
             {
-                sf::Vector2f collpos = collider->getPosition();
-                lightSrc->position.x = collpos.x;
-                lightSrc->position.y = collpos.y;
+                lightSrc->position.x = position.x;
+                lightSrc->position.y = position.y;
             }
             if(skeleton != nullptr)
             {
-                skeleton->setRootPosition(collider->getPosition());
+                skeleton->setRootPosition(position);
+            }
+            if(character != nullptr)
+            {
+                character->updateState();
+            }
+            if(equipable != nullptr)
+            {
+                equipable->updateParentPos(position);
+            }
+            break;
+        }
+        case(EventType::Update_Rotation):
+        {
+            float rotation = ((DataContainer<float >& )(*data)).data;
+            if(renderObj != nullptr)
+            {
+                renderObj->updateOrientation(rotation);
+            }
+            if(equipable != nullptr)
+            {
+                equipable->setAimAngle(rotation);
             }
             break;
         }
         case(EventType::Skel_Animate):
         {
-            std::vector<sf::Vector2f > jointPositions = skeleton->getJointPositions();
+            std::map<std::string, BoneData > jointData = skeleton->getBoneData();
 
-            for(int i=0; i<jointPositions.size(); ++i)
+            int i=0;
+            for(auto it = jointData.begin(); it != jointData.end(); ++it)
             {
-                skeletonDebugJoints[i]->updatePosition( jointPositions[i] );
+                BoneData tempData = it->second;
+
+                //skeletonDebugJoints.at(i)->updatePosition( tempData.position );
+                skeletonDebugJoints.at(i)->updatePosition( tempData.position +
+                                                       tempData.length * tempData.orientation );
+
+                i+=1;
+            }
+            break;
+        }
+        case(EventType::Projectile_Contact):
+        {
+            if(character != nullptr)
+            {
+                character->updateState();
+            }
+            break;
+        }
+        case(EventType::Set_Animation):
+        {
+            if(skeleton != nullptr)
+            {
+                std::string name = ((DataContainer<std::string>&)*data).data;
+                skeleton->setAnimation(name);
+            }
+            break;
+        }
+        case(EventType::Character_SetTarget):
+        {
+            /*if(skeleton != nullptr)
+            {
+                sf::Vector2f target = ((DataContainer<sf::Vector2f >&)(*data)).data;
+                skeleton->setTarget(target);
+            }*/
+            break;
+        }
+        /*case(EventType::Joint_PosUpdate):
+        {
+            if(joint != nullptr)
+            {
+                sf::Vector2f jointPos = ((DataContainer<sf::Vector2f >&)(*data)).data;
+                joint->
+            }
+        }*/
+        case(EventType::Set_Scale):
+        {
+            if(renderObj != nullptr)
+            {
+                sf::Vector2f scale = ((DataContainer<sf::Vector2f >& )(*data)).data;
+                renderObj->setScale(scale);
             }
         }
         default:

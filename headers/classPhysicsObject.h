@@ -10,9 +10,12 @@
 #include <tuple>
 #include "Observer.h"
 #include "baseObject.h"
+#include "contactData.h"
 
-class PhysicsObject : public Entity
+class PhysicsObject : public Component
 {
+    typedef std::pair<PhysicsObject*, Contact > ContactDataPair;
+
     float coefRestitution = 0.0f;
     float coefFriction = 1.0f;
 protected:
@@ -42,8 +45,16 @@ protected:
     bool bullet = false;
     bool ignoreGravity = false;
     bool isStatic = false;
+    bool enableCollision = true;
 
 public:
+    void addContactData(ContactDataPair const & contactPair);
+    void removeContactData(PhysicsObject* key);
+    void clearContactData();
+    const std::map<PhysicsObject*, Contact > & getContactData();
+
+    std::map<PhysicsObject*, Contact > contactData;
+
     static Subject engineNotify;
     Subject physSubject;
 
@@ -93,6 +104,9 @@ public:
     bool getIsPlayer();
     void setIsPlayer(bool value);
 
+    bool getCollisionsEnabled() {return enableCollision;}
+    void setCollisionsEnabled(bool value) {enableCollision = value;}
+
     void incTimesCollided();
     int getNumCollTimes();
 
@@ -102,6 +116,7 @@ public:
     float getRotRate();
     void setRotRate(float _rotRate);
     float getRotAngle();
+    void setRotAngle(float _rotAngle) {rotAngle = _rotAngle;}
 
     float getCoefRestitution();
     float getCoefFriction();

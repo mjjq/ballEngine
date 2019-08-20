@@ -14,7 +14,7 @@ enum class ObjectType
 struct Material
 {
     std::string shaderID = "";
-    std::string diffuseID = "";
+    std::string diffuseID = "null.jpg";
     std::string normalID = "";
     std::string emissionID = "";
 
@@ -23,6 +23,7 @@ struct Material
     float specularStrength = 0.5f;
     float emissionStrength = 0.3f;
     float shininess = 32.0f;
+    bool castShadow = false;
 };
 
 struct ObjectProperties
@@ -38,9 +39,11 @@ struct ObjectProperties
     bool _isStatic = false;
     bool _bullet = false;
     bool _ignoreGravity = false;
+    bool _enableCollision = true;
     ObjectType type = ObjectType::Ball;
     std::vector<sf::Vertex > _vertices = {};
     Material material;
+    float _zPosition = 0.0f;
 };
 
 #endif // BASE_OBJECT_H

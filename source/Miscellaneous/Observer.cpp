@@ -1,10 +1,10 @@
 #include "Observer.h"
 
-void Subject::notify(Entity& entity, Event event)
+void Subject::notify(Component& entity, Event event, Container* data)
 {
     for (int i = 0; i < numObservers_; i++)
     {
-      observers_[i]->onNotify(entity, event);
+      observers_[i]->onNotify(entity, event, data);
     }
 }
 

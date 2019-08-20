@@ -15,8 +15,16 @@ Renderer::Renderer()
     lightingEngine.resizeTextures(windowManager.getWindowSize());
 }
 
+void Renderer::sortByZ(std::vector<Renderable* > & objects)
+{
+    for(int i=1; i<objects.size(); ++i)
+        for(int j=i; j > 0 && objects[j]->getZPosition() < objects[j-1]->getZPosition(); --j)
+            std::swap(objects[j], objects[j-1]);
+}
+
 void Renderer::redrawAll(sf::RenderWindow &window)
 {
+    sortByZ(renderObjects);
     lightingEngine.clearShadowTextures(windowManager.getWindow().getView());
     lightingEngine.generateShadowTextures(renderObjects);
     lightingEngine.displayShadowTextures();
@@ -45,7 +53,7 @@ void Renderer::redrawAll(sf::RenderWindow &window)
 
 }
 
-void Renderer::onNotify(Entity& entity, Event event)
+void Renderer::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {

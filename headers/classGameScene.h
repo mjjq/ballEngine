@@ -59,7 +59,7 @@ protected:
     GameObjectManager* projMan = nullptr;
     GameObjectEditor* objEditor = nullptr;
     Skeleton2DManager* skeletonMan = nullptr;
-    ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
+    //ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
     sf::RectangleShape boundaryRect;
 
     bool canZoom = false;

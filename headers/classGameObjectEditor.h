@@ -6,8 +6,8 @@
 
 class GameObjectEditor
 {
-    sf::RenderWindow& viewWindow;
     GameObjectManager& gameObjectManager;
+    sf::RenderWindow& viewWindow;
     GameObject* currentObject = nullptr;
 
     sf::RenderTexture selectionTexture;

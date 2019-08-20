@@ -9,6 +9,7 @@ enum class EventType
     Destroy_Projectile,
     Character_Contact,
     Projectile_Contact,
+    PhysicsObj_OnContact,
     Deal_Damage,
     Gen_Explosion,
     New_Renderable,
@@ -18,10 +19,34 @@ enum class EventType
     New_LightSrc,
     Delete_LightSrc,
     Update_Position,
+    Update_Rotation,
     New_SkelObj,
+    New_Character,
+    Delete_Character,
     Delete_SkelObj,
+    New_GameObject,
+    Delete_GameObject,
     Skel_Animate,
+    Set_Animation,
+    Character_SetTarget,
+    New_Joint,
+    Delete_Joint,
+    Set_Scale,
     Count
+};
+
+class Container
+{
+
+};
+
+template <typename T>
+class DataContainer : public Container
+{
+public:
+    T data;
+    DataContainer() {};
+    DataContainer(T _data) : data{_data} {};
 };
 
 class Event
@@ -32,16 +57,17 @@ public:
     {}
 };
 
-class Entity
+class Component
 {
 
 };
 
-class Observer : public Entity
+
+class Observer : public Component
 {
 public:
     virtual ~Observer() {}
-    virtual void onNotify(Entity& entity, Event event) = 0;
+    virtual void onNotify(Component& entity, Event event, Container* data = nullptr) = 0;
 };
 
 class Subject
@@ -50,7 +76,7 @@ class Subject
     int numObservers_ = 0;
 
 public:
-    void notify(Entity& entity, Event event);
+    void notify(Component& entity, Event event, Container* data = nullptr);
 
     void addObserver(Observer* observer);
 

@@ -12,6 +12,7 @@
 #include "classArbiter.h"
 #include "classJoint.h"
 #include "Observer.h"
+#include "classJointManager.h"
 
 enum class SpawnObjectType
 {
@@ -23,6 +24,10 @@ enum class SpawnObjectType
 
 class BallUniverse : public Observer
 {
+
+    typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
+    typedef std::pair<ArbiterKey, Arbiter> ArbPair;
+    typedef std::vector<std::unique_ptr<PhysicsObject> > PhysObjectArray;
 
     int worldSizeX;
     int worldSizeY;
@@ -42,7 +47,7 @@ class BallUniverse : public Observer
     bool hasCollided = false;
     bool collWithStatic = false;
 
-    float currentTime = 0;
+    float currentTime = 0.0f;
     float dt;
     float accumulator = 0.0f;
     sf::Clock thresholdTimer;
@@ -74,11 +79,16 @@ class BallUniverse : public Observer
     void broadPhase();
 
     Subject universeSub;
+
+    void addArbiter(ArbPair const & arbPair);
+    void clearArbiters();
+    void eraseArbiter(ArbiterKey const & key);
 public:
     std::vector<PhysicsObject* > dynamicObjects;
     std::vector<PhysicsObject* > staticObjects;
     std::map<ArbiterKey, Arbiter> arbiters;
-    std::vector<Joint> joints;
+    //std::vector<Joint*> joints;
+    JointManager jointManager;
 
     BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
     ~BallUniverse();
@@ -139,11 +149,11 @@ public:
                          float radiusOfEffect,
                          float strength);
 
-    void newJoint(int index1, int index2);
+    void newJoint(int index1, sf::Vector2f const & position);
 
     void newObserver(Observer* obs);
 
-    void onNotify(Entity& entity, Event event);
+    void onNotify(Component& entity, Event event, Container* data = nullptr);
 };
 
 #endif // CLASS_UNIVERSE_H

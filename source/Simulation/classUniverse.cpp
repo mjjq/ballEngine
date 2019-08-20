@@ -9,9 +9,6 @@
 #include "Math.h"
 #include "stringConversion.h"
 
-typedef std::map<ArbiterKey, Arbiter>::iterator ArbIter;
-typedef std::pair<ArbiterKey, Arbiter> ArbPair;
-typedef std::vector<std::unique_ptr<PhysicsObject> > PhysObjectArray;
 
 
 /*void BallUniverse::spawnNewObject(ObjectProperties init)
@@ -365,7 +362,7 @@ void BallUniverse::removeBall(int index)
         ////staticCollArray.removeEndRow();
     }
 
-    arbiters.clear();
+    clearArbiters();
     //broadPhase();
 }
 
@@ -389,7 +386,7 @@ void BallUniverse::removeRect(int index)
         //staticCollArray.removeColumnQuick(std::numeric_limits<float>::quiet_NaN());
     }
 
-    arbiters.clear();
+    clearArbiters();
     broadPhase();
 }
 
@@ -400,11 +397,15 @@ void BallUniverse::broadPhase()
     {
         PhysicsObject* obji = dynamicObjects[i];
 
+        if(obji->getCollisionsEnabled())
+        {
         for(unsigned int j=i+1; j<dynamicObjects.size(); ++j)
         {
             //std::cout << i << " " << j << "\n";
             PhysicsObject* objj = dynamicObjects[j];
 
+            if(objj->getCollisionsEnabled())
+            {
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);
 
@@ -415,7 +416,8 @@ void BallUniverse::broadPhase()
 
                 if(iter == arbiters.end())
                 {
-                    arbiters.insert(ArbPair(key, newArb));
+                    addArbiter(ArbPair(key, newArb));
+                    //obji->contactData.insert(objj)
                 }
                 else
                     iter->second.update();
@@ -428,8 +430,10 @@ void BallUniverse::broadPhase()
                     //if(newDt < dtR)
                 }
                 else
-                    arbiters.erase(key);
+                    eraseArbiter(key);
             }
+            }
+        }
         }
     }
 
@@ -437,10 +441,14 @@ void BallUniverse::broadPhase()
     {
         PhysicsObject* obji = dynamicObjects[i];
 
+        if(obji->getCollisionsEnabled())
+        {
         for(unsigned int j=0; j<staticObjects.size(); ++j)
         {
             PhysicsObject* objj = staticObjects[j];
 
+            if(objj->getCollisionsEnabled())
+            {
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);
 
@@ -450,13 +458,15 @@ void BallUniverse::broadPhase()
 
                 if(iter == arbiters.end())
                 {
-                    arbiters.insert(ArbPair(key, newArb));
+                    addArbiter(ArbPair(key, newArb));
                 }
                 else
                     iter->second.update();
             }
             else
-                arbiters.erase(key);
+                eraseArbiter(key);
+            }
+        }
         }
     }
 }
@@ -486,10 +496,8 @@ float BallUniverse::physicsLoop()
     {
         arb->second.PreStep(1.0f/dt);
     }
-    for(auto jointIt = joints.begin(); jointIt != joints.end(); ++jointIt)
-    {
-        jointIt->PreStep(1.0f/dt);
-    }
+
+    jointManager.preStep(1.0f/dt);
 
     for (int i = 0; i < 10; ++i)
     {
@@ -497,10 +505,8 @@ float BallUniverse::physicsLoop()
         {
             arb->second.ApplyImpulse();
         }
-        for(auto jointIt = joints.begin(); jointIt != joints.end(); ++jointIt)
-        {
-            jointIt->ApplyImpulse();
-        }
+
+        jointManager.applyImpulse();
     }
     //std::cout << "hello\n";
     //std::cout << arbiters.size() <<"\n";
@@ -510,6 +516,7 @@ float BallUniverse::physicsLoop()
         dynamicObjects[i]->updatePosition(dt);
     }
 
+    currentTime += dt;
     return dt;
 }
 
@@ -786,8 +793,8 @@ void BallUniverse::clearSimulation()
     //colliderArray.clearMatrix();
     //staticCollArray.clearMatrix();
     numOfBalls = 0;
-    arbiters.clear();
-    joints.clear();
+    clearArbiters();
+    jointManager.clear();
 }
 
 const int& BallUniverse::getWorldSizeX()
@@ -976,20 +983,13 @@ void BallUniverse::createExplosion(sf::Vector2f position,
     }
 }
 
-void BallUniverse::newJoint(int index1, int index2)
+void BallUniverse::newJoint(int index1, sf::Vector2f const & position)
 {
-    if(index1 < (int)dynamicObjects.size() &&
-       index2 < (int)dynamicObjects.size() &&
-       index1 != index2)
+    if(index1 < (int)dynamicObjects.size())
     {
-        //std::cout << "joint created\n";
-        //Joint nJoint(dynamicObjects[index1].get(),
-        //               dynamicObjects[index2].get());
-        //joints.push_back(nJoint);
-        int objSize = dynamicObjects.size();
-        Joint nJoint(dynamicObjects[objSize-2],
-                       dynamicObjects[objSize-1]);
-        joints.push_back(nJoint);
+        Joint* newJoint = new PositionJoint({dynamicObjects[index1]},
+                                             [position, this](){return sf::Vector2f{position.x + 300.0f*sinf(0.01f*currentTime), position.y};},
+                                              [](){return 0.0f;});
     }
 }
 
@@ -998,7 +998,7 @@ void BallUniverse::newObserver(Observer* obs)
     universeSub.addObserver(obs);
 }
 
-void BallUniverse::onNotify(Entity& entity, Event event)
+void BallUniverse::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {
@@ -1025,7 +1025,7 @@ void BallUniverse::onNotify(Entity& entity, Event event)
                 {
                     dynamicObjects.erase(dynamicObjects.begin() + i);
                     numOfBalls--;
-                    arbiters.clear();
+                    clearArbiters();
                 }
             }
             for(int i=0; i<(int)staticObjects.size(); ++i)
@@ -1033,7 +1033,7 @@ void BallUniverse::onNotify(Entity& entity, Event event)
                 if(obj == staticObjects[i])
                 {
                     staticObjects.erase(staticObjects.begin() + i);
-                    arbiters.clear();
+                    clearArbiters();
                 }
             }
             break;
@@ -1042,6 +1042,39 @@ void BallUniverse::onNotify(Entity& entity, Event event)
             break;
     }
 
+}
+
+void BallUniverse::addArbiter(ArbPair const & arbPair)
+{
+    arbiters.insert(arbPair);
+
+    std::pair<PhysicsObject* , Contact > contactDataPair;
+
+    contactDataPair.first = arbPair.first.obj2;
+    contactDataPair.second = arbPair.second.contacts[0];
+    arbPair.first.obj1->addContactData(contactDataPair);
+
+    contactDataPair.first = arbPair.first.obj1;
+    contactDataPair.second = -arbPair.second.contacts[0];
+    arbPair.first.obj2->addContactData(contactDataPair);
+}
+
+void BallUniverse::clearArbiters()
+{
+    for(auto it = arbiters.begin(); it != arbiters.end(); ++it)
+    {
+        it->first.obj1->clearContactData();
+        it->first.obj2->clearContactData();
+    }
+    arbiters.clear();
+}
+
+void BallUniverse::eraseArbiter(ArbiterKey const & key)
+{
+    key.obj1->removeContactData(key.obj2);
+    key.obj2->removeContactData(key.obj1);
+
+    arbiters.erase(key);
 }
 
 BallUniverse::BallUniverse(int _worldSizeX,

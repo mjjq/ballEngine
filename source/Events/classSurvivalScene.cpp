@@ -22,20 +22,20 @@ void SurvivalScene::spawnRandomBalls(int nOBalls,
 
     for(int i=0; i<nOBalls; ++i)
     {
-        float relativePosX = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
-        float relativePosY = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
-        float velocityX = ( (std::rand()-RAND_MAX/2.0f)/RAND_MAX )*maxSpeed;
+        //float relativePosX = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
+        //float relativePosY = ((std::rand()-RAND_MAX/2.0f)/RAND_MAX)*boundingRadius;
+        /*float velocityX = ( (std::rand()-RAND_MAX/2.0f)/RAND_MAX )*maxSpeed;
 
         float plusMinusOne = 1.0f;
         if(std::rand()-RAND_MAX/2.0f < 0)
-            plusMinusOne = -1.0f;
+            plusMinusOne = -1.0f;*/
 
-        float velocityY = plusMinusOne*sqrt(maxSpeed*maxSpeed - velocityX*velocityX);
+        //float velocityY = plusMinusOne*sqrt(maxSpeed*maxSpeed - velocityX*velocityX);
 
-        sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
-        sf::Vector2f newVelocity = {velocityX, velocityY};
+        //sf::Vector2f newPos = {relativePosX+position.x, relativePosY+position.y};
+        //sf::Vector2f newVelocity = {velocityX, velocityY};
 
-        charWorldInterface.spawnNewProjectile(ProjectileType::Bullet, newPos, newVelocity);
+        //charWorldInterface.spawnNewProjectile(ProjectileType::Bullet, newPos, newVelocity);
     }
 }
 
@@ -78,8 +78,8 @@ void SurvivalScene::load()
         ballSim = new BallUniverse{2000, 2000, 1.0f, false, false};
         charMan = new CharacterManager{};
         projMan = new GameObjectManager{};
-        charWorldInterface = ICharWorld{ballSim, charMan, projMan};
-        ballSim->newObserver(&charWorldInterface);
+        //charWorldInterface = ICharWorld{ballSim, charMan, projMan};
+        //ballSim->newObserver(&charWorldInterface);
 
         gameLogic = GameLogic{};
 
@@ -127,10 +127,10 @@ void SurvivalScene::load()
                                 KeyBinds::isFuncContinuous = true;}},
             {"mvPlrLft",    [&]{if(gameLogic.allowPlayerMovement)ballSim->playerInFunc({0.2,0});
                                 KeyBinds::isFuncContinuous = true;}},*/
-            {"mvPlrRgt",    [&]{charMan->moveCharacter({1,0}, 0);
+            {"mvPlrRgt",    [&]{charMan->handleInput(Input::WalkRight, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
-            {"mvPlrLft",    [&]{charMan->moveCharacter({-1,0}, 0);
+            {"mvPlrLft",    [&]{charMan->handleInput(Input::WalkLeft, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
             {"startGme",    [&]{startGame();}},

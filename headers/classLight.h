@@ -29,7 +29,7 @@ public:
     float maxT;
 };
 
-class LightSource : public Entity
+class LightSource : public Component
 {
 public:
     static Subject renderSubject;

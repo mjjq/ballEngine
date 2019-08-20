@@ -69,7 +69,7 @@ void Skeleton2DManager::clearAll()
     skeletons.clear();
 }
 
-void Skeleton2DManager::onNotify(Entity& entity, Event event)
+void Skeleton2DManager::onNotify(Component& entity, Event event, Container* data)
 {
     switch(event.type)
     {
