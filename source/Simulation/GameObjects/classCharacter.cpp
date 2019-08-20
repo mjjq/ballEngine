@@ -41,9 +41,10 @@ void Character::moveSideWays(float input)
                    Math::dot(direction, (std::prev(contactData.end()))->second.normal) <= 0.0f &&
                    Math::dot(collider->getVelocity(), direction) < properties.movementSpeed)
                 {
-                    std::cout << "movement " << direction.x << " " << direction.y << "\n";
                     collider->addSolvedVelocity(direction*properties.movementSpeed,
                                                 direction*properties.movementSpeed);
+
+
                 }
             }
         }
@@ -175,6 +176,12 @@ void Character::setAnimation(std::string const & animationName)
     charSubject.notify(*this, Event{EventType::Set_Animation}, &message);
     if(properties.aimingAtTarget == true)
         setTarget(properties.target);
+}
+
+void Character::setAnimationSpeed(float speed)
+{
+    if(skeleton != nullptr)
+        skeleton->setAnimationSpeed(speed);
 }
 
 void Character::setTarget(sf::Vector2f const & target)

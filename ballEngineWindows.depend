@@ -679,7 +679,7 @@
 	"SFML/Graphics.hpp"
 	"classPhysicsObject.h"
 
-1564685670 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
+1566317487 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
 	"classCapsule.h"
 	"classProjectileWeapon.h"
 	"Observer.h"
@@ -1013,7 +1013,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1566059709 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1566317499 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
@@ -1367,7 +1367,7 @@
 1563479563 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dmanager.h
 	"classSkeleton2DWrap.h"
 
-1566305799 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2d.h
+1566315737 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2d.h
 	"SkeletonNode.h"
 	"Skeleton2DBone.h"
 	"SkeletonAnimation.h"
@@ -1406,7 +1406,7 @@
 	"JSONSkeletonReader.h"
 	<iostream>
 
-1566304341 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
+1566317585 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
 	"Skeleton2D.h"
 	"Observer.h"
 	"classRenderable.h"
@@ -1559,7 +1559,7 @@
 
 1563732674 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacterstate.h
 
-1563732844 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
+1566317457 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
 	"classCharacterState.h"
 	"classCharacter.h"
 

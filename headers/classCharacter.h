@@ -71,12 +71,16 @@ public:
 
     void setAnimation(std::string const & animationName);
 
+    void setAnimationSpeed(float speed);
+
     void setTarget(sf::Vector2f const & target);
 
     void updateEquipablePosData(sf::Vector2f const & position,
                                 sf::Vector2f const & orientation);
 
     void updateEquippedAnchorPoints();
+
+    bool getFlippedState() { return properties.flipped; }
 };
 
 

@@ -31,6 +31,8 @@ public:
 
     void setAnimation(std::string const & animationName);
 
+    void setAnimationSpeed(float _speed) {skeleton.setAnimationSpeed(_speed); }
+
     std::map<std::string, BoneData > getBoneData();
 
     void setTarget(sf::Vector2f const & target);

@@ -4,6 +4,7 @@
 void WalkState::enterState(Character& character)
 {
     character.setAnimation("walk");
+
 }
 
 CharacterState* WalkState::handleInput(Character& character, Input input)
@@ -42,6 +43,12 @@ CharacterState* WalkState::handleInput(Character& character, Input input)
 void WalkState::update(Character& character)
 {
     character.moveSideWays(direction);
+
+    if((direction < 0.0f && !character.getFlippedState()) ||
+       direction > 0.0f && character.getFlippedState())
+        character.setAnimationSpeed(-1.0f);
+    else
+        character.setAnimationSpeed(1.0f);
 }
 
 void IdleState::enterState(Character& character)
