@@ -32,6 +32,8 @@ enum class EventType
     New_Joint,
     Delete_Joint,
     Set_Scale,
+    New_PSrc,
+    Del_PSrc,
     Count
 };
 

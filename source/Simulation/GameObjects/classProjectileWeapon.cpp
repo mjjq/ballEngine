@@ -51,9 +51,9 @@ void ProjectileWeapon::primaryFunc()
     objProps._size = {3.0f, 3.0f};
     objProps._position = parentPosition + localMuzzlePos;
     objProps._velocity = parentVelocity + 10.0f*Math::norm(localMuzzlePos);
-    objProps.material = {"phong",
-                                             "red.jpg",
-                                             "normal2.png"};
+    objProps.material = {"",
+                         "red.jpg",
+                         "normal2.png"};
     GameObject* obj = new GameObject(new Renderable(objProps),
                    new Ball(objProps),
                    nullptr,
