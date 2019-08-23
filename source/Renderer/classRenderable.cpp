@@ -22,6 +22,7 @@ Renderable::Renderable(ObjectProperties objProps)
 
 Renderable::~Renderable()
 {
+
     renderSubject.notify(*this, Event(EventType::Delete_Renderable));
 }
 
@@ -71,6 +72,11 @@ void Renderable::generateDrawables(ObjectProperties objProps)
             primTransformable = shape;
             primShape = shape;
             break;
+        }
+        case(ObjectType::VertexArray):
+        {
+            sf::VertexArray* vArray = new sf::VertexArray(objProps.vArrayType, objProps.vArrayCount);
+            primDrawable = std::move(vArray);
         }
         default:
             break;

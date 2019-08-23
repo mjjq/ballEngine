@@ -591,7 +591,7 @@
 	"classGameScene.h"
 	"characterWorldInterface.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classgamescene.h
+1566574506 i:\users\marcus\my documents\github\ballengine_latest\headers\classgamescene.h
 	"classScene.h"
 	"classUniverse.h"
 	"classCharacterManager.h"
@@ -600,6 +600,7 @@
 	"characterWorldInterface.h"
 	"classUIContainer.h"
 	"classSkeleton2DManager.h"
+	"ParticleSystemManager.h"
 
 1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
 	"integrators.h"
@@ -828,7 +829,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1566587356 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 
@@ -1043,7 +1044,7 @@
 1552053549 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectilemanager.cpp
 	"classProjectileManager.h"
 
-1566321934 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectileweapon.cpp
+1566579098 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectileweapon.cpp
 	"classProjectileWeapon.h"
 	"Math.h"
 	"classGameObject.h"
@@ -1233,12 +1234,12 @@
 	"classUIGroup.h"
 	"structs.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
+1566572996 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
 	"classRenderable.h"
 	<cmath>
 	"Math.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
+1566572680 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 	"baseObject.h"
@@ -1260,9 +1261,9 @@
 	"windowManager.h"
 	"resourceManager.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
+1566572951 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
+1566575307 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
 	"classBall.h"
 	"Observer.h"
 	"classRenderable.h"
@@ -1270,11 +1271,12 @@
 	"classSkeleton2DWrap.h"
 	"classCharacter.h"
 	"classJoint.h"
+	"ParticleSourceWrap.h"
 
 1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjectmanager.h
 	"classGameObject.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
+1566575219 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
 	<iostream>
 	"classGameObject.h"
 	"Math.h"
@@ -1330,7 +1332,7 @@
 
 1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\math.h
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\lightingengine.cpp
+1566574266 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\lightingengine.cpp
 	"lightingEngine.h"
 	"math.h"
 	<cmath>
@@ -1570,22 +1572,28 @@
 	"Observer.h"
 	"classJoint.h"
 
-1566500312 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\particlesystemmanager.cpp
+1566575723 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\particlesystemmanager.cpp
 	"ParticleSystemManager.h"
+	<iostream>
 
 1566499399 i:\users\marcus\my documents\github\ballengine_latest\headers\particlesystemmanager.h
 	"Observer.h"
 	"ParticleSourceWrap.h"
 
-1566500675 i:\users\marcus\my documents\github\ballengine_latest\headers\particlesourcewrap.h
+1566583729 i:\users\marcus\my documents\github\ballengine_latest\headers\particlesourcewrap.h
+	"classRenderable.h"
 	"ParticleSystem.h"
 	"Observer.h"
 
-1566497579 i:\users\marcus\my documents\github\particlesystem\particlesystem.h
+1566574894 i:\users\marcus\my documents\github\particlesystem\particlesystem.h
 	<SFML/Graphics.hpp>
 	<functional>
 	<cstdlib>
 	<math.h>
 	<cmath>
 	<time.h>
+
+1566584238 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\particlesourcewrap.cpp
+	"ParticleSourceWrap.h"
+	"ParticleSystem.h"
 

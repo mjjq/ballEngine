@@ -1,4 +1,5 @@
 #include "ParticleSystemManager.h"
+#include <iostream>
 
 ParticleSystemManager::ParticleSystemManager()
 {
@@ -21,6 +22,7 @@ void ParticleSystemManager::updateAll(float deltaTime)
 
 void ParticleSystemManager::addPSource(ParticleSourceWrap* pSrc)
 {
+    std::cout << "particleSource added\n";
     pSources.push_back(pSrc);
 }
 
@@ -83,5 +85,7 @@ void ParticleSystemManager::onNotify(Component& entity, Event event, Container* 
             removePSource((ParticleSourceWrap*)(&entity));
             break;
         }
+        default:
+            break;
     }
 }

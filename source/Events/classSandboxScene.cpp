@@ -21,6 +21,7 @@ void SandboxScene::load()
         projMan = new GameObjectManager{};
         objEditor = new GameObjectEditor{*projMan, window};
         skeletonMan = new Skeleton2DManager{};
+        pSrcMan = new ParticleSystemManager{};
         //charWorldInterface = ICharWorld{ballSim, charMan, projMan};
         //ballSim->newObserver(&charWorldInterface);
 
@@ -181,8 +182,14 @@ void SandboxScene::load()
                                              {"phong",
                                              "red.jpg",
                                              "normal2.png"}};
-                    GameObject* obj = new GameObject(new Renderable(props),
-                                                      new Ball(props));
+                    GameObject* obj = new GameObject(nullptr,//new Renderable(props),
+                                                      new Ball(props),
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     new ParticleSourceWrap(10000, 80.0f));
                     drawLine = false;
                 }
             }
@@ -550,6 +557,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
     window.setMouseCursorVisible(true);
 
     skeletonMan->updateAll(0.01f);
+    pSrcMan->updateAll(1.0f);
 
     KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
     KeyBinds::exeReleasedKey(pressedKeyStack, releasedKeyStack, releasedKeyBinds);

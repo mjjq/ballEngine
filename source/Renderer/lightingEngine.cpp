@@ -30,12 +30,15 @@ void LightingEngine::generateShadowTextures(std::vector<Renderable* > const & _r
 
             if(_renderObjects[j]->material.castShadow == true)
             {
-                shadowStencil(*lights[i], *_renderObjects[j]->primShape, *shadowTextures[i]);
+                if(_renderObjects[j]->primShape != nullptr)
+                {
+                    shadowStencil(*lights[i], *_renderObjects[j]->primShape, *shadowTextures[i]);
 
-                std::string shadowTextureString = "shadowTextures[" + std::to_string(i) + "]";
-                if(_renderObjects[j]->shader != nullptr)
-                    _renderObjects[j]->shader->setUniform(shadowTextureString,
-                                                          shadowTextures[i]->getTexture());
+                    std::string shadowTextureString = "shadowTextures[" + std::to_string(i) + "]";
+                    if(_renderObjects[j]->shader != nullptr)
+                        _renderObjects[j]->shader->setUniform(shadowTextureString,
+                                                              shadowTextures[i]->getTexture());
+                }
             }
         }
     }
