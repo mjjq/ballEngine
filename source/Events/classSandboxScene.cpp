@@ -16,7 +16,7 @@ void SandboxScene::load()
     {
         isLoaded = true;
 
-        ballSim = new BallUniverse{2000,2000,1.0f,false,false};
+        ballSim = new BallUniverse{2000,2000,false,false};
         charMan = new CharacterManager{};
         projMan = new GameObjectManager{};
         objEditor = new GameObjectEditor{*projMan, window};
@@ -52,12 +52,12 @@ void SandboxScene::load()
             {"tglPTraj",    [&]{ballSim->togglePlayerTraj();}},
             {"tglIntMthd",  [&]{ballSim->toggleRK4();}},
             {"clearSim",    [&]{projMan->clearAll();}},
-            {"decSimStep",  [&]{ballSim->decSimStep(0.1);}},
-            {"incSimStep",  [&]{ballSim->incSimStep(0.1);}},
+            {"decSimStep",  [&]{if(dt > 0.1f) dt -=0.1f;}},
+            {"incSimStep",  [&]{dt += 0.1f;}},
             {"zmToMse",     [&]{zoomToMouse(2.0f);}},
             {"zmFromMse",   [&]{zoomToMouse(0.5f);}},
             {"rstView",     [&]{resetCamera();}},
-            {"tglSimPse",   [&]{ballSim->toggleSimPause();}},
+            {"tglSimPse",   [&]{isPaused = !isPaused;}},
             {"viewPan",     [&]{
                 checkForViewPan(mousePosOnPan);
                 canZoom = true;
@@ -556,17 +556,46 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     window.setMouseCursorVisible(true);
 
-    skeletonMan->updateAll(0.01f);
-    pSrcMan->updateAll(1.0f);
 
     KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
     KeyBinds::exeReleasedKey(pressedKeyStack, releasedKeyStack, releasedKeyBinds);
 
     mousePosOnPan = sf::Mouse::getPosition(window);
 
-    ballSim->universeLoop(currentFrameTime, targetFrameTime);
+    //ballSim->universeLoop(currentFrameTime, targetFrameTime);
 
-    //charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
+    if(!isPaused)
+    {
+        float factor = 1.0f;
+        accumulator += factor*120*dt*currentFrameTime.asSeconds();//((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+        int limiting = 0;
+        int maxLimit = 1000;
+        float dtR = dt;
+
+        while(accumulator >= dt && limiting < maxLimit)
+        {
+            thresholdTimer.restart();
+
+
+            ballSim->physicsLoop(dt/factor);
+            skeletonMan->updateAll(0.01f*dt/factor);
+            pSrcMan->updateAll(1.0f*dt/factor);
+
+
+            accumulator -= dt;
+            if(thresholdTimer.getElapsedTime().asSeconds() > targetFrameTime.asSeconds()*dt)
+                ++limiting;
+        }
+        if( (limiting == maxLimit) && (accumulator >= dt) )
+        {
+            accumulator = 0.0f;
+            std::cout << "Limit\n";
+            if(currentFrameTime.asSeconds() > 1.0f)
+                isPaused = true;
+        }
+    }
+
+
 
     timeToNextSpawn -= currentFrameTime;
 }

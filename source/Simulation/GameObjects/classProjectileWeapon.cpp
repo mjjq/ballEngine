@@ -61,8 +61,8 @@ void ProjectileWeapon::primaryFunc()
 
         float constant2 = 1.0f * (float)(p.seed2 - RAND_MAX/2)/(float)RAND_MAX;
 
-        float f1 = 20.0f*log(1.0f + 1.0f*t);
-        float f2 = 20.0f*log(1.0f + 1.0f*t);
+        float f1 = 5.0f*log(1.0f + 1.0f*t);
+        float f2 = 5.0f*log(1.0f + 1.0f*t);
         float x = 1.0f*constant * f1;
         float y = 1.0f*constant2 * f2;
 
@@ -75,14 +75,14 @@ void ProjectileWeapon::primaryFunc()
 
 
 
-    GameObject* obj = new GameObject(nullptr,//new Renderable(objProps),
+    GameObject* obj = new GameObject(new Renderable(objProps),
                    new Ball(objProps),
                    nullptr,
                    nullptr,
                    nullptr,
                    nullptr,
                    nullptr,
-                   new ParticleSourceWrap(500, 50.0f, pF, "test"));
+                   new ParticleSourceWrap(50, 5.0f, pF, "test"));
     std::cout << "primary\n";
 }
 

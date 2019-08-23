@@ -15,7 +15,7 @@ void main()
 
     color = gl_Color;
 
-    vec2 size = vec2(30.0);
+    vec2 size = vec2(12.0);
 
     viewSize = (gl_ProjectionMatrix * gl_ModelViewMatrix * vec4(gl_Vertex.xy + size, gl_Vertex.zw)).xy;
     worldPos = gl_Position.xyz;

@@ -471,7 +471,7 @@ void BallUniverse::broadPhase()
     }
 }
 
-float BallUniverse::physicsLoop()
+float BallUniverse::physicsLoop(float _dt)
 {
     //float dtR = dt;
     //float epsilon = 1e-5;
@@ -490,14 +490,14 @@ float BallUniverse::physicsLoop()
     universeSub.notify(*this, Event{EventType::Character_Contact});
     universeSub.notify(*this, Event{EventType::Projectile_Contact});
 
-    updateAllObjects(enable_forces, dt);
+    updateAllObjects(enable_forces, _dt);
 
     for(ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
     {
-        arb->second.PreStep(1.0f/dt);
+        arb->second.PreStep(1.0f/_dt);
     }
 
-    jointManager.preStep(1.0f/dt);
+    jointManager.preStep(1.0f/_dt);
 
     for (int i = 0; i < 10; ++i)
     {
@@ -513,40 +513,40 @@ float BallUniverse::physicsLoop()
 
     for(unsigned int i=0; i<dynamicObjects.size(); ++i)
     {
-        dynamicObjects[i]->updatePosition(dt);
+        dynamicObjects[i]->updatePosition(_dt);
     }
 
-    currentTime += dt;
-    return dt;
+    currentTime += _dt;
+    return _dt;
 }
 
 void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
 {
-    if(!isPaused)
-    {
-        accumulator += 120*dt*frameTime.asSeconds();//((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
-        int limiting = 0;
+    //if(!isPaused)
+    //{
+        //accumulator += 120*dt*frameTime.asSeconds();((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+        /*int limiting = 0;
         int maxLimit = 1000;
         float dtR = dt;
 
         while(accumulator >= dt && limiting < maxLimit)
         {
             thresholdTimer.restart();
-            //std::cout << "Before: " << limiting << "\n";
+            std::cout << "Before: " << limiting << "\n";
             dtR = physicsLoop();
             accumulator -= dtR;
-            //std::cout << "After: " << limiting << "\n";
-            //std::cout << "After: " << thresholdTimer.getElapsedTime().asSeconds() << "\n\n";
+            std::cout << "After: " << limiting << "\n";
+            std::cout << "After: " << thresholdTimer.getElapsedTime().asSeconds() << "\n\n";
 
             sampleAllPositions();
             if(thresholdTimer.getElapsedTime().asSeconds() > frameLimit.asSeconds()*dtR)
                 ++limiting;
         }
-        //playerInput.first = false;
-        //calcTotalKE(dynamicObjects);
-        //calcTotalMomentum(dynamicObjects);
-        //calcTotalGPE(dynamicObjects);
-        //calcTotalEnergy();
+        playerInput.first = false;
+        calcTotalKE(dynamicObjects);
+        calcTotalMomentum(dynamicObjects);
+        calcTotalGPE(dynamicObjects);
+        calcTotalEnergy();
         if( (limiting == maxLimit) && (accumulator >= dt) )
         {
             accumulator = 0.0f;
@@ -554,12 +554,12 @@ void BallUniverse::universeLoop(sf::Time frameTime, sf::Time frameLimit)
             if(frameTime.asSeconds() > 1.0f)
                 isPaused = true;
         }
-    }
+    }*/
 }
 
 void BallUniverse::sampleAllPositions()
 {
-    if(timeToNextSample - dt <= 0)
+    /*if(timeToNextSample - dt <= 0)
     {
         for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); ++iter)
             if((**iter).getSamplePrevPosBool())
@@ -573,7 +573,7 @@ void BallUniverse::sampleAllPositions()
 
     for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); ++iter)
         if((**iter).getSamplePrevPosBool())
-            (**iter).sampleCurrentPosition();
+            (**iter).sampleCurrentPosition();*/
 }
 
 void BallUniverse::drawSampledPositions(sf::RenderWindow &window) //No longer very CPU intensive
@@ -704,19 +704,19 @@ sf::Vector2i BallUniverse::getWorldSize()
 
 void BallUniverse::incSimStep(float delta)
 {
-    if(delta>0)
-        dt+=delta;
+//    if(delta>0)
+//        dt+=delta;
 }
 void BallUniverse::decSimStep(float delta)
 {
-    if(delta>0 && dt>delta)
-        dt-=delta;
+//    if(delta>0 && dt>delta)
+//        dt-=delta;
 }
 
 void BallUniverse::setSimStep(float delta)
 {
-    if(delta > 0)
-        dt = delta;
+//    if(delta > 0)
+//        dt = delta;
 }
 
 void BallUniverse::toggleSimPause()
@@ -848,7 +848,8 @@ sf::Vector2f BallUniverse::getObjPosition(unsigned int i)
 
 std::string BallUniverse::getTimeStep()
 {
-    return std::to_string(dt);
+        return std::to_string(0.0f);
+//    return std::to_string(dt);
 }
 
 std::string BallUniverse::getUseRK4()
@@ -960,7 +961,7 @@ void BallUniverse::createExplosion(sf::Vector2f position,
             minDistance = 1.0f;
         }
 
-        if(distanceSq < radiusOfEffect*radiusOfEffect && distanceSq > minDistance)
+        /*if(distanceSq < radiusOfEffect*radiusOfEffect && distanceSq > minDistance)
         {
             float factor = std::min(strength, strength/sqrtf(distanceSq));
             sf::Vector2f sepVector = factor*(GJKResult.v2 - GJKResult.v1);
@@ -979,7 +980,7 @@ void BallUniverse::createExplosion(sf::Vector2f position,
 
             dynamicObjects[i]->addSolvedVelocity(factor*tempContact.normal,
                                                  factor*tempContact.normal);
-        }
+        }*/
     }
 }
 
@@ -1079,15 +1080,13 @@ void BallUniverse::eraseArbiter(ArbiterKey const & key)
 
 BallUniverse::BallUniverse(int _worldSizeX,
                            int _worldSizeY,
-                           float _dt,
                            bool _force,
                            bool _collision) :
 
 worldSizeX{_worldSizeX},
 worldSizeY{_worldSizeY},
 enable_forces{_force},
-enable_collisions{_collision},
-dt{_dt}
+enable_collisions{_collision}
 {
     PhysicsObject::engineNotify.addObserver(this);
 }

@@ -48,15 +48,15 @@ class BallUniverse : public Observer
     bool collWithStatic = false;
 
     float currentTime = 0.0f;
-    float dt;
+    //float dt;
     float accumulator = 0.0f;
     sf::Clock thresholdTimer;
     Integrators intEnum = Integrators::INTEG_VERLET;
     std::string useRK4 = "";
     bool isPaused = false;
 
-    float sampledt = 5*dt;
-    float timeToNextSample = sampledt;
+    //float sampledt = 5*dt;
+    //float timeToNextSample = sampledt;
     bool enable_trajectories = false;
 
     void calcCollTimes();
@@ -74,7 +74,6 @@ class BallUniverse : public Observer
 
     bool checkForBounce(PhysicsObject* object);
 
-    float physicsLoop();
     float physicsLoopAbsorb();
     void broadPhase();
 
@@ -90,9 +89,10 @@ public:
     //std::vector<Joint*> joints;
     JointManager jointManager;
 
-    BallUniverse(int worldSizeX, int worldSizeY, float dt, bool force=true, bool collision=true);
+    BallUniverse(int worldSizeX, int worldSizeY, bool force=true, bool collision=true);
     ~BallUniverse();
 
+    float physicsLoop(float _dt);
     void universeLoop(sf::Time frameTime, sf::Time frameLimit);
     void updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2);
     void updateAllObjects(bool enableForces, float dt);
