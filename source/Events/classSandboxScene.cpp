@@ -217,11 +217,11 @@ void SandboxScene::load()
                                              false, false, false, true,
                                              ObjectType::Capsule,
                                              {},
-                                             {"phong",
+                                             {"",
                                              "red.jpg",
                                              "normal2.png"}};
                     CharacterProperties init;
-                    GameObject* obj = new GameObject(nullptr,//new Renderable(props),
+                    GameObject* obj = new GameObject(nullptr, //new Renderable(props),
                                                         new Capsule(props),
                                                         nullptr,
                                                         new Character(init),
@@ -577,9 +577,9 @@ void SandboxScene::update(sf::RenderWindow &_window)
             thresholdTimer.restart();
 
 
-            ballSim->physicsLoop(dt/factor);
             skeletonMan->updateAll(0.01f*dt/factor);
             pSrcMan->updateAll(1.0f*dt/factor);
+            ballSim->physicsLoop(dt/factor);
 
 
             accumulator -= dt;
@@ -594,8 +594,6 @@ void SandboxScene::update(sf::RenderWindow &_window)
                 isPaused = true;
         }
     }
-
-
 
     timeToNextSpawn -= currentFrameTime;
 }

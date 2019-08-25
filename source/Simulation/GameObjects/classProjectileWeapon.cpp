@@ -50,7 +50,7 @@ void ProjectileWeapon::primaryFunc()
     objProps._ignoreGravity = true;
     objProps._size = {3.0f, 3.0f};
     objProps._position = parentPosition + localMuzzlePos;
-    objProps._velocity = parentVelocity + 50.0f*Math::norm(localMuzzlePos);
+    objProps._velocity = parentVelocity + 10.0f*Math::norm(localMuzzlePos);
     objProps.material = {"",
                          "red.jpg",
                          "normal2.png"};
@@ -66,7 +66,7 @@ void ProjectileWeapon::primaryFunc()
         float x = 1.0f*constant * f1;
         float y = 1.0f*constant2 * f2;
 
-        uint8_t value = 255/(1.0f + 0.1f*t);
+        uint8_t value = 255/(1.0f + 0.11f*t);
         uint8_t value2 = 255/(1.0f + 0.1f*t*t*t*t);
         p.color = sf::Color(value, value2, value);
         p.position = sf::Vector2f{x,y} + p.initialPosition;
@@ -75,14 +75,14 @@ void ProjectileWeapon::primaryFunc()
 
 
 
-    GameObject* obj = new GameObject(new Renderable(objProps),
+    GameObject* obj = new GameObject(nullptr,//new Renderable(objProps),
                    new Ball(objProps),
                    nullptr,
                    nullptr,
                    nullptr,
                    nullptr,
                    nullptr,
-                   new ParticleSourceWrap(50, 5.0f, pF, "test"));
+                   new ParticleSourceWrap(50, 15.0f, pF, "test"));
     std::cout << "primary\n";
 }
 
