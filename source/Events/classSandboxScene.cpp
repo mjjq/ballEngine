@@ -567,7 +567,6 @@ void SandboxScene::update(sf::RenderWindow &_window)
     if(!isPaused)
     {
         float factor = 1.0f;
-
         float minFramerate = 10.0f;
 
         if(currentFrameTime.asSeconds() > 1.0f/minFramerate)
@@ -575,11 +574,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
         else
             accumulator += factor*120*dt*currentFrameTime.asSeconds();//((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
 
-        int limiting = 0;
-        int maxLimit = 1000;
-        float dtR = dt;
-
-        while(accumulator >= dt && limiting < maxLimit)
+        while(accumulator >= dt)
         {
             thresholdTimer.restart();
 
@@ -590,15 +585,6 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
 
             accumulator -= dt;
-            if(thresholdTimer.getElapsedTime().asSeconds() > targetFrameTime.asSeconds()*dt)
-                ++limiting;
-        }
-        if( (limiting == maxLimit) && (accumulator >= dt) )
-        {
-            accumulator = 0.0f;
-            std::cout << "Limit\n";
-            if(currentFrameTime.asSeconds() > 1.0f)
-                isPaused = true;
         }
     }
 
