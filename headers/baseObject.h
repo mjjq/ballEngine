@@ -12,6 +12,14 @@ enum class ObjectType
     _Count,
 };
 
+enum class CollisionIDType
+{
+    ALL_GEOMETRY = 1,
+    CHARACTER_CAPSULE = 2,
+    CHARACTER_HITBOXES = 3,
+    WEAPON_PROJECTILES = 4
+};
+
 struct Material
 {
     std::string shaderID = "";
@@ -47,6 +55,7 @@ struct ObjectProperties
     float _zPosition = 0.0f;
     int vArrayCount = 0;
     sf::PrimitiveType vArrayType = sf::PrimitiveType::Points;
+    std::vector<unsigned int > _collisionGroup = {1};
 };
 
 #endif // BASE_OBJECT_H

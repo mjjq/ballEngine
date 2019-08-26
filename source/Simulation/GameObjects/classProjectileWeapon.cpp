@@ -54,7 +54,10 @@ void ProjectileWeapon::primaryFunc()
     objProps.material = {"",
                          "red.jpg",
                          "normal2.png"};
-
+    objProps._collisionGroup = {(unsigned int)CollisionIDType::CHARACTER_HITBOXES,
+                                (unsigned int)CollisionIDType::WEAPON_PROJECTILES,
+                                (unsigned int)CollisionIDType::ALL_GEOMETRY
+                                };
 
     VecFunction pF = [](float t, Particle& p) {
         float constant = 1.0f * (float)(p.seed - RAND_MAX/2)/(float)RAND_MAX;

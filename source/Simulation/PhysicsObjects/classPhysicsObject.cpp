@@ -17,7 +17,8 @@ PhysicsObject::PhysicsObject(ObjectProperties init) :
                   bullet{init._bullet},
                   ignoreGravity{init._ignoreGravity},
                   isStatic{init._isStatic},
-                  enableCollision{init._enableCollision}
+                  enableCollision{init._enableCollision},
+                  collisionGroup{BitwiseCollObject(init._collisionGroup)}
 {
     engineNotify.notify(*this, Event(EventType::New_PhysicsObj));
 }

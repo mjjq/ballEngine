@@ -4,12 +4,14 @@
 #include "Skeleton2D.h"
 #include "Observer.h"
 #include "classRenderable.h"
+#include "classPhysicsObject.h"
 
 struct SkinDataRenderable
 {
     std::string boneName;
     SkinData data;
     Renderable* renderObj;
+    PhysicsObject* physObj;
 };
 
 class Skeleton2DWrap : public Component

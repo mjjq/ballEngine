@@ -12,6 +12,41 @@
 #include "baseObject.h"
 #include "contactData.h"
 
+class BitwiseCollObject
+{
+    unsigned int collisionMask = 0;
+
+    bool isIDValid(unsigned int ID)
+    {
+        return ID <= 8*sizeof(collisionMask);
+    }
+
+public:
+    BitwiseCollObject(std::vector<unsigned int > const & cGs)
+    {
+        for(int i=0; i<cGs.size(); ++i)
+            if(isIDValid(cGs[i]))
+                collisionMask |= 1 << cGs[i];
+    }
+
+    bool isOfSameGroup(BitwiseCollObject const & otherObject) const
+    {
+        return (collisionMask & otherObject.collisionMask) != 0;
+    }
+
+    void addGroup(unsigned int ID)
+    {
+        if(isIDValid(ID))
+            collisionMask |= 1 << ID;
+    }
+
+    void removeGroup(unsigned int ID)
+    {
+        if(isIDValid(ID))
+            collisionMask &= ~(1 << ID);
+    }
+};
+
 class PhysicsObject : public Component
 {
     typedef std::pair<PhysicsObject*, Contact > ContactDataPair;
@@ -47,7 +82,10 @@ protected:
     bool isStatic = false;
     bool enableCollision = true;
 
+    BitwiseCollObject collisionGroup;
+
 public:
+
     void addContactData(ContactDataPair const & contactPair);
     void removeContactData(PhysicsObject* key);
     void clearContactData();
@@ -120,6 +158,8 @@ public:
 
     float getCoefRestitution();
     float getCoefFriction();
+
+    BitwiseCollObject const & getCollisionGroup() { return collisionGroup; }
 
     virtual sf::Vertex farthestPointInDir(sf::Vector2f direction) = 0;
     virtual sf::Rect<float > getBoundingBox() = 0;

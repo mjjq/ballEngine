@@ -404,7 +404,8 @@ void BallUniverse::broadPhase()
             //std::cout << i << " " << j << "\n";
             PhysicsObject* objj = dynamicObjects[j];
 
-            if(objj->getCollisionsEnabled())
+            if(objj->getCollisionsEnabled() &&
+               (obji->getCollisionGroup().isOfSameGroup(objj->getCollisionGroup())))
             {
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);
@@ -447,7 +448,8 @@ void BallUniverse::broadPhase()
         {
             PhysicsObject* objj = staticObjects[j];
 
-            if(objj->getCollisionsEnabled())
+            if(objj->getCollisionsEnabled() &&
+               (obji->getCollisionGroup().isOfSameGroup(objj->getCollisionGroup())))
             {
             Arbiter newArb(obji, objj);
             ArbiterKey key(obji, objj);

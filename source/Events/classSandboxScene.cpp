@@ -220,6 +220,7 @@ void SandboxScene::load()
                                              {"",
                                              "red.jpg",
                                              "normal2.png"}};
+                    props._collisionGroup = {1,3};
                     CharacterProperties init;
                     GameObject* obj = new GameObject(nullptr, //new Renderable(props),
                                                         new Capsule(props),

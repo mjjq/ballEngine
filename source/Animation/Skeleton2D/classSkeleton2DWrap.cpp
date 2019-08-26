@@ -1,6 +1,7 @@
 #include "classSkeleton2DWrap.h"
 
 #include "JSONSkeletonReader.h"
+#include "classPolygon.h"
 
 #include <iostream>
 
@@ -57,8 +58,14 @@ void Skeleton2DWrap::generateRenderables()
                 //properties.material.shaderID = "phong";
                 properties._zPosition = (float)i / (float)slotData.size();
                 std::cout << properties._zPosition << " zPos\n";
+                //properties._enableCollision = false;
+                properties._collisionGroup = {(unsigned int)CollisionIDType::WEAPON_PROJECTILES};
+                properties._isStatic = true;
 
-                skinRenderables.push_back({attachedBone.name, skinData[j], new Renderable(properties)});
+                skinRenderables.push_back({attachedBone.name,
+                                          skinData[j],
+                                          new Renderable(properties),
+                                          new Polygon(properties)});
 
                 std::cout << attachedBone.name << "\n";
             }
@@ -75,18 +82,21 @@ void Skeleton2DWrap::updateRenderables()
 
         SkinData data = skin.data;
         Renderable* tempRend = skin.renderObj;
+        PhysicsObject* tempPhys = skin.physObj;
 
         float xScale = skeleton.getScale().x;
 
         sf::Vector2f offset = data.offset.x * bone.orientation +
                             xScale * data.offset.y * Math::orthogonal(bone.orientation, 1.0f);
         tempRend->updatePosition(bone.position + offset);
+        tempPhys->setPosition(bone.position + offset);
 
         float rotation = 180.0f/ Math::PI * atan2f(bone.orientation.y,
                                 bone.orientation.x);
         if(xScale < 0.0f) rotation += 180.0f;
 
         tempRend->updateOrientation(rotation - xScale*data.rotation);
+        tempPhys->setRotAngle(rotation - xScale*data.rotation);
     }
 }
 
