@@ -562,8 +562,6 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     mousePosOnPan = sf::Mouse::getPosition(window);
 
-    //ballSim->universeLoop(currentFrameTime, targetFrameTime);
-
     if(!isPaused)
     {
         float factor = 1.0f;
@@ -572,7 +570,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
         if(currentFrameTime.asSeconds() > 1.0f/minFramerate)
             accumulator += factor*120*dt*targetFrameTime.asSeconds();
         else
-            accumulator += factor*120*dt*currentFrameTime.asSeconds();//((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+            accumulator += factor*120*dt*currentFrameTime.asSeconds();
 
         while(accumulator >= dt)
         {
