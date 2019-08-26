@@ -16,11 +16,12 @@ void SandboxScene::load()
     {
         isLoaded = true;
 
-        ballSim = new BallUniverse{2000,2000,1.0f,false,false};
+        ballSim = new BallUniverse{2000,2000,false,false};
         charMan = new CharacterManager{};
         projMan = new GameObjectManager{};
         objEditor = new GameObjectEditor{*projMan, window};
         skeletonMan = new Skeleton2DManager{};
+        pSrcMan = new ParticleSystemManager{};
         //charWorldInterface = ICharWorld{ballSim, charMan, projMan};
         //ballSim->newObserver(&charWorldInterface);
 
@@ -51,12 +52,12 @@ void SandboxScene::load()
             {"tglPTraj",    [&]{ballSim->togglePlayerTraj();}},
             {"tglIntMthd",  [&]{ballSim->toggleRK4();}},
             {"clearSim",    [&]{projMan->clearAll();}},
-            {"decSimStep",  [&]{ballSim->decSimStep(0.1);}},
-            {"incSimStep",  [&]{ballSim->incSimStep(0.1);}},
+            {"decSimStep",  [&]{if(dt > 0.1f) dt -=0.1f;}},
+            {"incSimStep",  [&]{dt += 0.1f;}},
             {"zmToMse",     [&]{zoomToMouse(2.0f);}},
             {"zmFromMse",   [&]{zoomToMouse(0.5f);}},
             {"rstView",     [&]{resetCamera();}},
-            {"tglSimPse",   [&]{ballSim->toggleSimPause();}},
+            {"tglSimPse",   [&]{isPaused = !isPaused;}},
             {"viewPan",     [&]{
                 checkForViewPan(mousePosOnPan);
                 canZoom = true;
@@ -181,8 +182,14 @@ void SandboxScene::load()
                                              {"phong",
                                              "red.jpg",
                                              "normal2.png"}};
-                    GameObject* obj = new GameObject(new Renderable(props),
-                                                      new Ball(props));
+                    GameObject* obj = new GameObject(nullptr,//new Renderable(props),
+                                                      new Ball(props),
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     new ParticleSourceWrap(10000, 80.0f));
                     drawLine = false;
                 }
             }
@@ -210,11 +217,11 @@ void SandboxScene::load()
                                              false, false, false, true,
                                              ObjectType::Capsule,
                                              {},
-                                             {"phong",
+                                             {"",
                                              "red.jpg",
                                              "normal2.png"}};
                     CharacterProperties init;
-                    GameObject* obj = new GameObject(nullptr,//new Renderable(props),
+                    GameObject* obj = new GameObject(nullptr, //new Renderable(props),
                                                         new Capsule(props),
                                                         nullptr,
                                                         new Character(init),
@@ -549,16 +556,35 @@ void SandboxScene::update(sf::RenderWindow &_window)
 
     window.setMouseCursorVisible(true);
 
-    skeletonMan->updateAll(0.01f);
 
     KeyBinds::exePressedKeys(pressedKeyStack, keyBinds);
     KeyBinds::exeReleasedKey(pressedKeyStack, releasedKeyStack, releasedKeyBinds);
 
     mousePosOnPan = sf::Mouse::getPosition(window);
 
-    ballSim->universeLoop(currentFrameTime, targetFrameTime);
+    if(!isPaused)
+    {
+        float factor = 1.0f;
+        float minFramerate = 10.0f;
 
-    //charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
+        if(currentFrameTime.asSeconds() > 1.0f/minFramerate)
+            accumulator += factor*120*dt*targetFrameTime.asSeconds();
+        else
+            accumulator += factor*120*dt*currentFrameTime.asSeconds();
+
+        while(accumulator >= dt)
+        {
+            thresholdTimer.restart();
+
+
+            skeletonMan->updateAll(0.01f*dt/factor);
+            pSrcMan->updateAll(1.0f*dt/factor);
+            ballSim->physicsLoop(dt/factor);
+
+
+            accumulator -= dt;
+        }
+    }
 
     timeToNextSpawn -= currentFrameTime;
 }

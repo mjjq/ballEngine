@@ -8,6 +8,7 @@
 #include "classSkeleton2DWrap.h"
 #include "classCharacter.h"
 #include "classJoint.h"
+#include "ParticleSourceWrap.h"
 
 
 class GameObject : public Observer
@@ -25,6 +26,8 @@ public:
     Skeleton2DWrap* skeleton = nullptr;
     Equipable* equipable = nullptr;
     Joint* joint = nullptr;
+    ParticleSourceWrap* pSource = nullptr;
+
 
     GameObject(Renderable* _renderObj = nullptr,
                PhysicsObject* _collider = nullptr,
@@ -32,7 +35,8 @@ public:
                Character* _character = nullptr,
                Skeleton2DWrap* _skeleton = nullptr,
                Equipable* _equipable = nullptr,
-               Joint* _joint = nullptr);
+               Joint* _joint = nullptr,
+               ParticleSourceWrap* _pSource = nullptr);
     ~GameObject();
     void onCollide();
 

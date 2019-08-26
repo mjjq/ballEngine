@@ -8,6 +8,7 @@ enum class ObjectType
     OBB,
     Polygon,
     Capsule,
+    VertexArray,
     _Count,
 };
 
@@ -44,6 +45,8 @@ struct ObjectProperties
     std::vector<sf::Vertex > _vertices = {};
     Material material;
     float _zPosition = 0.0f;
+    int vArrayCount = 0;
+    sf::PrimitiveType vArrayType = sf::PrimitiveType::Points;
 };
 
 #endif // BASE_OBJECT_H

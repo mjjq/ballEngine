@@ -10,6 +10,7 @@
 #include "characterWorldInterface.h"
 #include "classUIContainer.h"
 #include "classSkeleton2DManager.h"
+#include "ParticleSystemManager.h"
 
 class GameScene : public Scene
 {
@@ -53,12 +54,17 @@ protected:
     float spawnCoefRest = 0.0f;
     float spawnCoefFriction = 1.0f;
 
+    float dt = 1.0f;
+    float accumulator = 0.0f;
+    sf::Clock thresholdTimer;
+    bool isPaused = false;
 
     BallUniverse* ballSim = nullptr;//{2000, 2000, 1.0f, false, false};
     CharacterManager* charMan = nullptr;
     GameObjectManager* projMan = nullptr;
     GameObjectEditor* objEditor = nullptr;
     Skeleton2DManager* skeletonMan = nullptr;
+    ParticleSystemManager* pSrcMan = nullptr;
     //ICharWorld charWorldInterface{nullptr, nullptr, nullptr};
     sf::RectangleShape boundaryRect;
 

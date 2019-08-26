@@ -51,14 +51,38 @@ void ProjectileWeapon::primaryFunc()
     objProps._size = {3.0f, 3.0f};
     objProps._position = parentPosition + localMuzzlePos;
     objProps._velocity = parentVelocity + 10.0f*Math::norm(localMuzzlePos);
-    objProps.material = {"phong",
-                                             "red.jpg",
-                                             "normal2.png"};
-    GameObject* obj = new GameObject(new Renderable(objProps),
+    objProps.material = {"",
+                         "red.jpg",
+                         "normal2.png"};
+
+
+    VecFunction pF = [](float t, Particle& p) {
+        float constant = 1.0f * (float)(p.seed - RAND_MAX/2)/(float)RAND_MAX;
+
+        float constant2 = 1.0f * (float)(p.seed2 - RAND_MAX/2)/(float)RAND_MAX;
+
+        float f1 = 5.0f*log(1.0f + 1.0f*t);
+        float f2 = 5.0f*log(1.0f + 1.0f*t);
+        float x = 1.0f*constant * f1;
+        float y = 1.0f*constant2 * f2;
+
+        uint8_t value = 255/(1.0f + 0.11f*t);
+        uint8_t value2 = 255/(1.0f + 0.1f*t*t*t*t);
+        p.color = sf::Color(value, value2, value);
+        p.position = sf::Vector2f{x,y} + p.initialPosition;
+    };
+
+
+
+
+    GameObject* obj = new GameObject(nullptr,//new Renderable(objProps),
                    new Ball(objProps),
                    nullptr,
                    nullptr,
-                   nullptr);
+                   nullptr,
+                   nullptr,
+                   nullptr,
+                   new ParticleSourceWrap(50, 15.0f, pF, "test"));
     std::cout << "primary\n";
 }
 

@@ -75,7 +75,7 @@ void SurvivalScene::load()
     {
         isLoaded = true;
 
-        ballSim = new BallUniverse{2000, 2000, 1.0f, false, false};
+        ballSim = new BallUniverse{2000, 2000, false, false};
         charMan = new CharacterManager{};
         projMan = new GameObjectManager{};
         //charWorldInterface = ICharWorld{ballSim, charMan, projMan};

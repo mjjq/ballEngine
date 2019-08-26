@@ -10,14 +10,16 @@ GameObject::GameObject(Renderable* _renderObj,
                        Character* _character,
                        Skeleton2DWrap* _skeleton,
                        Equipable* _equipable,
-                       Joint* _joint) :
+                       Joint* _joint,
+                       ParticleSourceWrap* _pSource) :
                            renderObj{_renderObj},
                            collider{_collider},
                            lightSrc{_lightSrc},
                            character{_character},
                            skeleton{_skeleton},
                            equipable{_equipable},
-                           joint{_joint}
+                           joint{_joint},
+                           pSource{_pSource}
 {
     if(collider != nullptr)
         collider->physSubject.addObserver(this);
@@ -89,6 +91,8 @@ GameObject::~GameObject()
         delete equipable;
     if(joint != nullptr)
         delete joint;
+    if(pSource != nullptr)
+        delete pSource;
 
     engineNotify.notify(*this, Event(EventType::Delete_GameObject));
 }
@@ -158,6 +162,8 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
             {
                 equipable->updateParentPos(position);
             }
+            if(pSource != nullptr)
+                pSource->setPosition(position);
             break;
         }
         case(EventType::Update_Rotation):
