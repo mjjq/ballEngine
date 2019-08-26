@@ -567,7 +567,14 @@ void SandboxScene::update(sf::RenderWindow &_window)
     if(!isPaused)
     {
         float factor = 1.0f;
-        accumulator += factor*120*dt*currentFrameTime.asSeconds();//((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+
+        float minFramerate = 10.0f;
+
+        if(currentFrameTime.asSeconds() > 1.0f/minFramerate)
+            accumulator += factor*120*dt*targetFrameTime.asSeconds();
+        else
+            accumulator += factor*120*dt*currentFrameTime.asSeconds();//((frameTime<frameLimit)?frameTime:frameLimit).asSeconds();
+
         int limiting = 0;
         int maxLimit = 1000;
         float dtR = dt;
