@@ -56,7 +56,7 @@ void ProjectileWeapon::primaryFunc()
                          "normal2.png"};
     objProps._collisionGroup = {(unsigned int)CollisionIDType::CHARACTER_HITBOXES,
                                 (unsigned int)CollisionIDType::WEAPON_PROJECTILES,
-                                (unsigned int)CollisionIDType::ALL_GEOMETRY
+                                (unsigned int)CollisionIDType::DEFAULT_GEOMETRY
                                 };
 
     VecFunction pF = [](float t, Particle& p) {

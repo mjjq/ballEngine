@@ -14,7 +14,7 @@ enum class ObjectType
 
 enum class CollisionIDType
 {
-    ALL_GEOMETRY = 1,
+    DEFAULT_GEOMETRY = 1,
     CHARACTER_CAPSULE = 2,
     CHARACTER_HITBOXES = 3,
     WEAPON_PROJECTILES = 4

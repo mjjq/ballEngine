@@ -498,7 +498,7 @@ void SandboxScene::load()
 
         textVarMap = {
             {"numBalls",    [&]{return ballSim->getNumOfBalls();}},
-            {"timeStep",    [&]{return ballSim->getTimeStep();}},
+            {"timeStep",    [&]{return std::to_string(dt);}},
             {"spawnMass",   [&]{return std::to_string(spawnMass);}},
             {"spawnRad",    [&]{return std::to_string(spawnRadius);}},
             {"spawnRot",    [&]{return std::to_string(spawnRotation);}},
@@ -578,7 +578,7 @@ void SandboxScene::update(sf::RenderWindow &_window)
             thresholdTimer.restart();
 
 
-            skeletonMan->updateAll(0.01f*dt/factor);
+            skeletonMan->updateAll(0.007f*dt/factor);
             pSrcMan->updateAll(1.0f*dt/factor);
             ballSim->physicsLoop(dt/factor);
 
