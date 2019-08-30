@@ -179,17 +179,17 @@ void SandboxScene::load()
                                              false, false, false, true,
                                              ObjectType::Ball,
                                              {},
-                                             {"phong",
+                                             {"",
                                              "red.jpg",
                                              "normal2.png"}};
-                    GameObject* obj = new GameObject(nullptr,//new Renderable(props),
+                    GameObject* obj = new GameObject(new Renderable(props),
                                                       new Ball(props),
                                                      nullptr,
                                                      nullptr,
                                                      nullptr,
                                                      nullptr,
                                                      nullptr,
-                                                     new ParticleSourceWrap(10000, 80.0f));
+                                                     nullptr);//new ParticleSourceWrap(10000, 80.0f));
                     drawLine = false;
                 }
             }
@@ -298,7 +298,7 @@ void SandboxScene::load()
                                              false, false, false, true,
                                              ObjectType::Polygon,
                                              verts,
-                                             {"phong",
+                                             {"",
                                               "red.jpg",
                                               "pyramidN.png"}};
                     GameObject* obj = new GameObject(new Renderable(props),

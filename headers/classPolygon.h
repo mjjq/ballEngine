@@ -4,39 +4,29 @@
 #include <deque>
 #include "integrators.h"
 #include "classPhysicsObject.h"
+#include "classConcavePolygonWrap.h"
 
 class Polygon : public PhysicsObject
 {
-    std::vector<sf::Vertex > vertices = {};
-    std::vector<sf::Vector2f > edgeNorms = {};
-    std::vector<sf::Vector2f > edgeTotals = {};
-    sf::Rect<float> boundingOBB;
-    sf::Vector2f centrePosition = {0.0f, 0.0f};
-    sf::Vector2f size = {0.0f, 0.0f};
+    ConcavePolygonWrap poly;
 
     void genBoundingOBB();
 
 public:
+    Polygon(ConcavePolygonWrap const & _poly);
     Polygon(ObjectProperties init);
     ~Polygon();
 
-    sf::Rect<float> getGlobalBounds();
+    sf::Rect<float > getBoundingBox();
 
     static const ObjectType MY_TYPE = ObjectType::Polygon;
     ObjectType type() const override;
 
-    float getMinSize();
-    sf::Vector2f getCoM();
-    sf::Rect<float > getBoundingBox();
-    std::vector<sf::Vertex > constructVerts();
-    std::vector<sf::Vertex > constructLocalVerts();
-    std::vector<sf::Vector2f> getLocalEdgeNorms();
-    std::vector<sf::Vector2f> getLocalEdgeTotals();
-    float getRotAngle();
-
-    void draw(sf::RenderWindow &_window);
+    virtual float getMinSize();
 
     sf::Vertex farthestPointInDir(sf::Vector2f direction);
+
+    std::vector<sf::Vertex > constructVerts();
 
 };
 

@@ -13,6 +13,8 @@ class ConcavePolygonWrap : public sf::Shape
 public:
     ConcavePolygonWrap(PositionArray const & vertices);
 
+    PositionArray getVertices(bool const & applyTransform = true);
+
     virtual sf::Vector2f getPoint(std::size_t index) const;
     virtual std::size_t getPointCount() const;
 };

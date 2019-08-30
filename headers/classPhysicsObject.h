@@ -69,7 +69,7 @@ protected:
     float density = 0.0f;
     sf::Vector2f centreOfMass = {0.0f, 0.0f};
 
-    float momentInertia = 0.0f;
+    float momentInertia = 1e+15f;
 
     float dampingFactor = 1;
     int numDynColls = 0;
@@ -100,7 +100,6 @@ public:
     virtual ~PhysicsObject();
 
     virtual ObjectType type() const = 0;
-    virtual void draw(sf::RenderWindow &_window) = 0;
 
     virtual float getMinSize() = 0;
 

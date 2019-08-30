@@ -10,7 +10,22 @@ ConcavePolygonWrap::ConcavePolygonWrap(PositionArray const & vertices)
 
     polygon = ConcavePolygon(vertsToPush);
 
-    polygon.convexDecomp();
+    //polygon.convexDecomp();
+}
+
+std::vector<sf::Vertex > ConcavePolygonWrap::getVertices(bool const & applyTransform)
+{
+    PositionArray result;
+
+    for(int i=0; i<getPointCount(); ++i)
+    {
+        if(applyTransform)
+            result.push_back({getTransform() * getPoint(i)});
+        else
+            result.push_back({getPoint(i)});
+    }
+
+    return result;
 }
 
 sf::Vector2f ConcavePolygonWrap::getPoint(std::size_t index) const

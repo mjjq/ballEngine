@@ -386,7 +386,6 @@ std::vector<Contact> Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
     ClippedPoints cp;
     cp.push_back(contactPoint);
 
-
     /*Edge cpEdge = GJK::getClosestPoints(ball, poly);
     std::vector<sf::Vertex > vData = {
         {cpEdge.v1}, {cpEdge.v2}
@@ -405,6 +404,12 @@ std::vector<Contact> Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
     float separation = Math::dot(penetVector, contactNorm);
     if(separation <= 0.0f)
         Collisions::generateContacts(ball, poly, contResult, cp, contactNorm, separation);
+
+    if(contResult.size() > 0)
+    {
+        std::cout << "collision\n";
+    }
+
     return contResult;
 }
 

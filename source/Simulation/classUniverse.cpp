@@ -736,11 +736,11 @@ void BallUniverse::drawBalls(sf::RenderWindow &windowRef)
     //if(enable_trajectories)
     drawSampledPositions(windowRef);
 
-    for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); ++iter)
+    /*for(auto iter = dynamicObjects.begin(); iter != dynamicObjects.end(); ++iter)
         (**iter).draw(windowRef);
 
     for(auto iter = staticObjects.begin(); iter != staticObjects.end(); ++iter)
-        (**iter).draw(windowRef);
+        (**iter).draw(windowRef);*/
 }
 
 void BallUniverse::toggleCollisions()
