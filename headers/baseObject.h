@@ -9,6 +9,7 @@ enum class ObjectType
     Polygon,
     Capsule,
     VertexArray,
+    ConcavePoly,
     _Count,
 };
 

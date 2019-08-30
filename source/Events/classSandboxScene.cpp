@@ -390,7 +390,7 @@ void SandboxScene::load()
                                              spawnRotation,
                                              spawnRotRate,
                                              false, false, false, true,
-                                             ObjectType::Polygon,
+                                             ObjectType::ConcavePoly,
                                              verts,
                                              {"phong",
                                              "red.jpg",

@@ -3,6 +3,8 @@
 #include <cmath>
 #include "Math.h"
 
+#include "classConcavePolygonWrap.h"
+
 Renderable::Renderable(std::string _texID,
                std::vector<sf::Drawable* > _primitives) : Component()
 {
@@ -52,6 +54,22 @@ void Renderable::generateDrawables(ObjectProperties objProps)
             shape->setFillColor({80,80,80,80});
             for(int i=0; i<(int)objProps._vertices.size(); ++i)
                 shape->setPoint(i, objProps._vertices[i].position);
+            shape->setOrigin(Math::average(objProps._vertices));
+
+            primDrawable = std::move(shape);
+            primTransformable = shape;
+            primShape = shape;
+            break;
+        }
+        case(ObjectType::ConcavePoly):
+        {
+            ConcavePolygonWrap* shape = new ConcavePolygonWrap(objProps._vertices);
+            shape->setPosition(objProps._position);
+            shape->setOutlineThickness(-2);
+            shape->setOutlineColor(sf::Color::Red);
+            shape->setFillColor({80,80,80,80});
+            //for(int i=0; i<(int)objProps._vertices.size(); ++i)
+            //    shape->setPoint(i, objProps._vertices[i].position);
             shape->setOrigin(Math::average(objProps._vertices));
 
             primDrawable = std::move(shape);

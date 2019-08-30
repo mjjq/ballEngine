@@ -84,6 +84,7 @@
 			<Add directory="headers" />
 			<Add directory="I:/Users/Marcus/My Documents/Github/InverseKinematics/headers" />
 			<Add directory="../ParticleSystem" />
+			<Add directory="../ConvexDecomposition/src/" />
 		</Compiler>
 		<Linker>
 			<Add directory="C:/Program Files/CodeBlocks/SFML-2.4.2/lib" />
