@@ -262,47 +262,47 @@ std::vector<Contact> Collisions::collisionAABBAABB(AABB* rect1, AABB* rect2)
 std::vector<Contact> Collisions::collisionBallOBB(Ball* ball, OBB* rect)
 {
 
-        float rotAngle = rect->getRotAngle();
-        sf::Rect<float > rectBounds = rect->getGlobalBounds();
-
-        sf::Vector2f ballVelocity = Math::rotate(ball->getVelocity(), -rotAngle);
-        sf::Vector2f rectVelocity = Math::rotate(rect->getVelocity(), -rotAngle);
-        sf::Vector2f ballPosition = Math::rotate(ball->getPosition(), -rotAngle);
-        sf::Vector2f rectPosition = Math::rotate(rect->getPosition(), -rotAngle)
-                                  - sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f};
-
-
-        AABB obbInFrame{{rectPosition,
-                        rectVelocity,
-                        {rectBounds.width, rectBounds.height},
-                        rect->getMass(), 0.0f, 0.0f, 0.0f, 0.0f
-                        }};
-
-        Ball ballInFrame{{ballPosition,
-                        ballVelocity,
-                        {ball->getRadius(), 0.0f},
-                        rect->getMass(), 0.0f, 0.0f, 0.0f, 0.0f
-                        }};
-
-        ballInFrame.addRotRate(ball->getRotRate());
-        obbInFrame.addRotRate(rect->getRotRate());
-
-        std::pair<sf::Vector2f, sf::Vector2f> contact = Collisions::getContactNormal(&ballInFrame, &obbInFrame);
-
-        sf::Vector2f contactNorm = Math::rotate(contact.first, rotAngle);
-        //sf::Vector2f cornerPos = sfVectorMath::rotate(contact.second, rotAngle);
-
-        //std::cout << contactNorm << " norm\n";
-        //std::cout << penetVector << " pen\n";
-
-        sf::Vector2f contactPoint = ball->getPosition() + contactNorm*ball->getRadius();
-        ClippedPoints cp;
-        cp.push_back(contactPoint);
-
-        //std::vector<sf::Vertex > rectVerts = rect->constructVerts();
-        //ClippedPoints cp = Collisions::getContactPoints(rectVerts, *ball, contactNorm);
-        //Collisions::applyImpulse(ball, rect, contactNorm, penetVector, cp);
-        return std::vector<Contact > {};
+//        float rotAngle = rect->getRotAngle();
+//        sf::Rect<float > rectBounds = rect->getGlobalBounds();
+//
+//        sf::Vector2f ballVelocity = Math::rotate(ball->getVelocity(), -rotAngle);
+//        sf::Vector2f rectVelocity = Math::rotate(rect->getVelocity(), -rotAngle);
+//        sf::Vector2f ballPosition = Math::rotate(ball->getPosition(), -rotAngle);
+//        sf::Vector2f rectPosition = Math::rotate(rect->getPosition(), -rotAngle)
+//                                  - sf::Vector2f{rectBounds.width/2.0f, rectBounds.height/2.0f};
+//
+//
+//        AABB obbInFrame{{rectPosition,
+//                        rectVelocity,
+//                        {rectBounds.width, rectBounds.height},
+//                        rect->getMass(), 0.0f, 0.0f, 0.0f, 0.0f
+//                        }};
+//
+//        Ball ballInFrame{{ballPosition,
+//                        ballVelocity,
+//                        {ball->getRadius(), 0.0f},
+//                        rect->getMass(), 0.0f, 0.0f, 0.0f, 0.0f
+//                        }};
+//
+//        ballInFrame.addRotRate(ball->getRotRate());
+//        obbInFrame.addRotRate(rect->getRotRate());
+//
+//        std::pair<sf::Vector2f, sf::Vector2f> contact = Collisions::getContactNormal(&ballInFrame, &obbInFrame);
+//
+//        sf::Vector2f contactNorm = Math::rotate(contact.first, rotAngle);
+//        //sf::Vector2f cornerPos = sfVectorMath::rotate(contact.second, rotAngle);
+//
+//        //std::cout << contactNorm << " norm\n";
+//        //std::cout << penetVector << " pen\n";
+//
+//        sf::Vector2f contactPoint = ball->getPosition() + contactNorm*ball->getRadius();
+//        ClippedPoints cp;
+//        cp.push_back(contactPoint);
+//
+//        //std::vector<sf::Vertex > rectVerts = rect->constructVerts();
+//        //ClippedPoints cp = Collisions::getContactPoints(rectVerts, *ball, contactNorm);
+//        //Collisions::applyImpulse(ball, rect, contactNorm, penetVector, cp);
+//        return std::vector<Contact > {};
 }
 
 std::vector<Contact> Collisions::collisionOBBOBB(OBB* rect1, OBB* rect2)
@@ -405,10 +405,10 @@ std::vector<Contact> Collisions::collisionBallPoly(Ball *ball, Polygon *poly)
     if(separation <= 0.0f)
         Collisions::generateContacts(ball, poly, contResult, cp, contactNorm, separation);
 
-    if(contResult.size() > 0)
+    /*if(contResult.size() > 0)
     {
         std::cout << "collision\n";
-    }
+    }*/
 
     return contResult;
 }
@@ -418,50 +418,17 @@ std::vector<Contact> Collisions::collisionPolyPoly(Polygon* poly1, Polygon *poly
     std::vector<sf::Vertex > poly1Vert = poly1->constructVerts();
     std::vector<sf::Vertex > poly2Vert = poly2->constructVerts();
 
-    /*sf::VertexArray quad1(sf::TriangleStrip, 4);
-    for(int i=0; i<3; ++i)
-        quad1[i] = rect1Vert[i];
-
-    sf::VertexArray quad2(sf::LineStrip, 4);
-    for(int i=0; i<3; ++i)
-        quad2[i] = rect2Vert[i];
-
-    debugWindow->draw(quad1);
-    debugWindow->draw(quad2);*/
     std::vector<Contact> contResult;
 
     std::pair<bool, sf::Vector2f> sepAxis = Collisions::sepAxisTest(poly1Vert, poly2Vert);
-    //std::pair<bool, sf::Vector2f> sepAxis = std::make_pair(false, sf::Vector2f{0.0f, 0.0f});
-    //std::cout << GJK::isIntersecting(poly1, poly2) << "\n";
 
-
-    /*Edge cpEdge = GJK::getClosestPoints(poly1, poly2);
-    std::vector<sf::Vertex > vData = {
-        {cpEdge.v1}, {cpEdge.v2}
-    };
-    debugWindow->draw(vData.data(), 2, sf::LineStrip);*/
 
     if(sepAxis.first)
     {
         sf::Vector2f penetVector = sepAxis.second;
         sf::Vector2f contactNorm = -Math::norm(penetVector);
 
-        //std::cout << contactNorm << " hello\n";
-        //float redMass = 1.0f/(1.0f/poly1->getMass() + 1.0f/poly2->getMass());
-        //penetVector += 0.1f*contactNorm;
-
         ClippedPoints cp = Collisions::getContactPoints(poly1Vert, poly2Vert, contactNorm);
-
-        /*sf::CircleShape circ1{2.0f};
-        circ1.setPosition(*cp.begin());
-        sf::CircleShape circ2{2.0f};
-        circ2.setPosition(*cp.end());*/
-        sf::CircleShape circ3{5.0f};
-        circ3.setPosition(poly1->getPosition());
-
-        //debugWindow->draw(circ1);
-        //debugWindow->draw(circ2);
-        //debugWindow->draw(circ3);
 
         float separation = Math::dot(penetVector, contactNorm);
 
@@ -553,4 +520,78 @@ bool Collisions::isAABBIntersecting(PhysicsObject* p1, PhysicsObject* p2)
     sf::Rect<float > rect2 = p2->getBoundingBox();
 
     return rect1.intersects(rect2);
+}
+
+std::vector<Contact > Collisions::genericCollision(PhysicsObject* p1,
+                                                   PhysicsObject* p2)
+{
+    std::vector<Contact > contResult;
+    ClippedPoints cp;
+
+    if(p1->getVertexCount() < 3 || p2->getVertexCount() < 3)
+    {
+        Edge closestLine = GJK::getClosestPoints(p1, p2);
+
+        sf::Vector2f sepVector = p2->getPosition() - p1->getPosition();
+        float p1Radius = p1->getRadius();
+        float p2Radius = p2->getRadius();
+        float totalRadius = p1Radius + p2Radius;
+        float lineLengthSq = Math::square(closestLine.dir);
+
+        if(lineLengthSq <= totalRadius*totalRadius)
+        {
+            sf::Vector2f contactNorm = Math::norm(closestLine.dir);
+
+            float separation = sqrtf(lineLengthSq) - totalRadius;
+
+            cp.push_back(closestLine.v1 + p1Radius * contactNorm);
+
+            Collisions::generateContacts(p1, p2, contResult, cp, contactNorm, separation);
+        }
+    }
+    else
+    {
+        std::vector<sf::Vertex > p1Verts = p1->constructVerts();
+        std::vector<sf::Vertex > p2Verts = p2->constructVerts();
+
+        std::pair<bool, sf::Vector2f > sepAxis = sepAxisTest(p1Verts, p2Verts);
+
+        if(sepAxis.first)
+        {
+            sf::Vector2f penetVector = sepAxis.second;
+            sf::Vector2f contactNorm = -Math::norm(penetVector);
+
+            ClippedPoints cp = Collisions::getContactPoints(p1Verts,
+                                                            p2Verts,
+                                                            contactNorm);
+
+            float separation = Math::dot(penetVector, contactNorm);
+
+            for(int i=0; i<(int)cp.size(); ++i)
+            {
+                Contact tempContact;
+                tempContact.normal = contactNorm;
+                tempContact.position = cp[i];
+                tempContact.rA = cp[i] - p1->getPosition();
+                tempContact.rB = cp[i] - p2->getPosition();
+                tempContact.separation = separation;
+
+                contResult.push_back(tempContact);
+            }
+        }
+    }
+
+    /*sf::CircleShape circ(3.0f);
+    circ.setOrigin({3.0f, 3.0f});
+    for(int i=0; i<contResult.size(); ++i)
+    {
+        circ.setPosition(contResult[i].position);
+        debugWindow->draw(circ);
+        std::cout << contResult[i].position.x << ", " << contResult[i].position.y << " contResult\n";
+    }
+    std::cout << p1->getPosition().x << ", " << p1->getPosition().y << " p1Position\n";
+    std::cout << p2->getPosition().x << ", " << p2->getPosition().y << " p2Position\n\n";*/
+
+
+    return contResult;
 }

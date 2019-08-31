@@ -29,9 +29,9 @@ void Collisions::generateContacts(PhysicsObject* p1, PhysicsObject*p2,
     }
 }
 
-std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex > &obj1,
-                                                        std::vector<sf::Vertex > &obj2,
-                                                        sf::Vector2f contactNormal)
+std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex > const & obj1,
+                                                        std::vector<sf::Vertex > const & obj2,
+                                                        sf::Vector2f const & contactNormal)
 {
     //contactNormal = -contactNormal;
     Edge edge1 = Collisions::getBestEdge(obj1, contactNormal);
@@ -275,7 +275,7 @@ ClippedPoints Collisions::getIntPoint(Ball &ball, Edge &edge)
 }
 
 
-Edge Collisions::getBestEdge(std::vector<sf::Vertex > &obj, sf::Vector2f normal)
+Edge Collisions::getBestEdge(std::vector<sf::Vertex > const & obj, sf::Vector2f normal)
 {
 
     int index = 0;

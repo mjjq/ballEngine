@@ -192,6 +192,18 @@ float Math::average(std::vector<float> const & vec)
     return average;
 }
 
+std::vector<sf::Vertex > Math::averageVertices(std::vector<sf::Vertex > & verts)
+{
+    sf::Vector2f avgPosition = Math::average(verts);
+
+    for(auto& vert : verts)
+    {
+        vert.position -= avgPosition;
+    }
+
+    return verts;
+}
+
 
 /**
     Print the float vector, format (x, y).

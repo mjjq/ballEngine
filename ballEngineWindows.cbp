@@ -107,6 +107,7 @@
 		<Unit filename="headers/classCharacter.h" />
 		<Unit filename="headers/classCharacterManager.h" />
 		<Unit filename="headers/classCharacterState.h" />
+		<Unit filename="headers/classConcavePolygonWrap.h" />
 		<Unit filename="headers/classEquipable.h" />
 		<Unit filename="headers/classGameObject.h" />
 		<Unit filename="headers/classGameObjectEditor.h" />
@@ -207,6 +208,7 @@
 		<Unit filename="source/Simulation/PhysicsObjects/classAABB.cpp" />
 		<Unit filename="source/Simulation/PhysicsObjects/classBall.cpp" />
 		<Unit filename="source/Simulation/PhysicsObjects/classCapsule.cpp" />
+		<Unit filename="source/Simulation/PhysicsObjects/classConcavePolygonWrap.cpp" />
 		<Unit filename="source/Simulation/PhysicsObjects/classOBB.cpp" />
 		<Unit filename="source/Simulation/PhysicsObjects/classPhysicsObject.cpp" />
 		<Unit filename="source/Simulation/PhysicsObjects/classPolygon.cpp" />

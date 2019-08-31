@@ -28,6 +28,7 @@ public:
     sf::Vector2f getCoM();
     sf::Rect<float > getBoundingBox();
     std::vector<sf::Vertex > constructVerts();
+    int getVertexCount() { return 2; }
     std::vector<sf::Vertex > constructLocalVerts();
     float getRotAngle();
 

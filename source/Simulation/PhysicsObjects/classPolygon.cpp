@@ -30,13 +30,14 @@
 Polygon::Polygon(ConcavePolygonWrap const & _poly) : PhysicsObject(ObjectProperties()), poly{_poly} {}
 
 Polygon::Polygon(ObjectProperties init) :
-PhysicsObject(init), poly{ConcavePolygonWrap(init._vertices)}
+PhysicsObject(init), poly{ConcavePolygonWrap(Math::averageVertices(init._vertices))}
 {
     momentInertia = 0.0f;
     for(sf::Vertex &vert : init._vertices)
     {
-        momentInertia += init._mass*Math::square(vert.position);
+        momentInertia += Math::square(vert.position);
     }
+    momentInertia = momentInertia*init._mass/init._vertices.size();
     //momentInertia = momentInertia*init._mass/init._vertices.size();
     std::cout << init._mass << "\n";
 }
@@ -97,4 +98,9 @@ std::vector<sf::Vertex > Polygon::constructVerts()
     }
 
     return verts;
+}
+
+void Polygon::getConvexBreakdown(std::vector<Polygon > & returnArr)
+{
+
 }

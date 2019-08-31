@@ -22,6 +22,10 @@ public:
 
     void draw(sf::RenderWindow &_window);
 
+    std::vector<sf::Vertex > constructVerts() { return {{getPosition()}};}
+
+    int getVertexCount() { return 1; }
+
     sf::Vertex farthestPointInDir(sf::Vector2f direction);
 
     sf::Rect<float > getBoundingBox();

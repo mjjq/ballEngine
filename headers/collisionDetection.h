@@ -64,6 +64,9 @@ public:
     static std::vector<Contact> collisionPolyCaps(Polygon* poly, Capsule* caps);
     static std::vector<Contact> collisionCapsCaps(Capsule* caps1, Capsule* caps2);
 
+    static std::vector<Contact > genericCollision(PhysicsObject* p1,
+                                                  PhysicsObject* p2);
+
     static bool isAABBIntersecting(PhysicsObject* p1, PhysicsObject* p2);
 
     static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
@@ -86,13 +89,13 @@ public:
                                           std::vector<sf::Vertex> &obj2);
 
 
-    static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
-                                                       std::vector<sf::Vertex > &obj2,
-                                                       sf::Vector2f contactNormal);
+    static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > const & obj1,
+                                                        std::vector<sf::Vertex > const & obj2,
+                                                        sf::Vector2f const & contactNormal);
     static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
                                                         Ball &obj2,
                                                         sf::Vector2f contactNormal);
-    static Edge getBestEdge(std::vector<sf::Vertex > &obj,
+    static Edge getBestEdge(std::vector<sf::Vertex > const & obj,
                      sf::Vector2f normal);
 
     static ClippedPoints clip(sf::Vector2f v1,

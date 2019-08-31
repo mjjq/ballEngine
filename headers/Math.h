@@ -46,6 +46,8 @@ namespace Math
 
     sf::Vector2f average(std::vector<sf::Vertex > const & verts);
 
+    std::vector<sf::Vertex > averageVertices(std::vector<sf::Vertex > & verts);
+
     float average(std::vector<float> const & vec);
 
     void printVector(sf::Vector2f const & vec);

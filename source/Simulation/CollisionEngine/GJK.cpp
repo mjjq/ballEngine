@@ -201,7 +201,7 @@ Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
     simp.add(supportData(p1, p2, direction));
 
     direction = closestPToOrigin(simp.getSData(0).difference.position,
-                                  simp.getSData(1).difference.position).position;
+                                 simp.getSData(1).difference.position).position;
 
     const float tolerance = 0.001f;
     const int MAX_ITERATIONS = 100;

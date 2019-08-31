@@ -103,6 +103,12 @@ public:
 
     virtual float getMinSize() = 0;
 
+    virtual float getRadius() { return 0.0f; }
+
+    virtual int getVertexCount() = 0;
+
+    virtual std::vector<sf::Vertex > constructVerts () = 0;
+
     sf::Vector2f getPosition();
     sf::Vector2f getVelocity();
     sf::Vector2f getnStepVelocity();

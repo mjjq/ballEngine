@@ -10,7 +10,7 @@ ConcavePolygonWrap::ConcavePolygonWrap(PositionArray const & vertices)
 
     polygon = ConcavePolygon(vertsToPush);
 
-    //polygon.convexDecomp();
+    polygon.convexDecomp();
 }
 
 std::vector<sf::Vertex > ConcavePolygonWrap::getVertices(bool const & applyTransform)

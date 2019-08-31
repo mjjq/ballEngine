@@ -26,8 +26,11 @@ public:
 
     sf::Vertex farthestPointInDir(sf::Vector2f direction);
 
+    int getVertexCount() { return poly.getPointCount(); }
+
     std::vector<sf::Vertex > constructVerts();
 
+    void getConvexBreakdown(std::vector<Polygon > & returnArr);
 };
 
 #endif // CLASS_UNIVERSE_H
