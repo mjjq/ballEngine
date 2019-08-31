@@ -617,7 +617,7 @@
 	"Observer.h"
 	"classJointManager.h"
 
-1567268713 i:\users\marcus\my documents\github\ballengine_latest\headers\collisiondetection.h
+1567277142 i:\users\marcus\my documents\github\ballengine_latest\headers\collisiondetection.h
 	"classPhysicsObject.h"
 	"classBall.h"
 	"classAABB.h"
@@ -903,7 +903,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567268828 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
+1567276663 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
 	<iostream>
 	<cmath>
 	"classArbiter.h"
@@ -919,7 +919,7 @@
 1567191420 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisiondetection.cpp
 	"collisionDetection.h"
 
-1567276601 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
+1567277038 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>

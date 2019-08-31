@@ -51,19 +51,6 @@ public:
     static float timeToCollBallPoly(Ball* ball, Polygon* poly);
     static float timeToCollPolyPoly(Polygon* poly1, Polygon *poly2);
 
-    static std::vector<Contact> resolveCollision(PhysicsObject* p1, PhysicsObject* p2);
-    static std::vector<Contact> collisionBallBall(Ball* firstBall, Ball* secondBall);
-    static std::vector<Contact> collisionBallAABB(Ball* origBall, AABB* origAABB);
-    static std::vector<Contact> collisionAABBAABB(AABB* rect1, AABB* rect2);
-    static std::vector<Contact> collisionBallOBB(Ball* ball, OBB* rect);
-    static std::vector<Contact> collisionOBBOBB(OBB* rect1, OBB* rect2);
-    static std::vector<Contact> collisionOBBPoly(OBB *rect, Polygon *poly);
-    static std::vector<Contact> collisionBallPoly(Ball *ball, Polygon *poly);
-    static std::vector<Contact> collisionPolyPoly(Polygon* poly1, Polygon *poly2);
-    static std::vector<Contact> collisionBallCaps(Ball* ball, Capsule* caps);
-    static std::vector<Contact> collisionPolyCaps(Polygon* poly, Capsule* caps);
-    static std::vector<Contact> collisionCapsCaps(Capsule* caps1, Capsule* caps2);
-
     static std::vector<Contact > genericCollision(PhysicsObject* p1,
                                                   PhysicsObject* p2);
 
