@@ -11,6 +11,9 @@
 #include "Observer.h"
 #include "baseObject.h"
 #include "contactData.h"
+#include "Math.h"
+#include "BoundingSphere.h"
+#include "classConcavePolygonWrap.h"
 
 class BitwiseCollObject
 {
@@ -53,7 +56,12 @@ class PhysicsObject : public Component
 
     float coefRestitution = 0.0f;
     float coefFriction = 1.0f;
+
+
 protected:
+    ConcavePolygonWrap poly;
+    BoundingSphere boundingSphere;
+
     sf::Vector2f position;
     sf::Vector2f nStepPosition = getPosition();
     sf::Vector2f pStepPosition = nStepPosition;
@@ -83,6 +91,8 @@ protected:
     bool enableCollision = true;
 
     BitwiseCollObject collisionGroup;
+
+    void generateBoundingSphere();
 
 public:
 
@@ -167,7 +177,8 @@ public:
     BitwiseCollObject const & getCollisionGroup() { return collisionGroup; }
 
     virtual sf::Vertex farthestPointInDir(sf::Vector2f direction) = 0;
-    virtual sf::Rect<float > getBoundingBox() = 0;
+    BoundingSphere const & getBoundingSphere() const;
+    ConcavePolygonWrap & getGeometry() { return poly; }
 };
 
 #endif // CLASS_DYNOBJ_H

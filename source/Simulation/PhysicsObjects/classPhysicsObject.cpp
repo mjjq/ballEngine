@@ -94,6 +94,9 @@ void PhysicsObject::updatePosition(float dt)
     DataContainer<float > dataRot(getRotAngle());
     physSubject.notify(*this, Event(EventType::Update_Position), &dataPos);
     physSubject.notify(*this, Event(EventType::Update_Rotation), &dataRot);
+    boundingSphere.position = getPosition();
+    poly.setPosition(getPosition());
+    poly.setRotation(getRotAngle());
 }
 
 /**
@@ -404,4 +407,27 @@ float PhysicsObject::getCoefFriction()
 float PhysicsObject::getRotAngle()
 {
     return rotAngle;
+}
+
+BoundingSphere const & PhysicsObject::getBoundingSphere() const
+{
+    return boundingSphere;
+}
+
+void PhysicsObject::generateBoundingSphere()
+{
+    std::vector<sf::Vertex > verts = constructVerts();
+
+    float maxDistanceSq = 0.0f;
+
+    for(auto & vert : verts)
+    {
+        if(Math::square(vert.position) > maxDistanceSq)
+        {
+            maxDistanceSq = Math::square(position - vert.position);
+        }
+    }
+
+    boundingSphere.position = getPosition();
+    boundingSphere.radius = sqrtf(maxDistanceSq) + getRadius();
 }

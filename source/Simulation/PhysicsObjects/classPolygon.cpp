@@ -27,10 +27,10 @@
     @param initPos The initial position of the ball.
     @param initVel The initial velocity of the ball.
 */
-Polygon::Polygon(ConcavePolygonWrap const & _poly) : PhysicsObject(ObjectProperties()), poly{_poly} {}
+Polygon::Polygon(ConcavePolygonWrap const & _poly) : PhysicsObject(ObjectProperties()) {}
 
 Polygon::Polygon(ObjectProperties init) :
-PhysicsObject(init), poly{ConcavePolygonWrap(Math::averageVertices(init._vertices))}
+PhysicsObject(init)
 {
     momentInertia = 0.0f;
     for(sf::Vertex &vert : init._vertices)
@@ -40,6 +40,11 @@ PhysicsObject(init), poly{ConcavePolygonWrap(Math::averageVertices(init._vertice
     momentInertia = momentInertia*init._mass/init._vertices.size();
     //momentInertia = momentInertia*init._mass/init._vertices.size();
     std::cout << init._mass << "\n";
+    generateBoundingSphere();
+
+    poly = ConcavePolygonWrap(Math::averageVertices(init._vertices));
+    poly.setPosition(init._position);
+    poly.setRotation(init._rotation);
 }
 
 Polygon::~Polygon() {}

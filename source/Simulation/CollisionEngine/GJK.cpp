@@ -134,6 +134,24 @@ SupportData GJK::supportData(PhysicsObject* p1, PhysicsObject* p2, sf::Vector2f 
     return data;
 }
 
+SupportData GJK::supportData(ConcavePolygonWrap const & p1,
+                             ConcavePolygonWrap const & p2,
+                             sf::Vector2f &direction)
+{
+    sf::Vertex point1 = p1.farthestPointInDir(direction);
+    sf::Vertex point2 = p2.farthestPointInDir(-direction);
+
+    sf::Vertex point3;
+    point3.position = point1.position - point2.position;
+
+    SupportData data;
+    data.s1 = point1;
+    data.s2 = point2;
+    data.difference = point3;
+
+    return data;
+}
+
 sf::Vertex GJK::closestPToOrigin(sf::Vector2f v1, sf::Vector2f v2)
 {
     float A = Math::square(v2 - v1);
@@ -194,6 +212,115 @@ bool GJK::isIntersecting(PhysicsObject* p1, PhysicsObject* p2)
 Edge GJK::getClosestPoints(PhysicsObject* p1, PhysicsObject* p2)
 {
     sf::Vector2f direction = p1->getPosition() - p2->getPosition();
+
+    Simplex simp;
+    simp.add(supportData(p1, p2, direction));
+    direction = -direction;
+    simp.add(supportData(p1, p2, direction));
+
+    direction = closestPToOrigin(simp.getSData(0).difference.position,
+                                 simp.getSData(1).difference.position).position;
+
+    const float tolerance = 0.001f;
+    const int MAX_ITERATIONS = 100;
+    int i=0;
+
+    sf::Vector2f Q = {0.0f, 0.0f};
+
+    while(i < MAX_ITERATIONS)
+    {
+        direction = -direction;
+
+        if(Math::square(direction) <= 0.0f)
+        {
+            Q = {0.0f, 0.0f};
+            break;
+        }
+
+        SupportData c = supportData(p1, p2, direction);
+
+        float dc = Math::dot(c.difference.position, direction);
+
+        float da = Math::dot(simp.getSData(0).difference.position, direction);
+
+        if(dc - da < tolerance)
+        {
+            Q = direction;
+            break;
+        }
+
+        sf::Vertex point1 = closestPToOrigin(simp.getSData(0).difference.position,
+                                         c.difference.position);
+        sf::Vertex point2 = closestPToOrigin(c.difference.position,
+                                         simp.getSData(1).difference.position);
+
+        if(Math::square(point1.position) < Math::square(point2.position))
+        {
+            simp.setSData(1, c);
+            direction = point1.position;
+            Q = direction;
+        }
+        else
+        {
+            simp.setSData(0, c);
+            direction = point2.position;
+            Q = direction;
+        }
+        i++;
+    }
+
+    sf::Vector2f L = simp.getSData(1).difference.position -
+                    simp.getSData(0).difference.position;
+    float lambda2 = -Math::dot(L, simp.getSData(0).difference.position) /
+                        Math::square(L);
+    float lambda1 = 1.0f - lambda2;
+
+    sf::Vertex As1 = simp.getSData(0).s1;
+    sf::Vertex As2 = simp.getSData(0).s2;
+    sf::Vertex Bs1 = simp.getSData(1).s1;
+    sf::Vertex Bs2 = simp.getSData(1).s2;
+
+    sf::Vector2f AClosest;
+    sf::Vector2f BClosest;
+
+    if(Math::square(L) <= 0.0f)
+    {
+        AClosest = As1.position;
+        BClosest = As2.position;
+    }
+    else
+    {
+        if(lambda1 >= 0.0f && lambda2 >= 0.0f)
+        {
+            AClosest = lambda1 * As1.position + lambda2 * Bs1.position;
+            BClosest = lambda1 * As2.position + lambda2 * Bs2.position;
+        }
+        else if(lambda1 < 0.0f)
+        {
+            AClosest = Bs1.position;
+            BClosest = Bs2.position;
+        }
+        else if(lambda2 < 0.0f)
+        {
+            AClosest = As1.position;
+            BClosest = As2.position;
+        }
+    }
+    //std::cout << lambda1 << " " << lambda2 << " lambda\n";
+
+    Edge returnEdge;
+    returnEdge.v1 = AClosest;
+    returnEdge.v2 = BClosest;
+    returnEdge.dir = BClosest - AClosest;
+    returnEdge.max = BClosest;
+
+    return returnEdge;
+}
+
+Edge GJK::getClosestPoints(ConcavePolygonWrap const & p1,
+                           ConcavePolygonWrap const & p2)
+{
+    sf::Vector2f direction = p1.getPosition() - p2.getPosition();
 
     Simplex simp;
     simp.add(supportData(p1, p2, direction));

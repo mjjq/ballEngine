@@ -51,6 +51,7 @@ PhysicsObject(init)
 
 
     genBoundingOBB();
+    generateBoundingSphere();
 }
 
 Capsule::~Capsule() {}

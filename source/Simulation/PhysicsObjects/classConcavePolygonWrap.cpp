@@ -1,5 +1,12 @@
 #include "classConcavePolygonWrap.h"
 
+ConcavePolygonWrap::ConcavePolygonWrap(std::vector<Vertex > const & vertices)
+{
+    polygon = ConcavePolygon(vertices);
+}
+
+ConcavePolygonWrap::ConcavePolygonWrap() {}
+
 ConcavePolygonWrap::ConcavePolygonWrap(PositionArray const & vertices)
 {
     std::vector<Vertex > vertsToPush;
@@ -11,9 +18,22 @@ ConcavePolygonWrap::ConcavePolygonWrap(PositionArray const & vertices)
     polygon = ConcavePolygon(vertsToPush);
 
     polygon.convexDecomp();
+    populateLowestLevelVector();
 }
 
-std::vector<sf::Vertex > ConcavePolygonWrap::getVertices(bool const & applyTransform)
+void ConcavePolygonWrap::populateLowestLevelVector()
+{
+    std::vector<ConcavePolygon > llPolys;
+    polygon.returnLowestLevelPolys(llPolys);
+
+    for(auto & poly : llPolys)
+    {
+        convexPolys.push_back(ConcavePolygonWrap(poly.getVertices()));
+    }
+
+}
+
+std::vector<sf::Vertex > ConcavePolygonWrap::getVertices(bool const & applyTransform) const
 {
     PositionArray result;
 
@@ -37,4 +57,30 @@ sf::Vector2f ConcavePolygonWrap::getPoint(std::size_t index) const
 std::size_t ConcavePolygonWrap::getPointCount() const
 {
     return polygon.getPointCount();
+}
+
+sf::Vertex ConcavePolygonWrap::farthestPointInDir(sf::Vector2f const & direction) const
+{
+    float maxProj = -1e15;
+    int bestVert = 0;
+    for(int i=0; i<getPointCount(); ++i)
+    {
+        float projection = Math::dot(getPoint(i), direction);
+        if(projection > maxProj)
+        {
+            maxProj = projection;
+            bestVert = i;
+        }
+    }
+
+    return {getPoint(bestVert)};
+}
+
+ConcavePolygonWrap & ConcavePolygonWrap::getConvexPoly(int index)
+{
+    assert(index < convexPolys.size() && index >= 0);
+
+    convexPolys[index].setPosition(getPosition());
+    convexPolys[index].setRotation(getRotation());
+    return convexPolys[index];
 }

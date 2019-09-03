@@ -5,6 +5,7 @@
 #include <vector>
 #include "SFML/Graphics.hpp"
 #include "classPhysicsObject.h"
+#include "classConcavePolygonWrap.h"
 
 struct SupportData
 {
@@ -49,6 +50,9 @@ class GJK
                               sf::Vector2f &direction);
     static SupportData supportData(PhysicsObject* p1, PhysicsObject* p2,
                               sf::Vector2f &direction);
+    static SupportData supportData(ConcavePolygonWrap const & p1,
+                                    ConcavePolygonWrap const & p2,
+                                   sf::Vector2f &direction);
     static sf::Vertex farthestPointInDir(PolyVerts &p, sf::Vector2f direction);
 
     static sf::Vertex closestPToOrigin(sf::Vector2f v1, sf::Vector2f v2);
@@ -57,6 +61,8 @@ public:
     static bool isIntersecting(PhysicsObject* p1, PhysicsObject* p2);
 
     static Edge getClosestPoints(PhysicsObject* p1, PhysicsObject* p2);
+    static Edge getClosestPoints(ConcavePolygonWrap const & p1,
+                                 ConcavePolygonWrap const & p2);
 };
 
 

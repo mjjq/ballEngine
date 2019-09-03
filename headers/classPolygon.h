@@ -8,10 +8,8 @@
 
 class Polygon : public PhysicsObject
 {
-    ConcavePolygonWrap poly;
 
     void genBoundingOBB();
-
 public:
     Polygon(ConcavePolygonWrap const & _poly);
     Polygon(ObjectProperties init);
@@ -31,6 +29,8 @@ public:
     std::vector<sf::Vertex > constructVerts();
 
     void getConvexBreakdown(std::vector<Polygon > & returnArr);
+
+    std::vector<sf::Vertex > getClosestConvexShape(PhysicsObject const & p);
 };
 
 #endif // CLASS_UNIVERSE_H

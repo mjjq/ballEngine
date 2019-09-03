@@ -53,6 +53,11 @@ public:
 
     static std::vector<Contact > genericCollision(PhysicsObject* p1,
                                                   PhysicsObject* p2);
+    static void genericCollision(ConcavePolygonWrap & p1,
+                                  ConcavePolygonWrap & p2,
+                                  std::vector<Contact > & contResult);
+    static std::vector<Contact > findCollisions(PhysicsObject* p1,
+                                                PhysicsObject* p2);
 
     static bool isAABBIntersecting(PhysicsObject* p1, PhysicsObject* p2);
 
@@ -98,6 +103,12 @@ public:
     static int getClosestVertex(std::vector<sf::Vertex > &poly, sf::Vertex &intPoint);
 
     static void generateContacts(PhysicsObject* p1, PhysicsObject*p2,
+                                std::vector<Contact > &retContacts,
+                                ClippedPoints &cp,
+                                sf::Vector2f contactNorm,
+                                float separation);
+    static void generateContacts(ConcavePolygonWrap const & p1,
+                                 ConcavePolygonWrap const & p2,
                                 std::vector<Contact > &retContacts,
                                 ClippedPoints &cp,
                                 sf::Vector2f contactNorm,

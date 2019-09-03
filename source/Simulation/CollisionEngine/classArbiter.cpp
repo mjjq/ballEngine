@@ -22,7 +22,7 @@ Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
 
         //if(Collisions::isAABBIntersecting(obj1, obj2))
         //{
-            contacts = Collisions::genericCollision(obj1, obj2);
+            contacts = Collisions::findCollisions(obj1, obj2);
             numContacts = contacts.size();
         /*}
         else
@@ -57,7 +57,7 @@ void Arbiter::update()
 {
     //if(Collisions::isAABBIntersecting(obj1, obj2))
     //{
-        contacts = Collisions::genericCollision(obj1, obj2);
+        contacts = Collisions::findCollisions(obj1, obj2);
         numContacts = contacts.size();
 
         coefFriction = sqrtf(obj1->getCoefFriction() * obj2->getCoefFriction());

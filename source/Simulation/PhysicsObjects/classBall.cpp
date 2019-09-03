@@ -36,6 +36,8 @@ PhysicsObject(init)
     centreOfMass = {0.0f, 0.0f};
 
     momentInertia = 0.5*init._mass*radius*radius;
+
+    generateBoundingSphere();
 }
 
 Ball::~Ball() {}

@@ -617,7 +617,7 @@
 	"Observer.h"
 	"classJointManager.h"
 
-1567277142 i:\users\marcus\my documents\github\ballengine_latest\headers\collisiondetection.h
+1567545555 i:\users\marcus\my documents\github\ballengine_latest\headers\collisiondetection.h
 	"classPhysicsObject.h"
 	"classBall.h"
 	"classAABB.h"
@@ -627,7 +627,7 @@
 	"classArbiter.h"
 	"GJK.h"
 
-1567267656 i:\users\marcus\my documents\github\ballengine_latest\headers\classphysicsobject.h
+1567545582 i:\users\marcus\my documents\github\ballengine_latest\headers\classphysicsobject.h
 	<deque>
 	<iostream>
 	<SFML/Graphics.hpp>
@@ -638,6 +638,9 @@
 	"Observer.h"
 	"baseObject.h"
 	"contactData.h"
+	"Math.h"
+	"BoundingSphere.h"
+	"classConcavePolygonWrap.h"
 
 1567267901 i:\users\marcus\my documents\github\ballengine_latest\headers\classball.h
 	<deque>
@@ -654,7 +657,7 @@
 	"integrators.h"
 	"classPhysicsObject.h"
 
-1567267791 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygon.h
+1567537421 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygon.h
 	<deque>
 	"integrators.h"
 	"classPhysicsObject.h"
@@ -675,11 +678,12 @@
 	<SFML/Graphics.hpp>
 	"classPhysicsObject.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\gjk.h
+1567538248 i:\users\marcus\my documents\github\ballengine_latest\headers\gjk.h
 	<iostream>
 	<vector>
 	"SFML/Graphics.hpp"
 	"classPhysicsObject.h"
+	"classConcavePolygonWrap.h"
 
 1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
 	"classCapsule.h"
@@ -830,7 +834,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567192183 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1567547076 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 
@@ -903,7 +907,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567276663 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
+1567545688 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
 	<iostream>
 	<cmath>
 	"classArbiter.h"
@@ -919,7 +923,7 @@
 1567191420 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisiondetection.cpp
 	"collisionDetection.h"
 
-1567277038 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
+1567547154 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -939,7 +943,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567268745 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\contactpoints.cpp
+1567538338 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\contactpoints.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -951,7 +955,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567271940 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\gjk.cpp
+1567538271 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\gjk.cpp
 	"GJK.h"
 	"Math.h"
 	"stringConversion.h"
@@ -1076,7 +1080,7 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1567271148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classball.cpp
+1567450767 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classball.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1088,7 +1092,7 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classcapsule.cpp
+1567450938 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classcapsule.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1112,13 +1116,13 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1566839498 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classphysicsobject.cpp
+1567546748 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classphysicsobject.cpp
 	"classPhysicsObject.h"
 	"Math.h"
 	"integrators.h"
 	"stringConversion.h"
 
-1567274406 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classpolygon.cpp
+1567546775 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classpolygon.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1592,14 +1596,16 @@
 	"ParticleSourceWrap.h"
 	"ParticleSystem.h"
 
-1567192989 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classconcavepolygonwrap.cpp
+1567545616 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classconcavepolygonwrap.cpp
 	"classConcavePolygonWrap.h"
 
-1567190180 i:\users\marcus\my documents\github\ballengine_latest\headers\classconcavepolygonwrap.h
-	"ConcavePolygon.h"
+1567545362 i:\users\marcus\my documents\github\ballengine_latest\headers\classconcavepolygonwrap.h
 	<SFML/Graphics.hpp>
+	"BoundingSphere.h"
+	"ConcavePolygon.h"
+	<cassert>
 
-1567184394 i:\users\marcus\my documents\github\convexdecomposition\src\\concavepolygon.h
+1567537014 i:\users\marcus\my documents\github\convexdecomposition\src\\concavepolygon.h
 	<vector>
 	<cmath>
 	<map>
@@ -1609,4 +1615,8 @@
 	"integrators.h"
 	"classPhysicsObject.h"
 	"classConcavePolygonWrap.h"
+
+1567527842 i:\users\marcus\my documents\github\ballengine_latest\headers\boundingsphere.h
+	<SFML/Graphics.hpp>
+	"Math.h"
 
