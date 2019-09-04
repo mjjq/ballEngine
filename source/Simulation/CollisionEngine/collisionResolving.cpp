@@ -84,10 +84,6 @@ void Collisions::genericCollision(ConcavePolygonWrap & p1,
 
     ClippedPoints cp;
 
-    /*for(int i=0; i<p1.getConvexPolyCount(); ++i)
-        for(int j=0; j<p2.getConvexPolyCount(); ++j)
-            genericCollision(p1.getConvexPoly(i), p2.getConvexPoly(j), contResult);*/
-
     if(p1.getPointCount() < 3 || p2.getPointCount() < 3)
     {
         Edge closestLine = GJK::getClosestPoints(p1, p2);
@@ -97,6 +93,18 @@ void Collisions::genericCollision(ConcavePolygonWrap & p1,
         float p2Radius = p2.getRadius();
         float totalRadius = p1Radius + p2Radius;
         float lineLengthSq = Math::square(closestLine.dir);
+
+        /*sf::CircleShape circ(3.0f);
+        circ.setOrigin({3.0f, 3.0f});
+        circ.setPosition(closestLine.v1);
+        debugWindow->draw(circ);
+        circ.setPosition(closestLine.v2);
+        debugWindow->draw(circ);
+        std::vector<sf::Vertex > verts(2);
+        verts[0].position = closestLine.v1;
+        verts[1].position = closestLine.v2;*/
+
+        debugWindow->draw(verts.data(), verts.size(), sf::Lines);
 
         if(lineLengthSq <= totalRadius*totalRadius)
         {

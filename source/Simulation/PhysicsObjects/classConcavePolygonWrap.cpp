@@ -65,7 +65,7 @@ sf::Vertex ConcavePolygonWrap::farthestPointInDir(sf::Vector2f const & direction
     int bestVert = 0;
     for(int i=0; i<getPointCount(); ++i)
     {
-        float projection = Math::dot(getPoint(i), direction);
+        float projection = Math::dot(getTransform() * getPoint(i), direction);
         if(projection > maxProj)
         {
             maxProj = projection;
@@ -73,7 +73,7 @@ sf::Vertex ConcavePolygonWrap::farthestPointInDir(sf::Vector2f const & direction
         }
     }
 
-    return {getPoint(bestVert)};
+    return {getTransform() * getPoint(bestVert)};
 }
 
 ConcavePolygonWrap & ConcavePolygonWrap::getConvexPoly(int index)
@@ -82,5 +82,6 @@ ConcavePolygonWrap & ConcavePolygonWrap::getConvexPoly(int index)
 
     convexPolys[index].setPosition(getPosition());
     convexPolys[index].setRotation(getRotation());
+    convexPolys[index].setRadius(radius);
     return convexPolys[index];
 }

@@ -27,7 +27,7 @@
     @param initPos The initial position of the ball.
     @param initVel The initial velocity of the ball.
 */
-Ball::Ball(ObjectProperties init) :
+/*Ball::Ball(ObjectProperties init) :
 PhysicsObject(init)
 {
     radius = sqrtf(init._size.x * init._size.x +
@@ -87,4 +87,4 @@ sf::Rect<float > Ball::getBoundingBox()
     sf::Rect<float > rect{position.x-radius, position.y-radius,
                             2.0f*radius, 2.0f*radius};
     return rect;
-}
+}*/

@@ -80,7 +80,7 @@
 
 void BallUniverse::spawnNewObject(ObjectProperties init)
 {
-    sf::Vector2f position = init._position;
+    /*sf::Vector2f position = init._position;
     if(!(position.x < 0 ||
        position.y < 0 ||
        position.x> worldSizeX ||
@@ -136,7 +136,7 @@ void BallUniverse::spawnNewObject(ObjectProperties init)
                     break;
             }
         }
-    }
+    }*/
 }
 
 /*void BallUniverse::spawnNewObject(std::unique_ptr<PhysicsObject> obj)

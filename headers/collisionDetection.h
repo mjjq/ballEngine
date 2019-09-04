@@ -41,7 +41,7 @@ public:
                                   Edge &edge1);
 
 
-    static float timeToCollision(PhysicsObject* p1, PhysicsObject* p2);
+    /*static float timeToCollision(PhysicsObject* p1, PhysicsObject* p2);
     static float timeToCollBallBall(Ball *firstBall, Ball *secondBall);
     static float timeToCollBallAABB(Ball* origBall, AABB* origAABB);
     static float timeToCollAABBAABB(AABB* rect1, AABB* rect2);
@@ -49,7 +49,7 @@ public:
     static float timeToCollOBBOBB(OBB* rect1, OBB* rect2);
     static float timeToCollOBBPoly(OBB* rect, Polygon* poly);
     static float timeToCollBallPoly(Ball* ball, Polygon* poly);
-    static float timeToCollPolyPoly(Polygon* poly1, Polygon *poly2);
+    static float timeToCollPolyPoly(Polygon* poly1, Polygon *poly2);*/
 
     static std::vector<Contact > genericCollision(PhysicsObject* p1,
                                                   PhysicsObject* p2);
@@ -61,8 +61,8 @@ public:
 
     static bool isAABBIntersecting(PhysicsObject* p1, PhysicsObject* p2);
 
-    static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
-    static sf::Vector2f calcPenetVector(Ball* ball1, Ball* ball2);
+    //static sf::Vector2f calcPenetVector(sf::Vector2f rayStart, sf::Vector2f rayNorm, Ball &ball);
+    //static sf::Vector2f calcPenetVector(Ball* ball1, Ball* ball2);
     static sf::Vector2f calcPenetVector(AABB &rect1, AABB &rect2);
 
     static sf::Vector2f calcContactNorm(AABB &rect1, AABB &rect2);
@@ -84,9 +84,9 @@ public:
     static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > const & obj1,
                                                         std::vector<sf::Vertex > const & obj2,
                                                         sf::Vector2f const & contactNormal);
-    static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
+    /*static std::vector<sf::Vector2f > getContactPoints(std::vector<sf::Vertex > &obj1,
                                                         Ball &obj2,
-                                                        sf::Vector2f contactNormal);
+                                                        sf::Vector2f contactNormal);*/
     static Edge getBestEdge(std::vector<sf::Vertex > const & obj,
                      sf::Vector2f normal);
 
@@ -95,10 +95,10 @@ public:
                                sf::Vector2f normal,
                                float o);
 
-    static ClippedPoints getIntPoint(Ball &ball, Edge &edge);
+    //static ClippedPoints getIntPoint(Ball &ball, Edge &edge);
 
-    static std::pair<sf::Vector2f, sf::Vector2f> getContactNormal(Ball *origBall, AABB *origAABB);
-    static std::pair<sf::Vector2f, sf::Vector2f> getContactNormal(Ball* ball, Polygon* poly);
+/*    static std::pair<sf::Vector2f, sf::Vector2f> getContactNormal(Ball *origBall, AABB *origAABB);
+    static std::pair<sf::Vector2f, sf::Vector2f> getContactNormal(Ball* ball, Polygon* poly);*/
 
     static int getClosestVertex(std::vector<sf::Vertex > &poly, sf::Vertex &intPoint);
 

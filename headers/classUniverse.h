@@ -97,7 +97,7 @@ public:
     void updateFirstVelocity(Integrators _integType, float _dt, PhysicsObject* obj1, PhysicsObject* obj2);
     void updateAllObjects(bool enableForces, float dt);
 
-    void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
+    //void ballAbsorption(Ball &_firstBall, Ball &_secondBall);
 
     void spawnNewObject(ObjectProperties init);
     //void spawnNewObject(std::unique_ptr<PhysicsObject> obj);

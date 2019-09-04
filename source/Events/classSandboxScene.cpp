@@ -183,7 +183,7 @@ void SandboxScene::load()
                                              "red.jpg",
                                              "normal2.png"}};
                     GameObject* obj = new GameObject(new Renderable(props),
-                                                      new Ball(props),
+                                                      new Polygon(props),
                                                      nullptr,
                                                      nullptr,
                                                      nullptr,
@@ -268,7 +268,7 @@ void SandboxScene::load()
                                              ObjectType::Ball};
 
                     GameObject* obj = new GameObject(new Renderable(props),
-                                                      new Ball(props));
+                                                      new Polygon(props));
                     drawLine = false;
                 }
             }
@@ -368,7 +368,7 @@ void SandboxScene::load()
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
                     std::vector<sf::Vertex > verts = {
-                        {{0.15f, -3.65f}},
+  {{0.15f, -3.65f}},
 {{2.475f, -3.275f}},
 {{1.15f, -3.175f}},
 {{1.0f, -2.175f}},
@@ -392,8 +392,8 @@ void SandboxScene::load()
 
                     for(sf::Vertex &vert : verts)
                     {
-                        vert.position.x = vert.position.x * spawnRadius*1.0f;
-                        vert.position.y = vert.position.y * spawnRadius*1.0f;
+                        vert.position.x = vert.position.x * spawnRadius*5.0f;
+                        vert.position.y = vert.position.y * spawnRadius*5.0f;
                     }
                     ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
                                              velocity,
@@ -407,7 +407,7 @@ void SandboxScene::load()
                                              ObjectType::ConcavePoly,
                                              verts,
                                              {"",
-                                             "red.jpg",
+                                             "",
                                              "normal.jpg",
                                              "spiro.jpg"}};
                     GameObject* obj = new GameObject(new Renderable(props),
@@ -451,7 +451,7 @@ void SandboxScene::load()
                     LightProperties lProperties = {{props._position.x, props._position.y, 5.0f}};
                     lProperties.umbralRadius = spawnRadius;
                     GameObject* obj = new GameObject(new Renderable(props),
-                                                      new Ball(props),
+                                                      new Polygon(props),
                                                       new LightSource(lProperties));
                     drawLine = false;
                 }

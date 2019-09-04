@@ -163,136 +163,136 @@ std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex >
 }
 
 
-std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex > &obj1,
-                                                        Ball &obj2,
-                                                        sf::Vector2f contactNormal)
-{
-    Edge edge1 = Collisions::getBestEdge(obj1, contactNormal);
-    //std::cout << contactNormal << "norm\n";
-    //std::cout << edge1.dir << "edge\n";
-
-    /*sf::Vertex line1[] = {
-        sf::Vertex(edge1.v1),
-        sf::Vertex(edge1.v2)
-    };
-    debugWindow->draw(line1, 2, sf::Lines);*/
-
-    //bool flip = false;
-    Edge refEdge;
-
-    refEdge = edge1;
-    //flip = true;
-    //std::cout << refEdge.v1 << " v1\n";
-   // std::cout << refEdge.v2 << " v2\n";
-
-
-    sf::Vector2f refDir = Math::norm(refEdge.dir);
-    //std::cout << refDir <<" diredtion\n";
-
-    float o1 = 1.0f*Math::dot(refDir, refEdge.v1);
-
-    ClippedPoints cp = Collisions::getIntPoint(obj2, refEdge);
-
- /*if(cp.size() >= 1)
-    {
-    sf::CircleShape circ1{2.5f};
-    circ1.setPosition(cp[0]);
-    circ1.setOrigin({1.25f, 1.25f});
-    std::cout << refEdge.v1 << "v1\n";
-    std::cout << refEdge.v2 << "v2\n";
-    std::cout << refDir << "v2\n";
-    std::cout << cp[0] << "\n";
-    if(cp.size() >= 2)
-    {
-    sf::CircleShape circ2{2.5f};
-    circ2.setOrigin({1.25f, 1.25f});
-    circ2.setPosition(cp[1]);
-    std::cout << cp[1] << "\n";
-    debugWindow->draw(circ2);
-    }
-    debugWindow->draw(circ1);
-
-    }*/
-
-    if(cp.size() < 2)
-    {
-        return cp;
-    }
-
-    cp = clip(cp[0], cp[1], refDir, o1);
-
-
-
-    //std::cout << cp.size();
-
-    if(cp.size() < 2)
-    {
-        return cp;
-    }
-
-        //std::cout << refDir << " refdir\n\n";
-    float o2 = 1.0f*Math::dot(refDir, refEdge.v2);
-    cp = clip(cp[0], cp[1], -refDir, -o2);
-
-
-
-
-    return cp;
-}
-
-
-ClippedPoints Collisions::getIntPoint(Ball &ball, Edge &edge)
-{
-    sf::Vector2f relR = edge.v1 - ball.getPosition();// -sf::Vector2f{ball.getRadius(), ball.getRadius()};
-    float A = Math::square(edge.dir);
-    float B = 2.0f*Math::dot(edge.dir, relR);
-    float C = Math::square(relR) -
-                ball.getRadius()*ball.getRadius();
-
-    float discriminant = B*B - 4*A*C;
-
-   /* std::cout << B*B << "\n";
-    std::cout << 4*A*C << "\n";
-    std::cout << discriminant << "\n";*/
-/*
-    sf::CircleShape circ1{50.0f};
-    circ1.setPosition(ball.getPosition() - sf::Vector2f{50.0f, 50.0f});
-    circ1.setOrigin({1.25f, 1.25f});
-    circ1.setFillColor(sf::Color::Red);
-    debugWindow->draw(circ1);*/
+//std::vector<sf::Vector2f > Collisions::getContactPoints(std::vector<sf::Vertex > &obj1,
+//                                                        Ball &obj2,
+//                                                        sf::Vector2f contactNormal)
+//{
+//    Edge edge1 = Collisions::getBestEdge(obj1, contactNormal);
+//    //std::cout << contactNormal << "norm\n";
+//    //std::cout << edge1.dir << "edge\n";
+//
+//    /*sf::Vertex line1[] = {
+//        sf::Vertex(edge1.v1),
+//        sf::Vertex(edge1.v2)
+//    };
+//    debugWindow->draw(line1, 2, sf::Lines);*/
+//
+//    //bool flip = false;
+//    Edge refEdge;
+//
+//    refEdge = edge1;
+//    //flip = true;
+//    //std::cout << refEdge.v1 << " v1\n";
+//   // std::cout << refEdge.v2 << " v2\n";
+//
+//
+//    sf::Vector2f refDir = Math::norm(refEdge.dir);
+//    //std::cout << refDir <<" diredtion\n";
+//
+//    float o1 = 1.0f*Math::dot(refDir, refEdge.v1);
+//
+//    ClippedPoints cp = Collisions::getIntPoint(obj2, refEdge);
+//
+// /*if(cp.size() >= 1)
+//    {
+//    sf::CircleShape circ1{2.5f};
+//    circ1.setPosition(cp[0]);
+//    circ1.setOrigin({1.25f, 1.25f});
+//    std::cout << refEdge.v1 << "v1\n";
+//    std::cout << refEdge.v2 << "v2\n";
+//    std::cout << refDir << "v2\n";
+//    std::cout << cp[0] << "\n";
+//    if(cp.size() >= 2)
+//    {
+//    sf::CircleShape circ2{2.5f};
+//    circ2.setOrigin({1.25f, 1.25f});
+//    circ2.setPosition(cp[1]);
+//    std::cout << cp[1] << "\n";
+//    debugWindow->draw(circ2);
+//    }
+//    debugWindow->draw(circ1);
+//
+//    }*/
+//
+//    if(cp.size() < 2)
+//    {
+//        return cp;
+//    }
+//
+//    cp = clip(cp[0], cp[1], refDir, o1);
+//
+//
+//
+//    //std::cout << cp.size();
+//
+//    if(cp.size() < 2)
+//    {
+//        return cp;
+//    }
+//
+//        //std::cout << refDir << " refdir\n\n";
+//    float o2 = 1.0f*Math::dot(refDir, refEdge.v2);
+//    cp = clip(cp[0], cp[1], -refDir, -o2);
+//
+//
+//
+//
+//    return cp;
+//}
 
 
-    if(discriminant < 1e-5)
-    {
-        //std::cout << "single sol\n";
-        float t = -B/(2*A);
-        sf::Vector2f cp0 = edge.v1 + edge.dir * t;
-        ClippedPoints cp;
-        cp.push_back(cp0);
-        //std::cout << cp[0] << " cp\n";
-        return cp;
-    }
-
-    float t0 = (-B + 1.0f*sqrt(discriminant))/(2*A);
-    float t1 = (-B - 1.0f*sqrt(discriminant))/(2*A);
-
-
-
-    sf::Vector2f cp0 = edge.v1 + edge.dir * t0;
-    sf::Vector2f cp1 = edge.v1 + edge.dir * t1;
-
-    ClippedPoints cp;
-
-    cp.push_back(cp0);
-    cp.push_back(cp1);
-
-
-
-
-
-
-    return cp;
-}
+//ClippedPoints Collisions::getIntPoint(Ball &ball, Edge &edge)
+//{
+//    sf::Vector2f relR = edge.v1 - ball.getPosition();// -sf::Vector2f{ball.getRadius(), ball.getRadius()};
+//    float A = Math::square(edge.dir);
+//    float B = 2.0f*Math::dot(edge.dir, relR);
+//    float C = Math::square(relR) -
+//                ball.getRadius()*ball.getRadius();
+//
+//    float discriminant = B*B - 4*A*C;
+//
+//   /* std::cout << B*B << "\n";
+//    std::cout << 4*A*C << "\n";
+//    std::cout << discriminant << "\n";*/
+///*
+//    sf::CircleShape circ1{50.0f};
+//    circ1.setPosition(ball.getPosition() - sf::Vector2f{50.0f, 50.0f});
+//    circ1.setOrigin({1.25f, 1.25f});
+//    circ1.setFillColor(sf::Color::Red);
+//    debugWindow->draw(circ1);*/
+//
+//
+//    if(discriminant < 1e-5)
+//    {
+//        //std::cout << "single sol\n";
+//        float t = -B/(2*A);
+//        sf::Vector2f cp0 = edge.v1 + edge.dir * t;
+//        ClippedPoints cp;
+//        cp.push_back(cp0);
+//        //std::cout << cp[0] << " cp\n";
+//        return cp;
+//    }
+//
+//    float t0 = (-B + 1.0f*sqrt(discriminant))/(2*A);
+//    float t1 = (-B - 1.0f*sqrt(discriminant))/(2*A);
+//
+//
+//
+//    sf::Vector2f cp0 = edge.v1 + edge.dir * t0;
+//    sf::Vector2f cp1 = edge.v1 + edge.dir * t1;
+//
+//    ClippedPoints cp;
+//
+//    cp.push_back(cp0);
+//    cp.push_back(cp1);
+//
+//
+//
+//
+//
+//
+//    return cp;
+//}
 
 
 Edge Collisions::getBestEdge(std::vector<sf::Vertex > const & obj, sf::Vector2f normal)

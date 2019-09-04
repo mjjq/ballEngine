@@ -33,16 +33,25 @@ Polygon::Polygon(ObjectProperties init) :
 PhysicsObject(init)
 {
     momentInertia = 0.0f;
-    for(sf::Vertex &vert : init._vertices)
+    if(init._vertices.size() > 0)
     {
-        momentInertia += Math::square(vert.position);
-    }
-    momentInertia = momentInertia*init._mass/init._vertices.size();
-    //momentInertia = momentInertia*init._mass/init._vertices.size();
-    std::cout << init._mass << "\n";
-    generateBoundingSphere();
+        for(sf::Vertex &vert : init._vertices)
+        {
+            momentInertia += Math::square(vert.position);
+        }
+        momentInertia = momentInertia*init._mass/init._vertices.size();
+        poly = ConcavePolygonWrap(Math::averageVertices(init._vertices));
 
-    poly = ConcavePolygonWrap(Math::averageVertices(init._vertices));
+    }
+    else
+    {
+        momentInertia = 0.5f*init._mass*Math::square(init._size);
+        poly = ConcavePolygonWrap({sf::Vertex{{0.0f, 0.0f}}});
+
+        poly.setRadius(sqrtf(Math::square(init._size)));
+    }
+
+    generateBoundingSphere();
     poly.setPosition(init._position);
     poly.setRotation(init._rotation);
 }

@@ -2,6 +2,7 @@
 
 #include "Math.h"
 #include "classGameObject.h"
+#include "classPolygon.h"
 
 ProjectileWeapon::ProjectileWeapon(EquipableData _data,
                                    WeaponType type) : Equipable(_data)
@@ -79,7 +80,7 @@ void ProjectileWeapon::primaryFunc()
 
 
     GameObject* obj = new GameObject(nullptr,//new Renderable(objProps),
-                   new Ball(objProps),
+                   new Polygon(objProps),
                    nullptr,
                    nullptr,
                    nullptr,
