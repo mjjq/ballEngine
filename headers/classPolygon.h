@@ -11,7 +11,6 @@ class Polygon : public PhysicsObject
 
     void genBoundingOBB();
 public:
-    Polygon(ConcavePolygonWrap const & _poly);
     Polygon(ObjectProperties init);
     ~Polygon();
 

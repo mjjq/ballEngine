@@ -3,6 +3,16 @@
 ConcavePolygonWrap::ConcavePolygonWrap(std::vector<Vertex > const & vertices)
 {
     polygon = ConcavePolygon(vertices);
+
+    std::vector<sf::Vertex > conversion;
+    for(int i=0; i<vertices.size(); ++i)
+    {
+        conversion.push_back(sf::Vertex{{(float)vertices[i].position.x,
+                              (float)vertices[i].position.y}});
+    }
+
+    bounds = BoundingSphere(conversion);
+
 }
 
 ConcavePolygonWrap::ConcavePolygonWrap() {}
@@ -16,6 +26,7 @@ ConcavePolygonWrap::ConcavePolygonWrap(PositionArray const & vertices)
     }
 
     polygon = ConcavePolygon(vertsToPush);
+    bounds = BoundingSphere(vertices);
 
     polygon.convexDecomp();
     populateLowestLevelVector();
@@ -51,7 +62,7 @@ std::vector<sf::Vertex > ConcavePolygonWrap::getVertices(bool const & applyTrans
 sf::Vector2f ConcavePolygonWrap::getPoint(std::size_t index) const
 {
     Vec2 point = polygon.getPoint(index);
-    return {point.x, point.y};
+    return {(float)point.x, (float)point.y};
 }
 
 std::size_t ConcavePolygonWrap::getPointCount() const
@@ -84,4 +95,11 @@ ConcavePolygonWrap & ConcavePolygonWrap::getConvexPoly(int index)
     convexPolys[index].setRotation(getRotation());
     convexPolys[index].setRadius(radius);
     return convexPolys[index];
+}
+
+BoundingSphere ConcavePolygonWrap::getBounds()
+{
+    BoundingSphere transformedBounds = bounds;
+    transformedBounds.position = getPosition() + transformedBounds.position;
+    return transformedBounds;
 }

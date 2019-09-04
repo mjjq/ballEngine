@@ -3,15 +3,32 @@
 
 #include <SFML/Graphics.hpp>
 #include "Math.h"
+#include <cmath>
 
 struct BoundingSphere
 {
+    sf::Vector2f position = {0.0f, 0.0f};
+    float radius = 0.0f;
+
     BoundingSphere() {}
     BoundingSphere(sf::Vector2f const & _position,
                    float const & _radius) : position{_position},
                    radius{_radius} {}
-    sf::Vector2f position;
-    float radius;
+    BoundingSphere(std::vector<sf::Vertex > const & verts)
+    {
+        float maxRadiusSq = 0.0f;
+        for(int i=0; i<verts.size(); ++i)
+        {
+            float radSq = Math::square(verts[i].position);
+            if(radSq > maxRadiusSq)
+            {
+                maxRadiusSq = radSq;
+            }
+        }
+
+        radius = sqrt(maxRadiusSq);
+        position = Math::average(verts);
+    }
 
     bool intersects(BoundingSphere const & otherSphere) const
     {

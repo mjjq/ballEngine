@@ -145,15 +145,30 @@ std::vector<Contact > Collisions::findCollisions(PhysicsObject* p1,
 {
     std::vector<Contact > contResult;
 
+    if(p1 == nullptr || p2 == nullptr)
+        return contResult;
+
     ConcavePolygonWrap & p1Geometry = p1->getGeometry();
     ConcavePolygonWrap & p2Geometry = p2->getGeometry();
+
+    //if(!p1Geometry.getBounds().intersects(p2Geometry.getBounds()))
+    //    return contResult;
+
+    std::cout << p1Geometry.getPosition().y << "\n";
+    std::cout << p2Geometry.getPosition().y << "\n\n";
+    //std::cout << p1Geometry.getBounds().position.x << "bounds intersect\n";
 
     for(int i=0; i<p1Geometry.getConvexPolyCount(); ++i)
         for(int j=0; j<p2Geometry.getConvexPolyCount(); ++j)
         {
-            genericCollision(p1Geometry.getConvexPoly(i),
-                             p2Geometry.getConvexPoly(j),
-                             contResult);
+
+//            if(p1Geometry.getConvexPoly(i).getBounds().
+//               intersects(p2Geometry.getConvexPoly(j).getBounds()))
+            {
+                genericCollision(p1Geometry.getConvexPoly(i),
+                                 p2Geometry.getConvexPoly(j),
+                                 contResult);
+            }
         }
 
     return contResult;
