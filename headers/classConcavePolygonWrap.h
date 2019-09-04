@@ -37,7 +37,7 @@ public:
     BoundingSphere getBounds();
 
     float getRadius() const { return radius; }
-    void setRadius(float _radius) { radius = _radius; }
+    void setRadius(float _radius);
 
 };
 

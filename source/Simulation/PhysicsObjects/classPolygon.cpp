@@ -62,7 +62,6 @@ PhysicsObject(init)
         }
     }
 
-    generateBoundingSphere();
     poly.setPosition(init._position);
     poly.setRotation(init._rotation);
 

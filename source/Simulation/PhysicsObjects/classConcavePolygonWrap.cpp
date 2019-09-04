@@ -103,3 +103,9 @@ BoundingSphere ConcavePolygonWrap::getBounds()
     transformedBounds.position = getPosition() + transformedBounds.position;
     return transformedBounds;
 }
+
+void ConcavePolygonWrap::setRadius(float _radius)
+{
+    radius = _radius;
+    bounds.radius = radius;
+}

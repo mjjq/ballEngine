@@ -151,12 +151,9 @@ std::vector<Contact > Collisions::findCollisions(PhysicsObject* p1,
     ConcavePolygonWrap & p1Geometry = p1->getGeometry();
     ConcavePolygonWrap & p2Geometry = p2->getGeometry();
 
-    //if(!p1Geometry.getBounds().intersects(p2Geometry.getBounds()))
-    //    return contResult;
+    if(!p1Geometry.getBounds().intersects(p2Geometry.getBounds()))
+        return contResult;
 
-    std::cout << p1Geometry.getPosition().y << "\n";
-    std::cout << p2Geometry.getPosition().y << "\n\n";
-    //std::cout << p1Geometry.getBounds().position.x << "bounds intersect\n";
 
     for(int i=0; i<p1Geometry.getConvexPolyCount(); ++i)
         for(int j=0; j<p2Geometry.getConvexPolyCount(); ++j)

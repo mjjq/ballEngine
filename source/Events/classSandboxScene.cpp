@@ -463,12 +463,26 @@ void SandboxScene::load()
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
                     std::vector<sf::Vertex > verts = {
-                        sf::Vertex{{-10.0f, -35.0f}},
-                        sf::Vertex{{10.0f, -10.0f}},
-                        sf::Vertex{{10.0f, 10.0f}},
-                        sf::Vertex{{-10.0f, 10.0f}},
-                        sf::Vertex{{-30.0f, 0.0f}},
-                        sf::Vertex{{-30.0f, -10.0f}}
+  {{0.15f, -3.65f}},
+{{2.475f, -3.275f}},
+{{1.15f, -3.175f}},
+{{1.0f, -2.175f}},
+{{2.325f, -1.775f}},
+{{4.725f, -1.725f}},
+{{6.225f, -1.175f}},
+{{6.95f, -0.05f}},
+{{6.625f, 1.775f}},
+{{4.775f, 4.15f}},
+{{3.4f, 4.275f}},
+{{2.425f, 3.175f}},
+{{2.575f, 1.925f}},
+{{1.825f, 0.0f}},
+{{1.05f, -0.15f}},
+{{-2.225f, 1.175f}},
+{{-3.4f, 0.3f}},
+{{-3.95f, -1.25f}},
+{{-3.35f, -2.5f}},
+{{-1.05f, -3.625f}}
                     };
                     /*std::vector<sf::Vertex > verts = {
                         sf::Vertex{{-10.0f, -10.0f}},
@@ -478,7 +492,7 @@ void SandboxScene::load()
                     };*/
                     for(sf::Vertex &vert : verts)
                     {
-                        vert.position = vert.position * velocity.x*velocity.y;
+                        vert.position = vert.position * velocity.x*velocity.y * spawnRadius/10.0f;
                     }
                     ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
                                             {0.0f, 0.0f},
@@ -492,7 +506,7 @@ void SandboxScene::load()
                                              ObjectType::Polygon,
                                              verts,
                                              {"",
-                                             "red.jpg",
+                                             "",
                                              "normal.jpg",
                                              "spiro.jpg"}};
                     GameObject* obj = new GameObject(new Renderable(props),
