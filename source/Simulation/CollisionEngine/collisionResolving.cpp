@@ -104,7 +104,7 @@ void Collisions::genericCollision(ConcavePolygonWrap & p1,
         verts[0].position = closestLine.v1;
         verts[1].position = closestLine.v2;*/
 
-        debugWindow->draw(verts.data(), verts.size(), sf::Lines);
+        //debugWindow->draw(verts.data(), verts.size(), sf::Lines);
 
         if(lineLengthSq <= totalRadius*totalRadius)
         {

@@ -113,7 +113,7 @@ public:
 
     virtual float getMinSize() = 0;
 
-    virtual float getRadius() { return 0.0f; }
+    virtual float getRadius() {return 0.0f;}
 
     virtual int getVertexCount() = 0;
 

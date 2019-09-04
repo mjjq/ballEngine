@@ -223,7 +223,7 @@ void SandboxScene::load()
                     props._collisionGroup = {1,3};
                     CharacterProperties init;
                     GameObject* obj = new GameObject(nullptr, //new Renderable(props),
-                                                        new Capsule(props),
+                                                        new Polygon(props),
                                                         nullptr,
                                                         new Character(init),
                                                         new Skeleton2DWrap("./res/json/example3.json"));

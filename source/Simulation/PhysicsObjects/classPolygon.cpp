@@ -45,10 +45,22 @@ PhysicsObject(init)
     }
     else
     {
-        momentInertia = 0.5f*init._mass*Math::square(init._size);
-        poly = ConcavePolygonWrap({sf::Vertex{{0.0f, 0.0f}}});
+        if(init.type == ObjectType::Ball)
+        {
+            momentInertia = 0.5f*init._mass*Math::square(init._size);
+            poly = ConcavePolygonWrap({sf::Vertex{{0.0f, 0.0f}}});
 
-        poly.setRadius(sqrtf(Math::square(init._size)));
+            poly.setRadius(sqrtf(Math::square(init._size)));
+        }
+        else if(init.type == ObjectType::Capsule)
+        {
+            momentInertia = 1.0f*init._mass*Math::square(init._size);
+            poly = ConcavePolygonWrap({
+                                      sf::Vertex{{0.0f, -init._size.y/2.0f}},
+                                      sf::Vertex{{0.0f, init._size.y/2.0f}}
+                                      });
+            poly.setRadius(init._size.x);
+        }
     }
 
     generateBoundingSphere();
