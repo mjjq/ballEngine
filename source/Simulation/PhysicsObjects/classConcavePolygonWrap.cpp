@@ -100,7 +100,7 @@ ConcavePolygonWrap & ConcavePolygonWrap::getConvexPoly(int index)
 
 BoundingSphere ConcavePolygonWrap::getBounds()
 {
-    BoundingSphere transformedBounds = bounds;
+    BoundingSphere transformedBounds;
     transformedBounds.radius = bounds.radius + radius;
     transformedBounds.position = getPosition() + transformedBounds.position;
     return transformedBounds;

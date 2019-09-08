@@ -34,7 +34,8 @@ PhysicsObject(init)
 
     momentInertia = 0.0f;
 
-    if(init.type == ObjectType::Polygon)
+    if(init.type == ObjectType::Polygon ||
+       init.type == ObjectType::ConcavePoly)
     {
         for(sf::Vertex &vert : init._vertices)
         {
