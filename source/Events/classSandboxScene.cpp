@@ -1,5 +1,6 @@
 #include "classSandboxScene.h"
 #include "jsonParsing.h"
+#include "LevelCreator.h"
 
 SandboxScene::SandboxScene(sf::RenderWindow &_window,
                            sf::Time &_targetFTime,
@@ -39,6 +40,7 @@ void SandboxScene::load()
             {"spwnMode",    [&]{switchControlMode("SpawnMode"); std::cout << "spawnmode\n";}},
             {"editMode",    [&]{switchControlMode("EditObjectMode"); std::cout << "editmode\n";}},
             {"charMode",    [&]{switchControlMode("CharacterMode"); std::cout << "charmode\n";}},
+            {"obCrMode",    [&]{switchControlMode("ObjectCreationMode"); std::cout << "objCrMode\n";}},
             {"incMass",     [&]{spawnMass+=1;}},
             {"decMass",     [&]{if(spawnMass>1){spawnMass-=1;}}},
             {"incRad",      [&]{spawnRadius+=1;}},
@@ -157,6 +159,14 @@ void SandboxScene::load()
                 }
                 }
             },
+            {"reloadLvl",  [&]{
+                projMan->clearAll();
+                lvlCreator::Parameters params;
+                params.useTargetSize = true;
+                params.targetSize = (sf::Vector2f)wSize;
+                LevelCreator::createLevel("./res/levels/testLevel.png", params);
+                }
+            },
         };
         buttonReleaseMap = {
             {"mvPlrRgt",    [&]{charMan->handleInput(Input::Idle, 0);}
@@ -236,17 +246,22 @@ void SandboxScene::load()
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
                                                               spawnVelFactor);
-                    ballSim->spawnNewObject(
-                                           {static_cast<sf::Vector2f>(mousePosOnClick),
-                                         velocity,
-                                         {spawnRadius, 3.0f*spawnRadius},
-                                         spawnMass,
-                                         spawnCoefFriction,
-                                         spawnCoefRest,
-                                         spawnRotation,
-                                         spawnRotRate,
-                                         false, false, false, true,
-                                         ObjectType::Capsule});
+                    ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
+                                             velocity,
+                                             {spawnRadius, 4.0f*spawnRadius},
+                                             spawnMass,
+                                             spawnCoefFriction,
+                                             spawnCoefRest,
+                                             spawnRotation,
+                                             spawnRotRate,
+                                             false, false, false, true,
+                                             ObjectType::Capsule,
+                                             {},
+                                             {"",
+                                              "",
+                                              ""}};
+                    GameObject* obj = new GameObject(new Renderable(props),
+                                                      new Polygon(props));
                     drawLine = false;
                 }
             }
@@ -492,6 +507,7 @@ void SandboxScene::load()
                     };*/
                     for(sf::Vertex &vert : verts)
                     {
+                        vert.position = Math::rotate(vert.position, spawnRotation);
                         vert.position = vert.position * velocity.x*velocity.y * spawnRadius/10.0f;
                     }
                     ObjectProperties props = {static_cast<sf::Vector2f>(mousePosOnClick),
@@ -500,8 +516,8 @@ void SandboxScene::load()
                                             spawnMass,
                                              spawnCoefFriction,
                                              spawnCoefRest,
-                                             spawnRotation,
-                                             spawnRotRate,
+                                             0.0f,
+                                             0.0f,
                                              true, false, false, true,
                                              ObjectType::Polygon,
                                              verts,
@@ -577,6 +593,10 @@ void SandboxScene::load()
                                  "blankN.jpg"}
                                              };
         //projMan->addObject(new GameObject(new Renderable(props)));
+        lvlCreator::Parameters params;
+        params.useTargetSize = true;
+        params.targetSize = (sf::Vector2f)wSize;
+        LevelCreator::createLevel("./res/levels/testLevel.png", params);
     }
 }
 

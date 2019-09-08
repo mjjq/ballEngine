@@ -24,7 +24,7 @@ enum class CollisionIDType
 struct Material
 {
     std::string shaderID = "";
-    std::string diffuseID = "null.jpg";
+    std::string diffuseID = "";
     std::string normalID = "";
     std::string emissionID = "";
 
@@ -42,7 +42,7 @@ struct ObjectProperties
     sf::Vector2f _velocity = {0.0f, 0.0f};
     sf::Vector2f _size = {1.0f, 1.0f};
     float _mass = 1.0f;
-    float _coefFric = 0.0f;
+    float _coefFric = 1.0f;
     float _coefRest = 0.0f;
     float _rotation = 0.0f;
     float _rotRate = 0.0f;

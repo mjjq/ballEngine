@@ -33,7 +33,8 @@ PhysicsObject(init)
 {
 
     momentInertia = 0.0f;
-    if(init._vertices.size() > 0)
+
+    if(init.type == ObjectType::Polygon)
     {
         for(sf::Vertex &vert : init._vertices)
         {
@@ -42,24 +43,23 @@ PhysicsObject(init)
         momentInertia = momentInertia*init._mass/init._vertices.size();
         poly = ConcavePolygonWrap(Math::averageVertices(init._vertices));
     }
-    else
+    else if(init.type == ObjectType::Ball)
     {
-        if(init.type == ObjectType::Ball)
-        {
-            momentInertia = 0.5f*init._mass*Math::square(init._size);
-            poly = ConcavePolygonWrap({sf::Vertex{{0.0f, 0.0f}}});
+        momentInertia = 0.5f*init._mass*Math::square(init._size);
+        poly = ConcavePolygonWrap({sf::Vertex{{0.0f, 0.0f}}});
 
-            poly.setRadius(sqrtf(Math::square(init._size)));
-        }
-        else if(init.type == ObjectType::Capsule)
-        {
-            momentInertia = 1.0f*init._mass*Math::square(init._size);
-            poly = ConcavePolygonWrap({
-                                      sf::Vertex{{0.0f, -init._size.y/2.0f}},
-                                      sf::Vertex{{0.0f, init._size.y/2.0f}}
-                                      });
-            poly.setRadius(init._size.x);
-        }
+        poly.setRadius(sqrtf(Math::square(init._size)));
+    }
+    else if(init.type == ObjectType::Capsule)
+    {
+        momentInertia = 1.0f*init._mass*Math::square(init._size);
+
+        poly = ConcavePolygonWrap({
+                                  sf::Vertex{{0.0f, -init._size.y/2.0f}},
+                                  sf::Vertex{{0.0f, init._size.y/2.0f}}
+                                  });
+
+        poly.setRadius(init._size.x);
     }
 
     poly.setPosition(init._position);

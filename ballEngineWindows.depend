@@ -834,9 +834,10 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567604882 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1567977039 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
+	"LevelCreator.h"
 
 1562753158 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classscene.cpp
 	<iostream>
@@ -923,7 +924,7 @@
 1567191420 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisiondetection.cpp
 	"collisionDetection.h"
 
-1567605086 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
+1567977670 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1122,7 +1123,7 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1567605218 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classpolygon.cpp
+1567977776 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classpolygon.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1230,7 +1231,7 @@
 	"classUIGroup.h"
 	"structs.h"
 
-1567551043 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
+1567978243 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
 	"classRenderable.h"
 	<cmath>
 	"Math.h"
@@ -1258,7 +1259,7 @@
 	"windowManager.h"
 	"resourceManager.h"
 
-1567184677 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
+1567972675 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
 
 1566821122 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
 	"classBall.h"
@@ -1596,16 +1597,16 @@
 	"ParticleSourceWrap.h"
 	"ParticleSystem.h"
 
-1567603334 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classconcavepolygonwrap.cpp
+1567977568 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classconcavepolygonwrap.cpp
 	"classConcavePolygonWrap.h"
 
-1567605478 i:\users\marcus\my documents\github\ballengine_latest\headers\classconcavepolygonwrap.h
+1567966619 i:\users\marcus\my documents\github\ballengine_latest\headers\classconcavepolygonwrap.h
 	<SFML/Graphics.hpp>
 	"BoundingSphere.h"
 	"ConcavePolygon.h"
 	<cassert>
 
-1567603235 i:\users\marcus\my documents\github\convexdecomposition\src\\concavepolygon.h
+1567966516 i:\users\marcus\my documents\github\convexdecomposition\src\\concavepolygon.h
 	<vector>
 	<cmath>
 	<map>
@@ -1621,4 +1622,20 @@
 	<SFML/Graphics.hpp>
 	"Math.h"
 	<cmath>
+
+1567978203 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\levelcreator.cpp
+	"LevelCreator.h"
+	"Math.h"
+
+1567976410 i:\users\marcus\my documents\github\ballengine_latest\headers\levelcreator.h
+	"classGameObject.h"
+	"VertFromBitmapWrap.h"
+	"classPolygon.h"
+
+1567966450 i:\users\marcus\my documents\github\verticesfrombitmap\include\\verticesfrombitmap.hpp
+	<SFML/Graphics.hpp>
+	<cmath>
+
+1567972860 i:\users\marcus\my documents\github\ballengine_latest\headers\vertfrombitmapwrap.h
+	"VerticesFromBitmap.hpp"
 

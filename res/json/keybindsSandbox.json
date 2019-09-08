@@ -18,14 +18,13 @@
 		"clearSim"	 	: ["Delete"],
 		"incMass" 	 	: ["M"],
 		"decMass"	 	: ["LControl", "M"],
-		"incRad"	 	: ["R"],
-		"decRad"	 	: ["LControl", "R"],
 		"chgBColour" 	: ["LControl", "K"],
 		"undoBall"   	: ["LControl", "Z"],
 		"undoRect"   	: ["LAlt", "Z"],
 		"spwnSingle"	: ["LMB"],
 		"spwnSCirc"		: ["RMB"],
 		"spwnDAABB"		: ["LControl", "LMB"],
+		"spwnCaps"		: ["C", "LMB"],
 		"spwnDPoly"		: ["LShift", "LMB"],
 		"spwnSPoly"		: ["LShift", "RMB"],
 		"spwnSys"		: ["LControl", "RMB"],
@@ -33,7 +32,8 @@
 		"spwnJson"		: ["J", "LMB"],
 		"spwnLight"		: ["L", "LMB"],
 		"newJoint"		: ["LAlt", "Q"],
-		"editMode"		: ["Tab"]
+		"editMode"		: ["Tab"],
+		"reloadLvl"		: ["LControl", "R"]
 	},
 	"EditObjectMode" : {
 		"selObject"      : ["LMB"],

@@ -85,6 +85,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
             sf::RectangleShape* shape = new sf::RectangleShape({2.0f*radius, length});
             shape->setOrigin({radius, length/2.0f});
             shape->setPosition(objProps._position);
+            shape->setRotation(objProps._rotation);
 
             primDrawable = std::move(shape);
             primTransformable = shape;

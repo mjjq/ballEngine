@@ -85,6 +85,7 @@
 			<Add directory="I:/Users/Marcus/My Documents/Github/InverseKinematics/headers" />
 			<Add directory="../ParticleSystem" />
 			<Add directory="../ConvexDecomposition/src/" />
+			<Add directory="../VerticesFromBitmap/include/" />
 		</Compiler>
 		<Linker>
 			<Add directory="C:/Program Files/CodeBlocks/SFML-2.4.2/lib" />
@@ -93,6 +94,7 @@
 		</Linker>
 		<Unit filename="extern/json.hpp" />
 		<Unit filename="headers/GJK.h" />
+		<Unit filename="headers/LevelCreator.h" />
 		<Unit filename="headers/Math.h" />
 		<Unit filename="headers/Observer.h" />
 		<Unit filename="headers/ParticleSourceWrap.h" />
@@ -191,6 +193,7 @@
 		<Unit filename="source/Simulation/CollisionEngine/penetrationTests.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/rayObjectsTests.cpp" />
 		<Unit filename="source/Simulation/CollisionEngine/sepAxisTests.cpp" />
+		<Unit filename="source/Simulation/GameObjects/LevelCreator.cpp" />
 		<Unit filename="source/Simulation/GameObjects/ParticleSourceWrap.cpp" />
 		<Unit filename="source/Simulation/GameObjects/ParticleSystemManager.cpp" />
 		<Unit filename="source/Simulation/GameObjects/classCharacter.cpp" />
