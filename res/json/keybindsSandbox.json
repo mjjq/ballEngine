@@ -44,6 +44,8 @@
 	"CharacterMode" : {
 		"mvPlrLft" 		: ["A"],
 		"mvPlrRgt" 		: ["D"],
+		"runPlrLft" 	: ["A", "LShift"],
+		"runPlrRgt" 	: ["D", "LShift"],
 		"plrJump" 		: ["Space"],
 		"spwnMode" 		: ["Tab"],
 		"aimChar"		: ["RMB"],

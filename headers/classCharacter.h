@@ -20,7 +20,8 @@ struct ContactData
 
 struct CharacterProperties
 {
-    float movementSpeed = 1.0f;
+    float walkSpeed = 1.0f;
+    float runSpeed = 3.0f;
     float jumpPower = 10.0f;
     float coefFriction = 4.0f;
     float maxHealth = 10.0f;
@@ -42,6 +43,7 @@ class Character : public Component
 
     bool slopeOkay = true;
     bool touchingSurface = false;
+    float currentSpeed = properties.walkSpeed;
 
     Inventory characterItems;
     sf::Vector2f equipablePosition;
@@ -50,6 +52,7 @@ class Character : public Component
     CharacterState* currentState;
 
     void flipCharacter(bool & _isflipped);
+
 public:
     void moveSideWays(float input);
     Character(CharacterProperties init);
@@ -81,6 +84,8 @@ public:
     void updateEquippedAnchorPoints();
 
     bool getFlippedState() { return properties.flipped; }
+
+    void setMovementSpeed(float _speed) { currentSpeed = _speed; }
 };
 
 

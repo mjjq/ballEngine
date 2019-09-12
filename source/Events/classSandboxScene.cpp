@@ -96,6 +96,12 @@ void SandboxScene::load()
             {"mvPlrLft",    [&]{charMan->handleInput(Input::WalkLeft, 0);
                                 KeyBinds::isFuncContinuous = true;}
                                 },
+            {"runPlrLft",    [&]{charMan->handleInput(Input::RunLeft, 0);
+                                KeyBinds::isFuncContinuous = true;}
+                                },
+            {"runPlrRgt",    [&]{charMan->handleInput(Input::RunRight, 0);
+                                KeyBinds::isFuncContinuous = true;}
+                                },
             {"spwnSingle",  [&]{
                 if(!mouseOnUIWhenClicked.first){
                     sf::Vector2i viewPos = sf::Mouse::getPosition(window);

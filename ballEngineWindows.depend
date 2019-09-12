@@ -685,7 +685,7 @@
 	"classPhysicsObject.h"
 	"classConcavePolygonWrap.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
+1568306855 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
 	"classCapsule.h"
 	"classProjectileWeapon.h"
 	"Observer.h"
@@ -834,7 +834,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1568045688 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1568307373 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 	"LevelCreator.h"
@@ -1011,7 +1011,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1568306759 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
@@ -1559,9 +1559,9 @@
 
 1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\contactdata.h
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacterstate.h
+1568306891 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacterstate.h
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
+1568307542 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
 	"classCharacterState.h"
 	"classCharacter.h"
 

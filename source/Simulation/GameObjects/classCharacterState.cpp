@@ -4,7 +4,7 @@
 void WalkState::enterState(Character& character)
 {
     character.setAnimation("walk");
-
+    character.setMovementSpeed(character.getProperties().walkSpeed);
 }
 
 CharacterState* WalkState::handleInput(Character& character, Input input)
@@ -26,6 +26,16 @@ CharacterState* WalkState::handleInput(Character& character, Input input)
             if(direction < 0.0f)
                 return new IdleState();
 
+            break;
+        }
+        case(Input::RunLeft):
+        {
+            return new RunState(-1.0f);
+            break;
+        }
+        case(Input::RunRight):
+        {
+            return new RunState(1.0f);
             break;
         }
         case(Input::Jump):
@@ -51,6 +61,60 @@ void WalkState::update(Character& character)
         character.setAnimationSpeed(1.0f);
 }
 
+void RunState::enterState(Character& character)
+{
+    character.setAnimation("walk");
+    character.setMovementSpeed(character.getProperties().runSpeed);
+}
+
+CharacterState* RunState::handleInput(Character& character, Input input)
+{
+    switch(input)
+    {
+        case(Input::Idle):
+            return new IdleState();
+
+        case(Input::WalkLeft):
+        {
+            if(direction > 0.0f)
+                return new IdleState();
+
+            return new WalkState(-1.0f);
+
+            break;
+        }
+        case(Input::WalkRight):
+        {
+            if(direction < 0.0f)
+                return new IdleState();
+
+            return new WalkState(1.0f);
+
+            break;
+        }
+        case(Input::Jump):
+        {
+            return new JumpState();
+            break;
+        }
+        default:
+            break;
+    }
+
+    return nullptr;
+}
+
+void RunState::update(Character& character)
+{
+    character.moveSideWays(direction);
+
+    if((direction < 0.0f && !character.getFlippedState()) ||
+       direction > 0.0f && character.getFlippedState())
+        character.setAnimationSpeed(-2.0f);
+    else
+        character.setAnimationSpeed(2.0f);
+}
+
 void IdleState::enterState(Character& character)
 {
     character.setAnimation("idle");
@@ -61,9 +125,25 @@ CharacterState* IdleState::handleInput(Character& character, Input input)
     switch(input)
     {
         case(Input::WalkLeft):
+        {
             return new WalkState(-1.0f);
+            break;
+        }
         case(Input::WalkRight):
+        {
             return new WalkState(1.0f);
+            break;
+        }
+        case(Input::RunLeft):
+        {
+            return new RunState(-1.0f);
+            break;
+        }
+        case(Input::RunRight):
+        {
+            return new RunState(1.0f);
+            break;
+        }
         case(Input::Jump):
         {
             return new JumpState();

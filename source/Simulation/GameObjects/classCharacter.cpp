@@ -39,10 +39,10 @@ void Character::moveSideWays(float input)
 
                 if(Math::dot(direction, contactData.begin()->second.normal) <= 0.0f &&
                    Math::dot(direction, (std::prev(contactData.end()))->second.normal) <= 0.0f &&
-                   Math::dot(collider->getVelocity(), direction) < properties.movementSpeed)
+                   Math::dot(collider->getVelocity(), direction) < currentSpeed)
                 {
-                    collider->addSolvedVelocity(direction*properties.movementSpeed,
-                                                direction*properties.movementSpeed);
+                    collider->addSolvedVelocity(direction*currentSpeed,
+                                                direction*currentSpeed);
 
 
                 }
@@ -55,10 +55,10 @@ void Character::moveSideWays(float input)
         //std::cout << "thing\n";
         //std::cout << slopeOkay << "\n ";
         //std::cout << contactData.size() << " sii\n\n ";
-        if(input*collider->getVelocity().x < properties.movementSpeed)
+        if(input*collider->getVelocity().x < currentSpeed)
         {
-            collider->addSolvedVelocity({0.1f*input*properties.movementSpeed, 0.0f},
-                                    {0.1f*input*properties.movementSpeed, 0.0f});
+            collider->addSolvedVelocity({0.1f*input*currentSpeed, 0.0f},
+                                    {0.1f*input*currentSpeed, 0.0f});
         }
     }
 

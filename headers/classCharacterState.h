@@ -6,6 +6,8 @@ enum class Input
     Idle,
     WalkLeft,
     WalkRight,
+    RunLeft,
+    RunRight,
     Jump,
     Land,
     Fall,
@@ -31,6 +33,20 @@ class WalkState : public CharacterState
 
 public:
     WalkState(float _direction) : direction{_direction} {};
+
+    virtual void enterState(Character& character);
+
+    virtual CharacterState* handleInput(Character& character, Input input);
+
+    virtual void update(Character& character);
+};
+
+class RunState : public CharacterState
+{
+    float direction;
+
+public:
+    RunState(float _direction) : direction{_direction} {};
 
     virtual void enterState(Character& character);
 
