@@ -1,7 +1,15 @@
 #include "LevelCreator.h"
 #include "Math.h"
 
-void LevelCreator::createLevel(sf::Image const & image,
+void LevelCreator::generateLevelAssets(std::string const & imageName,
+                            lvlCreator::Parameters const & params)
+{
+    sf::Image image;
+    image.loadFromFile(imageName);
+    generateLevelAssets(image, params);
+}
+
+void LevelCreator::generateLevelAssets(sf::Image const & image,
                                lvlCreator::Parameters const & params)
 {
     VertsFromBmpWrap vbmp;

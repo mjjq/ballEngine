@@ -17,7 +17,7 @@ void SandboxScene::load()
     {
         isLoaded = true;
 
-        ballSim = new BallUniverse{2000,2000,false,false};
+        ballSim = new BallUniverse{8000,8000,false,false};
         charMan = new CharacterManager{};
         projMan = new GameObjectManager{};
         objEditor = new GameObjectEditor{*projMan, window};
@@ -164,7 +164,7 @@ void SandboxScene::load()
                 lvlCreator::Parameters params;
                 params.useTargetSize = true;
                 params.targetSize = (sf::Vector2f)wSize;
-                LevelCreator::createLevel("./res/levels/testLevel.png", params);
+                LevelCreator::generateLevelAssets("./res/levels/testLevel.png", params);
                 }
             },
         };
@@ -596,7 +596,7 @@ void SandboxScene::load()
         lvlCreator::Parameters params;
         params.useTargetSize = true;
         params.targetSize = (sf::Vector2f)wSize;
-        LevelCreator::createLevel("./res/levels/testLevel.png", params);
+        LevelCreator::generateLevelAssets("./res/levels/testLevel.png", params);
     }
 }
 

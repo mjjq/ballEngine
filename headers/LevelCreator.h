@@ -21,15 +21,10 @@ class LevelCreator
 {
 public:
 
-    static void createLevel(std::string const & imageName,
-                            lvlCreator::Parameters const & params)
-    {
-        sf::Image image;
-        image.loadFromFile(imageName);
-        createLevel(image, params);
-    }
+    static void generateLevelAssets(std::string const & imageName,
+                            lvlCreator::Parameters const & params);
 
-    static void createLevel(sf::Image const & image,
+    static void generateLevelAssets(sf::Image const & image,
                             lvlCreator::Parameters const & params);
 };
 

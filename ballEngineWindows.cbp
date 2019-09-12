@@ -16,10 +16,10 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
+					<Add library="InverseKinematics" />
 					<Add library="sfml-graphics" />
 					<Add library="sfml-window" />
 					<Add library="sfml-system" />
-					<Add library="InverseKinematics" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -99,6 +99,7 @@
 		<Unit filename="headers/Observer.h" />
 		<Unit filename="headers/ParticleSourceWrap.h" />
 		<Unit filename="headers/ParticleSystemManager.h" />
+		<Unit filename="headers/VertFromBitmapWrap.h" />
 		<Unit filename="headers/baseObject.h" />
 		<Unit filename="headers/characterWorldInterface.h" />
 		<Unit filename="headers/class2DMatrix.h" />
