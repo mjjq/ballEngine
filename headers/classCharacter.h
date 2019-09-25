@@ -20,8 +20,8 @@ struct ContactData
 
 struct CharacterProperties
 {
-    float walkSpeed = 1.0f;
-    float runSpeed = 3.0f;
+    float walkSpeed = 3.0f;
+    float runSpeed = 5.0f;
     float jumpPower = 10.0f;
     float coefFriction = 4.0f;
     float maxHealth = 10.0f;

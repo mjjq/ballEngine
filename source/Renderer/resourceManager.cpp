@@ -4,11 +4,19 @@
 
 bool ResourceManager::loadTexture(std::string const & textureName)
 {
+    std::string fullFilePath = TEXTURE_PATH + textureName;
+
+    if(textureName.length() < 4)
+        return false;
+
+    if(textureName.at(0) == '.' || textureName.at(0) == '/')
+        fullFilePath = textureName;
+
     if(loadedTextures.find(textureName) == loadedTextures.end() &&
        textureName != Renderable::NULL_ID)
     {
         sf::Texture texture;
-        if(texture.loadFromFile(TEXTURE_PATH + textureName))
+        if(texture.loadFromFile(fullFilePath))
         {
             loadedTextures.insert({textureName, texture});
             return true;

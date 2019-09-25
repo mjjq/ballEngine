@@ -24,7 +24,10 @@ public:
     static void generateLevelAssets(std::string const & imageName,
                             lvlCreator::Parameters const & params);
 
-    static void generateLevelAssets(sf::Image const & image,
+    static void generateVisualAssets(std::string const & imageName,
+                                     lvlCreator::Parameters const & params);
+
+    static void generateCollisionAssets(sf::Image const & image,
                             lvlCreator::Parameters const & params);
 };
 

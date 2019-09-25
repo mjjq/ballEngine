@@ -5,11 +5,30 @@ void LevelCreator::generateLevelAssets(std::string const & imageName,
                             lvlCreator::Parameters const & params)
 {
     sf::Image image;
-    image.loadFromFile(imageName);
-    generateLevelAssets(image, params);
+    image.loadFromFile(imageName + ".png");
+    generateCollisionAssets(image, params);
+    generateVisualAssets(imageName, params);
 }
 
-void LevelCreator::generateLevelAssets(sf::Image const & image,
+void LevelCreator::generateVisualAssets(std::string const & imageName,
+                               lvlCreator::Parameters const & params)
+{
+    ObjectProperties props;
+    props.type = ObjectType::Polygon;
+    props._isStatic = true;
+    props._vertices = {
+        {{0.0f, 0.0f}},
+        {{params.targetSize.x, 0.0f}},
+        {{params.targetSize.x, params.targetSize.y}},
+        {{0.0f, params.targetSize.y}}
+    };
+    props.material.diffuseID = imageName + "_d.png";
+    props._position = params.targetSize / 2.0f;
+
+    GameObject* gObj = new GameObject(new Renderable(props));
+}
+
+void LevelCreator::generateCollisionAssets(sf::Image const & image,
                                lvlCreator::Parameters const & params)
 {
     VertsFromBmpWrap vbmp;
@@ -53,7 +72,7 @@ void LevelCreator::generateLevelAssets(sf::Image const & image,
 
             props._position = Math::average(props._vertices);
 
-            GameObject* gObj = new GameObject(new Renderable(props),
+            GameObject* gObj = new GameObject(nullptr,//new Renderable(props),
                                           new Polygon(props));
         }
     }

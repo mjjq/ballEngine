@@ -170,7 +170,7 @@ void SandboxScene::load()
                 lvlCreator::Parameters params;
                 params.useTargetSize = true;
                 params.targetSize = (sf::Vector2f)wSize;
-                LevelCreator::generateLevelAssets("./res/levels/testLevel.png", params);
+                LevelCreator::generateLevelAssets("./res/levels/testLevel", params);
                 }
             },
         };
@@ -606,7 +606,7 @@ void SandboxScene::load()
         lvlCreator::Parameters params;
         params.useTargetSize = true;
         params.targetSize = (sf::Vector2f)wSize;
-        LevelCreator::generateLevelAssets("./res/levels/testLevel.png", params);
+        LevelCreator::generateLevelAssets("./res/levels/testLevel", params);
     }
 }
 
