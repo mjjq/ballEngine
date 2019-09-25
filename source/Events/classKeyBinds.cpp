@@ -402,6 +402,13 @@ void KeyBinds::exePressedKeys(std::vector<sf::Keyboard::Key > &_pressedKeyStack,
                            KeyFuncMap &_keyBinds)
 {
     std::vector<sf::Keyboard::Key > tempStack = _pressedKeyStack;
+
+    /*for(auto & key : tempStack)
+    {
+        std::cout << to_string(key) << ", ";
+    }
+    std::cout << "\n";*/
+
     bool functionFound = false;
     isFuncContinuous = false;
     while(tempStack.size() > 0 && functionFound == false)

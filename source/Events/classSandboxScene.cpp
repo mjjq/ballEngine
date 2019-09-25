@@ -179,6 +179,10 @@ void SandboxScene::load()
                                 },
             {"mvPlrLft",    [&]{charMan->handleInput(Input::Idle, 0);}
                                 },
+            {"runPlrRgt",    [&]{charMan->handleInput(Input::Idle, 0);}
+                                },
+            {"runPlrLft",    [&]{charMan->handleInput(Input::Idle, 0);}
+                                },
             {"spwnSingle",  [&]{
                 if(drawLine == true){
                     sf::Vector2f velocity = velocityFromMouse(mousePosOnClick,
