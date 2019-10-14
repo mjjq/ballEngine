@@ -22,8 +22,8 @@ struct CharacterProperties
 {
     float walkSpeed = 3.0f;
     float runSpeed = 5.0f;
-    float jumpPower = 10.0f;
-    float coefFriction = 4.0f;
+    float jumpPower = 15.0f;
+    float coefFriction = 100.0f;
     float maxHealth = 10.0f;
     float currentHealth = maxHealth;
     bool aimingAtTarget = false;
@@ -54,6 +54,7 @@ class Character : public Component
     void flipCharacter(bool & _isflipped);
 
 public:
+    void stop(char directionAxis);
     void moveSideWays(float input);
     Character(CharacterProperties init);
     ~Character();

@@ -72,6 +72,11 @@ public:
                                                          float targetPos,
                                                          char direction);
 
+    static CStructs::Constraint makeSocketConstraint(sf::Vector2f const & objectPos,
+                                                       sf::Vector2f const & anchorPos,
+                                                       sf::Vector2f const & initRVector,
+                                                       char direction);
+
     static CStructs::Constraint makeAngularConstraint(float objectAngle,
                                                         float targetAngle);
 

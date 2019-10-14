@@ -131,6 +131,34 @@ CStructs::Constraint Constraints::makePositionConstraint(float objectPos,
     return c;
 }
 
+CStructs::Constraint Constraints::makeSocketConstraint(sf::Vector2f const & objectPos,
+                                                       sf::Vector2f const & anchorPos,
+                                                       sf::Vector2f const & initRVector,
+                                                       char direction)
+{
+    CStructs::Constraint c;
+
+    sf::Vector2f rVector = anchorPos - objectPos;
+
+    sf::Vector2f biasVector = 0.5f*(objectPos + initRVector - anchorPos);
+
+    if(direction == 'x')
+    {
+        c.constraintPairs.push_back({{1.0f, 0.0}, -rVector.y});
+        c.bias = biasVector.x;
+    }
+    else if(direction == 'y')
+    {
+        c.constraintPairs.push_back({{0.0f, 1.0}, rVector.x});
+        c.bias = biasVector.y;
+    }
+
+    c.lambdaMax = 1000.0f;
+    c.lambdaMin = -1000.0f;
+
+    return c;
+}
+
 CStructs::Constraint Constraints::makeAngularConstraint(float objectAngle,
                                                         float targetAngle)
 {

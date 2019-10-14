@@ -3,19 +3,21 @@
 
 #include "classGameObject.h"
 #include "classGameObjectManager.h"
+#include "classJoint.h"
 
 class GameObjectEditor
 {
     GameObjectManager& gameObjectManager;
     sf::RenderWindow& viewWindow;
     GameObject* currentObject = nullptr;
+    SocketJointSingle* grabber = nullptr;
 
     sf::RenderTexture selectionTexture;
     sf::Shader selectionShader;
 public:
     GameObjectEditor(GameObjectManager& manager,
                      sf::RenderWindow& window);
-    void retrieveObject(sf::Vector2u const & position);
+    void selectObject(sf::Vector2u const & position);
     void releaseObject();
     void deleteObject();
 
@@ -33,6 +35,25 @@ public:
                 std::cout << "Object has no attribute " << attribute << "\n";
         }
     }
+
+    void ungrabObject()
+    {
+        if(grabber != nullptr)
+        {
+            delete grabber;
+            grabber = nullptr;
+        }
+    }
+
+    void grabObject(std::function<sf::Vector2f() > grabPosition)
+    {
+        ungrabObject();
+        if(currentObject != nullptr)
+        {
+            grabber = new SocketJointSingle({currentObject->getColliderAddress()}, grabPosition);
+        }
+    }
+
 };
 
 #endif // CLASS_GOEDITOR_H

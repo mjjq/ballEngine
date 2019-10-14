@@ -33,10 +33,15 @@ void SandboxScene::load()
 
         buttonFuncMap = {
             {"delObject",   [&]{objEditor->deleteObject();}},
-            {"selObject",   [&]{objEditor->retrieveObject((sf::Vector2u)sf::Mouse::getPosition(window));}},
-            {"mvObject",    [&]{objEditor->setObjectAttribute("position", window.mapPixelToCoords(sf::Mouse::getPosition(window)));
+            {"selObject",   [&]{objEditor->selectObject((sf::Vector2u)sf::Mouse::getPosition(window));}},
+            /*{"mvObject",    [&]{
+
+                objEditor->setObjectAttribute("position", window.mapPixelToCoords(sf::Mouse::getPosition(window)));
                                 objEditor->setObjectAttribute("velocity", sf::Vector2f{0.0f, 0.0f});
-                                KeyBinds::isFuncContinuous = true;}},
+                                KeyBinds::isFuncContinuous = true;}},*/
+            {"mvObject",    [&]{
+                objEditor->grabObject([&]{return window.mapPixelToCoords(sf::Mouse::getPosition(window));});
+                                }},
             {"spwnMode",    [&]{switchControlMode("SpawnMode"); std::cout << "spawnmode\n";}},
             {"editMode",    [&]{switchControlMode("EditObjectMode"); std::cout << "editmode\n";}},
             {"charMode",    [&]{switchControlMode("CharacterMode"); std::cout << "charmode\n";}},
@@ -175,6 +180,9 @@ void SandboxScene::load()
             },
         };
         buttonReleaseMap = {
+            {"mvObject",    [&]{
+                objEditor->ungrabObject();
+                                }},
             {"mvPlrRgt",    [&]{charMan->handleInput(Input::Idle, 0);}
                                 },
             {"mvPlrLft",    [&]{charMan->handleInput(Input::Idle, 0);}
@@ -230,7 +238,7 @@ void SandboxScene::load()
                                              {0.0f, 0.0f},
                                              {50.0f, 100.0f},
                                              spawnMass,
-                                             spawnCoefFriction,
+                                             30.0f,
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
@@ -242,6 +250,7 @@ void SandboxScene::load()
                                              "normal2.png"}};
                     props._collisionGroup = {1,3};
                     CharacterProperties init;
+                    init.jumpPower = 10.0f;
                     GameObject* obj = new GameObject(nullptr, //new Renderable(props),
                                                         new Polygon(props),
                                                         nullptr,
@@ -626,6 +635,12 @@ void SandboxScene::update(sf::RenderWindow &_window)
     KeyBinds::exeReleasedKey(pressedKeyStack, releasedKeyStack, releasedKeyBinds);
 
     mousePosOnPan = sf::Mouse::getPosition(window);
+
+    if(currentControlMode == "CharacterMode")
+    {
+        charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
+        charMan->handleInput(Input::EnableTarget, 0);
+    }
 
     if(!isPaused)
     {

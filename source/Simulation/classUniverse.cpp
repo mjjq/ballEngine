@@ -990,9 +990,9 @@ void BallUniverse::newJoint(int index1, sf::Vector2f const & position)
 {
     if(index1 < (int)dynamicObjects.size())
     {
-        Joint* newJoint = new PositionJoint({dynamicObjects[index1]},
-                                             [position, this](){return sf::Vector2f{position.x + 300.0f*sinf(0.01f*currentTime), position.y};},
-                                              [](){return 0.0f;});
+        Joint* newJoint = new SocketJointSingle({dynamicObjects[index1]},
+                                             [position, this](){return position + 500.0f * sf::Vector2f{sinf(0.03f * currentTime), 0.0f};}
+                                             );
     }
 }
 

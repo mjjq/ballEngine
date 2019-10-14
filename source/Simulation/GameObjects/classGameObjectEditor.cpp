@@ -17,7 +17,7 @@ GameObjectEditor::GameObjectEditor(GameObjectManager& manager,
     }
 }
 
-void GameObjectEditor::retrieveObject(sf::Vector2u const & position)
+void GameObjectEditor::selectObject(sf::Vector2u const & position)
 {
     selectionTexture.create(viewWindow.getSize().x, viewWindow.getSize().y);
     selectionTexture.setView(viewWindow.getView());
@@ -29,7 +29,9 @@ void GameObjectEditor::retrieveObject(sf::Vector2u const & position)
         GameObject* currObj = gameObjectManager.gameObjects[i];
         float color = (float)((float)i/(float)gameObjectManager.gameObjects.size());
         selectionShader.setUniform("color", color);
-        selectionTexture.draw(*currObj->renderObj->primDrawable, &selectionShader);
+
+        if(currObj->renderObj != nullptr)
+            selectionTexture.draw(*currObj->renderObj->primDrawable, &selectionShader);
     }
 
     sf::Image finalImage = selectionTexture.getTexture().copyToImage();
@@ -57,4 +59,6 @@ void GameObjectEditor::deleteObject()
         delete currentObject;
         releaseObject();
     }
+    else
+        releaseObject();
 }

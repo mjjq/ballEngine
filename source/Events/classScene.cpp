@@ -66,6 +66,7 @@ void Scene::loadKeybinds(std::string fileName,
 void Scene::switchControlMode(std::string controlModeName)
 {
     loadKeybinds(currentKeybindFilename, controlModeName);
+    currentControlMode = controlModeName;
 }
 
 void Scene::load()

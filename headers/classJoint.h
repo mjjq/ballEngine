@@ -30,6 +30,8 @@ public:
 
 	void PreStep(float inv_dt);
 	virtual void ApplyImpulse();
+
+	bool containsValidObject();
 };
 
 class PositionJoint : public Joint
@@ -42,6 +44,28 @@ public:
                   std::function<float() > _getRotation) :
                     Joint{_objects}, getPosition{_getPosition},
                     getRotation{_getRotation} {}
+
+    virtual void ApplyImpulse();
+};
+
+class SocketJointSingle : public Joint
+{
+    std::function<sf::Vector2f() > getAnchorPosition;
+    float initialRotation = 0.0f;
+    sf::Vector2f localVirtualAnchor;
+
+public:
+    SocketJointSingle(std::vector<PhysicsObject * > _objects,
+                      std::function<sf::Vector2f() > _getAnchorPosition) :
+                      Joint{_objects}, getAnchorPosition{_getAnchorPosition}
+  {
+        sf::Vector2f objPos = _objects[0]->getPosition();
+        float objRot = _objects[0]->getRotAngle();
+
+        sf::Vector2f relativePosition = getAnchorPosition() - objPos;
+        localVirtualAnchor = relativePosition;
+        initialRotation = objRot;
+  }
 
     virtual void ApplyImpulse();
 };

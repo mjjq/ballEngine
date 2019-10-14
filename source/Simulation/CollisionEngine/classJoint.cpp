@@ -3,6 +3,15 @@
 
 Subject Joint::engineNotify;
 
+bool Joint::containsValidObject()
+{
+    for(int i=0; i<(int)objects.size(); ++i)
+        if(objects[i] != nullptr)
+            return true;
+
+    return false;
+}
+
 Joint::Joint(std::vector<PhysicsObject* > _objects) : objects{_objects}
 {
     engineNotify.notify(*this, Event{EventType::New_Joint});
@@ -121,6 +130,41 @@ void PositionJoint::ApplyImpulse()
 
         Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
 
+    }
+
+    for(int i=0; i<(int)objects.size(); ++i)
+    {
+        objects[i]->setVelocity(pwv.velocityPairs[i].v);
+        objects[i]->setRotRate(pwv.velocityPairs[i].w);
+    }
+}
+
+
+void SocketJointSingle::ApplyImpulse()
+{
+    for(int i=0; i<(int)objects.size(); ++i)
+    {
+        pwv.velocityPairs[i] = {objects[i]->getVelocity(),
+                                objects[i]->getRotRate()};
+    }
+
+    CStructs::Constraint jacobian;
+
+    if(getAnchorPosition != nullptr)
+    {
+        float rotation = objects[0]->getRotAngle();
+        sf::Vector2f newLocalAnchor = Math::rotate(localVirtualAnchor,
+                                                    rotation - initialRotation);
+
+        jacobian = (Constraints::makeSocketConstraint(objects[0]->getPosition(),
+                                    getAnchorPosition(), newLocalAnchor, 'x'));
+
+        Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
+
+        jacobian = (Constraints::makeSocketConstraint(objects[0]->getPosition(),
+                                        getAnchorPosition(), newLocalAnchor, 'y'));
+
+        Constraints::solveConstraints(pwv, jacobian, pwm, lambda);
     }
 
     for(int i=0; i<(int)objects.size(); ++i)

@@ -168,6 +168,35 @@ CharacterState* JumpState::handleInput(Character& character, Input input)
     {
         //case(Input::Land):
         //    return new IdleState();
+        case(Input::WalkLeft):
+        {
+            movement = -1.0f;
+            character.setMovementSpeed(character.getProperties().walkSpeed);
+            break;
+        }
+        case(Input::WalkRight):
+        {
+            movement = 1.0f;
+            character.setMovementSpeed(character.getProperties().walkSpeed);
+            break;
+        }
+        case(Input::RunLeft):
+        {
+            movement = -1.0f;
+            character.setMovementSpeed(character.getProperties().runSpeed);
+            break;
+        }
+        case(Input::RunRight):
+        {
+            movement = 1.0f;
+            character.setMovementSpeed(character.getProperties().runSpeed);
+            break;
+        }
+        case(Input::Idle):
+        {
+            movement = 0.0f;
+            break;
+        }
         case(Input::Fall):
             return new FallState();
         default:
@@ -175,6 +204,14 @@ CharacterState* JumpState::handleInput(Character& character, Input input)
     }
 
     return nullptr;
+}
+
+void JumpState::update(Character& character)
+{
+    if(std::abs(movement) > 0.0f)
+        character.moveSideWays(movement);
+    else
+        character.stop('x');
 }
 
 void FallState::enterState(Character& character)
@@ -186,6 +223,35 @@ CharacterState* FallState::handleInput(Character& character, Input input)
 {
     switch(input)
     {
+        case(Input::WalkLeft):
+        {
+            movement = -1.0f;
+            character.setMovementSpeed(character.getProperties().walkSpeed);
+            break;
+        }
+        case(Input::WalkRight):
+        {
+            movement = 1.0f;
+            character.setMovementSpeed(character.getProperties().walkSpeed);
+            break;
+        }
+        case(Input::RunLeft):
+        {
+            movement = -1.0f;
+            character.setMovementSpeed(character.getProperties().runSpeed);
+            break;
+        }
+        case(Input::RunRight):
+        {
+            movement = 1.0f;
+            character.setMovementSpeed(character.getProperties().runSpeed);
+            break;
+        }
+        case(Input::Idle):
+        {
+            movement = 0.0f;
+            break;
+        }
         case(Input::Land):
             return new IdleState();
         default:
@@ -194,4 +260,12 @@ CharacterState* FallState::handleInput(Character& character, Input input)
     }
 
     return nullptr;
+}
+
+void FallState::update(Character& character)
+{
+    if(std::abs(movement) > 0.0f)
+        character.moveSideWays(movement);
+    else
+        character.stop('x');
 }

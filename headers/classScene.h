@@ -16,6 +16,7 @@ class Scene
 protected:
     SceneEnum prevScene = SceneEnum::LAST;
 
+    std::string currentControlMode = "";
     StringStringMap stringKeyBinds;
     StringStringMap relStrKeyBinds;
     StringFuncMap buttonFuncMap = {};

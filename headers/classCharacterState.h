@@ -66,18 +66,24 @@ public:
 
 class JumpState : public CharacterState
 {
+    float movement = 0.0f;
 public:
     virtual void enterState(Character& character);
 
     virtual CharacterState* handleInput(Character& character, Input input);
+
+    virtual void update(Character& character);
 };
 
 class FallState : public CharacterState
 {
+    float movement = 0.0f;
 public:
     virtual void enterState(Character& character);
 
     virtual CharacterState* handleInput(Character& character, Input input);
+
+    virtual void update(Character& character);
 };
 
 #endif

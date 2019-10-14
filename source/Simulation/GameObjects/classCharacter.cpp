@@ -24,6 +24,14 @@ Character::~Character()
     engineNotify.notify(*this, Event(EventType::Delete_Character));
 }
 
+void Character::stop(char directionAxis)
+{
+    if(directionAxis == 'x')
+        collider->setVelocity({0.0f, collider->getVelocity().y});
+    else if(directionAxis == 'y')
+        collider->setVelocity({collider->getVelocity().x, 0.0f});
+}
+
 void Character::moveSideWays(float input)
 {
     //std::cout << contactData.size() << "\n";
