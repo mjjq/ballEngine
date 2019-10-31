@@ -23,8 +23,8 @@ enum class CollisionIDType
 
 struct Material
 {
-    std::string shaderID = "";
-    std::string diffuseID = "";
+    std::string shaderID = "default.frag";
+    std::string diffuseID = "null.jpg";
     std::string normalID = "";
     std::string emissionID = "";
 

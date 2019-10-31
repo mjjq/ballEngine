@@ -88,14 +88,14 @@ void Skeleton2DWrap::updateRenderables()
 
         sf::Vector2f offset = data.offset.x * bone.orientation +
                             xScale * data.offset.y * Math::orthogonal(bone.orientation, 1.0f);
-        tempRend->updatePosition(bone.position + offset);
+        tempRend->setPosition(bone.position + offset);
         tempPhys->setPosition(bone.position + offset);
 
         float rotation = 180.0f/ Math::PI * atan2f(bone.orientation.y,
                                 bone.orientation.x);
         if(xScale < 0.0f) rotation += 180.0f;
 
-        tempRend->updateOrientation(rotation - xScale*data.rotation);
+        tempRend->setRotation(rotation - xScale*data.rotation);
         tempPhys->setRotAngle(rotation - xScale*data.rotation);
     }
 }

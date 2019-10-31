@@ -118,7 +118,7 @@ void GameObject::setPosition(sf::Vector2f const & position)
     }
     if(renderObj != nullptr)
     {
-        renderObj->updatePosition(position);
+        renderObj->setPosition(position);
     }
     if(lightSrc != nullptr)
     {
@@ -142,7 +142,7 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
             sf::Vector2f position = ((DataContainer<sf::Vector2f >& )(*data)).data;
             if(renderObj != nullptr)
             {
-                renderObj->updatePosition(position);
+                renderObj->setPosition(position);
                 //renderObj->updateOrientation(collider->getRotAngle());
             }
             if(lightSrc != nullptr)
@@ -171,7 +171,7 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
             float rotation = ((DataContainer<float >& )(*data)).data;
             if(renderObj != nullptr)
             {
-                renderObj->updateOrientation(rotation);
+                renderObj->setRotation(rotation);
             }
             if(equipable != nullptr)
             {
@@ -189,7 +189,7 @@ void GameObject::onNotify(Component& entity, Event event, Container* data)
                 BoneData tempData = it->second;
 
                 //skeletonDebugJoints.at(i)->updatePosition( tempData.position );
-                skeletonDebugJoints.at(i)->updatePosition( tempData.position +
+                skeletonDebugJoints.at(i)->setPosition( tempData.position +
                                                        tempData.length * tempData.orientation );
 
                 i+=1;

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1551625342 source:i:\users\marcus\my documents\github\ballengine_latest\main.cpp
+1551621742 source:i:\users\marcus\my documents\github\ballengine_latest\main.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -8,7 +8,7 @@
 	<tuple>
 	"classSceneManager.h"
 
-1486739997 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics.hpp
+1486736397 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics.hpp
 	<SFML/Window.hpp>
 	<SFML/Graphics/BlendMode.hpp>
 	<SFML/Graphics/CircleShape.hpp>
@@ -36,7 +36,7 @@
 	<SFML/Graphics/VertexArray.hpp>
 	<SFML/Graphics/View.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window.hpp
 	<SFML/System.hpp>
 	<SFML/Window/Context.hpp>
 	<SFML/Window/ContextSettings.hpp>
@@ -51,7 +51,7 @@
 	<SFML/Window/WindowHandle.hpp>
 	<SFML/Window/WindowStyle.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system.hpp
 	<SFML/Config.hpp>
 	<SFML/System/Clock.hpp>
 	<SFML/System/Err.hpp>
@@ -71,24 +71,24 @@
 	<SFML/System/Vector2.hpp>
 	<SFML/System/Vector3.hpp>
 
-1486739997 c:\program files\codeblocks\sfml-2.4.2\include\sfml\config.hpp
+1486736397 c:\program files\codeblocks\sfml-2.4.2\include\sfml\config.hpp
 	"TargetConditionals.h"
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\clock.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\clock.hpp
 	<SFML/System/Export.hpp>
 	<SFML/System/Time.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\export.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\export.hpp
 	<SFML/Config.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\time.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\time.hpp
 	<SFML/System/Export.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\err.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\err.hpp
 	<SFML/System/Export.hpp>
 	<ostream>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\fileinputstream.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\fileinputstream.hpp
 	<SFML/Config.hpp>
 	<SFML/System/Export.hpp>
 	<SFML/System/InputStream.hpp>
@@ -96,32 +96,32 @@
 	<cstdio>
 	<string>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\inputstream.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\inputstream.hpp
 	<SFML/Config.hpp>
 	<SFML/System/Export.hpp>
 
-1486740055 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\noncopyable.hpp
+1486736455 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\noncopyable.hpp
 	<SFML/System/Export.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\lock.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\lock.hpp
 	<SFML/System/Export.hpp>
 	<SFML/System/NonCopyable.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\memoryinputstream.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\memoryinputstream.hpp
 	<SFML/Config.hpp>
 	<SFML/System/InputStream.hpp>
 	<SFML/System/Export.hpp>
 	<cstdlib>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\mutex.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\mutex.hpp
 	<SFML/System/Export.hpp>
 	<SFML/System/NonCopyable.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\sleep.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\sleep.hpp
 	<SFML/System/Export.hpp>
 	<SFML/System/Time.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\string.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\string.hpp
 	<SFML/System/Export.hpp>
 	<SFML/System/Utf.hpp>
 	<iterator>
@@ -129,7 +129,7 @@
 	<string>
 	<SFML/System/String.inl>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\utf.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\utf.hpp
 	<SFML/Config.hpp>
 	<algorithm>
 	<locale>
@@ -137,86 +137,86 @@
 	<cstdlib>
 	<SFML/System/Utf.inl>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\utf.inl
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\utf.inl
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\string.inl
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\string.inl
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\thread.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\thread.hpp
 	<SFML/System/Export.hpp>
 	<SFML/System/NonCopyable.hpp>
 	<cstdlib>
 	<SFML/System/Thread.inl>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\thread.inl
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\thread.inl
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\threadlocal.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\threadlocal.hpp
 	<SFML/System/Export.hpp>
 	<SFML/System/NonCopyable.hpp>
 	<cstdlib>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\threadlocalptr.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\threadlocalptr.hpp
 	<SFML/System/ThreadLocal.hpp>
 	<SFML/System/ThreadLocalPtr.inl>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\threadlocalptr.inl
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\threadlocalptr.inl
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\vector2.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\vector2.hpp
 	<SFML/System/Vector2.inl>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\vector2.inl
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\vector2.inl
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\vector3.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\vector3.hpp
 	<SFML/System/Vector3.inl>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\vector3.inl
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\system\vector3.inl
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\context.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\context.hpp
 	<SFML/Window/Export.hpp>
 	<SFML/Window/GlResource.hpp>
 	<SFML/Window/ContextSettings.hpp>
 	<SFML/System/NonCopyable.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\export.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\export.hpp
 	<SFML/Config.hpp>
 
-1486740055 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\glresource.hpp
+1486736455 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\glresource.hpp
 	<SFML/Window/Export.hpp>
 	<SFML/System/NonCopyable.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\contextsettings.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\contextsettings.hpp
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\event.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\event.hpp
 	<SFML/Config.hpp>
 	<SFML/Window/Joystick.hpp>
 	<SFML/Window/Keyboard.hpp>
 	<SFML/Window/Mouse.hpp>
 	<SFML/Window/Sensor.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\joystick.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\joystick.hpp
 	<SFML/Window/Export.hpp>
 	<SFML/System/String.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\keyboard.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\keyboard.hpp
 	<SFML/Window/Export.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\mouse.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\mouse.hpp
 	<SFML/Window/Export.hpp>
 	<SFML/System/Vector2.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\sensor.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\sensor.hpp
 	<SFML/Window/Export.hpp>
 	<SFML/System/Vector3.hpp>
 	<SFML/System/Time.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\touch.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\touch.hpp
 	<SFML/Window/Export.hpp>
 	<SFML/System/Vector2.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\videomode.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\videomode.hpp
 	<SFML/Window/Export.hpp>
 	<vector>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\window.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\window.hpp
 	<SFML/Window/Export.hpp>
 	<SFML/Window/ContextSettings.hpp>
 	<SFML/Window/VideoMode.hpp>
@@ -228,54 +228,54 @@
 	<SFML/System/NonCopyable.hpp>
 	<SFML/System/String.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\windowhandle.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\windowhandle.hpp
 	<SFML/Config.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\windowstyle.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\window\windowstyle.hpp
 
-1486739997 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\blendmode.hpp
+1486736397 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\blendmode.hpp
 	<SFML/Graphics/Export.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\export.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\export.hpp
 	<SFML/Config.hpp>
 
-1486739997 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\circleshape.hpp
+1486736397 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\circleshape.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Shape.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\shape.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\shape.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Graphics/Transformable.hpp>
 	<SFML/Graphics/VertexArray.hpp>
 	<SFML/System/Vector2.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\drawable.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\drawable.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/RenderStates.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\renderstates.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\renderstates.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/BlendMode.hpp>
 	<SFML/Graphics/Transform.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\transform.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\transform.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Rect.hpp>
 	<SFML/System/Vector2.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rect.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rect.hpp
 	<SFML/System/Vector2.hpp>
 	<algorithm>
 	<SFML/Graphics/Rect.inl>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rect.inl
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rect.inl
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\transformable.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\transformable.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Transform.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\vertexarray.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\vertexarray.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Vertex.hpp>
 	<SFML/Graphics/PrimitiveType.hpp>
@@ -283,22 +283,22 @@
 	<SFML/Graphics/Drawable.hpp>
 	<vector>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\vertex.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\vertex.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Color.hpp>
 	<SFML/System/Vector2.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\color.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\color.hpp
 	<SFML/Graphics/Export.hpp>
 
-1552926121 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\primitivetype.hpp
+1552922521 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\primitivetype.hpp
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\convexshape.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\convexshape.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Shape.hpp>
 	<vector>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\font.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\font.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Glyph.hpp>
 	<SFML/Graphics/Texture.hpp>
@@ -309,27 +309,27 @@
 	<string>
 	<vector>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\glyph.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\glyph.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Rect.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\texture.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\texture.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Image.hpp>
 	<SFML/Window/GlResource.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\image.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\image.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Color.hpp>
 	<SFML/Graphics/Rect.hpp>
 	<string>
 	<vector>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rectangleshape.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rectangleshape.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Shape.hpp>
 
-1486740055 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rendertarget.hpp
+1486736455 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rendertarget.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Color.hpp>
 	<SFML/Graphics/Rect.hpp>
@@ -341,25 +341,25 @@
 	<SFML/Graphics/Vertex.hpp>
 	<SFML/System/NonCopyable.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\view.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\view.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Rect.hpp>
 	<SFML/Graphics/Transform.hpp>
 	<SFML/System/Vector2.hpp>
 
-1486740055 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rendertexture.hpp
+1486736455 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\rendertexture.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Texture.hpp>
 	<SFML/Graphics/RenderTarget.hpp>
 
-1486740055 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\renderwindow.hpp
+1486736455 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\renderwindow.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/RenderTarget.hpp>
 	<SFML/Graphics/Image.hpp>
 	<SFML/Window/Window.hpp>
 	<string>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\shader.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\shader.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Glsl.hpp>
 	<SFML/Window/GlResource.hpp>
@@ -369,23 +369,23 @@
 	<map>
 	<string>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\glsl.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\glsl.hpp
 	<SFML/Graphics/Transform.hpp>
 	<SFML/Graphics/Color.hpp>
 	<SFML/System/Vector2.hpp>
 	<SFML/System/Vector3.hpp>
 	<SFML/Graphics/Glsl.inl>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\glsl.inl
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\glsl.inl
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\sprite.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\sprite.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Graphics/Transformable.hpp>
 	<SFML/Graphics/Vertex.hpp>
 	<SFML/Graphics/Rect.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\text.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\graphics\text.hpp
 	<SFML/Graphics/Export.hpp>
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Graphics/Transformable.hpp>
@@ -396,7 +396,7 @@
 	<string>
 	<vector>
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classscenemanager.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classscenemanager.h
 	"classScene.h"
 	"classSandboxScene.h"
 	"classSurvivalScene.h"
@@ -407,13 +407,13 @@
 	"sceneEnums.h"
 	"classRenderer.h"
 
-1571070339 i:\users\marcus\my documents\github\ballengine_latest\headers\classscene.h
+1571066739 i:\users\marcus\my documents\github\ballengine_latest\headers\classscene.h
 	"classUIContainer.h"
 	"classKeyBinds.h"
 	"sceneEnums.h"
 	<fstream>
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classuicontainer.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classuicontainer.h
 	"classUIWindow.h"
 	"structs.h"
 	"../extern/json.hpp"
@@ -421,23 +421,23 @@
 	<ctime>
 	<cmath>
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classuiwindow.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classuiwindow.h
 	"classTextElement.h"
 	"structs.h"
 	<functional>
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classtextelement.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classtextelement.h
 	<functional>
 	<SFML/Graphics.hpp>
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\structs.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\structs.h
 	<functional>
 	"integrators.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\integrators.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\integrators.h
 	<SFML/Graphics.hpp>
 
-1534860198 i:\users\marcus\my documents\github\ballengine_latest\extern\json.hpp
+1534856598 i:\users\marcus\my documents\github\ballengine_latest\extern\json.hpp
 	<algorithm>
 	<cassert>
 	<ciso646>
@@ -577,7 +577,7 @@
 	<vector>
 	<utility>
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\classkeybinds.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\classkeybinds.h
 	<iostream>
 	<map>
 	<SFML/Graphics.hpp>
@@ -585,13 +585,13 @@
 	"../extern/json.hpp"
 	<fstream>
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\sceneenums.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\sceneenums.h
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classsandboxscene.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classsandboxscene.h
 	"classGameScene.h"
 	"characterWorldInterface.h"
 
-1566821122 i:\users\marcus\my documents\github\ballengine_latest\headers\classgamescene.h
+1566817522 i:\users\marcus\my documents\github\ballengine_latest\headers\classgamescene.h
 	"classScene.h"
 	"classUniverse.h"
 	"classCharacterManager.h"
@@ -602,7 +602,7 @@
 	"classSkeleton2DManager.h"
 	"ParticleSystemManager.h"
 
-1567547743 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
+1567544143 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
 	"integrators.h"
 	"collisionDetection.h"
 	"classPhysicsObject.h"
@@ -617,7 +617,7 @@
 	"Observer.h"
 	"classJointManager.h"
 
-1567547734 i:\users\marcus\my documents\github\ballengine_latest\headers\collisiondetection.h
+1567544134 i:\users\marcus\my documents\github\ballengine_latest\headers\collisiondetection.h
 	"classPhysicsObject.h"
 	"classBall.h"
 	"classAABB.h"
@@ -627,7 +627,7 @@
 	"classArbiter.h"
 	"GJK.h"
 
-1567595731 i:\users\marcus\my documents\github\ballengine_latest\headers\classphysicsobject.h
+1567592131 i:\users\marcus\my documents\github\ballengine_latest\headers\classphysicsobject.h
 	<deque>
 	<iostream>
 	<SFML/Graphics.hpp>
@@ -642,50 +642,50 @@
 	"BoundingSphere.h"
 	"classConcavePolygonWrap.h"
 
-1567547658 i:\users\marcus\my documents\github\ballengine_latest\headers\classball.h
+1567544058 i:\users\marcus\my documents\github\ballengine_latest\headers\classball.h
 	<deque>
 	"integrators.h"
 	"classPhysicsObject.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classaabb.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classaabb.h
 	<deque>
 	"integrators.h"
 	"classPhysicsObject.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\classobb.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\classobb.h
 	<deque>
 	"integrators.h"
 	"classPhysicsObject.h"
 
-1567604157 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygon.h
+1567600557 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygon.h
 	<deque>
 	"integrators.h"
 	"classPhysicsObject.h"
 	"classConcavePolygonWrap.h"
 
-1567595695 i:\users\marcus\my documents\github\ballengine_latest\headers\classcapsule.h
+1567592095 i:\users\marcus\my documents\github\ballengine_latest\headers\classcapsule.h
 	<deque>
 	"integrators.h"
 	"classPhysicsObject.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classarbiter.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classarbiter.h
 	<SFML/Graphics.hpp>
 	"contactData.h"
 	"constraintSolver.h"
 	"classPhysicsObject.h"
 
-1569957197 i:\users\marcus\my documents\github\ballengine_latest\headers\constraintsolver.h
+1569953597 i:\users\marcus\my documents\github\ballengine_latest\headers\constraintsolver.h
 	<SFML/Graphics.hpp>
 	"classPhysicsObject.h"
 
-1567538248 i:\users\marcus\my documents\github\ballengine_latest\headers\gjk.h
+1567534648 i:\users\marcus\my documents\github\ballengine_latest\headers\gjk.h
 	<iostream>
 	<vector>
 	"SFML/Graphics.hpp"
 	"classPhysicsObject.h"
 	"classConcavePolygonWrap.h"
 
-1571071866 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
+1571068266 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
 	"classCapsule.h"
 	"classProjectileWeapon.h"
 	"Observer.h"
@@ -693,14 +693,14 @@
 	"classSkeleton2DWrap.h"
 	"classCharacterState.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectileweapon.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectileweapon.h
 	"classEquipable.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classequipable.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classequipable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 
-1566821122 i:\users\marcus\my documents\github\ballengine_latest\headers\observer.h
+1566817522 i:\users\marcus\my documents\github\ballengine_latest\headers\observer.h
 	<vector>
 
 1552053549 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectile.h
@@ -708,25 +708,25 @@
 	"Observer.h"
 	"classRenderable.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classinventory.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classinventory.h
 	<vector>
 	<functional>
 	"classProjectileWeapon.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\class2dmatrix.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\class2dmatrix.h
 	<iostream>
 	<vector>
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\stringconversion.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\stringconversion.h
 	"integrators.h"
 
-1569959561 i:\users\marcus\my documents\github\ballengine_latest\headers\classjoint.h
+1569955961 i:\users\marcus\my documents\github\ballengine_latest\headers\classjoint.h
 	<SFML/Graphics.hpp>
 	"classPhysicsObject.h"
 	"constraintSolver.h"
 	"Observer.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\characterworldinterface.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\characterworldinterface.h
 	"classUniverse.h"
 	"classCharacterManager.h"
 	"classGameObjectManager.h"
@@ -734,7 +734,7 @@
 	"classProjectileWeapon.h"
 	"Observer.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharactermanager.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharactermanager.h
 	<iostream>
 	<vector>
 	"Observer.h"
@@ -743,24 +743,24 @@
 1552053549 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectilemanager.h
 	"classProjectile.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classsurvivalscene.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classsurvivalscene.h
 	"classGameScene.h"
 	"classCharacterManager.h"
 	"characterWorldInterface.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\classmainmenuscene.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\classmainmenuscene.h
 	"classMenuScene.h"
 	"classUIContainer.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\classmenuscene.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\classmenuscene.h
 	"classScene.h"
 	"classUIContainer.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\classpausemenuscene.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\classpausemenuscene.h
 	"classMenuScene.h"
 	"classUIContainer.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classgamescene.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classgamescene.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -779,17 +779,17 @@
 
 1553422057 i:\users\marcus\my documents\github\ballengine_latest\headers\sfvectormath.h
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\jsonparsing.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\jsonparsing.h
 	<map>
 	"structs.h"
 	"../extern/json.hpp"
 	"baseObject.h"
 	"classEquipable.h"
 
-1569422707 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classkeybinds.cpp
+1569419107 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classkeybinds.cpp
 	"classKeyBinds.h"
 
-1562753158 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classmainmenuscene.cpp
+1562749558 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classmainmenuscene.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -804,7 +804,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classmenuscene.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classmenuscene.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -819,7 +819,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1562753158 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classpausemenuscene.cpp
+1562749558 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classpausemenuscene.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -834,17 +834,17 @@
 	"Math.h"
 	"stringConversion.h"
 
-1571071417 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1571074213 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 	"LevelCreator.h"
 
-1571070362 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classscene.cpp
+1571066762 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classscene.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	"classScene.h"
 
-1566321235 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classscenemanager.cpp
+1566317635 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classscenemanager.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -855,27 +855,27 @@
 	<numeric>
 	"classSceneManager.h"
 
-1566821122 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsurvivalscene.cpp
+1566817522 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsurvivalscene.cpp
 	"classSurvivalScene.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\interfaces\characterworldinterface.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\interfaces\characterworldinterface.cpp
 	"characterWorldInterface.h"
 	"Math.h"
 
-1551625342 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\class2dmatrix.cpp
+1551621742 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\class2dmatrix.cpp
 	<iostream>
 	"class2DMatrix.h"
 	<tuple>
 	<algorithm>
 	<cmath>
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\jsonparsing.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\jsonparsing.cpp
 	<iostream>
 	<map>
 	<fstream>
 	"jsonParsing.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\observer.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\observer.cpp
 	"Observer.h"
 
 1553731379 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\sfvectormath.cpp
@@ -885,19 +885,19 @@
 	<math.h>
 	"Math.h"
 
-1551625342 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\stringconversion.cpp
+1551621742 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\stringconversion.cpp
 	<iostream>
 	<sstream>
 	<SFML/Graphics.hpp>
 	"stringConversion.h"
 	"integrators.h"
 
-1551625342 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\structs.cpp
+1551621742 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\structs.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	"structs.h"
 
-1570097396 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
+1570093796 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -908,7 +908,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567545688 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
+1567542088 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
 	<iostream>
 	<cmath>
 	"classArbiter.h"
@@ -917,14 +917,14 @@
 	"Math.h"
 	"stringConversion.h"
 
-1569959633 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjoint.cpp
+1569956033 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjoint.cpp
 	"classJoint.h"
 	"stringConversion.h"
 
-1567191420 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisiondetection.cpp
+1567187820 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisiondetection.cpp
 	"collisionDetection.h"
 
-1567985480 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
+1567981880 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -937,14 +937,14 @@
 	"stringConversion.h"
 	"constraintSolver.h"
 
-1569959315 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\constraintsolver.cpp
+1569955715 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\constraintsolver.cpp
 	<iostream>
 	<cmath>
 	"constraintSolver.h"
 	"Math.h"
 	"stringConversion.h"
 
-1567547817 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\contactpoints.cpp
+1567544217 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\contactpoints.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -956,14 +956,14 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567538271 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\gjk.cpp
+1567534671 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\gjk.cpp
 	"GJK.h"
 	"Math.h"
 	"stringConversion.h"
 	<cassert>
 	<cmath>
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\minkowskimath.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\minkowskimath.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -975,7 +975,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567547861 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\penetrationtests.cpp
+1567544261 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\penetrationtests.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -987,7 +987,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\rayobjectstests.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\rayobjectstests.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -999,7 +999,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\sepaxistests.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\sepaxistests.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1011,23 +1011,23 @@
 	"Math.h"
 	"stringConversion.h"
 
-1571072093 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1571073916 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
 	<cmath>
 	<iostream>
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharactermanager.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharactermanager.cpp
 	"classCharacterManager.h"
 	"Math.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classequipable.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classequipable.cpp
 	"classEquipable.h"
 	"Math.h"
 	<iostream>
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classinventory.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classinventory.cpp
 	"classInventory.h"
 	"classGameObject.h"
 	"jsonParsing.h"
@@ -1041,13 +1041,13 @@
 1552053549 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectilemanager.cpp
 	"classProjectileManager.h"
 
-1567547954 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectileweapon.cpp
+1567544354 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectileweapon.cpp
 	"classProjectileWeapon.h"
 	"Math.h"
 	"classGameObject.h"
 	"classPolygon.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\movement\forces.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\movement\forces.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1057,10 +1057,10 @@
 	"Math.h"
 	"forces.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\forces.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\forces.h
 	<SFML/Graphics.hpp>
 
-1551625342 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\movement\integrators.cpp
+1551621742 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\movement\integrators.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1070,7 +1070,7 @@
 	"integrators.h"
 	"forces.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classaabb.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classaabb.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1082,7 +1082,7 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1567547670 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classball.cpp
+1567544070 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classball.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1094,7 +1094,7 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1567595709 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classcapsule.cpp
+1567592109 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classcapsule.cpp
 	<SFML/Graphics.hpp>
 	<cmath>
 	<thread>
@@ -1105,7 +1105,7 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classobb.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classobb.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1117,13 +1117,13 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1567546748 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classphysicsobject.cpp
+1567543148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classphysicsobject.cpp
 	"classPhysicsObject.h"
 	"Math.h"
 	"integrators.h"
 	"stringConversion.h"
 
-1567985473 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classpolygon.cpp
+1567981873 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classpolygon.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1135,7 +1135,7 @@
 	"integrators.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuibutton.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuibutton.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1149,12 +1149,12 @@
 	"stringConversion.h"
 	"structs.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classuibutton.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classuibutton.h
 	<functional>
 	"classUIWindow.h"
 	"structs.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuicontainer.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuicontainer.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1168,7 +1168,7 @@
 	"structs.h"
 	"jsonParsing.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuigroup.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuigroup.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1184,15 +1184,15 @@
 	"classUISlider.h"
 	"structs.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\classuigroup.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\classuigroup.h
 	"classUIWindow.h"
 	"structs.h"
 
-1551625342 i:\users\marcus\my documents\github\ballengine_latest\headers\classuislider.h
+1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\classuislider.h
 	"classUIWindow.h"
 	"classUIButton.h"
 
-1551625342 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuislider.cpp
+1551621742 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuislider.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1203,7 +1203,7 @@
 	"classUISlider.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuitextelement.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuitextelement.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1215,7 +1215,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuiwindow.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\ui\classuiwindow.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1231,25 +1231,25 @@
 	"classUIGroup.h"
 	"structs.h"
 
-1567978243 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
+1572542021 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
 	"classRenderable.h"
 	<cmath>
 	"Math.h"
 	"classConcavePolygonWrap.h"
 
-1566572680 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
+1572537507 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 	"baseObject.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderer.cpp
+1572539774 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderer.cpp
 	"classRenderer.h"
 	<iostream>
 	<cmath>
 	"Math.h"
 	<SFML/OpenGL.hpp>
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderer.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderer.h
 	<vector>
 	"SFML/Graphics.hpp"
 	"lightingEngine.h"
@@ -1259,9 +1259,9 @@
 	"windowManager.h"
 	"resourceManager.h"
 
-1569425181 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
+1572540047 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
 
-1566821122 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
+1566817522 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
 	"classBall.h"
 	"Observer.h"
 	"classRenderable.h"
@@ -1271,39 +1271,39 @@
 	"classJoint.h"
 	"ParticleSourceWrap.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjectmanager.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjectmanager.h
 	"classGameObject.h"
 
-1566821122 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
+1572536791 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobject.cpp
 	<iostream>
 	"classGameObject.h"
 	"Math.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjectmanager.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjectmanager.cpp
 	"classGameObjectManager.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectilecomponent.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classprojectilecomponent.cpp
 	"classProjectileComponent.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectilecomponent.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classprojectilecomponent.h
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classlight.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classlight.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classlight.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classlight.cpp
 	"classLight.h"
 	"Math.h"
 	<iostream>
 	<cmath>
 	"stringConversion.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\windowmanager.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\windowmanager.h
 	<deque>
 	<SFML/Graphics.hpp>
 	"classScene.h"
 
-1562753148 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\windowmanager.cpp
+1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\windowmanager.cpp
 	"windowManager.h"
 
 1553422736 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classoglwrap.cpp
@@ -1314,7 +1314,7 @@
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
 
-1486739998 c:\program files\codeblocks\sfml-2.4.2\include\sfml\opengl.hpp
+1486736398 c:\program files\codeblocks\sfml-2.4.2\include\sfml\opengl.hpp
 	<SFML/Config.hpp>
 	<windows.h>
 	<GL/gl.h>
@@ -1328,47 +1328,47 @@
 	<GLES/glext.h>
 	<GLES2/gl2ext.h>
 
-1567274130 i:\users\marcus\my documents\github\ballengine_latest\headers\math.h
+1567270530 i:\users\marcus\my documents\github\ballengine_latest\headers\math.h
 
-1566821122 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\lightingengine.cpp
+1572535957 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\lightingengine.cpp
 	"lightingEngine.h"
 	"math.h"
 	<cmath>
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\lightingengine.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\lightingengine.h
 	<SFML/Graphics.hpp>
 	"classRenderable.h"
 	"classLight.h"
 
-1562753148 i:\users\marcus\my documents\github\ballengine_latest\headers\resourcemanager.h
+1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\resourcemanager.h
 	"classRenderable.h"
 
-1569425609 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\resourcemanager.cpp
+1572537681 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\resourcemanager.cpp
 	<iostream>
 	"resourceManager.h"
 
-1567274116 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\math.cpp
+1567270516 source:i:\users\marcus\my documents\github\ballengine_latest\source\miscellaneous\math.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
 	<math.h>
 	"Math.h"
 
-1570116524 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjecteditor.h
+1570112924 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobjecteditor.h
 	"classGameObject.h"
 	"classGameObjectManager.h"
 	"classJoint.h"
 
-1570116913 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjecteditor.cpp
+1572536906 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjecteditor.cpp
 	"classGameObjectEditor.h"
 
-1566320036 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dmanager.cpp
+1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dmanager.cpp
 	"classSkeleton2DManager.h"
 
-1566499205 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dmanager.h
+1566495605 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dmanager.h
 	"classSkeleton2DWrap.h"
 
-1566315737 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2d.h
+1566312137 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2d.h
 	"SkeletonNode.h"
 	"Skeleton2DBone.h"
 	"SkeletonAnimation.h"
@@ -1379,46 +1379,46 @@
 	<assert.h>
 	"Math.h"
 
-1565368970 i:\users\marcus\my documents\github\inversekinematics\headers\skeletonnode.h
+1565365370 i:\users\marcus\my documents\github\inversekinematics\headers\skeletonnode.h
 	<SFML/Graphics.hpp>
 	<cmath>
 	"Math.h"
 
-1553734919 i:\users\marcus\my documents\github\inversekinematics\headers\math.h
+1553731319 i:\users\marcus\my documents\github\inversekinematics\headers\math.h
 
-1564259132 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2dbone.h
+1564255532 i:\users\marcus\my documents\github\inversekinematics\headers\skeleton2dbone.h
 	<iostream>
 	<SFML/Graphics.hpp>
 	<assert.h>
 	"SkeletonNode.h"
 
-1564156516 i:\users\marcus\my documents\github\inversekinematics\headers\skeletonanimation.h
+1564152916 i:\users\marcus\my documents\github\inversekinematics\headers\skeletonanimation.h
 	"BoneAnimation.h"
 
-1562495763 i:\users\marcus\my documents\github\inversekinematics\headers\boneanimation.h
+1562492163 i:\users\marcus\my documents\github\inversekinematics\headers\boneanimation.h
 	<vector>
 	<SFML/Graphics.hpp>
 
-1562582530 i:\users\marcus\my documents\github\inversekinematics\headers\animationset.h
+1562578930 i:\users\marcus\my documents\github\inversekinematics\headers\animationset.h
 	"SkeletonAnimation.h"
 
-1566840787 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dwrap.cpp
+1572535882 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dwrap.cpp
 	"classSkeleton2DWrap.h"
 	"JSONSkeletonReader.h"
 	"classPolygon.h"
 	<iostream>
 
-1566822300 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
+1566818700 i:\users\marcus\my documents\github\ballengine_latest\headers\classskeleton2dwrap.h
 	"Skeleton2D.h"
 	"Observer.h"
 	"classRenderable.h"
 	"classPhysicsObject.h"
 
-1566305859 i:\users\marcus\my documents\github\inversekinematics\headers\jsonskeletonreader.h
+1566302259 i:\users\marcus\my documents\github\inversekinematics\headers\jsonskeletonreader.h
 	"../extern/json.hpp"
 	"Skeleton2D.h"
 
-1534860198 i:\users\marcus\my documents\github\inversekinematics\extern\json.hpp
+1534856598 i:\users\marcus\my documents\github\inversekinematics\extern\json.hpp
 	<algorithm>
 	<cassert>
 	<ciso646>
@@ -1558,35 +1558,35 @@
 	<vector>
 	<utility>
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\contactdata.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\contactdata.h
 
-1571069661 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacterstate.h
+1571066061 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacterstate.h
 
-1571069994 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
+1571068554 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
 	"classCharacterState.h"
 	"classCharacter.h"
 
-1569959948 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjointmanager.cpp
+1569956348 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classjointmanager.cpp
 	"classJointManager.h"
 
-1566320036 i:\users\marcus\my documents\github\ballengine_latest\headers\classjointmanager.h
+1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classjointmanager.h
 	"Observer.h"
 	"classJoint.h"
 
-1566821122 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\particlesystemmanager.cpp
+1566817522 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\particlesystemmanager.cpp
 	"ParticleSystemManager.h"
 	<iostream>
 
-1566821122 i:\users\marcus\my documents\github\ballengine_latest\headers\particlesystemmanager.h
+1566817522 i:\users\marcus\my documents\github\ballengine_latest\headers\particlesystemmanager.h
 	"Observer.h"
 	"ParticleSourceWrap.h"
 
-1566821122 i:\users\marcus\my documents\github\ballengine_latest\headers\particlesourcewrap.h
+1566817522 i:\users\marcus\my documents\github\ballengine_latest\headers\particlesourcewrap.h
 	"classRenderable.h"
 	"ParticleSystem.h"
 	"Observer.h"
 
-1566592634 i:\users\marcus\my documents\github\particlesystem\particlesystem.h
+1566589034 i:\users\marcus\my documents\github\particlesystem\particlesystem.h
 	<SFML/Graphics.hpp>
 	<functional>
 	<cstdlib>
@@ -1594,20 +1594,20 @@
 	<cmath>
 	<time.h>
 
-1566821122 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\particlesourcewrap.cpp
+1572536822 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\particlesourcewrap.cpp
 	"ParticleSourceWrap.h"
 	"ParticleSystem.h"
 
-1567985489 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classconcavepolygonwrap.cpp
+1567981889 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classconcavepolygonwrap.cpp
 	"classConcavePolygonWrap.h"
 
-1567966619 i:\users\marcus\my documents\github\ballengine_latest\headers\classconcavepolygonwrap.h
+1567963019 i:\users\marcus\my documents\github\ballengine_latest\headers\classconcavepolygonwrap.h
 	<SFML/Graphics.hpp>
 	"BoundingSphere.h"
 	"ConcavePolygon.h"
 	<cassert>
 
-1567966516 i:\users\marcus\my documents\github\convexdecomposition\src\\concavepolygon.h
+1567962916 i:\users\marcus\my documents\github\convexdecomposition\src\\concavepolygon.h
 	<vector>
 	<cmath>
 	<map>
@@ -1619,24 +1619,24 @@
 	"classPhysicsObject.h"
 	"classConcavePolygonWrap.h"
 
-1567598913 i:\users\marcus\my documents\github\ballengine_latest\headers\boundingsphere.h
+1567595313 i:\users\marcus\my documents\github\ballengine_latest\headers\boundingsphere.h
 	<SFML/Graphics.hpp>
 	"Math.h"
 	<cmath>
 
-1569425674 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\levelcreator.cpp
+1571074140 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\levelcreator.cpp
 	"LevelCreator.h"
 	"Math.h"
 
-1569424323 i:\users\marcus\my documents\github\ballengine_latest\headers\levelcreator.h
+1569420723 i:\users\marcus\my documents\github\ballengine_latest\headers\levelcreator.h
 	"classGameObject.h"
 	"VertFromBitmapWrap.h"
 	"classPolygon.h"
 
-1567966450 i:\users\marcus\my documents\github\verticesfrombitmap\include\\verticesfrombitmap.hpp
+1567962850 i:\users\marcus\my documents\github\verticesfrombitmap\include\\verticesfrombitmap.hpp
 	<SFML/Graphics.hpp>
 	<cmath>
 
-1567972860 i:\users\marcus\my documents\github\ballengine_latest\headers\vertfrombitmapwrap.h
+1567969260 i:\users\marcus\my documents\github\ballengine_latest\headers\vertfrombitmapwrap.h
 	"VerticesFromBitmap.hpp"
 

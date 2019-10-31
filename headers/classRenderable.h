@@ -5,7 +5,7 @@
 #include "Observer.h"
 #include "baseObject.h"
 
-class Renderable : public Component
+class Renderable : public Component, public sf::Transformable
 {
     float zPosition = 0.0f;
 
@@ -16,23 +16,17 @@ public:
 
     Material material;
 
-    sf::Drawable* primDrawable;
-    sf::Transformable* primTransformable;
-    sf::Shape* primShape;
-
     sf::Shader* shader = nullptr;
+    sf::Texture* diffuseMap = nullptr;
+    sf::Texture* normalMap = nullptr;
+    sf::Texture* emissionMap = nullptr;
+
+    sf::VertexArray verts;
 
     static Subject renderSubject;
 
-    Renderable(std::string _texID,
-               std::vector<sf::Drawable* > _primitives = {});
     Renderable(ObjectProperties objProps);
     ~Renderable();
-    //std::vector<sf::Drawable* > primitives;
-
-    void updatePosition(sf::Vector2f position);
-    void updateOrientation(float angle);
-    void setScale(sf::Vector2f const & scale);
 
     float getZPosition() { return zPosition; }
 };

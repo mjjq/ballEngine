@@ -69,7 +69,7 @@ void ParticleSourceWrap::animate(float dt)
         vArray[i].color = p.color;
     }
 
-    renderable->primDrawable = &vArray;
+    renderable->verts = vArray;
 }
 
 void ParticleSourceWrap::setPosition(sf::Vector2f const & position)

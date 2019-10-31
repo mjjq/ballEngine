@@ -250,8 +250,10 @@ void SandboxScene::load()
                                              "normal2.png"}};
                     props._collisionGroup = {1,3};
                     CharacterProperties init;
-                    init.jumpPower = 10.0f;
-                    GameObject* obj = new GameObject(nullptr, //new Renderable(props),
+                    init.jumpPower = 12.0f;
+                    init.walkSpeed = 4.0f;
+                    init.runSpeed = 6.0f;
+                    GameObject* obj = new GameObject(new Renderable(props),
                                                         new Polygon(props),
                                                         nullptr,
                                                         new Character(init),

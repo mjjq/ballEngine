@@ -121,15 +121,25 @@ sf::Texture* ResourceManager::getTexture(std::string const & textureName)
 
 void ResourceManager::assignResources(Renderable& object)
 {
-    if(object.primShape != nullptr)
+    //if(object.primShape != nullptr)
     {
         if(loadTexture(object.material.diffuseID) ||
                         textureIsLoaded(object.material.diffuseID))
         {
-            std::cout << "assigned texture\n";
-            object.primShape->setTexture(&loadedTextures[object.material.diffuseID]);
-            object.primShape->setFillColor(sf::Color::White);
-            object.primShape->setOutlineThickness(0);
+            std::cout << "assigned diffuseMap\n";
+            object.diffuseMap = (&loadedTextures[object.material.diffuseID]);
+        }
+        if(loadTexture(object.material.normalID) ||
+                        textureIsLoaded(object.material.normalID))
+        {
+            std::cout << "assigned normalMap\n";
+            object.normalMap = (&loadedTextures[object.material.normalID]);
+        }
+        if(loadTexture(object.material.emissionID) ||
+                        textureIsLoaded(object.material.emissionID))
+        {
+            std::cout << "assigned emissionMap\n";
+            object.emissionMap = (&loadedTextures[object.material.emissionID]);
         }
     }
     if(loadShader(object.material.shaderID) ||
@@ -137,6 +147,4 @@ void ResourceManager::assignResources(Renderable& object)
     {
         object.shader = &loadedShaders[object.material.shaderID];
     }
-    loadTexture(object.material.normalID);
-    loadTexture(object.material.emissionID);
 }

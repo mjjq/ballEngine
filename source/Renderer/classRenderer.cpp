@@ -33,14 +33,13 @@ void Renderer::redrawAll(sf::RenderWindow &window)
         if(renderObjects[i]->shader != nullptr)
         {
             sf::Shader* shader = renderObjects[i]->shader;
-            lightingEngine.setObjectShaderLightProps(*shader);
 
-            float rotation = Math::PI * renderObjects[i]->primTransformable->getRotation() / 180.0f;
+            float rotation = Math::PI * renderObjects[i]->getRotation() / 180.0f;
             shader->setUniform("rotCosine", (float)cos(rotation));
             shader->setUniform("rotSine", (float)sin(rotation));
-            shader->setUniform("material.diffuseMap", *resourceManager.getTexture(renderObjects[i]->material.diffuseID));
-            shader->setUniform("material.normalMap", *resourceManager.getTexture(renderObjects[i]->material.normalID));
-            shader->setUniform("material.emissionMap", *resourceManager.getTexture(renderObjects[i]->material.emissionID));
+            shader->setUniform("material.diffuseMap", *renderObjects[i]->diffuseMap);
+            shader->setUniform("material.normalMap", *renderObjects[i]->normalMap);
+            shader->setUniform("material.emissionMap", *renderObjects[i]->emissionMap);
             shader->setUniform("material.diffuseStrength", renderObjects[i]->material.diffuseStrength);
             shader->setUniform("material.ambientStrength", renderObjects[i]->material.ambientStrength);
             shader->setUniform("material.specularStrength", renderObjects[i]->material.specularStrength);
@@ -48,7 +47,10 @@ void Renderer::redrawAll(sf::RenderWindow &window)
             shader->setUniform("material.shininess", renderObjects[i]->material.shininess);
         }
 
-        window.draw(*renderObjects[i]->primDrawable, renderObjects[i]->shader);
+        window.draw(renderObjects[i]->verts, sf::RenderStates(sf::BlendMode(),
+                                                              renderObjects[i]->getTransform(),
+                                                              nullptr,
+                                                              renderObjects[i]->shader));
     }
 
 }

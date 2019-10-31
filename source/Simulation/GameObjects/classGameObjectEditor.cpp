@@ -31,7 +31,7 @@ void GameObjectEditor::selectObject(sf::Vector2u const & position)
         selectionShader.setUniform("color", color);
 
         if(currObj->renderObj != nullptr)
-            selectionTexture.draw(*currObj->renderObj->primDrawable, &selectionShader);
+            selectionTexture.draw(currObj->renderObj->verts, &selectionShader);
     }
 
     sf::Image finalImage = selectionTexture.getTexture().copyToImage();

@@ -42,21 +42,21 @@ void LevelCreator::generateCollisionAssets(sf::Image const & image,
     std::vector<lvlCreator::Poly > polys = vbmp.generateIslands(image);
 
     ObjectProperties props;
-    props.type = ObjectType::Capsule;
+    props.type = ObjectType::ConcavePoly;
     props._isStatic = true;
     props._size.x = 10.0f;
     props._size.y = 20.0f;
     props._vertices = std::vector<sf::Vertex >(2);
 
-    /*for(auto const & poly : polys)
+    for(auto const & poly : polys)
     {
         props._position = Math::average(poly);
         props._vertices = poly;
         GameObject* gObj = new GameObject(new Renderable(props),
                                           new Polygon(props));
-    }*/
+    }
 
-    for(auto const & poly : polys)
+    /*for(auto const & poly : polys)
     {
         for(int i=0; i<poly.size()-1; ++i)
         {
@@ -75,5 +75,5 @@ void LevelCreator::generateCollisionAssets(sf::Image const & image,
             GameObject* gObj = new GameObject(nullptr,//new Renderable(props),
                                           new Polygon(props));
         }
-    }
+    }*/
 }

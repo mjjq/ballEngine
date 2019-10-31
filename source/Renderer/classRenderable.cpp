@@ -5,17 +5,11 @@
 
 #include "classConcavePolygonWrap.h"
 
-Renderable::Renderable(std::string _texID,
-               std::vector<sf::Drawable* > _primitives) : Component()
-{
-    material.diffuseID = _texID;
-    //primitives = _primitives;
-    renderSubject.notify(*this, Event(EventType::New_Renderable));
-}
-
 Renderable::Renderable(ObjectProperties objProps)
 {
     material = objProps.material;
+    if(material.diffuseID == "") material.diffuseID = "null.jpg";
+    if(material.shaderID == "") material.shaderID = "default.frag";
     generateDrawables(objProps);
     //primShape->setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(1, 1)));
     renderSubject.notify(*this, Event(EventType::New_Renderable));
@@ -36,87 +30,83 @@ void Renderable::generateDrawables(ObjectProperties objProps)
         {
             float radius = sqrt(Math::square(objProps._size));
 
-            sf::CircleShape* circle = new sf::CircleShape(radius);
-            circle->setPosition(objProps._position);
-            circle->setOrigin(radius,radius);
-            circle->setFillColor(sf::Color{180,180,180,100});
-            primDrawable = std::move(circle);
-            primTransformable = circle;
-            primShape = circle;
+            verts.append(sf::Vertex({0.0f, 0.0f}));
+            int numSides = 24;
+            for(int i=0; i<numSides+1; ++i)
+            {
+                float phase = 2.0f*Math::PI*(float)i/(float)numSides;
+                sf::Vector2f relPos = radius * sf::Vector2f{cosf(phase), sinf(phase)};
+                verts.append(sf::Vertex{relPos});
+            }
+            verts.setPrimitiveType(sf::TriangleFan);
             break;
         }
         case(ObjectType::Polygon):
         {
-            sf::ConvexShape* shape = new sf::ConvexShape(objProps._vertices.size());
-            shape->setPosition(objProps._position);
-            shape->setOutlineThickness(-2);
-            shape->setOutlineColor(sf::Color::Red);
-            shape->setFillColor({80,80,80,80});
-            for(int i=0; i<(int)objProps._vertices.size(); ++i)
-                shape->setPoint(i, objProps._vertices[i].position);
-            shape->setOrigin(Math::average(objProps._vertices));
+            for(int i=0; i<objProps._vertices.size(); ++i)
+            {
+                verts.append(objProps._vertices[i]);
+            }
 
-            primDrawable = std::move(shape);
-            primTransformable = shape;
-            primShape = shape;
+            verts.setPrimitiveType(sf::TriangleFan);
             break;
         }
         case(ObjectType::ConcavePoly):
         {
-            ConcavePolygonWrap* shape = new ConcavePolygonWrap(objProps._vertices);
-            shape->setPosition(objProps._position);
-            shape->setOutlineThickness(-2);
-            shape->setOutlineColor(sf::Color::Red);
-            shape->setFillColor({80,80,80,80});
-            //for(int i=0; i<(int)objProps._vertices.size(); ++i)
-            //    shape->setPoint(i, objProps._vertices[i].position);
-            shape->setOrigin(Math::average(objProps._vertices));
-
-            primDrawable = std::move(shape);
-            primTransformable = shape;
-            primShape = shape;
-            break;
+            for(int i=0; i<objProps._vertices.size(); ++i)
+            {
+                verts.append(objProps._vertices[i]);
+            }
         }
         case(ObjectType::Capsule):
         {
             float radius = objProps._size.x;
             float length = objProps._size.y;
 
-            sf::RectangleShape* shape = new sf::RectangleShape({2.0f*radius, length});
-            shape->setOrigin({radius, length/2.0f});
-            shape->setPosition(objProps._position);
-            shape->setRotation(objProps._rotation);
+            verts.append(sf::Vertex({0.0f, 0.0f}));
+            int numSides = 24;
+            for(int i=0; i<numSides+1; ++i)
+            {
+                sf::Vector2f offset = sf::Vector2f{0.0f, length/2.0f};
+                if(i>numSides/2) offset.y *= -1.0f;
 
-            primDrawable = std::move(shape);
-            primTransformable = shape;
-            primShape = shape;
+                float phase = 2.0f*Math::PI*(float)i/(float)numSides;
+                sf::Vector2f relPos = offset + radius * sf::Vector2f{cosf(phase), sinf(phase)};
+
+
+                verts.append(sf::Vertex{relPos});
+                if(i==numSides/2)
+                {
+                    relPos = relPos - 2.0f*offset;
+                    verts.append(sf::Vertex{relPos});
+                }
+
+            }
+            verts.append(sf::Vertex({radius, length/2.0f}));
+            verts.setPrimitiveType(sf::TriangleFan);
             break;
         }
         case(ObjectType::VertexArray):
         {
-            sf::VertexArray* vArray = new sf::VertexArray(objProps.vArrayType, objProps.vArrayCount);
-            primDrawable = std::move(vArray);
+            verts = sf::VertexArray(objProps.vArrayType, objProps.vArrayCount);
         }
         default:
             break;
     }
-}
 
-void Renderable::updatePosition(sf::Vector2f position)
-{
-    if(primTransformable != nullptr)
-        primTransformable->setPosition(position);
-}
-void Renderable::updateOrientation(float angle)
-{
-    if(primTransformable != nullptr)
-        primTransformable->setRotation(angle);
-}
+    setOrigin(Math::average(objProps._vertices));
 
-void Renderable::setScale(sf::Vector2f const & scale)
-{
-    if(primTransformable != nullptr)
-        primTransformable->setScale(scale);
+    setPosition(objProps._position);
+    setRotation(objProps._rotation);
+    sf::Vector2f boundingRect = {verts.getBounds().left, verts.getBounds().top};
+    sf::Vector2f boundsSize = {verts.getBounds().width, verts.getBounds().height};
+
+    for(int i=0; i<verts.getVertexCount(); ++i)
+    {
+        verts[i].texCoords = verts[i].position - boundingRect;
+        verts[i].texCoords.x /= boundsSize.x;
+        verts[i].texCoords.y /= boundsSize.y;
+    }
 }
 
 Subject Renderable::renderSubject;
