@@ -30,27 +30,30 @@ void Renderer::redrawAll(sf::RenderWindow &window)
     lightingEngine.displayShadowTextures();
     for(int i=0; i<(int)renderObjects.size(); ++i)
     {
-        if(renderObjects[i]->shader != nullptr)
-        {
-            sf::Shader* shader = renderObjects[i]->shader;
+        Renderable& renderObj = *renderObjects[i];
 
-            float rotation = Math::PI * renderObjects[i]->getRotation() / 180.0f;
+        if(renderObj.shader != nullptr)
+        {
+            sf::Shader* shader = renderObj.shader;
+            Material& material = renderObj.material;
+
+            float rotation = Math::PI * renderObj.getRotation() / 180.0f;
             shader->setUniform("rotCosine", (float)cos(rotation));
             shader->setUniform("rotSine", (float)sin(rotation));
-            shader->setUniform("material.diffuseMap", *renderObjects[i]->diffuseMap);
-            shader->setUniform("material.normalMap", *renderObjects[i]->normalMap);
-            shader->setUniform("material.emissionMap", *renderObjects[i]->emissionMap);
-            shader->setUniform("material.diffuseStrength", renderObjects[i]->material.diffuseStrength);
-            shader->setUniform("material.ambientStrength", renderObjects[i]->material.ambientStrength);
-            shader->setUniform("material.specularStrength", renderObjects[i]->material.specularStrength);
-            shader->setUniform("material.emissionStrength", renderObjects[i]->material.emissionStrength);
-            shader->setUniform("material.shininess", renderObjects[i]->material.shininess);
+            shader->setUniform("material.diffuseMap", *renderObj.diffuseMap);
+            shader->setUniform("material.normalMap", *renderObj.normalMap);
+            shader->setUniform("material.emissionMap", *renderObj.emissionMap);
+            shader->setUniform("material.diffuseStrength", material.diffuseStrength);
+            shader->setUniform("material.ambientStrength", material.ambientStrength);
+            shader->setUniform("material.specularStrength", material.specularStrength);
+            shader->setUniform("material.emissionStrength", material.emissionStrength);
+            shader->setUniform("material.shininess", material.shininess);
         }
 
-        window.draw(renderObjects[i]->verts, sf::RenderStates(sf::BlendMode(),
-                                                              renderObjects[i]->getTransform(),
+        window.draw(renderObj.verts, sf::RenderStates(sf::BlendMode(),
+                                                              renderObj.getTransform(),
                                                               nullptr,
-                                                              renderObjects[i]->shader));
+                                                              renderObj.shader));
     }
 
 }
