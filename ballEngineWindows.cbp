@@ -127,6 +127,7 @@
 		<Unit filename="headers/classPauseMenuScene.h" />
 		<Unit filename="headers/classPhysicsObject.h" />
 		<Unit filename="headers/classPolygon.h" />
+		<Unit filename="headers/classPolygonTriangulator.h" />
 		<Unit filename="headers/classProjectileComponent.h" />
 		<Unit filename="headers/classProjectileWeapon.h" />
 		<Unit filename="headers/classRenderable.h" />
@@ -158,6 +159,16 @@
 		<Unit filename="headers/structs.h" />
 		<Unit filename="headers/windowManager.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="res/shaders/default.frag" />
+		<Unit filename="res/shaders/light.frag" />
+		<Unit filename="res/shaders/phong.frag" />
+		<Unit filename="res/shaders/phong.vert" />
+		<Unit filename="res/shaders/test.frag" />
+		<Unit filename="res/shaders/test.geom" />
+		<Unit filename="res/shaders/test.vert" />
+		<Unit filename="res/shaders/umbralgen.frag" />
+		<Unit filename="res/shaders/umbralgen.geom" />
+		<Unit filename="res/shaders/umbralgen.vert" />
 		<Unit filename="source/Animation/Skeleton2D/classSkeleton2DManager.cpp" />
 		<Unit filename="source/Animation/Skeleton2D/classSkeleton2DWrap.cpp" />
 		<Unit filename="source/Events/classGameScene.cpp" />

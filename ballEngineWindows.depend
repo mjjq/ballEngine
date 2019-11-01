@@ -1231,18 +1231,19 @@
 	"classUIGroup.h"
 	"structs.h"
 
-1572543083 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
+1572614052 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
 	"classRenderable.h"
 	<cmath>
 	"Math.h"
 	"classConcavePolygonWrap.h"
+	"classPolygonTriangulator.h"
 
 1572537507 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 	"baseObject.h"
 
-1572539774 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderer.cpp
+1572543414 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderer.cpp
 	"classRenderer.h"
 	<iostream>
 	<cmath>
@@ -1639,4 +1640,7 @@
 
 1567969260 i:\users\marcus\my documents\github\ballengine_latest\headers\vertfrombitmapwrap.h
 	"VerticesFromBitmap.hpp"
+
+1572613854 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygontriangulator.h
+	"classConcavePolygonWrap.h"
 

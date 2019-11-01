@@ -4,6 +4,7 @@
 #include "Math.h"
 
 #include "classConcavePolygonWrap.h"
+#include "classPolygonTriangulator.h"
 
 Renderable::Renderable(ObjectProperties objProps)
 {
@@ -53,10 +54,9 @@ void Renderable::generateDrawables(ObjectProperties objProps)
         }
         case(ObjectType::ConcavePoly):
         {
-            for(int i=0; i<objProps._vertices.size(); ++i)
-            {
-                verts.append(objProps._vertices[i]);
-            }
+            verts = PolygonTriangulator::triangulateCCWVertexList(objProps._vertices);
+            verts.setPrimitiveType(sf::Triangles);
+            break;
         }
         case(ObjectType::Capsule):
         {

@@ -25,7 +25,7 @@ void LevelCreator::generateVisualAssets(std::string const & imageName,
     props.material.diffuseID = imageName + "_d.png";
     props._position = params.targetSize / 2.0f;
 
-    GameObject* gObj = new GameObject(new Renderable(props));
+    //GameObject* gObj = new GameObject(new Renderable(props));
 }
 
 void LevelCreator::generateCollisionAssets(sf::Image const & image,
