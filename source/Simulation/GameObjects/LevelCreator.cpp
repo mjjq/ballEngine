@@ -45,15 +45,28 @@ void LevelCreator::generateCollisionAssets(sf::Image const & image,
     ObjectProperties props;
     props.type = ObjectType::ConcavePoly;
     props._isStatic = true;
-    props._size.x = 10.0f;
-    props._size.y = 20.0f;
-    props._vertices = std::vector<sf::Vertex >(2);
+    props.material.diffuseID = "testLevel_d.png";
+    props.useCustomTexCoords = true;
 
     for(auto const & poly : polys)
     {
         props._position = Math::average(poly);
         props._vertices = poly;
-        GameObject* gObj = new GameObject(new Renderable(props),
+
+        ObjectProperties renderProps(props);
+        renderProps.type = ObjectType::VertexArray;
+        renderProps._vertices = PolygonTriangulator::convertArray(PolygonTriangulator::triangulateCCWVertexList(poly));
+
+        for(auto & vert : renderProps._vertices)
+        {
+            vert.texCoords.x = vert.position.x / params.targetSize.x;
+            vert.texCoords.y = vert.position.y / params.targetSize.y;
+        }
+
+        renderProps._position = Math::average(renderProps._vertices);
+        renderProps.vArrayType = sf::Triangles;
+
+        GameObject* gObj = new GameObject(new Renderable(renderProps),
                                           new Polygon(props));
     }
 }

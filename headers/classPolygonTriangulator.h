@@ -6,6 +6,19 @@
 class PolygonTriangulator
 {
 public:
+    static std::vector<sf::Vertex > convertArray(sf::VertexArray const & input)
+    {
+        std::vector<sf::Vertex > returnArray;
+        returnArray.reserve(input.getVertexCount());
+
+        for(int i=0; i<input.getVertexCount(); ++i)
+        {
+            returnArray.emplace_back(input[i]);
+        }
+
+        return returnArray;
+    }
+
     static sf::VertexArray triangulateConcavePolygon(ConcavePolygonWrap & concavePoly)
     {
         sf::VertexArray returnArray;

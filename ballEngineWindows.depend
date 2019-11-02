@@ -1260,7 +1260,7 @@
 	"windowManager.h"
 	"resourceManager.h"
 
-1572698842 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
+1572718761 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
 
 1566817522 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
 	"classBall.h"
@@ -1404,7 +1404,7 @@
 1562578930 i:\users\marcus\my documents\github\inversekinematics\headers\animationset.h
 	"SkeletonAnimation.h"
 
-1572535882 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dwrap.cpp
+1572718720 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dwrap.cpp
 	"classSkeleton2DWrap.h"
 	"JSONSkeletonReader.h"
 	"classPolygon.h"
@@ -1643,6 +1643,6 @@
 1567969260 i:\users\marcus\my documents\github\ballengine_latest\headers\vertfrombitmapwrap.h
 	"VerticesFromBitmap.hpp"
 
-1572700429 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygontriangulator.h
+1572718904 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygontriangulator.h
 	"classConcavePolygonWrap.h"
 
