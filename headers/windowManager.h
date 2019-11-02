@@ -1,10 +1,11 @@
 #include <deque>
 #include <SFML/Graphics.hpp>
 #include "classScene.h"
+#include <vector>
 
 class WindowManager
 {
-    std::deque<float> previousFrames;
+    std::vector<float> previousFrames;
     sf::Time currentFrameTime = sf::seconds(1.0f/60.0f);
     sf::Time targetFTime = sf::seconds(1.0f/60.0f);
     sf::Time timeSinceFSample = sf::milliseconds(0);

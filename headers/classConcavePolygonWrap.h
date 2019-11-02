@@ -9,7 +9,6 @@
 class ConcavePolygonWrap : public sf::Shape
 {
     cxd::ConcavePolygon polygon;
-    BoundingSphere bounds;
 
     typedef std::vector<sf::Vertex > PositionArray;
 
@@ -20,6 +19,7 @@ class ConcavePolygonWrap : public sf::Shape
     ConcavePolygonWrap(std::vector<cxd::Vertex > const & vertices);
 
     float radius = 0.0f;
+    float length = 0.0f;
 public:
     ConcavePolygonWrap(PositionArray const & vertices);
     ConcavePolygonWrap();
@@ -34,7 +34,7 @@ public:
     int getConvexPolyCount() const { return convexPolys.size(); }
 
     ConcavePolygonWrap & getConvexPoly(int index);
-    BoundingSphere getBounds();
+    sf::FloatRect getBounds();
 
     float getRadius() const { return radius; }
     void setRadius(float _radius);

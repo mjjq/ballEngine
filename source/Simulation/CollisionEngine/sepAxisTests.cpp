@@ -13,13 +13,14 @@
 std::vector<sf::Vector2f > Collisions::edgesOf(std::vector<sf::Vertex > &vertices)
 {
     std::vector<sf::Vector2f > edges;
+    edges.reserve(vertices.size());
 
     unsigned int num = vertices.size();
     for(unsigned int i=0; i<num; ++i)
     {
         sf::Vector2f newEdge;
-        newEdge = vertices[(i+1)%num].position - vertices[i].position;
-        edges.push_back(newEdge);
+        newEdge = orthogonal(vertices[(i+1)%num].position - vertices[i].position, 1.0f);
+        edges.emplace_back(newEdge);
     }
 
     return edges;
@@ -87,19 +88,20 @@ sf::Vector2f Collisions::getCentre(std::vector<sf::Vertex> &obj)
 std::pair<bool, sf::Vector2f> Collisions::sepAxisTest(std::vector<sf::Vertex> &obj1,
                                           std::vector<sf::Vertex> &obj2)
 {
-    std::vector<sf::Vector2f > edges = edgesOf(obj1);
-    std::vector<sf::Vector2f > edges2 = edgesOf(obj2);
-    edges.insert(edges.end(), edges2.begin(), edges2.end());
+    std::vector<sf::Vector2f > orthogonals = edgesOf(obj1);
+    std::vector<sf::Vector2f > orthogonals2 = edgesOf(obj2);
+    orthogonals.insert(orthogonals.end(), orthogonals2.begin(), orthogonals2.end());
 
 
-    std::vector<sf::Vector2f > orthogonals;
+    /*std::vector<sf::Vector2f > orthogonals;
     for(sf::Vector2f &edge : edges)
     {
         sf::Vector2f orthog = orthogonal(edge, 1.0f);
         orthogonals.push_back(orthog);
-    }
+    }*/
 
     std::vector<sf::Vector2f > pushVectors;
+    pushVectors.reserve(orthogonals.size());
     for(sf::Vector2f &orthog : orthogonals)
     {
         std::pair<bool, sf::Vector2f> result = isSeparatingAxis(orthog, obj1, obj2);
@@ -107,7 +109,7 @@ std::pair<bool, sf::Vector2f> Collisions::sepAxisTest(std::vector<sf::Vertex> &o
             return std::make_pair(false, sf::Vector2f{0.0f, 0.0f});
 
         else
-            pushVectors.push_back(result.second);
+            pushVectors.emplace_back(result.second);
     }
 
     sf::Vector2f mpv = {1e+15, 1e+15};

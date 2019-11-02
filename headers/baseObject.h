@@ -57,6 +57,7 @@ struct ObjectProperties
     int vArrayCount = 0;
     sf::PrimitiveType vArrayType = sf::PrimitiveType::Points;
     std::vector<unsigned int > _collisionGroup = {1};
+    bool useCustomTexCoords = false;
 };
 
 #endif // BASE_OBJECT_H

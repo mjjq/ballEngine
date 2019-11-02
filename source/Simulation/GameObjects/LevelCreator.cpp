@@ -1,5 +1,6 @@
 #include "LevelCreator.h"
 #include "Math.h"
+#include "classPolygonTriangulator.h"
 
 void LevelCreator::generateLevelAssets(std::string const & imageName,
                             lvlCreator::Parameters const & params)
@@ -55,25 +56,4 @@ void LevelCreator::generateCollisionAssets(sf::Image const & image,
         GameObject* gObj = new GameObject(new Renderable(props),
                                           new Polygon(props));
     }
-
-    /*for(auto const & poly : polys)
-    {
-        for(int i=0; i<poly.size()-1; ++i)
-        {
-            props._vertices.at(0) = (poly[i]);
-            props._vertices.at(1) = (poly[i+1]);
-            std::cout << poly[i+1].position.x << " polyx\n";
-            std::cout << poly[i+1].position.y << " polyy\n";
-            sf::Vector2f direction = poly[i+1].position - poly[i].position;
-
-            props._rotation = 90.0f + 180.0f * atan2(direction.y, direction.x) / Math::PI;
-            std::cout << props._rotation << " rotation\n";
-            props._size.y = sqrtf(Math::square(direction));
-
-            props._position = Math::average(props._vertices);
-
-            GameObject* gObj = new GameObject(nullptr,//new Renderable(props),
-                                          new Polygon(props));
-        }
-    }*/
 }

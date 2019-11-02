@@ -60,10 +60,10 @@
 				</Compiler>
 				<Linker>
 					<Add option="-pg -lgmon" />
+					<Add library="InverseKinematics" />
 					<Add library="sfml-graphics" />
 					<Add library="sfml-window" />
 					<Add library="sfml-system" />
-					<Add library="InverseKinematics" />
 				</Linker>
 			</Target>
 		</Build>

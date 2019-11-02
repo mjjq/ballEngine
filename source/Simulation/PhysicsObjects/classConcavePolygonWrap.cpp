@@ -4,15 +4,14 @@ ConcavePolygonWrap::ConcavePolygonWrap(std::vector<cxd::Vertex > const & vertice
 {
     polygon = cxd::ConcavePolygon(vertices);
 
-    std::vector<sf::Vertex > conversion;
-    for(int i=0; i<vertices.size(); ++i)
+    if(vertices.size()==2)
     {
-        conversion.push_back(sf::Vertex{{(float)vertices[i].position.x,
-                              (float)vertices[i].position.y}});
+        sf::Vector2f pos1 = {(float)vertices[0].position.x, (float)vertices[0].position.y};
+        sf::Vector2f pos2 = {(float)vertices[1].position.x, (float)vertices[1].position.y};
+        length = sqrtf(Math::square(pos2 - pos1));
     }
 
-    bounds = BoundingSphere(conversion);
-
+    update();
 }
 
 ConcavePolygonWrap::ConcavePolygonWrap() {}
@@ -25,11 +24,18 @@ ConcavePolygonWrap::ConcavePolygonWrap(PositionArray const & vertices)
         vertsToPush.push_back(cxd::Vertex({vertices[i].position.x, vertices[i].position.y}));
     }
 
+    if(vertices.size()==2)
+    {
+        length = sqrtf(Math::square(vertices[1].position - vertices[0].position));
+    }
+
     polygon = cxd::ConcavePolygon(vertsToPush);
-    bounds = BoundingSphere(vertices);
 
     polygon.convexDecomp();
     populateLowestLevelVector();
+
+
+    update();
 }
 
 void ConcavePolygonWrap::populateLowestLevelVector()
@@ -47,14 +53,21 @@ void ConcavePolygonWrap::populateLowestLevelVector()
 std::vector<sf::Vertex > ConcavePolygonWrap::getVertices(bool const & applyTransform) const
 {
     PositionArray result;
+    int pointCount = getPointCount();
+    result.reserve(pointCount);
 
-    for(int i=0; i<getPointCount(); ++i)
-    {
-        if(applyTransform)
-            result.push_back({getTransform() * getPoint(i)});
-        else
-            result.push_back({getPoint(i)});
-    }
+    if(applyTransform)
+        for(int i=0; i<pointCount; ++i)
+        {
+            cxd::Vec2 point = polygon.getPoint(i);
+            result.emplace_back(getTransform() * sf::Vector2f{(float)point.x, (float)point.y});
+        }
+    else
+        for(int i=0; i<pointCount; ++i)
+        {
+            cxd::Vec2 point = polygon.getPoint(i);
+            result.emplace_back(sf::Vector2f{(float)point.x, (float)point.y});
+        }
 
     return result;
 }
@@ -72,6 +85,9 @@ std::size_t ConcavePolygonWrap::getPointCount() const
 
 sf::Vertex ConcavePolygonWrap::farthestPointInDir(sf::Vector2f const & direction) const
 {
+    if(getPointCount() == 1)
+        return {getTransform() * getPoint(0)};
+
     float maxProj = -1e15;
     int bestVert = 0;
     sf::Vector2f rotatedDir = Math::rotate(direction, -getRotation());
@@ -98,12 +114,15 @@ ConcavePolygonWrap & ConcavePolygonWrap::getConvexPoly(int index)
     return convexPolys[index];
 }
 
-BoundingSphere ConcavePolygonWrap::getBounds()
+sf::FloatRect ConcavePolygonWrap::getBounds()
 {
-    BoundingSphere transformedBounds;
-    transformedBounds.radius = bounds.radius + radius;
-    transformedBounds.position = getPosition() + transformedBounds.position;
-    return transformedBounds;
+
+    sf::FloatRect rect = getLocalBounds();
+    rect.left -= radius;
+    rect.top -= radius;
+    rect.width += 2.0f*radius;
+    rect.height += 2.0f*radius + length;
+    return getTransform().transformRect(rect);;
 }
 
 void ConcavePolygonWrap::setRadius(float _radius)

@@ -999,7 +999,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\sepaxistests.cpp
+1572633441 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\sepaxistests.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1231,7 +1231,7 @@
 	"classUIGroup.h"
 	"structs.h"
 
-1572614052 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
+1572700560 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderable.cpp
 	"classRenderable.h"
 	<cmath>
 	"Math.h"
@@ -1260,7 +1260,7 @@
 	"windowManager.h"
 	"resourceManager.h"
 
-1572540047 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
+1572698842 i:\users\marcus\my documents\github\ballengine_latest\headers\baseobject.h
 
 1566817522 i:\users\marcus\my documents\github\ballengine_latest\headers\classgameobject.h
 	"classBall.h"
@@ -1299,10 +1299,11 @@
 	<cmath>
 	"stringConversion.h"
 
-1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\windowmanager.h
+1572616399 i:\users\marcus\my documents\github\ballengine_latest\headers\windowmanager.h
 	<deque>
 	<SFML/Graphics.hpp>
 	"classScene.h"
+	<vector>
 
 1562749548 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\windowmanager.cpp
 	"windowManager.h"
@@ -1599,10 +1600,10 @@
 	"ParticleSourceWrap.h"
 	"ParticleSystem.h"
 
-1567981889 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classconcavepolygonwrap.cpp
+1572642127 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\physicsobjects\classconcavepolygonwrap.cpp
 	"classConcavePolygonWrap.h"
 
-1567963019 i:\users\marcus\my documents\github\ballengine_latest\headers\classconcavepolygonwrap.h
+1572641574 i:\users\marcus\my documents\github\ballengine_latest\headers\classconcavepolygonwrap.h
 	<SFML/Graphics.hpp>
 	"BoundingSphere.h"
 	"ConcavePolygon.h"
@@ -1625,9 +1626,10 @@
 	"Math.h"
 	<cmath>
 
-1571074140 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\levelcreator.cpp
+1572701110 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\levelcreator.cpp
 	"LevelCreator.h"
 	"Math.h"
+	"classPolygonTriangulator.h"
 
 1569420723 i:\users\marcus\my documents\github\ballengine_latest\headers\levelcreator.h
 	"classGameObject.h"
@@ -1641,6 +1643,6 @@
 1567969260 i:\users\marcus\my documents\github\ballengine_latest\headers\vertfrombitmapwrap.h
 	"VerticesFromBitmap.hpp"
 
-1572613854 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygontriangulator.h
+1572700429 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygontriangulator.h
 	"classConcavePolygonWrap.h"
 

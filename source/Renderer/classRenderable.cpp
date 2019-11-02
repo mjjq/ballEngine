@@ -55,7 +55,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
         case(ObjectType::ConcavePoly):
         {
             verts = PolygonTriangulator::triangulateCCWVertexList(objProps._vertices);
-            verts.setPrimitiveType(sf::Triangles);
+            verts.setPrimitiveType(sf::LineStrip);
             break;
         }
         case(ObjectType::Capsule):
@@ -89,6 +89,10 @@ void Renderable::generateDrawables(ObjectProperties objProps)
         case(ObjectType::VertexArray):
         {
             verts = sf::VertexArray(objProps.vArrayType, objProps.vArrayCount);
+            for(int i=0; i<objProps._vertices.size(); ++i)
+            {
+                verts.append(objProps._vertices[i]);
+            }
         }
         default:
             break;
@@ -98,14 +102,25 @@ void Renderable::generateDrawables(ObjectProperties objProps)
 
     setPosition(objProps._position);
     setRotation(objProps._rotation);
-    sf::Vector2f boundingRect = {verts.getBounds().left, verts.getBounds().top};
-    sf::Vector2f boundsSize = {verts.getBounds().width, verts.getBounds().height};
 
-    for(int i=0; i<verts.getVertexCount(); ++i)
+    /*if(objProps.useCustomTexCoords)
     {
-        verts[i].texCoords = verts[i].position - boundingRect;
-        verts[i].texCoords.x /= boundsSize.x;
-        verts[i].texCoords.y /= boundsSize.y;
+        for(int i=0; i<verts.getVertexCount(); ++i)
+        {
+            verts[i].texCoords = objProps._vertices[i].texCoords;
+        }
+    }*/
+    if(!objProps.useCustomTexCoords)
+    {
+        sf::Vector2f boundingRect = {verts.getBounds().left, verts.getBounds().top};
+        sf::Vector2f boundsSize = {verts.getBounds().width, verts.getBounds().height};
+
+        for(int i=0; i<verts.getVertexCount(); ++i)
+        {
+            verts[i].texCoords = verts[i].position - boundingRect;
+            verts[i].texCoords.x /= boundsSize.x;
+            verts[i].texCoords.y /= boundsSize.y;
+        }
     }
 }
 
