@@ -11,6 +11,7 @@
 #include "classUIContainer.h"
 #include "classSkeleton2DManager.h"
 #include "ParticleSystemManager.h"
+#include "Camera.h"
 
 class GameScene : public Scene
 {
@@ -26,15 +27,14 @@ protected:
         SQ_DENSITY,
     };
 
-    float currentZoom = 1.0f;
+    Camera camera{window, worldView};
 
     sf::Vector2i mousePosOnClick;
     sf::Vector2i mousePosOnPan;
     sf::Vector2i mousePosOnRelease;
     bool drawLine = false;
 
-    void resetCamera();
-    void adjustViewSize(sf::Vector2u newSize);//, float zoom);
+    //void adjustViewSize(sf::Vector2u newSize);//, float zoom);
 
     void checkMBPress(sf::Vector2i &initPos, bool mouseType);
 

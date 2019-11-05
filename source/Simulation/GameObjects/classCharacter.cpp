@@ -127,6 +127,8 @@ bool Character::updateState()
         updateEquippedAnchorPoints();
     }
 
+    properties.position = collider->getPosition();
+
     return true;
 }
 

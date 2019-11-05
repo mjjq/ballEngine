@@ -28,7 +28,7 @@ void SandboxScene::load()
 
         wSize = ballSim->getWorldSize();
         changeBoundaryRect(wSize);
-        resetCamera();
+        camera.reset();
         adjustViewSize(window.getSize());
 
         buttonFuncMap = {
@@ -61,9 +61,9 @@ void SandboxScene::load()
             {"clearSim",    [&]{projMan->clearAll();}},
             {"decSimStep",  [&]{if(dt > 0.1f) dt -=0.1f;}},
             {"incSimStep",  [&]{dt += 0.1f;}},
-            {"zmToMse",     [&]{zoomToMouse(2.0f);}},
-            {"zmFromMse",   [&]{zoomToMouse(0.5f);}},
-            {"rstView",     [&]{resetCamera();}},
+            {"zmToMse",     [&]{camera.zoomTarget += 0.1f;}},
+            {"zmFromMse",   [&]{camera.zoomTarget += -0.1f;}},
+            {"rstView",     [&]{camera.reset();}},
             {"tglSimPse",   [&]{isPaused = !isPaused;}},
             {"viewPan",     [&]{
                 checkForViewPan(mousePosOnPan);
@@ -75,7 +75,7 @@ void SandboxScene::load()
                 charMan->handleInput(Input::EnableTarget, 0);
                 KeyBinds::isFuncContinuous = true;
                     }},
-            {"focusPlr",    [&]{focusOnBall(playerBallIndex);}},
+            {"focusPlr",    [&]{worldView.setSize({300.0f, 900.0f});}},
             {"pauseGme",    [&]{togglePause();}},
             {"tglForces",   [&]{ballSim->toggleForces();}},
             {"tglCols",     [&]{ballSim->toggleCollisions();}},
@@ -618,8 +618,11 @@ void SandboxScene::load()
         params.useTargetSize = true;
         params.targetSize = (sf::Vector2f)wSize;
         LevelCreator::generateLevelAssets("./res/levels/testLevel", params);
+        camera.zoomTarget = (float)window.getSize().x / (float)wSize.x;
+        camera.zoom = (float)window.getSize().x / (float)wSize.x;
     }
 }
+
 
 void SandboxScene::update(sf::RenderWindow &_window)
 {
@@ -642,7 +645,11 @@ void SandboxScene::update(sf::RenderWindow &_window)
     {
         charMan->setTarget(window.mapPixelToCoords(mousePosOnPan), 0);
         charMan->handleInput(Input::EnableTarget, 0);
+
+        camera.target = charMan->getCharacterProperties(0).position;
+        camera.zoomTarget = 0.4f;
     }
+
 
     if(!isPaused)
     {
@@ -662,11 +669,14 @@ void SandboxScene::update(sf::RenderWindow &_window)
             skeletonMan->updateAll(0.007f*dt/factor);
             pSrcMan->updateAll(1.0f*dt/factor);
             ballSim->physicsLoop(dt/factor);
+            camera.updateCameraPos(dt);
 
 
             accumulator -= dt;
         }
     }
+
+    camera.updateView();
 
     timeToNextSpawn -= currentFrameTime;
 }

@@ -29,6 +29,7 @@ struct CharacterProperties
     bool aimingAtTarget = false;
     sf::Vector2f target = {0.0f, 0.0f};
     bool flipped = false;
+    sf::Vector2f position = {0.0f, 0.0f};
 };
 
 class Character : public Component
@@ -64,6 +65,8 @@ public:
 
     void setCollider(PhysicsObject* _collider);
     void setSkeleton(Skeleton2DWrap* _skeleton);
+
+    PhysicsObject* getCollider() { return collider; }
 
     void handleInput(Input input);
     void jump();

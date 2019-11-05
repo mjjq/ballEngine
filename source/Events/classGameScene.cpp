@@ -84,21 +84,7 @@ sf::Vector2f GameScene::velocityFromMouse(sf::Vector2i _mousePosOnClick,
     return velocity;
 }
 
-/**
-    Applies a zoom to the rendered view, and centres the view to the position
-    of the mouse. The if statement imposes a maximum zoom out limit.
 
-    @param zoomFactor The factor by which to zoom the current view.
-*/
-void GameScene::zoomToMouse(float zoomFactor)
-{
-    if(currentZoom*zoomFactor < 2.0)
-    {
-        currentZoom *= zoomFactor;
-        worldView.zoom(zoomFactor);
-        window.setView(worldView);
-    }
-}
 
 
 /**
@@ -120,7 +106,7 @@ sf::Vector2f GameScene::getEffectiveZoom(int worldSizeX, int worldSizeY)
     sf::Vector2f effectiveZoom;
     if(simFitsInWindow)
     {
-        float zoom = currentZoom;
+        float zoom = camera.zoom;
         float winSizeX = window.getSize().x;
         float winSizeY = window.getSize().y;
         //sf::Vector2i viewPos = sf::Mouse::getPosition(window);
@@ -157,15 +143,15 @@ void GameScene::checkForViewPan(sf::Vector2i initialPos)
     sf::Vector2i viewPos = sf::Mouse::getPosition(window);
     sf::Vector2f relPos = static_cast<sf::Vector2f>(initialPos - viewPos);
 
-    if(effectiveZoom.y > effectiveZoom.x)
+    /*if(effectiveZoom.y > effectiveZoom.x)
         relPos *= effectiveZoom.y;
     else
-        relPos *= effectiveZoom.x;
+        relPos *= effectiveZoom.x;*/
 
+    camera.target += (sf::Vector2f)relPos / camera.zoom;
+    //worldView.move(relPos);// + originalView);
 
-    worldView.move(relPos);// + originalView);
-
-    window.setView(worldView);
+    //window.setView(worldView);
 }
 
 
@@ -255,7 +241,7 @@ void GameScene::spawnFromJson(sf::Vector2f position, sf::Vector2f velocity)
 
     @return Void.
 */
-void GameScene::adjustViewSize(sf::Vector2u newSize)
+/*void GameScene::adjustViewSize(sf::Vector2u newSize)
 {
     sf::Vector2f effectiveZoom = getEffectiveZoom(wSize.x, wSize.y);
     worldView.setSize(newSize.x, newSize.y);
@@ -267,7 +253,7 @@ void GameScene::adjustViewSize(sf::Vector2u newSize)
         worldView.zoom(effectiveZoom.x);
 
     window.setView(worldView);
-}
+}*/
 
 /**
     Resets the window view to a zoom of 1, centered on the simulation world
@@ -275,15 +261,15 @@ void GameScene::adjustViewSize(sf::Vector2u newSize)
 
     @return Void.
 */
-void GameScene::resetCamera()
+/*void GameScene::resetCamera()
 {
-    currentZoom = 1.0;
+    camera.zoomTarget = 1.0;
     sf::Vector2i woSize = ballSim->getWorldSize();
     worldView.setCenter(woSize.x/2,woSize.y/2);
     adjustViewSize({window.getSize().x, window.getSize().y});//, currentZoom);
 
     window.setView(worldView);
-}
+}*/
 
 
 /**
@@ -319,9 +305,9 @@ void GameScene::mouseWheelZoom(bool keyPress, float delta)
     {
         //std::cout << delta << "\n";
         if(delta > 0)
-            zoomToMouse(0.97);
+            camera.zoomTarget *= 0.8f;
         else
-            zoomToMouse(1.03);
+            camera.zoomTarget *= 1.2f;
     }
     canZoom = false;
 }

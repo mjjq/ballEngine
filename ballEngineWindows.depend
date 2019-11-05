@@ -587,11 +587,12 @@
 
 1551621742 i:\users\marcus\my documents\github\ballengine_latest\headers\sceneenums.h
 
-1562749548 i:\users\marcus\my documents\github\ballengine_latest\headers\classsandboxscene.h
+1572990440 i:\users\marcus\my documents\github\ballengine_latest\headers\classsandboxscene.h
 	"classGameScene.h"
 	"characterWorldInterface.h"
+	"Camera.h"
 
-1566817522 i:\users\marcus\my documents\github\ballengine_latest\headers\classgamescene.h
+1572990834 i:\users\marcus\my documents\github\ballengine_latest\headers\classgamescene.h
 	"classScene.h"
 	"classUniverse.h"
 	"classCharacterManager.h"
@@ -601,6 +602,7 @@
 	"classUIContainer.h"
 	"classSkeleton2DManager.h"
 	"ParticleSystemManager.h"
+	"Camera.h"
 
 1567544143 i:\users\marcus\my documents\github\ballengine_latest\headers\classuniverse.h
 	"integrators.h"
@@ -685,7 +687,7 @@
 	"classPhysicsObject.h"
 	"classConcavePolygonWrap.h"
 
-1571068266 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
+1572977343 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
 	"classCapsule.h"
 	"classProjectileWeapon.h"
 	"Observer.h"
@@ -760,7 +762,7 @@
 	"classMenuScene.h"
 	"classUIContainer.h"
 
-1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classgamescene.cpp
+1572991694 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classgamescene.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -834,7 +836,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1571074213 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1572991333 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 	"LevelCreator.h"
@@ -855,7 +857,7 @@
 	<numeric>
 	"classSceneManager.h"
 
-1566817522 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsurvivalscene.cpp
+1572991570 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsurvivalscene.cpp
 	"classSurvivalScene.h"
 
 1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\interfaces\characterworldinterface.cpp
@@ -1011,7 +1013,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1571073916 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1572977419 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
@@ -1361,7 +1363,7 @@
 	"classGameObjectManager.h"
 	"classJoint.h"
 
-1572536906 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjecteditor.cpp
+1572976079 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classgameobjecteditor.cpp
 	"classGameObjectEditor.h"
 
 1566316436 source:i:\users\marcus\my documents\github\ballengine_latest\source\animation\skeleton2d\classskeleton2dmanager.cpp
@@ -1626,7 +1628,7 @@
 	"Math.h"
 	<cmath>
 
-1572719393 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\levelcreator.cpp
+1572989093 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\levelcreator.cpp
 	"LevelCreator.h"
 	"Math.h"
 	"classPolygonTriangulator.h"
@@ -1645,4 +1647,6 @@
 
 1572718904 i:\users\marcus\my documents\github\ballengine_latest\headers\classpolygontriangulator.h
 	"classConcavePolygonWrap.h"
+
+1572990344 i:\users\marcus\my documents\github\ballengine_latest\headers\camera.h
 

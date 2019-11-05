@@ -85,7 +85,7 @@ void SurvivalScene::load()
 
         wSize = ballSim->getWorldSize();
         changeBoundaryRect(wSize);
-        resetCamera();
+        camera.reset();
         adjustViewSize(window.getSize());
 
         buttonFuncMap = {
@@ -104,9 +104,9 @@ void SurvivalScene::load()
             {"clearSim",    [&]{ballSim->clearSimulation();}},
             {"decSimStep",  [&]{ballSim->decSimStep(0.1);}},
             {"incSimStep",  [&]{ballSim->incSimStep(0.1);}},
-            {"zmToMse",     [&]{zoomToMouse(2.0f);}},
-            {"zmFromMse",   [&]{zoomToMouse(0.5f);}},
-            {"rstView",     [&]{resetCamera();}},
+            {"zmToMse",     [&]{camera.zoomTarget *= 2.0f;}},
+            {"zmFromMse",   [&]{camera.zoomTarget *= 0.5f;}},
+            {"rstView",     [&]{camera.reset();}},
             {"tglSimPse",   [&]{ballSim->toggleSimPause();}},
             {"viewPan",     [&]{
                 checkForViewPan(mousePosOnPan);

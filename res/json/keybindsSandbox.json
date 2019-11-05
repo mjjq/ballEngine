@@ -12,7 +12,8 @@
 		"tglForces"	 	: ["LControl", "F"],
 		"tglGrav"	 	: ["LControl", "G"],
 		"mouseExp"		: ["E"],
-		"mouseSin"		: ["Q"]
+		"mouseSin"		: ["Q"],
+		"focusPlr"		: ["LShift", "G"]
 	},
 	"SpawnMode" : {
 		"clearSim"	 	: ["Delete"],

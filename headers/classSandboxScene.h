@@ -3,6 +3,7 @@
 
 #include "classGameScene.h"
 #include "characterWorldInterface.h"
+#include "Camera.h"
 
 class SandboxScene : public GameScene
 {

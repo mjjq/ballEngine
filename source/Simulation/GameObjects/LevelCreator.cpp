@@ -45,7 +45,7 @@ void LevelCreator::generateCollisionAssets(sf::Image const & image,
     ObjectProperties props;
     props.type = ObjectType::ConcavePoly;
     props._isStatic = true;
-    props.material.diffuseID = "testLevel_d.png";
+    //props.material.diffuseID = "testLevel_d.png";
     props.useCustomTexCoords = true;
 
     for(auto const & poly : polys)
