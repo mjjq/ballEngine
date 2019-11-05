@@ -55,7 +55,7 @@ void Renderable::generateDrawables(ObjectProperties objProps)
         case(ObjectType::ConcavePoly):
         {
             verts = PolygonTriangulator::triangulateCCWVertexList(objProps._vertices);
-            verts.setPrimitiveType(sf::LineStrip);
+            verts.setPrimitiveType(sf::Triangles);
             break;
         }
         case(ObjectType::Capsule):

@@ -24,14 +24,21 @@ void GameObjectEditor::selectObject(sf::Vector2u const & position)
     selectionTexture.display();
     selectionTexture.clear({0, 0, 0, 0});
 
-    for(int i=0; i<(int)gameObjectManager.gameObjects.size(); ++i)
+    int numObjects = gameObjectManager.gameObjects.size();
+    sf::RenderStates drawState(&selectionShader);
+
+    for(int i=0; i<numObjects; ++i)
     {
-        GameObject* currObj = gameObjectManager.gameObjects[i];
-        float color = (float)((float)i/(float)gameObjectManager.gameObjects.size());
+        Renderable* renderObj = gameObjectManager.gameObjects[i]->renderObj;
+        float color = (float)((float)i/(float)numObjects);
         selectionShader.setUniform("color", color);
 
-        if(currObj->renderObj != nullptr)
-            selectionTexture.draw(currObj->renderObj->verts, &selectionShader);
+        if(renderObj != nullptr)
+        {
+            drawState.transform = renderObj->getTransform();
+            selectionTexture.draw(renderObj->verts,
+                                  drawState);
+        }
     }
 
     sf::Image finalImage = selectionTexture.getTexture().copyToImage();
