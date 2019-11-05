@@ -29,6 +29,8 @@ void SandboxScene::load()
         wSize = ballSim->getWorldSize();
         changeBoundaryRect(wSize);
         camera.reset();
+        camera.position = (sf::Vector2f)wSize / 2.0f;
+        camera.target = camera.position;
         adjustViewSize(window.getSize());
 
         buttonFuncMap = {
@@ -63,7 +65,9 @@ void SandboxScene::load()
             {"incSimStep",  [&]{dt += 0.1f;}},
             {"zmToMse",     [&]{camera.zoomTarget += 0.1f;}},
             {"zmFromMse",   [&]{camera.zoomTarget += -0.1f;}},
-            {"rstView",     [&]{camera.reset();}},
+            {"rstView",     [&]{camera.reset();
+                                camera.position = (sf::Vector2f)wSize / 2.0f;
+                                camera.target = camera.position;}},
             {"tglSimPse",   [&]{isPaused = !isPaused;}},
             {"viewPan",     [&]{
                 checkForViewPan(mousePosOnPan);
