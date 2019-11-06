@@ -93,6 +93,7 @@
 			<Add directory="I:/Users/Marcus/My Documents/Github/InverseKinematics/bin/Release" />
 		</Linker>
 		<Unit filename="extern/json.hpp" />
+		<Unit filename="headers/Camera.h" />
 		<Unit filename="headers/GJK.h" />
 		<Unit filename="headers/LevelCreator.h" />
 		<Unit filename="headers/Math.h" />

@@ -119,7 +119,7 @@ sf::FloatRect ConcavePolygonWrap::getBounds()
 
     sf::FloatRect rect = getLocalBounds();
     rect.left -= radius;
-    rect.top -= radius;
+    rect.top -= (radius+length/2.0f);
     rect.width += 2.0f*radius;
     rect.height += 2.0f*radius + length;
     return getTransform().transformRect(rect);;

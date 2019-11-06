@@ -6,7 +6,7 @@
 
 Subject Character::engineNotify;
 
-float Character::MAX_SLOPE_ANGLE = 50.0f;
+float Character::MAX_SLOPE_ANGLE = 60.0f;
 float Character::MAX_SLOPE_COSINE = cosf(Math::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
 Character::Character(CharacterProperties init) :
@@ -45,10 +45,14 @@ void Character::moveSideWays(float input)
             {
                 sf::Vector2f direction = input*Math::orthogonal(it->second.normal, 1.0f);
 
+                std::cout << direction << " dir\n";
+
                 if(Math::dot(direction, contactData.begin()->second.normal) <= 0.0f &&
                    Math::dot(direction, (std::prev(contactData.end()))->second.normal) <= 0.0f &&
                    Math::dot(collider->getVelocity(), direction) < currentSpeed)
                 {
+                    std::cout << "true\n";
+
                     collider->addSolvedVelocity(direction*currentSpeed,
                                                 direction*currentSpeed);
 
@@ -111,7 +115,14 @@ bool Character::updateState()
         }
     }
     if(badSlopeCount == (int)contactData.size())
+    {
+        collider->setCoefFriction(0.0f);
         slopeOkay = false;
+    }
+    else
+    {
+        collider->setCoefFriction(properties.coefFriction);
+    }
 
     if(collider->getVelocity().y > 0.0f && !touchingSurface)
     {

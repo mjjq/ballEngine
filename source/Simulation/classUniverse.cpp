@@ -1053,13 +1053,16 @@ void BallUniverse::addArbiter(ArbPair const & arbPair)
 
     std::pair<PhysicsObject* , Contact > contactDataPair;
 
-    contactDataPair.first = arbPair.first.obj2;
-    contactDataPair.second = arbPair.second.contacts[0];
-    arbPair.first.obj1->addContactData(contactDataPair);
+    for(int i=0; i<arbPair.second.contacts.size(); ++i)
+    {
+        contactDataPair.first = arbPair.first.obj2;
+        contactDataPair.second = arbPair.second.contacts[i];
+        arbPair.first.obj1->addContactData(contactDataPair);
 
-    contactDataPair.first = arbPair.first.obj1;
-    contactDataPair.second = -arbPair.second.contacts[0];
-    arbPair.first.obj2->addContactData(contactDataPair);
+        contactDataPair.first = arbPair.first.obj1;
+        contactDataPair.second = -arbPair.second.contacts[i];
+        arbPair.first.obj2->addContactData(contactDataPair);
+    }
 }
 
 void BallUniverse::clearArbiters()

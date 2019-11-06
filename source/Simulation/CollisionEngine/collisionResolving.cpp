@@ -154,6 +154,8 @@ std::vector<Contact > Collisions::findCollisions(PhysicsObject* p1,
     if(!p1Geometry.getBounds().intersects(p2Geometry.getBounds()))
         return contResult;
 
+    //std::cout << p1Geometry.getConvexPolyCount() << " p1conv\n";
+    //std::cout << p2Geometry.getConvexPolyCount() << " p2conv\n";
 
     for(int i=0; i<p1Geometry.getConvexPolyCount(); ++i)
         for(int j=0; j<p2Geometry.getConvexPolyCount(); ++j)
@@ -167,6 +169,14 @@ std::vector<Contact > Collisions::findCollisions(PhysicsObject* p1,
                                  contResult);
             }
         }
+
+    /*sf::CircleShape debugPoint(5.0f);
+    debugPoint.setOrigin(5.0f, 5.0f);
+    for(auto & contact : contResult)
+    {
+        debugPoint.setPosition(contact.position);
+        debugWindow->draw(debugPoint);
+    }*/
 
     return contResult;
 }
