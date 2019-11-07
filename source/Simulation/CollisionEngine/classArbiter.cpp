@@ -51,6 +51,26 @@ Arbiter::Arbiter(PhysicsObject* p1, PhysicsObject* p2)
 
         pwv.velocityPairs.push_back({obj1->getVelocity(), obj1->getRotRate()});
         pwv.velocityPairs.push_back({obj2->getVelocity(), obj2->getRotRate()});
+
+
+        std::pair<PhysicsObject* , Contact > contactDataPair;
+
+        for(int i=0; i<contacts.size(); ++i)
+        {
+            contactDataPair.first = obj2;
+            contactDataPair.second = contacts[i];
+            obj1->addContactData(contactDataPair);
+
+            contactDataPair.first = obj1;
+            contactDataPair.second = -contacts[i];
+            obj2->addContactData(contactDataPair);
+        }
+}
+
+Arbiter::~Arbiter()
+{
+    //obj1->clearContactData();
+    //obj2->clearContactData();
 }
 
 void Arbiter::update()
@@ -72,6 +92,20 @@ void Arbiter::update()
 
     pwv.velocityPairs[0] = {obj1->getVelocity(), obj1->getRotRate()};
     pwv.velocityPairs[1] = {obj2->getVelocity(), obj2->getRotRate()};
+
+    obj1->clearContactData();
+    obj2->clearContactData();
+    std::pair<PhysicsObject* , Contact > contactDataPair;
+    for(int i=0; i<contacts.size(); ++i)
+    {
+        contactDataPair.first = obj2;
+        contactDataPair.second = contacts[i];
+        obj1->addContactData(contactDataPair);
+
+        contactDataPair.first = obj1;
+        contactDataPair.second = -contacts[i];
+        obj2->addContactData(contactDataPair);
+    }
 
 }
 

@@ -23,7 +23,6 @@ struct CharacterProperties
     float walkSpeed = 3.0f;
     float runSpeed = 5.0f;
     float jumpPower = 15.0f;
-    float coefFriction = 100.0f;
     float maxHealth = 10.0f;
     float currentHealth = maxHealth;
     bool aimingAtTarget = false;
@@ -53,6 +52,8 @@ class Character : public Component
     CharacterState* currentState;
 
     void flipCharacter(bool & _isflipped);
+
+    sf::Vector2f lastKnownTangent = {1.0f, 0.0f};
 
 public:
     void stop(char directionAxis);

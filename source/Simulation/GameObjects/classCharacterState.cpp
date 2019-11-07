@@ -120,6 +120,11 @@ void IdleState::enterState(Character& character)
     character.setAnimation("idle");
 }
 
+void IdleState::update(Character& character)
+{
+    character.stop('t');
+}
+
 CharacterState* IdleState::handleInput(Character& character, Input input)
 {
     switch(input)

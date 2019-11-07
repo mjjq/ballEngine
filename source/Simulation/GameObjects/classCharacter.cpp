@@ -6,7 +6,7 @@
 
 Subject Character::engineNotify;
 
-float Character::MAX_SLOPE_ANGLE = 60.0f;
+float Character::MAX_SLOPE_ANGLE = 50.0f;
 float Character::MAX_SLOPE_COSINE = cosf(Math::PI * Character::MAX_SLOPE_ANGLE / 180.0f);
 
 Character::Character(CharacterProperties init) :
@@ -30,48 +30,31 @@ void Character::stop(char directionAxis)
         collider->setVelocity({0.0f, collider->getVelocity().y});
     else if(directionAxis == 'y')
         collider->setVelocity({collider->getVelocity().x, 0.0f});
+    else if(directionAxis == 't')
+        moveSideWays(0.0f);
 }
 
 void Character::moveSideWays(float input)
 {
-    //std::cout << contactData.size() << "\n";
-    const std::map<PhysicsObject*, Contact > & contactData = collider->getContactData();
-    if(contactData.size() > 0)
+    sf::Vector2f currentVelocity = collider->getVelocity();
+
+    const Contact contact = collider->getContactData().begin()->second;
+
+    sf::Vector2f tangent = Math::orthogonal(contact.normal, 1.0f);
+
+    if(Math::square(tangent) > 0.9f) lastKnownTangent = tangent;
+
+    tangent = Math::square(tangent) > 0.9f ? tangent : lastKnownTangent;
+
+    float speed = std::abs(Math::dot(collider->getVelocity(), tangent));
+
+    if(std::abs(input)*speed < currentSpeed && touchingSurface && slopeOkay)
     {
-        for(auto it = contactData.begin(); it != contactData.end(); ++it)
-        {
-            float dProduct = Math::dot(it->second.normal, {0.0f, 1.0f});
-            if(dProduct >= MAX_SLOPE_COSINE)
-            {
-                sf::Vector2f direction = input*Math::orthogonal(it->second.normal, 1.0f);
-
-                std::cout << direction << " dir\n";
-
-                if(Math::dot(direction, contactData.begin()->second.normal) <= 0.0f &&
-                   Math::dot(direction, (std::prev(contactData.end()))->second.normal) <= 0.0f &&
-                   Math::dot(collider->getVelocity(), direction) < currentSpeed)
-                {
-                    std::cout << "true\n";
-
-                    collider->addSolvedVelocity(direction*currentSpeed,
-                                                direction*currentSpeed);
-
-
-                }
-            }
-        }
-
+        collider->setVelocity(input*tangent*currentSpeed);
     }
-    if(contactData.size() == 0 || (!slopeOkay && contactData.size()==2))
+    else if(std::abs(input)*speed < currentSpeed && !touchingSurface)
     {
-        //std::cout << "thing\n";
-        //std::cout << slopeOkay << "\n ";
-        //std::cout << contactData.size() << " sii\n\n ";
-        if(input*collider->getVelocity().x < currentSpeed)
-        {
-            collider->addSolvedVelocity({0.1f*input*currentSpeed, 0.0f},
-                                    {0.1f*input*currentSpeed, 0.0f});
-        }
+        collider->setVelocity(sf::Vector2f{input*currentSpeed, currentVelocity.y});
     }
 
 }
@@ -114,14 +97,9 @@ bool Character::updateState()
             ++badSlopeCount;
         }
     }
-    if(badSlopeCount == (int)contactData.size())
+    if(badSlopeCount > 0)
     {
-        collider->setCoefFriction(0.0f);
         slopeOkay = false;
-    }
-    else
-    {
-        collider->setCoefFriction(properties.coefFriction);
     }
 
     if(collider->getVelocity().y > 0.0f && !touchingSurface)

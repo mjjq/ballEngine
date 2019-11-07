@@ -62,6 +62,8 @@ public:
     virtual void enterState(Character& character);
 
     virtual CharacterState* handleInput(Character& character, Input input);
+
+    virtual void update(Character& character);
 };
 
 class JumpState : public CharacterState

@@ -10,6 +10,7 @@ struct Arbiter
     enum {MAX_POINTS = 2};
 
 	Arbiter(PhysicsObject* p1, PhysicsObject* p2);
+	~Arbiter();
 
 	void update();
 

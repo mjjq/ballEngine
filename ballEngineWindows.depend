@@ -670,7 +670,7 @@
 	"integrators.h"
 	"classPhysicsObject.h"
 
-1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\classarbiter.h
+1573128537 i:\users\marcus\my documents\github\ballengine_latest\headers\classarbiter.h
 	<SFML/Graphics.hpp>
 	"contactData.h"
 	"constraintSolver.h"
@@ -687,7 +687,7 @@
 	"classPhysicsObject.h"
 	"classConcavePolygonWrap.h"
 
-1572977343 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
+1573072519 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacter.h
 	"classCapsule.h"
 	"classProjectileWeapon.h"
 	"Observer.h"
@@ -836,7 +836,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1572993238 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1573072558 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 	"LevelCreator.h"
@@ -899,7 +899,7 @@
 	<SFML/Graphics.hpp>
 	"structs.h"
 
-1573062441 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
+1573129237 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\classuniverse.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -910,7 +910,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1567542088 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
+1573129159 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\classarbiter.cpp
 	<iostream>
 	<cmath>
 	"classArbiter.h"
@@ -926,7 +926,7 @@
 1567187820 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisiondetection.cpp
 	"collisionDetection.h"
 
-1573062156 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
+1573063387 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1013,7 +1013,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1573062073 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1573129365 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
@@ -1564,9 +1564,9 @@
 
 1566316436 i:\users\marcus\my documents\github\ballengine_latest\headers\contactdata.h
 
-1571066061 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacterstate.h
+1573065333 i:\users\marcus\my documents\github\ballengine_latest\headers\classcharacterstate.h
 
-1571068554 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
+1573067563 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacterstate.cpp
 	"classCharacterState.h"
 	"classCharacter.h"
 

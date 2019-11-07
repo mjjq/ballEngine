@@ -63,8 +63,8 @@ void SandboxScene::load()
             {"clearSim",    [&]{projMan->clearAll();}},
             {"decSimStep",  [&]{if(dt > 0.1f) dt -=0.1f;}},
             {"incSimStep",  [&]{dt += 0.1f;}},
-            {"zmToMse",     [&]{camera.zoomTarget += 0.1f;}},
-            {"zmFromMse",   [&]{camera.zoomTarget += -0.1f;}},
+            {"zmToMse",     [&]{camera.zoomTarget *= 1.1f;}},
+            {"zmFromMse",   [&]{camera.zoomTarget /= 1.1f;}},
             {"rstView",     [&]{camera.reset();
                                 camera.position = (sf::Vector2f)wSize / 2.0f;
                                 camera.target = camera.position;}},
@@ -242,7 +242,7 @@ void SandboxScene::load()
                                              {0.0f, 0.0f},
                                              {50.0f, 100.0f},
                                              spawnMass,
-                                             30.0f,
+                                             0.0f,
                                              spawnCoefRest,
                                              spawnRotation,
                                              spawnRotRate,
