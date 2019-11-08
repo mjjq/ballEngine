@@ -836,7 +836,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1573072558 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
+1573239416 source:i:\users\marcus\my documents\github\ballengine_latest\source\events\classsandboxscene.cpp
 	"classSandboxScene.h"
 	"jsonParsing.h"
 	"LevelCreator.h"
@@ -926,7 +926,7 @@
 1567187820 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisiondetection.cpp
 	"collisionDetection.h"
 
-1573063387 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
+1573214311 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\collisionengine\collisionresolving.cpp
 	<iostream>
 	<SFML/Graphics.hpp>
 	<cmath>
@@ -1013,7 +1013,7 @@
 	"Math.h"
 	"stringConversion.h"
 
-1573129365 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
+1573230562 source:i:\users\marcus\my documents\github\ballengine_latest\source\simulation\gameobjects\classcharacter.cpp
 	"classCharacter.h"
 	"Math.h"
 	"stringConversion.h"
@@ -1240,12 +1240,12 @@
 	"classConcavePolygonWrap.h"
 	"classPolygonTriangulator.h"
 
-1572537507 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
+1573219634 i:\users\marcus\my documents\github\ballengine_latest\headers\classrenderable.h
 	"SFML/Graphics.hpp"
 	"Observer.h"
 	"baseObject.h"
 
-1572543414 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderer.cpp
+1573237815 source:i:\users\marcus\my documents\github\ballengine_latest\source\renderer\classrenderer.cpp
 	"classRenderer.h"
 	<iostream>
 	<cmath>

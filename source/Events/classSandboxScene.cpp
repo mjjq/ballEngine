@@ -63,8 +63,8 @@ void SandboxScene::load()
             {"clearSim",    [&]{projMan->clearAll();}},
             {"decSimStep",  [&]{if(dt > 0.1f) dt -=0.1f;}},
             {"incSimStep",  [&]{dt += 0.1f;}},
-            {"zmToMse",     [&]{camera.zoomTarget *= 1.1f;}},
-            {"zmFromMse",   [&]{camera.zoomTarget /= 1.1f;}},
+            {"zmToMse",     [&]{camera.zoomTarget *= 1.5f;}},
+            {"zmFromMse",   [&]{camera.zoomTarget /= 1.5f;}},
             {"rstView",     [&]{camera.reset();
                                 camera.position = (sf::Vector2f)wSize / 2.0f;
                                 camera.target = camera.position;}},
@@ -595,14 +595,15 @@ void SandboxScene::load()
 
         Collisions::setDebugWindow(window);
 
-
+        float scale = .02f;
         std::vector<sf::Vertex > verts = {
             sf::Vertex{{0.0f, 0.0f}},
-            sf::Vertex{{(float)wSize.x, 0.0f}},
-            sf::Vertex{{(float)wSize.x, (float)wSize.y}},
-            sf::Vertex{{0.0f, (float)wSize.y}}
+            sf::Vertex{{scale*2.0f*(float)wSize.x, 0.0f}},
+            sf::Vertex{{scale*2.0f*(float)wSize.x, scale*(float)wSize.y}},
+            sf::Vertex{{0.0f, scale*(float)wSize.y}}
         };
-        ObjectProperties props = {{(float)wSize.x/2.0f, (float)wSize.y/2.0f},
+
+        ObjectProperties props = {0.0f*(sf::Vector2f)wSize,
                                  {0.0f, 0.0f},
                                  {1.0f, 1.0f},
                                  spawnMass,
@@ -613,10 +614,11 @@ void SandboxScene::load()
                                  false, false, false, true,
                                  ObjectType::Polygon,
                                  verts,
-                                 {"phong",
-                                 "white.png",
+                                 {"background",
+                                 "sky.jpg",
                                  "blankN.jpg"}
                                              };
+        props._zPosition = -300.0f;
         //projMan->addObject(new GameObject(new Renderable(props)));
         lvlCreator::Parameters params;
         params.useTargetSize = true;
@@ -624,6 +626,9 @@ void SandboxScene::load()
         LevelCreator::generateLevelAssets("./res/levels/testLevel", params);
         camera.zoomTarget = (float)window.getSize().x / (float)wSize.x;
         camera.zoom = (float)window.getSize().x / (float)wSize.x;
+
+
+        GameObject* obj = new GameObject(new Renderable(props));
     }
 }
 

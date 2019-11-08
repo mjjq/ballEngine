@@ -62,8 +62,11 @@ void Character::moveSideWays(float input)
 void Character::jump()
 {
     if(touchingSurface && (slopeOkay || collider->getContactData().size()==2))
+    {
+        stop('y');
         collider->addSolvedVelocity({0.0f, -properties.jumpPower},
                                 {0.0f, -properties.jumpPower});
+    }
 }
 
 void Character::setCollider(PhysicsObject* _collider)

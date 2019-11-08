@@ -7,8 +7,6 @@
 
 class Renderable : public Component, public sf::Transformable
 {
-    float zPosition = 0.0f;
-
     void generateDrawables(ObjectProperties objProps);
 
 public:
@@ -28,6 +26,7 @@ public:
     Renderable(ObjectProperties objProps);
     ~Renderable();
 
+    float zPosition = 0.0f;
     float getZPosition() { return zPosition; }
 };
 

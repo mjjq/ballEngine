@@ -48,6 +48,9 @@ void Renderer::redrawAll(sf::RenderWindow &window)
             shader->setUniform("material.specularStrength", material.specularStrength);
             shader->setUniform("material.emissionStrength", material.emissionStrength);
             shader->setUniform("material.shininess", material.shininess);
+            shader->setUniform("zPosition", renderObj.zPosition);
+            shader->setUniform("windowSize", (sf::Vector2f)window.getSize());
+            shader->setUniform("viewCentre", (sf::Vector2f)window.getView().getCenter());
         }
 
         window.draw(renderObj.verts, sf::RenderStates(sf::BlendMode(),
