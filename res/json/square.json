@@ -1,0 +1,18 @@
+{
+    "objectProperties" :
+	{
+		"size" : {"x":10.0, "y":10.0},
+		"ignoreGravity" : true,
+		"objectType":3,
+		"vertices": [
+			{"x":-30.0, "y":-30.0},
+			{"x":30.0, "y":-30.0},
+			{"x":30.0, "y":30.0},
+			{"x":-30.0, "y":30.0}
+		],
+		"material":{
+			"shaderID":"phong",
+			"diffuseID":"red.jpg"
+		}
+	}
+}

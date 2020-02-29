@@ -160,6 +160,8 @@
 		<Unit filename="headers/structs.h" />
 		<Unit filename="headers/windowManager.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="res/shaders/background.frag" />
+		<Unit filename="res/shaders/background.vert" />
 		<Unit filename="res/shaders/default.frag" />
 		<Unit filename="res/shaders/light.frag" />
 		<Unit filename="res/shaders/phong.frag" />

@@ -257,7 +257,7 @@ void SandboxScene::load()
                     init.jumpPower = 12.0f;
                     init.walkSpeed = 4.0f;
                     init.runSpeed = 6.0f;
-                    GameObject* obj = new GameObject(new Renderable(props),
+                    GameObject* obj = new GameObject(nullptr, //new Renderable(props),
                                                         new Polygon(props),
                                                         nullptr,
                                                         new Character(init),
@@ -595,7 +595,7 @@ void SandboxScene::load()
 
         Collisions::setDebugWindow(window);
 
-        float scale = .02f;
+        float scale = .45f;
         std::vector<sf::Vertex > verts = {
             sf::Vertex{{0.0f, 0.0f}},
             sf::Vertex{{scale*2.0f*(float)wSize.x, 0.0f}},
@@ -603,7 +603,7 @@ void SandboxScene::load()
             sf::Vertex{{0.0f, scale*(float)wSize.y}}
         };
 
-        ObjectProperties props = {0.0f*(sf::Vector2f)wSize,
+        ObjectProperties props = {{0.2f*window.getSize().x, 0.00f*window.getSize().y},
                                  {0.0f, 0.0f},
                                  {1.0f, 1.0f},
                                  spawnMass,
@@ -618,7 +618,7 @@ void SandboxScene::load()
                                  "sky.jpg",
                                  "blankN.jpg"}
                                              };
-        props._zPosition = -300.0f;
+        props._zPosition = -50.0f;
         //projMan->addObject(new GameObject(new Renderable(props)));
         lvlCreator::Parameters params;
         params.useTargetSize = true;
@@ -629,6 +629,17 @@ void SandboxScene::load()
 
 
         GameObject* obj = new GameObject(new Renderable(props));
+
+        props._zPosition = -20.0f;
+        props.material.diffuseID = "asteroid.jpg";
+        verts[1].position *= 0.1f;
+        verts[2].position *= 0.1f;
+        verts[3].position *= 0.1f;
+
+        props._vertices = verts;
+
+        GameObject* obj2 = new GameObject(new Renderable(props));
+
     }
 }
 

@@ -1,0 +1,29 @@
+{
+    "objectProperties" :
+	{
+		"mass" : 0.1,
+		"size" : {"x":30.0, "y":6.53},
+		"ignoreGravity" : true,
+		"objectType":3,
+		"vertices": [
+			{"x":-15.0, "y":-3.27},
+			{"x":15.0, "y":-3.27},
+			{"x":15.0, "y":3.27},
+			{"x":-15.0, "y":3.27}
+		],
+		"scale": 5.5,
+		"material":{
+			"diffuseID":"./res/textures/example/gunPHTest.png"
+		},
+		"enableCollisions":false,
+		"zPosition" : 0.8
+	},
+	
+	"equipableProperties" :
+	{
+		"offset" : {"x":-10.0, "y":60.0},
+		"anchorPoints" : [
+			{"name":"handle", "x":5.0, "y":0.0}
+		]
+	}
+}
